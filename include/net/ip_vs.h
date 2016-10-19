@@ -109,7 +109,10 @@ extern int ip_vs_conn_tab_size;
 struct ip_vs_iphdr {
 	__u32 len;	/* IPv4 simply where L4 starts
 			   IPv6 where L4 Transport Header starts */
+<<<<<<< HEAD
 	__u32 thoff_reasm; /* Transport Header Offset in nfct_reasm skb */
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	__u16 fragoffs; /* IPv6 fragment offset, 0 if first frag (or not frag)*/
 	__s16 protocol;
 	__s32 flags;
@@ -117,6 +120,7 @@ struct ip_vs_iphdr {
 	union nf_inet_addr daddr;
 };
 
+<<<<<<< HEAD
 /* Dependency to module: nf_defrag_ipv6 */
 #if defined(CONFIG_NF_DEFRAG_IPV6) || defined(CONFIG_NF_DEFRAG_IPV6_MODULE)
 static inline struct sk_buff *skb_nfct_reasm(const struct sk_buff *skb)
@@ -138,13 +142,18 @@ static inline struct sk_buff *skb_nfct_reasm(const struct sk_buff *skb)
 {
 	return NULL;
 }
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static inline void *frag_safe_skb_hp(const struct sk_buff *skb, int offset,
 				      int len, void *buffer,
 				      const struct ip_vs_iphdr *ipvsh)
 {
 	return skb_header_pointer(skb, offset, len, buffer);
 }
+<<<<<<< HEAD
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 static inline void
 ip_vs_fill_ip4hdr(const void *nh, struct ip_vs_iphdr *iphdr)
@@ -171,19 +180,26 @@ ip_vs_fill_iph_skb(int af, const struct sk_buff *skb, struct ip_vs_iphdr *iphdr)
 			(struct ipv6hdr *)skb_network_header(skb);
 		iphdr->saddr.in6 = iph->saddr;
 		iphdr->daddr.in6 = iph->daddr;
+<<<<<<< HEAD
 		/* ipv6_find_hdr() updates len, flags, thoff_reasm */
 		iphdr->thoff_reasm = 0;
+=======
+		/* ipv6_find_hdr() updates len, flags */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		iphdr->len	 = 0;
 		iphdr->flags	 = 0;
 		iphdr->protocol  = ipv6_find_hdr(skb, &iphdr->len, -1,
 						 &iphdr->fragoffs,
 						 &iphdr->flags);
+<<<<<<< HEAD
 		/* get proto from re-assembled packet and it's offset */
 		if (skb_nfct_reasm(skb))
 			iphdr->protocol = ipv6_find_hdr(skb_nfct_reasm(skb),
 							&iphdr->thoff_reasm,
 							-1, NULL, NULL);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	} else
 #endif
 	{
@@ -1225,7 +1241,11 @@ static inline bool __ip_vs_conn_get(struct ip_vs_conn *cp)
 /* put back the conn without restarting its timer */
 static inline void __ip_vs_conn_put(struct ip_vs_conn *cp)
 {
+<<<<<<< HEAD
 	smp_mb__before_atomic_dec();
+=======
+	smp_mb__before_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	atomic_dec(&cp->refcnt);
 }
 extern void ip_vs_conn_put(struct ip_vs_conn *cp);
@@ -1433,7 +1453,11 @@ static inline void ip_vs_dest_hold(struct ip_vs_dest *dest)
 
 static inline void ip_vs_dest_put(struct ip_vs_dest *dest)
 {
+<<<<<<< HEAD
 	smp_mb__before_atomic_dec();
+=======
+	smp_mb__before_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	atomic_dec(&dest->refcnt);
 }
 

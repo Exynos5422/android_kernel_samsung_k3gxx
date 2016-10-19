@@ -141,7 +141,10 @@ processor_set_freq (
 {
 	int			ret = 0;
 	u32			value = 0;
+<<<<<<< HEAD
 	struct cpufreq_freqs    cpufreq_freqs;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	cpumask_t		saved_mask;
 	int			retval;
 
@@ -168,6 +171,7 @@ processor_set_freq (
 	pr_debug("Transitioning from P%d to P%d\n",
 		data->acpi_data.state, state);
 
+<<<<<<< HEAD
 	/* cpufreq frequency struct */
 	cpufreq_freqs.old = data->freq_table[data->acpi_data.state].frequency;
 	cpufreq_freqs.new = data->freq_table[state].frequency;
@@ -175,6 +179,8 @@ processor_set_freq (
 	/* notify cpufreq */
 	cpufreq_notify_transition(policy, &cpufreq_freqs, CPUFREQ_PRECHANGE);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/*
 	 * First we write the target state's 'control' value to the
 	 * control_register.
@@ -186,6 +192,7 @@ processor_set_freq (
 
 	ret = processor_set_pstate(value);
 	if (ret) {
+<<<<<<< HEAD
 		unsigned int tmp = cpufreq_freqs.new;
 		cpufreq_notify_transition(policy, &cpufreq_freqs,
 				CPUFREQ_POSTCHANGE);
@@ -195,13 +202,18 @@ processor_set_freq (
 				CPUFREQ_PRECHANGE);
 		cpufreq_notify_transition(policy, &cpufreq_freqs,
 				CPUFREQ_POSTCHANGE);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		printk(KERN_WARNING "Transition failed with error %d\n", ret);
 		retval = -ENODEV;
 		goto migrate_end;
 	}
 
+<<<<<<< HEAD
 	cpufreq_notify_transition(policy, &cpufreq_freqs, CPUFREQ_POSTCHANGE);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	data->acpi_data.state = state;
 
 	retval = 0;
@@ -274,7 +286,11 @@ acpi_cpufreq_cpu_init (
 
 	pr_debug("acpi_cpufreq_cpu_init\n");
 
+<<<<<<< HEAD
 	data = kzalloc(sizeof(struct cpufreq_acpi_io), GFP_KERNEL);
+=======
+	data = kzalloc(sizeof(*data), GFP_KERNEL);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (!data)
 		return (-ENOMEM);
 
@@ -304,7 +320,11 @@ acpi_cpufreq_cpu_init (
 	}
 
 	/* alloc freq_table */
+<<<<<<< HEAD
 	data->freq_table = kmalloc(sizeof(struct cpufreq_frequency_table) *
+=======
+	data->freq_table = kmalloc(sizeof(*data->freq_table) *
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	                           (data->acpi_data.state_count + 1),
 	                           GFP_KERNEL);
 	if (!data->freq_table) {
@@ -326,7 +346,11 @@ acpi_cpufreq_cpu_init (
 	/* table init */
 	for (i = 0; i <= data->acpi_data.state_count; i++)
 	{
+<<<<<<< HEAD
 		data->freq_table[i].index = i;
+=======
+		data->freq_table[i].driver_data = i;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (i < data->acpi_data.state_count) {
 			data->freq_table[i].frequency =
 			      data->acpi_data.states[i].core_frequency * 1000;
@@ -409,7 +433,10 @@ static struct cpufreq_driver acpi_cpufreq_driver = {
 	.init		= acpi_cpufreq_cpu_init,
 	.exit		= acpi_cpufreq_cpu_exit,
 	.name		= "acpi-cpufreq",
+<<<<<<< HEAD
 	.owner		= THIS_MODULE,
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	.attr           = acpi_cpufreq_attr,
 };
 

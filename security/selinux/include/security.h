@@ -130,11 +130,16 @@ struct operation {
 };
 
 /* definitions of av_decision.flags */
+<<<<<<< HEAD
 // START_SEC_SELINUX_PORTING_COMMON
 #define AVD_FLAGS_PERMISSIVE	0x0001
 
 // END_SEC_SELINUX_PORTING_COMMON
 
+=======
+#define AVD_FLAGS_PERMISSIVE	0x0001
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 void security_compute_av(u32 ssid, u32 tsid,
 			 u16 tclass, struct av_decision *avd,
 			 struct operation *ops);

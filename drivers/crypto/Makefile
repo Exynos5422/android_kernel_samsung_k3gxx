@@ -9,6 +9,10 @@ obj-$(CONFIG_CRYPTO_DEV_TALITOS) += talitos.o
 obj-$(CONFIG_CRYPTO_DEV_FSL_CAAM) += caam/
 obj-$(CONFIG_CRYPTO_DEV_IXP4XX) += ixp4xx_crypto.o
 obj-$(CONFIG_CRYPTO_DEV_PPC4XX) += amcc/
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_CRYPTO_DEV_QCE) += msm/
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 obj-$(CONFIG_CRYPTO_DEV_OMAP_SHAM) += omap-sham.o
 obj-$(CONFIG_CRYPTO_DEV_OMAP_AES) += omap-aes.o
 obj-$(CONFIG_CRYPTO_DEV_PICOXCELL) += picoxcell_crypto.o
@@ -21,4 +25,7 @@ obj-$(CONFIG_CRYPTO_DEV_NX) += nx/
 obj-$(CONFIG_CRYPTO_DEV_ATMEL_AES) += atmel-aes.o
 obj-$(CONFIG_CRYPTO_DEV_ATMEL_TDES) += atmel-tdes.o
 obj-$(CONFIG_CRYPTO_DEV_ATMEL_SHA) += atmel-sha.o
+<<<<<<< HEAD
 obj-$(CONFIG_CRYPTO_S5P_DEV_ACE) += ace.o
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

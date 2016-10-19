@@ -80,7 +80,10 @@ struct cpuidle_device {
 	cpumask_t		coupled_cpus;
 	struct cpuidle_coupled	*coupled;
 #endif
+<<<<<<< HEAD
 	int skip_idle_correlation;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 DECLARE_PER_CPU(struct cpuidle_device *, cpuidle_devices);

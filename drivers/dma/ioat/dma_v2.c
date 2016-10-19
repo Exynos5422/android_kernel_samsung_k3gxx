@@ -190,8 +190,16 @@ static void ioat2_cleanup(struct ioat2_dma_chan *ioat)
 void ioat2_cleanup_event(unsigned long data)
 {
 	struct ioat2_dma_chan *ioat = to_ioat2_chan((void *) data);
+<<<<<<< HEAD
 
 	ioat2_cleanup(ioat);
+=======
+	struct ioat_chan_common *chan = &ioat->base;
+
+	ioat2_cleanup(ioat);
+	if (!test_bit(IOAT_RUN, &chan->state))
+		return;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	writew(IOAT_CHANCTRL_RUN, ioat->base.reg_base + IOAT_CHANCTRL_OFFSET);
 }
 
@@ -553,10 +561,17 @@ int ioat2_alloc_chan_resources(struct dma_chan *c)
 	ioat->issued = 0;
 	ioat->tail = 0;
 	ioat->alloc_order = order;
+<<<<<<< HEAD
 	spin_unlock_bh(&ioat->prep_lock);
 	spin_unlock_bh(&chan->cleanup_lock);
 
 	tasklet_enable(&chan->cleanup_task);
+=======
+	set_bit(IOAT_RUN, &chan->state);
+	spin_unlock_bh(&ioat->prep_lock);
+	spin_unlock_bh(&chan->cleanup_lock);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ioat2_start_null_desc(ioat);
 
 	/* check that we got off the ground */
@@ -566,7 +581,10 @@ int ioat2_alloc_chan_resources(struct dma_chan *c)
 	} while (i++ < 20 && !is_ioat_active(status) && !is_ioat_idle(status));
 
 	if (is_ioat_active(status) || is_ioat_idle(status)) {
+<<<<<<< HEAD
 		set_bit(IOAT_RUN, &chan->state);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return 1 << ioat->alloc_order;
 	} else {
 		u32 chanerr = readl(chan->reg_base + IOAT_CHANERR_OFFSET);
@@ -809,11 +827,16 @@ void ioat2_free_chan_resources(struct dma_chan *c)
 	if (!ioat->ring)
 		return;
 
+<<<<<<< HEAD
 	tasklet_disable(&chan->cleanup_task);
 	del_timer_sync(&chan->timer);
 	device->cleanup_fn((unsigned long) c);
 	device->reset_hw(chan);
 	clear_bit(IOAT_RUN, &chan->state);
+=======
+	ioat_stop(chan);
+	device->reset_hw(chan);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	spin_lock_bh(&chan->cleanup_lock);
 	spin_lock_bh(&ioat->prep_lock);

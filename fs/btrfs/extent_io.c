@@ -1624,6 +1624,10 @@ again:
 		 * shortening the size of the delalloc range we're searching
 		 */
 		free_extent_state(cached_state);
+<<<<<<< HEAD
+=======
+		cached_state = NULL;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (!loops) {
 			unsigned long offset = (*start) & (PAGE_CACHE_SIZE - 1);
 			max_bytes = PAGE_CACHE_SIZE - offset;
@@ -2356,7 +2360,11 @@ int end_extent_writepage(struct page *page, int err, u64 start, u64 end)
 {
 	int uptodate = (err == 0);
 	struct extent_io_tree *tree;
+<<<<<<< HEAD
 	int ret;
+=======
+	int ret = 0;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	tree = &BTRFS_I(page->mapping->host)->io_tree;
 
@@ -2370,6 +2378,11 @@ int end_extent_writepage(struct page *page, int err, u64 start, u64 end)
 	if (!uptodate) {
 		ClearPageUptodate(page);
 		SetPageError(page);
+<<<<<<< HEAD
+=======
+		ret = ret < 0 ? ret : -EIO;
+		mapping_set_error(page->mapping, ret);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 	return 0;
 }
@@ -3266,7 +3279,11 @@ static int lock_extent_buffer_for_io(struct extent_buffer *eb,
 static void end_extent_buffer_writeback(struct extent_buffer *eb)
 {
 	clear_bit(EXTENT_BUFFER_WRITEBACK, &eb->bflags);
+<<<<<<< HEAD
 	smp_mb__after_clear_bit();
+=======
+	smp_mb__after_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	wake_up_bit(&eb->bflags, EXTENT_BUFFER_WRITEBACK);
 }
 

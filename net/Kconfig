@@ -235,19 +235,32 @@ source "net/netlink/Kconfig"
 source "net/rmnet_data/Kconfig"
 
 config RPS
+<<<<<<< HEAD
 	boolean "RPS"
 	depends on SMP && SYSFS && USE_GENERIC_SMP_HELPERS
+=======
+	boolean
+	depends on SMP && SYSFS
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	default y
 
 config RFS_ACCEL
 	boolean
+<<<<<<< HEAD
 	depends on RPS && GENERIC_HARDIRQS
+=======
+	depends on RPS
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	select CPU_RMAP
 	default y
 
 config XPS
 	boolean
+<<<<<<< HEAD
 	depends on SMP && USE_GENERIC_SMP_HELPERS
+=======
+	depends on SMP
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	default y
 
 config NETPRIO_CGROUP
@@ -274,6 +287,18 @@ config BPF_JIT
 	  packet sniffing (libpcap/tcpdump). Note : Admin should enable
 	  this feature changing /proc/sys/net/core/bpf_jit_enable
 
+<<<<<<< HEAD
+=======
+config SOCKEV_NLMCAST
+	bool "Enable SOCKEV Netlink Multicast"
+	default n
+	---help---
+	  Default client for SOCKEV notifier events. Sends multicast netlink
+	  messages whenever the socket event notifier is invoked. Enable if
+	  user space entities need to be notified of socket events without
+	  having to poll /proc
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 menu "Network testing"
 
 config NET_PKTGEN

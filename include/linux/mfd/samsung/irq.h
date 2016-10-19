@@ -13,6 +13,7 @@
 #ifndef __LINUX_MFD_SEC_IRQ_H
 #define __LINUX_MFD_SEC_IRQ_H
 
+<<<<<<< HEAD
 enum s2mps13_irq {
 	S2MPS13_IRQ_PWRONF,
 	S2MPS13_IRQ_PWRONR,
@@ -57,6 +58,8 @@ enum s2mps13_irq {
 #define S2MPS13_IRQ_INT140C_MASK	(1 << 1)
 #define S2MPS13_IRQ_TSD_MASK	(1 << 2)
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 enum s2mps11_irq {
 	S2MPS11_IRQ_PWRONF,
 	S2MPS11_IRQ_PWRONR,
@@ -69,7 +72,11 @@ enum s2mps11_irq {
 
 	S2MPS11_IRQ_RTC60S,
 	S2MPS11_IRQ_RTCA1,
+<<<<<<< HEAD
 	S2MPS11_IRQ_RTCA0,
+=======
+	S2MPS11_IRQ_RTCA2,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	S2MPS11_IRQ_SMPL,
 	S2MPS11_IRQ_RTC1S,
 	S2MPS11_IRQ_WTSR,
@@ -91,7 +98,11 @@ enum s2mps11_irq {
 
 #define S2MPS11_IRQ_RTC60S_MASK		(1 << 0)
 #define S2MPS11_IRQ_RTCA1_MASK		(1 << 1)
+<<<<<<< HEAD
 #define S2MPS11_IRQ_RTCA0_MASK		(1 << 2)
+=======
+#define S2MPS11_IRQ_RTCA2_MASK		(1 << 2)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define S2MPS11_IRQ_SMPL_MASK		(1 << 3)
 #define S2MPS11_IRQ_RTC1S_MASK		(1 << 4)
 #define S2MPS11_IRQ_WTSR_MASK		(1 << 5)
@@ -193,6 +204,9 @@ enum s5m8763_irq {
 
 #define S5M8763_ENRAMP                  (1 << 4)
 
+<<<<<<< HEAD
 extern int sec_pmic_get_irq_base(void);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif /*  __LINUX_MFD_SEC_IRQ_H */

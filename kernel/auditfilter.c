@@ -423,7 +423,11 @@ static struct audit_entry *audit_data_to_entry(struct audit_rule_data *data,
 		f->lsm_rule = NULL;
 
 		/* Support legacy tests for a valid loginuid */
+<<<<<<< HEAD
 		if ((f->type == AUDIT_LOGINUID) && (f->val == ~0U)) {
+=======
+		if ((f->type == AUDIT_LOGINUID) && (f->val == 4294967295u)) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			f->type = AUDIT_LOGINUID_SET;
 			f->val = 0;
 		}

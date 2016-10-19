@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 /* Copyright (c) 2010, Code Aurora Forum. All rights reserved.
+=======
+/* Copyright (c) 2010, 2013, The Linux Foundation. All rights reserved.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -8,11 +12,14 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+<<<<<<< HEAD
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  */
 #include <linux/gpio.h>
 #include <linux/i2c.h>
@@ -23,7 +30,14 @@
 #include <linux/mutex.h>
 #include <linux/slab.h>
 #include <linux/workqueue.h>
+<<<<<<< HEAD
 #include <linux/i2c/sx150x.h>
+=======
+#include <linux/of_gpio.h>
+#include <linux/i2c/sx150x.h>
+#include <linux/of.h>
+#include <linux/delay.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define NO_UPDATE_PENDING	-1
 
@@ -58,8 +72,16 @@ struct sx150x_chip {
 	struct mutex                     lock;
 };
 
+<<<<<<< HEAD
 static const struct sx150x_device_data sx150x_devices[] = {
 	[0] = { /* sx1508q */
+=======
+#define SX1508Q_ID 0
+#define SX1509Q_ID 1
+
+static const struct sx150x_device_data sx150x_devices[] = {
+	[SX1508Q_ID] = { /* sx1508q */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		.reg_pullup   = 0x03,
 		.reg_pulldn   = 0x04,
 		.reg_drain    = 0x05,
@@ -74,7 +96,11 @@ static const struct sx150x_device_data sx150x_devices[] = {
 		.reg_reset    = 0x7d,
 		.ngpios       = 8
 	},
+<<<<<<< HEAD
 	[1] = { /* sx1509q */
+=======
+	[SX1509Q_ID] = { /* sx1509q */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		.reg_pullup   = 0x07,
 		.reg_pulldn   = 0x09,
 		.reg_drain    = 0x0b,
@@ -91,9 +117,30 @@ static const struct sx150x_device_data sx150x_devices[] = {
 	},
 };
 
+<<<<<<< HEAD
 static const struct i2c_device_id sx150x_id[] = {
 	{"sx1508q", 0},
 	{"sx1509q", 1},
+=======
+#ifdef CONFIG_OF
+static struct of_device_id sx150x_match_table[] = {
+	{
+		.compatible = "sx1508q", .data = NULL,
+	},
+	{
+		.compatible = "sx1509q", .data = NULL,
+	},
+	{ },
+};
+MODULE_DEVICE_TABLE(of, sx150x_match_table);
+#else
+#define sx150x_match_table NULL
+#endif
+
+static const struct i2c_device_id sx150x_id[] = {
+	{"sx1508q", SX1508Q_ID},
+	{"sx1509q", SX1509Q_ID},
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	{}
 };
 MODULE_DEVICE_TABLE(i2c, sx150x_id);
@@ -189,9 +236,15 @@ static int sx150x_get_io(struct sx150x_chip *chip, unsigned offset)
 	return err;
 }
 
+<<<<<<< HEAD
 static void sx150x_set_oscio(struct sx150x_chip *chip, int val)
 {
 	sx150x_i2c_write(chip->client,
+=======
+static s32 sx150x_set_oscio(struct sx150x_chip *chip, int val)
+{
+	return sx150x_i2c_write(chip->client,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			chip->dev_cfg->reg_clock,
 			(val ? 0x1f : 0x10));
 }
@@ -286,11 +339,21 @@ static int sx150x_gpio_direction_output(struct gpio_chip *gc,
 
 	chip = container_of(gc, struct sx150x_chip, gpio_chip);
 
+<<<<<<< HEAD
 	if (!offset_is_oscio(chip, offset)) {
 		mutex_lock(&chip->lock);
 		status = sx150x_io_output(chip, offset, val);
 		mutex_unlock(&chip->lock);
 	}
+=======
+	mutex_lock(&chip->lock);
+	if (offset_is_oscio(chip, offset))
+		status = sx150x_set_oscio(chip, val);
+	else
+		status = sx150x_io_output(chip, offset, val);
+	mutex_unlock(&chip->lock);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return status;
 }
 
@@ -427,6 +490,16 @@ static void sx150x_init_chip(struct sx150x_chip *chip,
 {
 	mutex_init(&chip->lock);
 
+<<<<<<< HEAD
+=======
+	if (client->dev.of_node) {
+		if (of_device_is_compatible(client->dev.of_node, "sx1508q"))
+			driver_data = SX1508Q_ID;
+		else
+			driver_data = SX1509Q_ID;
+	}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	chip->client                     = client;
 	chip->dev_cfg                    = &sx150x_devices[driver_data];
 	chip->gpio_chip.label            = client->name;
@@ -441,6 +514,13 @@ static void sx150x_init_chip(struct sx150x_chip *chip,
 	if (pdata->oscio_is_gpo)
 		++chip->gpio_chip.ngpio;
 
+<<<<<<< HEAD
+=======
+	if (client && client->dev.of_node)
+		chip->gpio_chip.of_node  =
+			of_node_get(client->dev.of_node);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	chip->irq_chip.name                = client->name;
 	chip->irq_chip.irq_mask            = sx150x_irq_mask;
 	chip->irq_chip.irq_unmask          = sx150x_irq_unmask;
@@ -469,6 +549,32 @@ static int sx150x_init_io(struct sx150x_chip *chip, u8 base, u16 cfg)
 static int sx150x_reset(struct sx150x_chip *chip)
 {
 	int err;
+<<<<<<< HEAD
+=======
+	struct device_node *np = chip->gpio_chip.of_node;
+	enum of_gpio_flags flags = OF_GPIO_ACTIVE_LOW;
+	int rst_gpio;
+
+	if (np) {
+		rst_gpio = of_get_named_gpio_flags(np, "sx150x,reset_gpio",
+						0, &flags);
+		if (rst_gpio < 0)
+			pr_debug("%s: No Reset GPIO found %d\n",
+				__func__, rst_gpio);
+		else {
+			err = gpio_request(rst_gpio, "sx150x_rst");
+			if (err) {
+				pr_err("Failed to get reset GPIO %d\n", err);
+				return err;
+			}
+
+			/* Max. time for NRESET low is 2.5ms */
+			gpio_direction_output(rst_gpio, 0x0);
+			usleep(2500);
+			gpio_direction_output(rst_gpio, 0x1);
+		}
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	err = i2c_smbus_write_byte_data(chip->client,
 					chip->dev_cfg->reg_reset,
@@ -575,16 +681,96 @@ static void sx150x_remove_irq_chip(struct sx150x_chip *chip)
 	}
 }
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_OF
+static int sx150x_parse_dt(struct device *dev,
+			struct sx150x_platform_data *pdata)
+{
+	int rc;
+	unsigned int temp;
+	struct device_node *np = dev->of_node;
+
+	if (!np)
+		return -ENODEV;
+
+	pdata->oscio_is_gpo = of_property_read_bool(np, "sx150x,oscio_is_gpo");
+	pdata->reset_during_probe =
+			of_property_read_bool(np, "sx150x,reset_onprobe");
+
+	rc = of_property_read_u32(np, "sx150x,pullup_ena", &temp);
+	if (rc) {
+		pr_err("%s: Failed to find pullup_ena %d\n", __func__, rc);
+		return rc;
+	}
+	pdata->io_pullup_ena = temp;
+
+	rc = of_property_read_u32(np, "sx150x,pulldn_ena", &temp);
+	if (rc) {
+		pr_err("%s: Failed to find pulldn_ena %d\n", __func__, rc);
+		return rc;
+	}
+	pdata->io_pulldn_ena = temp;
+
+	rc = of_property_read_u32(np, "sx150x,float_ena", &temp);
+	if (rc) {
+		pr_err("%s: Failed to find float_ena %d\n", __func__, rc);
+		return rc;
+	}
+	pdata->io_open_drain_ena = temp;
+
+	rc = of_property_read_u32(np, "sx150x,polarity", &temp);
+	if (rc) {
+		pr_err("%s: Failed to find polarity %d\n", __func__, rc);
+		return rc;
+	}
+	pdata->io_polarity = temp;
+
+	/* TODO: Add support for Interrupts */
+	pdata->irq_summary = -1;
+	pdata->gpio_base   = -1;
+
+	return 0;
+}
+#else
+static int sx150x_parse_dt(struct device *dev,
+			struct sx150x_platform_data *pdata)
+{
+	return -ENODEV;
+}
+#endif
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int sx150x_probe(struct i2c_client *client,
 				const struct i2c_device_id *id)
 {
 	static const u32 i2c_funcs = I2C_FUNC_SMBUS_BYTE_DATA |
+<<<<<<< HEAD
 				     I2C_FUNC_SMBUS_WRITE_WORD_DATA;
+=======
+					I2C_FUNC_SMBUS_WRITE_WORD_DATA;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct sx150x_platform_data *pdata;
 	struct sx150x_chip *chip;
 	int rc;
 
+<<<<<<< HEAD
 	pdata = client->dev.platform_data;
+=======
+	if (client->dev.of_node) {
+		pdata = devm_kzalloc(&client->dev,
+			sizeof(struct sx150x_platform_data), GFP_KERNEL);
+		if (!pdata) {
+			dev_err(&client->dev, "Failed to allocate memory\n");
+			return -ENOMEM;
+		}
+
+		rc = sx150x_parse_dt(&client->dev, pdata);
+		if (rc)
+			return rc;
+	} else
+		pdata = client->dev.platform_data;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (!pdata)
 		return -EINVAL;
 
@@ -643,7 +829,12 @@ static int sx150x_remove(struct i2c_client *client)
 static struct i2c_driver sx150x_driver = {
 	.driver = {
 		.name = "sx150x",
+<<<<<<< HEAD
 		.owner = THIS_MODULE
+=======
+		.owner = THIS_MODULE,
+		.of_match_table = of_match_ptr(sx150x_match_table)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	},
 	.probe    = sx150x_probe,
 	.remove   = sx150x_remove,

@@ -20,6 +20,10 @@
 
 %{
 #include <stdio.h>
+<<<<<<< HEAD
+=======
+#include <inttypes.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #include "dtc.h"
 #include "srcpos.h"
@@ -56,9 +60,17 @@ static unsigned char eval_char_literal(const char *s);
 	struct node *nodelist;
 	struct reserve_info *re;
 	uint64_t integer;
+<<<<<<< HEAD
 }
 
 %token DT_V1
+=======
+	int is_plugin;
+}
+
+%token DT_V1
+%token DT_PLUGIN
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 %token DT_MEMRESERVE
 %token DT_LSHIFT DT_RSHIFT DT_LE DT_GE DT_EQ DT_NE DT_AND DT_OR
 %token DT_BITS
@@ -76,6 +88,10 @@ static unsigned char eval_char_literal(const char *s);
 
 %type <data> propdata
 %type <data> propdataprefix
+<<<<<<< HEAD
+=======
+%type <is_plugin> plugindecl
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 %type <re> memreserve
 %type <re> memreserves
 %type <array> arrayprefix
@@ -106,10 +122,30 @@ static unsigned char eval_char_literal(const char *s);
 %%
 
 sourcefile:
+<<<<<<< HEAD
 	  DT_V1 ';' memreserves devicetree
 		{
 			the_boot_info = build_boot_info($3, $4,
 							guess_boot_cpuid($4));
+=======
+	  DT_V1 ';' plugindecl memreserves devicetree
+		{
+			$5->is_plugin = $3;
+			$5->is_root = 1;
+			the_boot_info = build_boot_info($4, $5,
+							guess_boot_cpuid($5));
+		}
+	;
+
+plugindecl:
+	/* empty */
+		{
+			$$ = 0;
+		}
+	| DT_PLUGIN ';'
+		{
+			$$ = 1;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		}
 	;
 

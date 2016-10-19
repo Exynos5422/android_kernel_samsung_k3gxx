@@ -67,6 +67,7 @@ static char *check[] = {
 	"lzo", "cts", "zlib", NULL
 };
 
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_DRBG
 static char *drbg_cores[] = {
 #ifdef CONFIG_CRYPTO_DRBG_CTR
@@ -89,6 +90,8 @@ static char *drbg_cores[] = {
 };
 #endif /* CONFIG_CRYPTO_DRBG */
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int test_cipher_jiffies(struct blkcipher_desc *desc, int enc,
 			       struct scatterlist *sg, int blen, int sec)
 {
@@ -948,6 +951,7 @@ out:
 	crypto_free_ablkcipher(tfm);
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_DRBG
 static inline int test_drbg(const char *drbg_core, int pr)
 {
@@ -969,6 +973,8 @@ static inline int test_drbg(const char *drbg_core, int pr)
 }
 #endif /* CONFIG_CRYPTO_DRBG */
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static void test_available(void)
 {
 	char **name = check;
@@ -1057,6 +1063,7 @@ static int do_test(int m)
 		ret += tcrypt_test("ecb(aes)");
 		ret += tcrypt_test("cbc(aes)");
 		ret += tcrypt_test("lrw(aes)");
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_XTS
 		ret += tcrypt_test("xts(aes)");
 #endif
@@ -1064,6 +1071,11 @@ static int do_test(int m)
 		ret += tcrypt_test("ctr(aes)");
 		ret += tcrypt_test("rfc3686(ctr(aes))");
 #endif
+=======
+		ret += tcrypt_test("xts(aes)");
+		ret += tcrypt_test("ctr(aes)");
+		ret += tcrypt_test("rfc3686(ctr(aes))");
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		break;
 
 	case 11:
@@ -1174,9 +1186,13 @@ static int do_test(int m)
 		break;
 
 	case 35:
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_GCM
 		ret += tcrypt_test("gcm(aes)");
 #endif
+=======
+		ret += tcrypt_test("gcm(aes)");
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		break;
 
 	case 36:
@@ -1184,9 +1200,13 @@ static int do_test(int m)
 		break;
 
 	case 37:
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_CCM
 		ret += tcrypt_test("ccm(aes)");
 #endif
+=======
+		ret += tcrypt_test("ccm(aes)");
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		break;
 
 	case 38:
@@ -1218,9 +1238,13 @@ static int do_test(int m)
 		break;
 
 	case 45:
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_CCM
 		ret += tcrypt_test("rfc4309(ccm(aes))");
 #endif
+=======
+		ret += tcrypt_test("rfc4309(ccm(aes))");
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		break;
 
 	case 46:
@@ -1276,9 +1300,13 @@ static int do_test(int m)
 		break;
 
 	case 151:
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_GCM
 		ret += tcrypt_test("rfc4106(gcm(aes))");
 #endif
+=======
+		ret += tcrypt_test("rfc4106(gcm(aes))");
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		break;
 
 	case 152:
@@ -1841,6 +1869,7 @@ static int do_test(int m)
 	case 1000:
 		test_available();
 		break;
+<<<<<<< HEAD
 
 #ifdef CONFIG_CRYPTO_FIPS
 	case 1402 : //For FIPS 140-2
@@ -1910,6 +1939,8 @@ static int do_test(int m)
 		break;
 #endif //CONFIG_CRYPTO_FIPS
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	return ret;
@@ -1932,16 +1963,20 @@ static int __init tcrypt_mod_init(void)
 			goto err_free_tv;
 	}
 
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_FIPS
 	testmgr_crypto_proc_init();
 	mode = 1402; //For FIPS 140-2
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (alg)
 		err = do_alg_test(alg, type, mask);
 	else
 		err = do_test(mode);
 
+<<<<<<< HEAD
 #if FIPS_FUNC_TEST == 1
 	printk(KERN_ERR "FIPS FUNC TEST: Do test again\n");
 	do_test(mode);
@@ -1969,6 +2004,13 @@ static int __init tcrypt_mod_init(void)
 	}
     #endif
 #endif /* FIPS_FUNC_TEST */
+=======
+	if (err) {
+		printk(KERN_ERR "tcrypt: one or more tests failed!\n");
+		goto err_free_tv;
+	}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* We intentionaly return -EAGAIN to prevent keeping the module,
 	 * unless we're running in fips mode. It does all its work from
 	 * init() and doesn't offer any runtime functionality, but in
@@ -1992,6 +2034,7 @@ err_free_tv:
  */
 static void __exit tcrypt_mod_fini(void) { }
 
+<<<<<<< HEAD
 #if defined(CONFIG_DEFERRED_INITCALLS)
 deferred_module_init(tcrypt_mod_init);
 #elif defined(USE_LATE_INITCALL_SYNC)
@@ -1999,6 +2042,9 @@ late_initcall_sync(tcrypt_mod_init);
 #else
 late_initcall(tcrypt_mod_init);
 #endif
+=======
+module_init(tcrypt_mod_init);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 module_exit(tcrypt_mod_fini);
 
 module_param(alg, charp, 0);

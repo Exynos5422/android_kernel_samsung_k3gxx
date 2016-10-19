@@ -379,7 +379,11 @@ struct mem_cgroup {
 static size_t memcg_size(void)
 {
 	return sizeof(struct mem_cgroup) +
+<<<<<<< HEAD
 		nr_node_ids * sizeof(struct mem_cgroup_per_node);
+=======
+		nr_node_ids * sizeof(struct mem_cgroup_per_node *);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 /* internal only representation about the status of kmem accounting. */
@@ -1220,7 +1224,11 @@ struct mem_cgroup *mem_cgroup_iter(struct mem_cgroup *root,
 			if (dead_count == iter->last_dead_count) {
 				smp_rmb();
 				last_visited = iter->last_visited;
+<<<<<<< HEAD
 				if (last_visited &&
+=======
+				if (last_visited && last_visited != root &&
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				    !css_tryget(&last_visited->css))
 					last_visited = NULL;
 			}
@@ -1229,7 +1237,11 @@ struct mem_cgroup *mem_cgroup_iter(struct mem_cgroup *root,
 		memcg = __mem_cgroup_iter_next(root, last_visited);
 
 		if (reclaim) {
+<<<<<<< HEAD
 			if (last_visited)
+=======
+			if (last_visited && last_visited != root)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				css_put(&last_visited->css);
 
 			iter->last_visited = memcg;
@@ -5584,7 +5596,17 @@ static int compare_thresholds(const void *a, const void *b)
 	const struct mem_cgroup_threshold *_a = a;
 	const struct mem_cgroup_threshold *_b = b;
 
+<<<<<<< HEAD
 	return _a->threshold - _b->threshold;
+=======
+	if (_a->threshold > _b->threshold)
+		return 1;
+
+	if (_a->threshold < _b->threshold)
+		return -1;
+
+	return 0;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static int mem_cgroup_oom_notify_cb(struct mem_cgroup *memcg)
@@ -6320,9 +6342,29 @@ static void mem_cgroup_invalidate_reclaim_iterators(struct mem_cgroup *memcg)
 static void mem_cgroup_css_offline(struct cgroup *cont)
 {
 	struct mem_cgroup *memcg = mem_cgroup_from_cont(cont);
+<<<<<<< HEAD
 
 	mem_cgroup_invalidate_reclaim_iterators(memcg);
 	mem_cgroup_reparent_charges(memcg);
+=======
+	struct cgroup *iter;
+
+	mem_cgroup_invalidate_reclaim_iterators(memcg);
+
+	/*
+	 * This requires that offlining is serialized.  Right now that is
+	 * guaranteed because css_killed_work_fn() holds the cgroup_mutex.
+	 */
+	rcu_read_lock();
+	cgroup_for_each_descendant_post(iter, cont) {
+		rcu_read_unlock();
+		mem_cgroup_reparent_charges(mem_cgroup_from_cont(iter));
+		rcu_read_lock();
+	}
+	rcu_read_unlock();
+	mem_cgroup_reparent_charges(memcg);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	mem_cgroup_destroy_all_caches(memcg);
 }
 
@@ -6921,6 +6963,26 @@ static void mem_cgroup_move_task(struct cgroup *cont,
 }
 #endif
 
+<<<<<<< HEAD
+=======
+static int mem_cgroup_allow_attach(struct cgroup *cgrp,
+				 struct cgroup_taskset *tset)
+{
+	const struct cred *cred = current_cred(), *tcred;
+	struct task_struct *task;
+
+	cgroup_taskset_for_each(task, cgrp, tset) {
+		tcred = __task_cred(task);
+
+		if ((current != task) && !capable(CAP_SYS_ADMIN) &&
+		    cred->euid != tcred->uid && cred->euid != tcred->suid)
+			return -EACCES;
+	}
+
+	return 0;
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * Cgroup retains root cgroups across [un]mount cycles making it necessary
  * to verify sane_behavior flag on each mount attempt.
@@ -6946,6 +7008,10 @@ struct cgroup_subsys mem_cgroup_subsys = {
 	.can_attach = mem_cgroup_can_attach,
 	.cancel_attach = mem_cgroup_cancel_attach,
 	.attach = mem_cgroup_move_task,
+<<<<<<< HEAD
+=======
+	.allow_attach = mem_cgroup_allow_attach,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	.bind = mem_cgroup_bind,
 	.base_cftypes = mem_cgroup_files,
 	.early_init = 0,

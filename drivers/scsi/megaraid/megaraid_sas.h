@@ -1295,7 +1295,10 @@ struct megasas_instance {
 	u32 *reply_queue;
 	dma_addr_t reply_queue_h;
 
+<<<<<<< HEAD
 	unsigned long base_addr;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct megasas_register_set __iomem *reg_set;
 
 	struct megasas_pd_list          pd_list[MEGASAS_MAX_PD];

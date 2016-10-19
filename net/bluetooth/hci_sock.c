@@ -752,8 +752,11 @@ static int hci_sock_recvmsg(struct kiocb *iocb, struct socket *sock,
 	if (!skb)
 		return err;
 
+<<<<<<< HEAD
 	msg->msg_namelen = 0;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	copied = skb->len;
 	if (len < copied) {
 		msg->msg_flags |= MSG_TRUNC;

@@ -50,6 +50,10 @@ int	transport_subsystem_register(struct se_subsystem_api *);
 void	transport_subsystem_release(struct se_subsystem_api *);
 
 void	target_complete_cmd(struct se_cmd *, u8);
+<<<<<<< HEAD
+=======
+void	target_complete_cmd_with_length(struct se_cmd *, u8, int);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 sense_reason_t	spc_parse_cdb(struct se_cmd *cmd, unsigned int *size);
 sense_reason_t	spc_emulate_report_luns(struct se_cmd *cmd);

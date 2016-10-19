@@ -4,7 +4,11 @@
 
 config USB_RENESAS_USBHS
 	tristate 'Renesas USBHS controller'
+<<<<<<< HEAD
 	depends on USB_GADGET && GENERIC_HARDIRQS
+=======
+	depends on USB_GADGET
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	default n
 	help
 	  Renesas USBHS is a discrete USB host and peripheral controller chip

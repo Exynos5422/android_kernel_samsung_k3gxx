@@ -55,4 +55,10 @@
 #define SMB2_NTLMV2_SESSKEY_SIZE (16)
 #define SMB2_HMACSHA256_SIZE (32)
 
+<<<<<<< HEAD
+=======
+/* Maximum buffer size value we can send with 1 credit */
+#define SMB2_MAX_BUFFER_SIZE 65536
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif	/* _SMB2_GLOB_H */

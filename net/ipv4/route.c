@@ -1487,7 +1487,11 @@ static int __mkroute_input(struct sk_buff *skb,
 	struct in_device *out_dev;
 	unsigned int flags = 0;
 	bool do_cache;
+<<<<<<< HEAD
 	u32 itag;
+=======
+	u32 itag = 0;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/* get a working reference to the output device */
 	out_dev = __in_dev_get_rcu(FIB_RES_DEV(*res));
@@ -1507,10 +1511,18 @@ static int __mkroute_input(struct sk_buff *skb,
 
 	do_cache = res->fi && !itag;
 	if (out_dev == in_dev && err && IN_DEV_TX_REDIRECTS(out_dev) &&
+<<<<<<< HEAD
 	     skb->protocol == htons(ETH_P_IP) &&
 	    (IN_DEV_SHARED_MEDIA(out_dev) ||
 	     inet_addr_onlink(out_dev, saddr, FIB_RES_GW(*res))))
 		IPCB(skb)->flags |= IPSKB_DOREDIRECT;
+=======
+	    (IN_DEV_SHARED_MEDIA(out_dev) ||
+	     inet_addr_onlink(out_dev, saddr, FIB_RES_GW(*res)))) {
+		flags |= RTCF_DOREDIRECT;
+		do_cache = false;
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (skb->protocol != htons(ETH_P_IP)) {
 		/* Not IP (i.e. ARP). Do not create route, if it is
@@ -1552,6 +1564,10 @@ static int __mkroute_input(struct sk_buff *skb,
 	rth->rt_gateway	= 0;
 	rth->rt_uses_gateway = 0;
 	INIT_LIST_HEAD(&rth->rt_uncached);
+<<<<<<< HEAD
+=======
+	RT_CACHE_STAT_INC(in_slow_tot);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	rth->dst.input = ip_forward;
 	rth->dst.output = ip_output;
@@ -1653,8 +1669,11 @@ static int ip_route_input_slow(struct sk_buff *skb, __be32 daddr, __be32 saddr,
 	if (err != 0)
 		goto no_route;
 
+<<<<<<< HEAD
 	RT_CACHE_STAT_INC(in_slow_tot);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (res.type == RTN_BROADCAST)
 		goto brd_input;
 
@@ -1723,13 +1742,26 @@ local_input:
 	rth->rt_gateway	= 0;
 	rth->rt_uses_gateway = 0;
 	INIT_LIST_HEAD(&rth->rt_uncached);
+<<<<<<< HEAD
+=======
+	RT_CACHE_STAT_INC(in_slow_tot);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (res.type == RTN_UNREACHABLE) {
 		rth->dst.input= ip_error;
 		rth->dst.error= -err;
 		rth->rt_flags 	&= ~RTCF_LOCAL;
 	}
+<<<<<<< HEAD
 	if (do_cache)
 		rt_cache_route(&FIB_RES_NH(res), rth);
+=======
+	if (do_cache) {
+		if (unlikely(!rt_cache_route(&FIB_RES_NH(res), rth))) {
+			rth->dst.flags |= DST_NOCACHE;
+			rt_add_uncached_list(rth);
+		}
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	skb_dst_set(skb, &rth->dst);
 	err = 0;
 	goto out;
@@ -2028,7 +2060,11 @@ struct rtable *__ip_route_output_key(struct net *net, struct flowi4 *fl4)
 							      RT_SCOPE_LINK);
 			goto make_route;
 		}
+<<<<<<< HEAD
 		if (fl4->saddr) {
+=======
+		if (!fl4->saddr) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			if (ipv4_is_multicast(fl4->daddr))
 				fl4->saddr = inet_select_addr(dev_out, 0,
 							      fl4->flowi4_scope);
@@ -2243,8 +2279,11 @@ static int rt_fill_info(struct net *net,  __be32 dst, __be32 src,
 	r->rtm_flags	= (rt->rt_flags & ~0xFFFF) | RTM_F_CLONED;
 	if (rt->rt_flags & RTCF_NOTIFY)
 		r->rtm_flags |= RTM_F_NOTIFY;
+<<<<<<< HEAD
 	if (IPCB(skb)->flags & IPSKB_DOREDIRECT)
 		r->rtm_flags |= RTCF_DOREDIRECT;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (nla_put_be32(skb, RTA_DST, dst))
 		goto nla_put_failure;
@@ -2317,7 +2356,11 @@ static int rt_fill_info(struct net *net,  __be32 dst, __be32 src,
 			}
 		} else
 #endif
+<<<<<<< HEAD
 			if (nla_put_u32(skb, RTA_IIF, rt->rt_iif))
+=======
+			if (nla_put_u32(skb, RTA_IIF, skb->dev->ifindex))
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				goto nla_put_failure;
 	}
 

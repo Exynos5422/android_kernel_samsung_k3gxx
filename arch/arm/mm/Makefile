@@ -7,12 +7,19 @@ obj-y				:= dma-mapping.o extable.o fault.o init.o \
 
 obj-$(CONFIG_MMU)		+= fault-armv.o flush.o idmap.o ioremap.o \
 				   mmap.o pgd.o mmu.o
+<<<<<<< HEAD
 obj-$(CONFIG_DEBUG_RODATA)	+= rodata.o
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 ifneq ($(CONFIG_MMU),y)
 obj-y				+= nommu.o
 endif
 
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_ARM_PTDUMP)	+= dump.o
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 obj-$(CONFIG_MODULES)		+= proc-syms.o
 
 obj-$(CONFIG_ALIGNMENT_TRAP)	+= alignment.o
@@ -90,8 +97,12 @@ obj-$(CONFIG_CPU_V6K)		+= proc-v6.o
 obj-$(CONFIG_CPU_V7)		+= proc-v7.o
 
 AFLAGS_proc-v6.o	:=-Wa,-march=armv6
+<<<<<<< HEAD
 plus_sec := $(call as-instr,.arch_extension sec,+sec)
 AFLAGS_proc-v7.o	:=-Wa,-march=armv7-a$(plus_sec)
+=======
+AFLAGS_proc-v7.o	:=-Wa,-march=armv7-a
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 obj-$(CONFIG_CACHE_FEROCEON_L2)	+= cache-feroceon-l2.o
 obj-$(CONFIG_CACHE_L2X0)	+= cache-l2x0.o

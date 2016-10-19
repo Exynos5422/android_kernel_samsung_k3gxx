@@ -28,13 +28,19 @@ struct esoc_desc {
 
 #ifdef CONFIG_ESOC_CLIENT
 /* Can return probe deferral */
+<<<<<<< HEAD
 #if 0
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 struct esoc_desc *devm_register_esoc_client(struct device *dev,
 							const char *name);
 void devm_unregister_esoc_client(struct device *dev,
 						struct esoc_desc *esoc_desc);
 int esoc_register_client_notifier(struct notifier_block *nb);
+<<<<<<< HEAD
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #else
 static inline struct esoc_desc *devm_register_esoc_client(struct device *dev,
 							const char *name)
@@ -52,4 +58,7 @@ static inline int esoc_register_client_notifier(struct notifier_block *nb)
 }
 #endif
 #endif
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

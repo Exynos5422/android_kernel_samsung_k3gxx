@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 /* Copyright (c) 2013, The Linux Foundation. All rights reserved.
+=======
+/* Copyright (c) 2013-2014, The Linux Foundation. All rights reserved.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -15,9 +19,12 @@
 #include <linux/uaccess.h>
 #include <linux/wait.h>
 #include "esoc.h"
+<<<<<<< HEAD
 #if defined(CONFIG_SEC_DEBUG) && defined(CONFIG_SEC_PERIPHERAL_SECURE_CHK)
 #include <mach/sec_debug.h>
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /**
  * struct esoc_udev: Userspace char interface
@@ -152,7 +159,10 @@ void esoc_udev_handle_clink_req(enum esoc_req req, struct esoc_eng *eng)
 		pr_err("unable to queue request for %s\n", esoc_clink->name);
 		return;
 	}
+<<<<<<< HEAD
 	pr_err("releasing esoc REQ enginer from wait\n");
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	wake_up_interruptible(&esoc_udev->req_wait);
 }
 
@@ -207,12 +217,18 @@ static long esoc_dev_ioctl(struct file *file, unsigned int cmd,
 	case ESOC_WAIT_FOR_REQ:
 		if (esoc_clink->req_eng != &uhandle->eng)
 			return -EACCES;
+<<<<<<< HEAD
 		pr_err("esoc REQ enginer waiting on request\n");
 		err = wait_event_interruptible(esoc_udev->req_wait,
 					!kfifo_is_empty(&esoc_udev->req_fifo));
 		pr_err("esoc REQ engine released from wait\n");
 		if (!err) {
 			pr_err("esoc REQ engine reading from req fifo\n");
+=======
+		err = wait_event_interruptible(esoc_udev->req_wait,
+					!kfifo_is_empty(&esoc_udev->req_fifo));
+		if (!err) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			err = kfifo_out_spinlocked(&esoc_udev->req_fifo, &req,
 								sizeof(req),
 						&esoc_udev->req_fifo_lock);
@@ -221,7 +237,10 @@ static long esoc_dev_ioctl(struct file *file, unsigned int cmd,
 							esoc_clink->name);
 				return -EIO;
 			}
+<<<<<<< HEAD
 			pr_err("esoc REQ engine processing request\n");
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			put_user(req, (unsigned long __user *)uarg);
 
 		}
@@ -237,9 +256,12 @@ static long esoc_dev_ioctl(struct file *file, unsigned int cmd,
 			return err;
 		put_user(status, (unsigned long __user *)uarg);
 		break;
+<<<<<<< HEAD
 	case ESOC_SET_HSIC_READY:
 		clink_ops->set_hsic_ready(esoc_clink);
 		break;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	case ESOC_WAIT_FOR_CRASH:
 		err = wait_event_interruptible(esoc_udev->evt_wait,
 					!kfifo_is_empty(&esoc_udev->evt_fifo));
@@ -256,6 +278,7 @@ static long esoc_dev_ioctl(struct file *file, unsigned int cmd,
 		}
 		return err;
 		break;
+<<<<<<< HEAD
 	case ESOC_SET_CRASH:
 		status = clink_ops->cmd_exe(ESOC_SET_CRASH_OCCURRENCE, esoc_clink);
 		pr_info("%s, ESOC_SET_CRASH_OCCURRENCE, status : %d \n", __func__, status);
@@ -271,6 +294,8 @@ static long esoc_dev_ioctl(struct file *file, unsigned int cmd,
 		sec_peripheral_secure_check_fail();
 		break;
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	default:
 		return -EINVAL;
 	};
@@ -383,7 +408,10 @@ static struct notifier_block esoc_dev_notifier = {
 int __init esoc_dev_init(void)
 {
 	int ret = 0;
+<<<<<<< HEAD
 	pr_info("[MIF] %s\n", __func__);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	esoc_class = class_create(THIS_MODULE, "esoc-dev");
 	if (IS_ERR(esoc_class)) {
 		pr_err("coudn't create class");

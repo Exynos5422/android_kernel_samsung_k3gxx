@@ -71,6 +71,14 @@ struct nf_conn_help {
 #include <net/netfilter/ipv4/nf_conntrack_ipv4.h>
 #include <net/netfilter/ipv6/nf_conntrack_ipv6.h>
 
+<<<<<<< HEAD
+=======
+/* Handle NATTYPE Stuff,only if NATTYPE module was defined */
+#if defined(CONFIG_IP_NF_TARGET_NATTYPE_MODULE)
+#include <linux/netfilter_ipv4/ipt_NATTYPE.h>
+#endif
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 struct nf_conn {
 	/* Usage count in here is 1 for hash table/destruct timer, 1 per skb,
            plus 1 for any connection(s) we are `master' for */
@@ -105,6 +113,13 @@ struct nf_conn {
 	struct net *ct_net;
 #endif
 
+<<<<<<< HEAD
+=======
+#if defined(CONFIG_IP_NF_TARGET_NATTYPE_MODULE)
+	unsigned long nattype_entry;
+#endif
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* Storage reserved for other modules, must be the last member */
 	union nf_conntrack_proto proto;
 };

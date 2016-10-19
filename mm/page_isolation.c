@@ -59,6 +59,10 @@ out:
 		int migratetype = get_pageblock_migratetype(page);
 
 		set_pageblock_migratetype(page, MIGRATE_ISOLATE);
+<<<<<<< HEAD
+=======
+		zone->nr_isolate_pageblock++;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		nr_pages = move_freepages_block(zone, page, MIGRATE_ISOLATE);
 
 		__mod_zone_freepage_state(zone, -nr_pages, migratetype);
@@ -82,6 +86,10 @@ void unset_migratetype_isolate(struct page *page, unsigned migratetype)
 	nr_pages = move_freepages_block(zone, page, migratetype);
 	__mod_zone_freepage_state(zone, nr_pages, migratetype);
 	set_pageblock_migratetype(page, migratetype);
+<<<<<<< HEAD
+=======
+	zone->nr_isolate_pageblock--;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 out:
 	spin_unlock_irqrestore(&zone->lock, flags);
 }

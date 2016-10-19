@@ -17,6 +17,10 @@
  */
 
 #include <linux/cpu.h>
+<<<<<<< HEAD
+=======
+#include <linux/cpu_pm.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <linux/errno.h>
 #include <linux/err.h>
 #include <linux/kvm_host.h>
@@ -65,7 +69,11 @@ static bool vgic_present;
 static void kvm_arm_set_running_vcpu(struct kvm_vcpu *vcpu)
 {
 	BUG_ON(preemptible());
+<<<<<<< HEAD
 	__get_cpu_var(kvm_arm_running_vcpu) = vcpu;
+=======
+	__this_cpu_write(kvm_arm_running_vcpu, vcpu);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 /**
@@ -75,7 +83,11 @@ static void kvm_arm_set_running_vcpu(struct kvm_vcpu *vcpu)
 struct kvm_vcpu *kvm_arm_get_running_vcpu(void)
 {
 	BUG_ON(preemptible());
+<<<<<<< HEAD
 	return __get_cpu_var(kvm_arm_running_vcpu);
+=======
+	return __this_cpu_read(kvm_arm_running_vcpu);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 /**
@@ -473,6 +485,7 @@ static int kvm_vcpu_first_run_init(struct kvm_vcpu *vcpu)
 			return ret;
 	}
 
+<<<<<<< HEAD
 	/*
 	 * Handle the "start in power-off" case by calling into the
 	 * PSCI code.
@@ -482,6 +495,8 @@ static int kvm_vcpu_first_run_init(struct kvm_vcpu *vcpu)
 		kvm_psci_call(vcpu);
 	}
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 
@@ -695,6 +710,27 @@ int kvm_vm_ioctl_irq_line(struct kvm *kvm, struct kvm_irq_level *irq_level,
 	return -EINVAL;
 }
 
+<<<<<<< HEAD
+=======
+static int kvm_arch_vcpu_ioctl_vcpu_init(struct kvm_vcpu *vcpu,
+					 struct kvm_vcpu_init *init)
+{
+	int ret;
+
+	ret = kvm_vcpu_set_target(vcpu, init);
+	if (ret)
+		return ret;
+
+	/*
+	 * Handle the "start in power-off" case by marking the VCPU as paused.
+	 */
+	if (__test_and_clear_bit(KVM_ARM_VCPU_POWER_OFF, vcpu->arch.features))
+		vcpu->arch.pause = true;
+
+	return 0;
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 long kvm_arch_vcpu_ioctl(struct file *filp,
 			 unsigned int ioctl, unsigned long arg)
 {
@@ -708,8 +744,12 @@ long kvm_arch_vcpu_ioctl(struct file *filp,
 		if (copy_from_user(&init, argp, sizeof(init)))
 			return -EFAULT;
 
+<<<<<<< HEAD
 		return kvm_vcpu_set_target(vcpu, &init);
 
+=======
+		return kvm_arch_vcpu_ioctl_vcpu_init(vcpu, &init);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 	case KVM_SET_ONE_REG:
 	case KVM_GET_ONE_REG: {
@@ -811,7 +851,11 @@ static void cpu_init_hyp_mode(void *dummy)
 
 	boot_pgd_ptr = (unsigned long long)kvm_mmu_get_boot_httbr();
 	pgd_ptr = (unsigned long long)kvm_mmu_get_httbr();
+<<<<<<< HEAD
 	stack_page = __get_cpu_var(kvm_arm_hyp_stack_page);
+=======
+	stack_page = __this_cpu_read(kvm_arm_hyp_stack_page);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	hyp_stack_ptr = stack_page + PAGE_SIZE;
 	vector_ptr = (unsigned long)__kvm_hyp_vector;
 
@@ -835,6 +879,37 @@ static struct notifier_block hyp_init_cpu_nb = {
 	.notifier_call = hyp_init_cpu_notify,
 };
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_CPU_PM
+static int hyp_init_cpu_pm_notifier(struct notifier_block *self,
+				    unsigned long cmd,
+				    void *v)
+{
+	if (cmd == CPU_PM_EXIT &&
+	    __hyp_get_vectors() == hyp_default_vectors) {
+		cpu_init_hyp_mode(NULL);
+		return NOTIFY_OK;
+	}
+
+	return NOTIFY_DONE;
+}
+
+static struct notifier_block hyp_init_cpu_pm_nb = {
+	.notifier_call = hyp_init_cpu_pm_notifier,
+};
+
+static void __init hyp_cpu_pm_init(void)
+{
+	cpu_pm_register_notifier(&hyp_init_cpu_pm_nb);
+}
+#else
+static inline void hyp_cpu_pm_init(void)
+{
+}
+#endif
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /**
  * Inits Hyp-mode on all online CPUs
  */
@@ -995,6 +1070,11 @@ int kvm_arch_init(void *opaque)
 		goto out_err;
 	}
 
+<<<<<<< HEAD
+=======
+	hyp_cpu_pm_init();
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	kvm_coproc_table_init();
 	return 0;
 out_err:

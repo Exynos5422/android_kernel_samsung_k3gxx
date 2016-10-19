@@ -2957,14 +2957,26 @@ void r600_fence_ring_emit(struct radeon_device *rdev,
 			  struct radeon_fence *fence)
 {
 	struct radeon_ring *ring = &rdev->ring[fence->ring];
+<<<<<<< HEAD
+=======
+	u32 cp_coher_cntl = PACKET3_TC_ACTION_ENA | PACKET3_VC_ACTION_ENA |
+		PACKET3_SH_ACTION_ENA;
+
+	if (rdev->family >= CHIP_RV770)
+		cp_coher_cntl |= PACKET3_FULL_CACHE_ENA;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (rdev->wb.use_event) {
 		u64 addr = rdev->fence_drv[fence->ring].gpu_addr;
 		/* flush read cache over gart */
 		radeon_ring_write(ring, PACKET3(PACKET3_SURFACE_SYNC, 3));
+<<<<<<< HEAD
 		radeon_ring_write(ring, PACKET3_TC_ACTION_ENA |
 					PACKET3_VC_ACTION_ENA |
 					PACKET3_SH_ACTION_ENA);
+=======
+		radeon_ring_write(ring, cp_coher_cntl);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		radeon_ring_write(ring, 0xFFFFFFFF);
 		radeon_ring_write(ring, 0);
 		radeon_ring_write(ring, 10); /* poll interval */
@@ -2978,9 +2990,13 @@ void r600_fence_ring_emit(struct radeon_device *rdev,
 	} else {
 		/* flush read cache over gart */
 		radeon_ring_write(ring, PACKET3(PACKET3_SURFACE_SYNC, 3));
+<<<<<<< HEAD
 		radeon_ring_write(ring, PACKET3_TC_ACTION_ENA |
 					PACKET3_VC_ACTION_ENA |
 					PACKET3_SH_ACTION_ENA);
+=======
+		radeon_ring_write(ring, cp_coher_cntl);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		radeon_ring_write(ring, 0xFFFFFFFF);
 		radeon_ring_write(ring, 0);
 		radeon_ring_write(ring, 10); /* poll interval */
@@ -4508,6 +4524,13 @@ restart_ih:
 				break;
 			}
 			break;
+<<<<<<< HEAD
+=======
+		case 124: /* UVD */
+			DRM_DEBUG("IH: UVD int: 0x%08x\n", src_data);
+			radeon_fence_process(rdev, R600_RING_TYPE_UVD_INDEX);
+			break;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		case 176: /* CP_INT in ring buffer */
 		case 177: /* CP_INT in IB1 */
 		case 178: /* CP_INT in IB2 */

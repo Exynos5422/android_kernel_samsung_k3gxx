@@ -12,7 +12,11 @@
 #include <linux/err.h>
 #include <linux/module.h>
 #include <linux/of.h>
+<<<<<<< HEAD
 #include <linux/opp.h>
+=======
+#include <linux/pm_opp.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <linux/platform_device.h>
 #include <linux/regulator/consumer.h>
 
@@ -71,14 +75,22 @@ static int imx6q_set_target(struct cpufreq_policy *policy,
 	cpufreq_notify_transition(policy, &freqs, CPUFREQ_PRECHANGE);
 
 	rcu_read_lock();
+<<<<<<< HEAD
 	opp = opp_find_freq_ceil(cpu_dev, &freq_hz);
+=======
+	opp = dev_pm_opp_find_freq_ceil(cpu_dev, &freq_hz);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (IS_ERR(opp)) {
 		rcu_read_unlock();
 		dev_err(cpu_dev, "failed to find OPP for %ld\n", freq_hz);
 		return PTR_ERR(opp);
 	}
 
+<<<<<<< HEAD
 	volt = opp_get_voltage(opp);
+=======
+	volt = dev_pm_opp_get_voltage(opp);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	rcu_read_unlock();
 	volt_old = regulator_get_voltage(arm_reg);
 
@@ -246,14 +258,22 @@ static int imx6q_cpufreq_probe(struct platform_device *pdev)
 	}
 
 	/* We expect an OPP table supplied by platform */
+<<<<<<< HEAD
 	num = opp_get_opp_count(cpu_dev);
+=======
+	num = dev_pm_opp_get_opp_count(cpu_dev);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (num < 0) {
 		ret = num;
 		dev_err(cpu_dev, "no OPP table is found: %d\n", ret);
 		goto put_node;
 	}
 
+<<<<<<< HEAD
 	ret = opp_init_cpufreq_table(cpu_dev, &freq_table);
+=======
+	ret = dev_pm_opp_init_cpufreq_table(cpu_dev, &freq_table);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (ret) {
 		dev_err(cpu_dev, "failed to init cpufreq table: %d\n", ret);
 		goto put_node;
@@ -268,12 +288,21 @@ static int imx6q_cpufreq_probe(struct platform_device *pdev)
 	 * same order.
 	 */
 	rcu_read_lock();
+<<<<<<< HEAD
 	opp = opp_find_freq_exact(cpu_dev,
 				  freq_table[0].frequency * 1000, true);
 	min_volt = opp_get_voltage(opp);
 	opp = opp_find_freq_exact(cpu_dev,
 				  freq_table[--num].frequency * 1000, true);
 	max_volt = opp_get_voltage(opp);
+=======
+	opp = dev_pm_opp_find_freq_exact(cpu_dev,
+				  freq_table[0].frequency * 1000, true);
+	min_volt = dev_pm_opp_get_voltage(opp);
+	opp = dev_pm_opp_find_freq_exact(cpu_dev,
+				  freq_table[--num].frequency * 1000, true);
+	max_volt = dev_pm_opp_get_voltage(opp);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	rcu_read_unlock();
 	ret = regulator_set_voltage_time(arm_reg, min_volt, max_volt);
 	if (ret > 0)
@@ -301,7 +330,11 @@ static int imx6q_cpufreq_probe(struct platform_device *pdev)
 	return 0;
 
 free_freq_table:
+<<<<<<< HEAD
 	opp_free_cpufreq_table(cpu_dev, &freq_table);
+=======
+	dev_pm_opp_free_cpufreq_table(cpu_dev, &freq_table);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 put_node:
 	of_node_put(np);
 	return ret;
@@ -310,7 +343,11 @@ put_node:
 static int imx6q_cpufreq_remove(struct platform_device *pdev)
 {
 	cpufreq_unregister_driver(&imx6q_cpufreq_driver);
+<<<<<<< HEAD
 	opp_free_cpufreq_table(cpu_dev, &freq_table);
+=======
+	dev_pm_opp_free_cpufreq_table(cpu_dev, &freq_table);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return 0;
 }

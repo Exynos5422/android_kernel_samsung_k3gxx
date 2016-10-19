@@ -12,10 +12,18 @@
 #define __LINUX_SND_SOC_DPCM_H
 
 #include <linux/list.h>
+<<<<<<< HEAD
+=======
+#include <linux/slab.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <sound/pcm.h>
 
 struct snd_soc_pcm_runtime;
 
+<<<<<<< HEAD
+=======
+#define DPCM_MAX_BE_USERS   8
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * Types of runtime_update to perform. e.g. originated from FE PCM ops
  * or audio route changes triggered by muxes/mixers.
@@ -85,6 +93,10 @@ struct snd_soc_dpcm {
 #ifdef CONFIG_DEBUG_FS
 	struct dentry *debugfs_state;
 #endif
+<<<<<<< HEAD
+=======
+	int stream;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 /*
@@ -135,4 +147,32 @@ int soc_dpcm_be_digital_mute(struct snd_soc_pcm_runtime *fe, int mute);
 int soc_dpcm_debugfs_add(struct snd_soc_pcm_runtime *rtd);
 int soc_dpcm_runtime_update(struct snd_soc_dapm_widget *);
 
+<<<<<<< HEAD
+=======
+int dpcm_path_get(struct snd_soc_pcm_runtime *fe,
+	int stream, struct snd_soc_dapm_widget_list **list_);
+int dpcm_process_paths(struct snd_soc_pcm_runtime *fe,
+	int stream, struct snd_soc_dapm_widget_list **list, int new);
+int dpcm_be_dai_startup(struct snd_soc_pcm_runtime *fe, int stream);
+int dpcm_be_dai_shutdown(struct snd_soc_pcm_runtime *fe, int stream);
+void dpcm_be_disconnect(struct snd_soc_pcm_runtime *fe, int stream);
+void dpcm_clear_pending_state(struct snd_soc_pcm_runtime *fe, int stream);
+int dpcm_be_dai_hw_free(struct snd_soc_pcm_runtime *fe, int stream);
+int dpcm_be_dai_hw_params(struct snd_soc_pcm_runtime *fe, int tream);
+int dpcm_fe_dai_hw_params_be(struct snd_soc_pcm_runtime *fe,
+	struct snd_soc_pcm_runtime *be, struct snd_pcm_hw_params *hw_params,
+							    int stream);
+int dpcm_be_dai_trigger(struct snd_soc_pcm_runtime *fe, int stream, int cmd);
+int dpcm_be_dai_prepare(struct snd_soc_pcm_runtime *fe, int stream);
+int dpcm_fe_dai_prepare_be(struct snd_soc_pcm_runtime *fe,
+		struct snd_soc_pcm_runtime *be, int stream);
+int dpcm_dapm_stream_event(struct snd_soc_pcm_runtime *fe,
+	int dir, int event);
+
+static inline void dpcm_path_put(struct snd_soc_dapm_widget_list **list)
+{
+	kfree(*list);
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif

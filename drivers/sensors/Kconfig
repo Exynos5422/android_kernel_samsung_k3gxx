@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #
 # Sensor  drivers configuration
 #
@@ -208,3 +209,17 @@ config SENSORS_BMM050
 	depends on I2C
 	help
 	 BMM050 Magnetic Sensor Driver implemented by Bosch-Sensortec.
+=======
+config SENSORS
+	bool "Sensors Class Support"
+	help
+	  This option enables the sensor sysfs class in /sys/class/sensors.
+	  You'll need this to do anything useful with sensorss. If unsure, say N.
+
+config SENSORS_SSC
+	bool "Enable Sensors Driver Support for SSC"
+	help
+	  Add support for sensors SSC driver.
+	  This driver is used for exercising sensors use case,
+	  time syncing with ADSP clock.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

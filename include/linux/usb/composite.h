@@ -40,10 +40,13 @@
 #include <linux/usb/gadget.h>
 #include <linux/log2.h>
 #include <linux/configfs.h>
+<<<<<<< HEAD
 #ifdef CONFIG_USB_ANDROID_SAMSUNG_COMPOSITE
 #include <linux/usb_notify.h>
 #include <linux/gpio.h>
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /*
  * USB function drivers should return USB_GADGET_DELAYED_STATUS if they
@@ -55,7 +58,11 @@
 #define USB_GADGET_DELAYED_STATUS       0x7fff	/* Impossibly large value */
 
 /* big enough to hold our biggest descriptor */
+<<<<<<< HEAD
 #define USB_COMP_EP0_BUFSIZ	1024
+=======
+#define USB_COMP_EP0_BUFSIZ	4096
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define USB_MS_TO_HS_INTERVAL(x)	(ilog2((x * 1000 / 125)) + 1)
 struct usb_configuration;
@@ -98,7 +105,18 @@ struct usb_configuration;
  * @get_status: Returns function status as a reply to
  *	GetStatus() request when the recepient is Interface.
  * @func_suspend: callback to be called when
+<<<<<<< HEAD
  *	SetFeature(FUNCTION_SUSPEND) is reseived
+=======
+ *	SetFeature(FUNCTION_SUSPEND) is received
+ * @func_is_suspended: Tells whether the function is currently in
+ *	Function Suspend state (used in Super Speed mode only).
+ * @func_wakeup_allowed: Tells whether Function Remote Wakeup has been allowed
+ *	by the USB host (used in Super Speed mode only).
+ * @func_wakeup_pending: Marks that the function has issued a Function Wakeup
+ *	while the USB bus was suspended and therefore a Function Wakeup
+ *	notification needs to be sent once the USB bus is resumed.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  *
  * A single USB function uses one or more interfaces, and should in most
  * cases support operation at both full and high speeds.  Each function is
@@ -133,12 +151,15 @@ struct usb_function {
 
 	struct usb_configuration	*config;
 
+<<<<<<< HEAD
 #ifdef CONFIG_USB_ANDROID_SAMSUNG_COMPOSITE
 		int (*set_intf_num)(struct usb_function *f,
 				int intf_num, int index_num);
 		int (*set_config_desc)(int conf_num);
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* REVISIT:  bind() functions can be marked __init, which
 	 * makes trouble for section mismatch analysis.  See if
 	 * we can't restructure things to avoid mismatching.
@@ -168,6 +189,12 @@ struct usb_function {
 	int			(*get_status)(struct usb_function *);
 	int			(*func_suspend)(struct usb_function *,
 						u8 suspend_opt);
+<<<<<<< HEAD
+=======
+	unsigned		func_is_suspended:1;
+	unsigned		func_wakeup_allowed:1;
+	unsigned		func_wakeup_pending:1;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* private: */
 	/* internals */
 	struct list_head		list;
@@ -181,6 +208,12 @@ int usb_function_deactivate(struct usb_function *);
 int usb_function_activate(struct usb_function *);
 
 int usb_interface_id(struct usb_configuration *, struct usb_function *);
+<<<<<<< HEAD
+=======
+int usb_func_wakeup(struct usb_function *func);
+
+int usb_get_func_interface_id(struct usb_function *func);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 int config_ep_by_speed(struct usb_gadget *g, struct usb_function *f,
 			struct usb_ep *_ep);
@@ -261,6 +294,13 @@ struct usb_configuration {
 	unsigned		highspeed:1;
 	unsigned		fullspeed:1;
 	struct usb_function	*interface[MAX_CONFIG_INTERFACES];
+<<<<<<< HEAD
+=======
+
+	/* number of in and out eps used in this configuration */
+	int			num_ineps_used;
+	int			num_outeps_used;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 int usb_add_config(struct usb_composite_dev *,
@@ -401,6 +441,7 @@ struct usb_composite_dev {
 	 * data/status stages till delayed_status is zero.
 	 */
 	int				delayed_status;
+<<<<<<< HEAD
 #ifdef CONFIG_USB_ANDROID_SAMSUNG_COMPOSITE
 		/* used by enable_store function of android.c
 		 * to avoid signalling switch changes
@@ -408,6 +449,8 @@ struct usb_composite_dev {
 	bool				mute_switch;
 	bool				force_disconnect;
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/* protects deactivations and delayed_status counts*/
 	spinlock_t			lock;

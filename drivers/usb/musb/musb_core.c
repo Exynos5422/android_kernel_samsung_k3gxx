@@ -440,7 +440,10 @@ void musb_hnp_stop(struct musb *musb)
 static irqreturn_t musb_stage0_irq(struct musb *musb, u8 int_usb,
 				u8 devctl)
 {
+<<<<<<< HEAD
 	struct usb_otg *otg = musb->xceiv->otg;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	irqreturn_t handled = IRQ_NONE;
 
 	dev_dbg(musb->controller, "<== DevCtl=%02x, int_usb=0x%x\n", devctl,
@@ -655,7 +658,11 @@ static irqreturn_t musb_stage0_irq(struct musb *musb, u8 int_usb,
 				break;
 		case OTG_STATE_B_PERIPHERAL:
 			musb_g_suspend(musb);
+<<<<<<< HEAD
 			musb->is_active = otg->gadget->b_hnp_enable;
+=======
+			musb->is_active = musb->g.b_hnp_enable;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			if (musb->is_active) {
 				musb->xceiv->state = OTG_STATE_B_WAIT_ACON;
 				dev_dbg(musb->controller, "HNP: Setting timer for b_ase0_brst\n");
@@ -671,7 +678,11 @@ static irqreturn_t musb_stage0_irq(struct musb *musb, u8 int_usb,
 			break;
 		case OTG_STATE_A_HOST:
 			musb->xceiv->state = OTG_STATE_A_SUSPEND;
+<<<<<<< HEAD
 			musb->is_active = otg->host->b_hnp_enable;
+=======
+			musb->is_active = musb_to_hcd(musb)->self.b_hnp_enable;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			break;
 		case OTG_STATE_B_HOST:
 			/* Transition to B_PERIPHERAL, see 6.8.2.6 p 44 */

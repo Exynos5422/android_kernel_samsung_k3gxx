@@ -22,6 +22,13 @@ struct timezone {
 	int	tz_dsttime;	/* type of dst correction */
 };
 
+<<<<<<< HEAD
+=======
+#define FD_SET(fd,fdsetp)       __FD_SET(fd,fdsetp)
+#define FD_CLR(fd,fdsetp)       __FD_CLR(fd,fdsetp)
+#define FD_ISSET(fd,fdsetp)     __FD_ISSET(fd,fdsetp)
+#define FD_ZERO(fdsetp)         __FD_ZERO(fdsetp)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /*
  * Names of the interval timers, and structure

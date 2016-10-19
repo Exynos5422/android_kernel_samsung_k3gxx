@@ -717,6 +717,17 @@ static const struct dmi_system_id intel_no_crt[] = {
 			DMI_MATCH(DMI_PRODUCT_NAME, "ZGB"),
 		},
 	},
+<<<<<<< HEAD
+=======
+	{
+		.callback = intel_no_crt_dmi_callback,
+		.ident = "DELL XPS 8700",
+		.matches = {
+			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
+			DMI_MATCH(DMI_PRODUCT_NAME, "XPS 8700"),
+		},
+	},
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	{ }
 };
 

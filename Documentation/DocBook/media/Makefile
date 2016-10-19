@@ -195,7 +195,11 @@ DVB_DOCUMENTED = \
 #
 
 install_media_images = \
+<<<<<<< HEAD
 	$(Q)cp $(OBJIMGFILES) $(MEDIA_SRC_DIR)/v4l/*.svg $(MEDIA_OBJ_DIR)/media_api
+=======
+	$(Q)-cp $(OBJIMGFILES) $(MEDIA_SRC_DIR)/v4l/*.svg $(MEDIA_OBJ_DIR)/media_api
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 $(MEDIA_OBJ_DIR)/%: $(MEDIA_SRC_DIR)/%.b64
 	$(Q)base64 -d $< >$@

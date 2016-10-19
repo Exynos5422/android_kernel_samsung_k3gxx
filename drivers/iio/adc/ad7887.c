@@ -211,7 +211,17 @@ static const struct ad7887_chip_info ad7887_chip_info_tbl[] = {
 			.info_mask_shared_by_type = BIT(IIO_CHAN_INFO_SCALE),
 			.address = 1,
 			.scan_index = 1,
+<<<<<<< HEAD
 			.scan_type = IIO_ST('u', 12, 16, 0),
+=======
+			.scan_type = {
+				.sign = 'u',
+				.realbits = 12,
+				.storagebits = 16,
+				.shift = 0,
+				.endianness = IIO_BE,
+			},
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		},
 		.channel[1] = {
 			.type = IIO_VOLTAGE,
@@ -221,7 +231,17 @@ static const struct ad7887_chip_info ad7887_chip_info_tbl[] = {
 			.info_mask_shared_by_type = BIT(IIO_CHAN_INFO_SCALE),
 			.address = 0,
 			.scan_index = 0,
+<<<<<<< HEAD
 			.scan_type = IIO_ST('u', 12, 16, 0),
+=======
+			.scan_type = {
+				.sign = 'u',
+				.realbits = 12,
+				.storagebits = 16,
+				.shift = 0,
+				.endianness = IIO_BE,
+			},
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		},
 		.channel[2] = IIO_CHAN_SOFT_TIMESTAMP(2),
 		.int_vref_mv = 2500,

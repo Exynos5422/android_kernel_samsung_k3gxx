@@ -17,8 +17,13 @@
  * published by the Free Software Foundation.
 */
 
+<<<<<<< HEAD
 #include "exynos4.dtsi"
 #include "exynos4x12-pinctrl.dtsi"
+=======
+/include/ "exynos4.dtsi"
+/include/ "exynos4x12-pinctrl.dtsi"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 / {
 	aliases {
@@ -28,6 +33,17 @@
 		pinctrl3 = &pinctrl_3;
 	};
 
+<<<<<<< HEAD
+=======
+	combiner:interrupt-controller@10440000 {
+		interrupts = <0 0 0>, <0 1 0>, <0 2 0>, <0 3 0>,
+			     <0 4 0>, <0 5 0>, <0 6 0>, <0 7 0>,
+			     <0 8 0>, <0 9 0>, <0 10 0>, <0 11 0>,
+			     <0 12 0>, <0 13 0>, <0 14 0>, <0 15 0>,
+			     <0 16 0>, <0 17 0>, <0 18 0>, <0 19 0>;
+	};
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	clock: clock-controller@0x10030000 {
 		compatible = "samsung,exynos4412-clock";
 		reg = <0x10030000 0x20000>;
@@ -69,8 +85,11 @@
 		compatible = "samsung,exynos4212-g2d";
 		reg = <0x10800000 0x1000>;
 		interrupts = <0 89 0>;
+<<<<<<< HEAD
 		clocks = <&clock 177>, <&clock 277>;
 		clock-names = "sclk_fimg2d", "fimg2d";
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		status = "disabled";
 	};
 };

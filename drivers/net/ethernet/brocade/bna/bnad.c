@@ -248,7 +248,11 @@ bnad_tx_complete(struct bnad *bnad, struct bna_tcb *tcb)
 	if (likely(test_bit(BNAD_TXQ_TX_STARTED, &tcb->flags)))
 		bna_ib_ack(tcb->i_dbell, sent);
 
+<<<<<<< HEAD
 	smp_mb__before_clear_bit();
+=======
+	smp_mb__before_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	clear_bit(BNAD_TXQ_FREE_SENT, &tcb->flags);
 
 	return sent;
@@ -1024,7 +1028,11 @@ bnad_tx_cleanup(struct delayed_work *work)
 
 		bnad_txq_cleanup(bnad, tcb);
 
+<<<<<<< HEAD
 		smp_mb__before_clear_bit();
+=======
+		smp_mb__before_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		clear_bit(BNAD_TXQ_FREE_SENT, &tcb->flags);
 	}
 
@@ -2813,7 +2821,11 @@ bnad_start_xmit(struct sk_buff *skb, struct net_device *netdev)
 			sent = bnad_txcmpl_process(bnad, tcb);
 			if (likely(test_bit(BNAD_TXQ_TX_STARTED, &tcb->flags)))
 				bna_ib_ack(tcb->i_dbell, sent);
+<<<<<<< HEAD
 			smp_mb__before_clear_bit();
+=======
+			smp_mb__before_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			clear_bit(BNAD_TXQ_FREE_SENT, &tcb->flags);
 		} else {
 			netif_stop_queue(netdev);

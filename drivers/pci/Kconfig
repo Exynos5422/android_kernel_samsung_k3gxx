@@ -120,4 +120,15 @@ config PCI_LABEL
 	def_bool y if (DMI || ACPI)
 	select NLS
 
+<<<<<<< HEAD
 source "drivers/pci/host/Kconfig"
+=======
+config PCI_MSM
+	bool "MSM PCIe Controller driver"
+	depends on ARCH_MSM && PCI
+	select PCI_DOMAINS
+	select PCI_MSI
+	help
+	  Enables the PCIe functionality by configures PCIe core on
+	  MSM chipset and by enabling the ARM PCI framework extension.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

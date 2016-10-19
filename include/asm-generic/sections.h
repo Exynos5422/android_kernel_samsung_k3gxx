@@ -14,9 +14,12 @@ extern char __kprobes_text_start[], __kprobes_text_end[];
 extern char __entry_text_start[], __entry_text_end[];
 extern char __initdata_begin[], __initdata_end[];
 extern char __start_rodata[], __end_rodata[];
+<<<<<<< HEAD
 #ifdef	CONFIG_TIMA_RKP_RO_CRED
 extern char __rkp_ro_start[], __rkp_ro_end[];
 #endif /*CONFIG_TIMA_RKP_RO_CRED*/
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /* Start and end of .ctors section - used for constructor calls. */
 extern char __ctors_start[], __ctors_end[];

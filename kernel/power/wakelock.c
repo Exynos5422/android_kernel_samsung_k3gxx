@@ -9,6 +9,10 @@
  * manipulate wakelocks on Android.
  */
 
+<<<<<<< HEAD
+=======
+#include <linux/capability.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <linux/ctype.h>
 #include <linux/device.h>
 #include <linux/err.h>
@@ -188,6 +192,12 @@ int pm_wake_lock(const char *buf)
 	size_t len;
 	int ret = 0;
 
+<<<<<<< HEAD
+=======
+	if (!capable(CAP_BLOCK_SUSPEND))
+		return -EPERM;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	while (*str && !isspace(*str))
 		str++;
 
@@ -231,6 +241,12 @@ int pm_wake_unlock(const char *buf)
 	size_t len;
 	int ret = 0;
 
+<<<<<<< HEAD
+=======
+	if (!capable(CAP_BLOCK_SUSPEND))
+		return -EPERM;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	len = strlen(buf);
 	if (!len)
 		return -EINVAL;

@@ -97,9 +97,18 @@ spc_emulate_inquiry_std(struct se_cmd *cmd, unsigned char *buf)
 
 	buf[7] = 0x2; /* CmdQue=1 */
 
+<<<<<<< HEAD
 	snprintf(&buf[8], 8, "LIO-ORG");
 	snprintf(&buf[16], 16, "%s", dev->t10_wwn.model);
 	snprintf(&buf[32], 4, "%s", dev->t10_wwn.revision);
+=======
+	memcpy(&buf[8], "LIO-ORG ", 8);
+	memset(&buf[16], 0x20, 16);
+	memcpy(&buf[16], dev->t10_wwn.model,
+	       min_t(size_t, strlen(dev->t10_wwn.model), 16));
+	memcpy(&buf[32], dev->t10_wwn.revision,
+	       min_t(size_t, strlen(dev->t10_wwn.revision), 4));
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	buf[4] = 31; /* Set additional length to 31 */
 
 	return 0;
@@ -625,6 +634,10 @@ spc_emulate_inquiry(struct se_cmd *cmd)
 	unsigned char buf[SE_INQUIRY_BUF];
 	sense_reason_t ret;
 	int p;
+<<<<<<< HEAD
+=======
+	int len = 0;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	memset(buf, 0, SE_INQUIRY_BUF);
 
@@ -642,6 +655,10 @@ spc_emulate_inquiry(struct se_cmd *cmd)
 		}
 
 		ret = spc_emulate_inquiry_std(cmd, buf);
+<<<<<<< HEAD
+=======
+		len = buf[4] + 5;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		goto out;
 	}
 
@@ -649,6 +666,10 @@ spc_emulate_inquiry(struct se_cmd *cmd)
 		if (cdb[2] == evpd_handlers[p].page) {
 			buf[1] = cdb[2];
 			ret = evpd_handlers[p].emulate(cmd, buf);
+<<<<<<< HEAD
+=======
+			len = get_unaligned_be16(&buf[2]) + 4;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			goto out;
 		}
 	}
@@ -664,7 +685,11 @@ out:
 	}
 
 	if (!ret)
+<<<<<<< HEAD
 		target_complete_cmd(cmd, GOOD);
+=======
+		target_complete_cmd_with_length(cmd, GOOD, len);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return ret;
 }
 
@@ -982,7 +1007,11 @@ set_length:
 		transport_kunmap_data_sg(cmd);
 	}
 
+<<<<<<< HEAD
 	target_complete_cmd(cmd, GOOD);
+=======
+	target_complete_cmd_with_length(cmd, GOOD, length);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 
@@ -1159,7 +1188,11 @@ done:
 	buf[3] = (lun_count & 0xff);
 	transport_kunmap_data_sg(cmd);
 
+<<<<<<< HEAD
 	target_complete_cmd(cmd, GOOD);
+=======
+	target_complete_cmd_with_length(cmd, GOOD, 8 + lun_count * 8);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 EXPORT_SYMBOL(spc_emulate_report_luns);

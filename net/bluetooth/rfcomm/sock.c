@@ -608,7 +608,10 @@ static int rfcomm_sock_recvmsg(struct kiocb *iocb, struct socket *sock,
 
 	if (test_and_clear_bit(RFCOMM_DEFER_SETUP, &d->flags)) {
 		rfcomm_dlc_accept(d);
+<<<<<<< HEAD
 		msg->msg_namelen = 0;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return 0;
 	}
 

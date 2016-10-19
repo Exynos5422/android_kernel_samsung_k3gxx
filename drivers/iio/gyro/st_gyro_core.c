@@ -162,11 +162,18 @@ static const struct st_sensors st_gyro_sensors[] = {
 		.wai = ST_GYRO_2_WAI_EXP,
 		.sensors_supported = {
 			[0] = L3GD20_GYRO_DEV_NAME,
+<<<<<<< HEAD
 			[1] = L3GD20H_GYRO_DEV_NAME,
 			[2] = LSM330D_GYRO_DEV_NAME,
 			[3] = LSM330DLC_GYRO_DEV_NAME,
 			[4] = L3G4IS_GYRO_DEV_NAME,
 			[5] = LSM330_GYRO_DEV_NAME,
+=======
+			[1] = LSM330D_GYRO_DEV_NAME,
+			[2] = LSM330DLC_GYRO_DEV_NAME,
+			[3] = L3G4IS_GYRO_DEV_NAME,
+			[4] = LSM330_GYRO_DEV_NAME,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		},
 		.ch = (struct iio_chan_spec *)st_gyro_16bit_channels,
 		.odr = {

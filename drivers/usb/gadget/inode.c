@@ -1509,7 +1509,11 @@ gadgetfs_setup (struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
 		}
 		break;
 
+<<<<<<< HEAD
 #ifndef	CONFIG_USB_GADGET_PXA25X
+=======
+#ifndef	CONFIG_USB_PXA25X
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* PXA automagically handles this request too */
 	case USB_REQ_GET_CONFIGURATION:
 		if (ctrl->bRequestType != 0x80)

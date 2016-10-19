@@ -490,10 +490,22 @@ static int cifs_sfu_mode(struct cifs_fattr *fattr, const unsigned char *path,
 		return PTR_ERR(tlink);
 	tcon = tlink_tcon(tlink);
 
+<<<<<<< HEAD
 	rc = CIFSSMBQAllEAs(xid, tcon, path, "SETFILEBITS",
 			    ea_value, 4 /* size of buf */, cifs_sb->local_nls,
 			    cifs_sb->mnt_cifs_flags &
 				CIFS_MOUNT_MAP_SPECIAL_CHR);
+=======
+	if (tcon->ses->server->ops->query_all_EAs == NULL) {
+		cifs_put_tlink(tlink);
+		return -EOPNOTSUPP;
+	}
+
+	rc = tcon->ses->server->ops->query_all_EAs(xid, tcon, path,
+			"SETFILEBITS", ea_value, 4 /* size of buf */,
+			cifs_sb->local_nls,
+			cifs_sb->mnt_cifs_flags & CIFS_MOUNT_MAP_SPECIAL_CHR);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	cifs_put_tlink(tlink);
 	if (rc < 0)
 		return (int)rc;

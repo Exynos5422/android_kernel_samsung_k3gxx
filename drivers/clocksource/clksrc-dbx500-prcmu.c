@@ -14,8 +14,12 @@
  */
 #include <linux/clockchips.h>
 #include <linux/clksrc-dbx500-prcmu.h>
+<<<<<<< HEAD
 
 #include <asm/sched_clock.h>
+=======
+#include <linux/sched_clock.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define RATE_32K		32768
 

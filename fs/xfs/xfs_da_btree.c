@@ -1223,6 +1223,10 @@ xfs_da3_node_toosmall(
 	/* start with smaller blk num */
 	forward = nodehdr.forw < nodehdr.back;
 	for (i = 0; i < 2; forward = !forward, i++) {
+<<<<<<< HEAD
+=======
+		struct xfs_da3_icnode_hdr thdr;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (forward)
 			blkno = nodehdr.forw;
 		else
@@ -1235,10 +1239,17 @@ xfs_da3_node_toosmall(
 			return(error);
 
 		node = bp->b_addr;
+<<<<<<< HEAD
 		xfs_da3_node_hdr_from_disk(&nodehdr, node);
 		xfs_trans_brelse(state->args->trans, bp);
 
 		if (count - nodehdr.count >= 0)
+=======
+		xfs_da3_node_hdr_from_disk(&thdr, node);
+		xfs_trans_brelse(state->args->trans, bp);
+
+		if (count - thdr.count >= 0)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			break;	/* fits with at least 25% to spare */
 	}
 	if (i >= 2) {
@@ -1333,7 +1344,11 @@ xfs_da3_fixhashpath(
 		node = blk->bp->b_addr;
 		xfs_da3_node_hdr_from_disk(&nodehdr, node);
 		btree = xfs_da3_node_tree_p(node);
+<<<<<<< HEAD
 		if (be32_to_cpu(btree->hashval) == lasthash)
+=======
+		if (be32_to_cpu(btree[blk->index].hashval) == lasthash)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			break;
 		blk->hashval = lasthash;
 		btree[blk->index].hashval = cpu_to_be32(lasthash);

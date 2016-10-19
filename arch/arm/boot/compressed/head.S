@@ -263,7 +263,11 @@ restart:	adr	r0, LC0
 		 * area.  No GOT fixup has occurred yet, but none of the
 		 * code we're about to call uses any global variable.
 		*/
+<<<<<<< HEAD
 		add	sp, sp, #0x20000
+=======
+		add	sp, sp, #0x10000
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		stmfd	sp!, {r0-r3, ip, lr}
 		mov	r0, r8
 		mov	r1, r6
@@ -283,7 +287,11 @@ restart:	adr	r0, LC0
 		bleq	atags_to_fdt
 
 		ldmfd	sp!, {r0-r3, ip, lr}
+<<<<<<< HEAD
 		sub	sp, sp, #0x20000
+=======
+		sub	sp, sp, #0x10000
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif
 
 		mov	r8, r6			@ use the appended device tree
@@ -622,7 +630,11 @@ __setup_mmu:	sub	r3, r4, #16384		@ Page directory size
 		mov	r0, r3
 		mov	r9, r0, lsr #18
 		mov	r9, r9, lsl #18		@ start of RAM
+<<<<<<< HEAD
 		add	r10, r9, #0x10000000	@ a reasonable RAM size
+=======
+		add	r10, r9, #CONFIG_ARM_DECOMPRESSOR_LIMIT
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		mov	r1, #0x12		@ XN|U + section mapping
 		orr	r1, r1, #3 << 10	@ AP=11
 		add	r2, r3, #16384
@@ -1272,5 +1284,9 @@ reloc_code_end:
 
 		.align
 		.section ".stack", "aw", %nobits
+<<<<<<< HEAD
 .L_user_stack:	.space	24576
+=======
+.L_user_stack:	.space	4096
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 .L_user_stack_end:

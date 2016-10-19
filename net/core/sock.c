@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 /* Copyright (c) 2015 Samsung Electronics Co., Ltd. */
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * INET		An implementation of the TCP/IP protocol suite for the LINUX
  *		operating system.  INET is implemented using the  BSD Socket
@@ -89,6 +92,7 @@
  *		as published by the Free Software Foundation; either version
  *		2 of the License, or (at your option) any later version.
  */
+<<<<<<< HEAD
 /*
  *  Changes:
  *  KwnagHyun Kim <kh0304.kim@samsung.com> 2015/07/08
@@ -97,6 +101,8 @@
  *    Add codes to share UID/PID information
  *
  */
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
 
@@ -151,6 +157,58 @@
 static DEFINE_MUTEX(proto_list_mutex);
 static LIST_HEAD(proto_list);
 
+<<<<<<< HEAD
+=======
+/**
+ * sk_ns_capable - General socket capability test
+ * @sk: Socket to use a capability on or through
+ * @user_ns: The user namespace of the capability to use
+ * @cap: The capability to use
+ *
+ * Test to see if the opener of the socket had when the socket was
+ * created and the current process has the capability @cap in the user
+ * namespace @user_ns.
+ */
+bool sk_ns_capable(const struct sock *sk,
+		   struct user_namespace *user_ns, int cap)
+{
+	return file_ns_capable(sk->sk_socket->file, user_ns, cap) &&
+		ns_capable(user_ns, cap);
+}
+EXPORT_SYMBOL(sk_ns_capable);
+
+/**
+ * sk_capable - Socket global capability test
+ * @sk: Socket to use a capability on or through
+ * @cap: The global capbility to use
+ *
+ * Test to see if the opener of the socket had when the socket was
+ * created and the current process has the capability @cap in all user
+ * namespaces.
+ */
+bool sk_capable(const struct sock *sk, int cap)
+{
+	return sk_ns_capable(sk, &init_user_ns, cap);
+}
+EXPORT_SYMBOL(sk_capable);
+
+/**
+ * sk_net_capable - Network namespace socket capability test
+ * @sk: Socket to use a capability on or through
+ * @cap: The capability to use
+ *
+ * Test to see if the opener of the socket had when the socke was created
+ * and the current process has the capability @cap over the network namespace
+ * the socket is a member of.
+ */
+bool sk_net_capable(const struct sock *sk, int cap)
+{
+	return sk_ns_capable(sk, sock_net(sk)->user_ns, cap);
+}
+EXPORT_SYMBOL(sk_net_capable);
+
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifdef CONFIG_MEMCG_KMEM
 int mem_cgroup_sockets_init(struct mem_cgroup *memcg, struct cgroup_subsys *ss)
 {
@@ -894,7 +952,11 @@ set_rcvbuf:
 
 	case SO_PEEK_OFF:
 		if (sock->ops->set_peek_off)
+<<<<<<< HEAD
 			sock->ops->set_peek_off(sk, val);
+=======
+			ret = sock->ops->set_peek_off(sk, val);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		else
 			ret = -EOPNOTSUPP;
 		break;
@@ -1260,11 +1322,14 @@ static struct sock *sk_prot_alloc(struct proto *prot, gfp_t priority,
 		if (!try_module_get(prot->owner))
 			goto out_free_sec;
 		sk_tx_queue_clear(sk);
+<<<<<<< HEAD
 
 // ------------- START of KNOX_VPN ------------------//
         sk->knox_uid = current->cred->uid;
         sk->knox_pid = current->tgid;
 // ------------- END of KNOX_VPN -------------------//
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	return sk;
@@ -1828,7 +1893,11 @@ bool sk_page_frag_refill(struct sock *sk, struct page_frag *pfrag)
 		gfp_t gfp = sk->sk_allocation;
 
 		if (order)
+<<<<<<< HEAD
 			gfp |= __GFP_COMP | __GFP_NOWARN;
+=======
+			gfp |= __GFP_COMP | __GFP_NOWARN | __GFP_NORETRY;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		pfrag->page = alloc_pages(gfp, order);
 		if (likely(pfrag->page)) {
 			pfrag->offset = 0;
@@ -2285,6 +2354,10 @@ void sock_init_data(struct socket *sock, struct sock *sk)
 
 	sk->sk_stamp = ktime_set(-1L, 0);
 
+<<<<<<< HEAD
+=======
+	sk->sk_pacing_rate = ~0U;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/*
 	 * Before updating sk_refcnt, we must commit prior changes to memory
 	 * (Documentation/RCU/rculist_nulls.txt for details)
@@ -2322,10 +2395,20 @@ void release_sock(struct sock *sk)
 	if (sk->sk_backlog.tail)
 		__release_sock(sk);
 
+<<<<<<< HEAD
 	if (sk->sk_prot->release_cb)
 		sk->sk_prot->release_cb(sk);
 
 	sk->sk_lock.owned = 0;
+=======
+	/* Warning : release_cb() might need to release sk ownership,
+	 * ie call sock_release_ownership(sk) before us.
+	 */
+	if (sk->sk_prot->release_cb)
+		sk->sk_prot->release_cb(sk);
+
+	sock_release_ownership(sk);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (waitqueue_active(&sk->sk_lock.wq))
 		wake_up(&sk->sk_lock.wq);
 	spin_unlock_bh(&sk->sk_lock.slock);

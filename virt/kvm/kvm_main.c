@@ -1904,6 +1904,12 @@ static int kvm_vm_ioctl_create_vcpu(struct kvm *kvm, u32 id)
 	int r;
 	struct kvm_vcpu *vcpu, *v;
 
+<<<<<<< HEAD
+=======
+	if (id >= KVM_MAX_VCPUS)
+		return -EINVAL;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	vcpu = kvm_arch_vcpu_create(kvm, id);
 	if (IS_ERR(vcpu))
 		return PTR_ERR(vcpu);

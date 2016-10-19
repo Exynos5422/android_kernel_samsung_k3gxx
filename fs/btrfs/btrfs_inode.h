@@ -231,7 +231,11 @@ static inline void btrfs_inode_block_unlocked_dio(struct inode *inode)
 
 static inline void btrfs_inode_resume_unlocked_dio(struct inode *inode)
 {
+<<<<<<< HEAD
 	smp_mb__before_clear_bit();
+=======
+	smp_mb__before_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	clear_bit(BTRFS_INODE_READDIO_NEED_LOCK,
 		  &BTRFS_I(inode)->runtime_flags);
 }

@@ -353,9 +353,12 @@ void crypto_shoot_alg(struct crypto_alg *alg)
 }
 EXPORT_SYMBOL_GPL(crypto_shoot_alg);
 
+<<<<<<< HEAD
 #if FIPS_FUNC_TEST == 4
 int g_tfm_sz = 0;
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 struct crypto_tfm *__crypto_alloc_tfm(struct crypto_alg *alg, u32 type,
 				      u32 mask)
 {
@@ -363,19 +366,25 @@ struct crypto_tfm *__crypto_alloc_tfm(struct crypto_alg *alg, u32 type,
 	unsigned int tfm_size;
 	int err = -ENOMEM;
 
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_FIPS
 	if (unlikely(in_fips_err()))
 		return ERR_PTR(-EACCES);
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	tfm_size = sizeof(*tfm) + crypto_ctxsize(alg, type, mask);
 	tfm = kzalloc(tfm_size, GFP_KERNEL);
 	if (tfm == NULL)
 		goto out_err;
 
+<<<<<<< HEAD
 #if FIPS_FUNC_TEST == 4
 	g_tfm_sz = tfm_size;
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	tfm->__crt_alg = alg;
 
 	err = crypto_init_ops(tfm, type, mask);
@@ -427,11 +436,14 @@ struct crypto_tfm *crypto_alloc_base(const char *alg_name, u32 type, u32 mask)
 	struct crypto_tfm *tfm;
 	int err;
 
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_FIPS
 	if (unlikely(in_fips_err()))
 		return ERR_PTR(-EACCES);
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	for (;;) {
 		struct crypto_alg *alg;
 
@@ -470,6 +482,7 @@ void *crypto_create_tfm(struct crypto_alg *alg,
 	unsigned int total;
 	int err = -ENOMEM;
 
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_FIPS
 	if (unlikely(in_fips_err())) {
 		printk(KERN_ERR
@@ -477,6 +490,8 @@ void *crypto_create_tfm(struct crypto_alg *alg,
 		return ERR_PTR(-EACCES);
 	}
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	tfmsize = frontend->tfmsize;
 	total = tfmsize + sizeof(*tfm) + frontend->extsize(alg);
 
@@ -556,11 +571,14 @@ void *crypto_alloc_tfm(const char *alg_name,
 	void *tfm;
 	int err;
 
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_FIPS
 	if (unlikely(in_fips_err()))
 		return ERR_PTR(-EACCES);
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	for (;;) {
 		struct crypto_alg *alg;
 
@@ -611,6 +629,7 @@ void crypto_destroy_tfm(void *mem, struct crypto_tfm *tfm)
 		alg->cra_exit(tfm);
 	crypto_exit_ops(tfm);
 	crypto_mod_put(alg);
+<<<<<<< HEAD
 #if FIPS_FUNC_TEST == 4
     {
         extern void hexdump(unsigned char *, unsigned int);
@@ -624,6 +643,9 @@ void crypto_destroy_tfm(void *mem, struct crypto_tfm *tfm)
         hexdump(mem, t);
     }
 #endif
+=======
+	kzfree(mem);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 EXPORT_SYMBOL_GPL(crypto_destroy_tfm);
 

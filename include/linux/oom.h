@@ -27,9 +27,12 @@ enum oom_scan_t {
 	OOM_SCAN_CONTINUE,	/* do not consider thread for oom kill */
 	OOM_SCAN_ABORT,		/* abort the iteration and return */
 	OOM_SCAN_SELECT,	/* always select this thread first */
+<<<<<<< HEAD
 #ifdef CONFIG_OOM_SCAN_WA_PREVENT_WRONG_SEARCH
 	OOM_SCAN_SKIP_SEARCH_THREAD, /* skip to check the treads */
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 /* Thread is the potential origin of an oom condition; kill first on oom */
@@ -87,6 +90,12 @@ static inline void oom_killer_enable(void)
 
 extern struct task_struct *find_lock_task_mm(struct task_struct *p);
 
+<<<<<<< HEAD
+=======
+extern void dump_tasks(const struct mem_cgroup *memcg,
+		const nodemask_t *nodemask);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /* sysctls */
 extern int sysctl_oom_dump_tasks;
 extern int sysctl_oom_kill_allocating_task;

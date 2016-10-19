@@ -103,6 +103,11 @@ ENTRY(__kernel_clock_gettime)
 	bl	__do_get_tspec
 	seqcnt_check w9, 1b
 
+<<<<<<< HEAD
+=======
+	mov	x30, x2
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	cmp	w0, #CLOCK_MONOTONIC
 	b.ne	6f
 
@@ -118,6 +123,12 @@ ENTRY(__kernel_clock_gettime)
 	ccmp	w0, #CLOCK_MONOTONIC_COARSE, #0x4, ne
 	b.ne	8f
 
+<<<<<<< HEAD
+=======
+	/* xtime_coarse_nsec is already right-shifted */
+	mov	x12, #0
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* Get coarse timespec. */
 	adr	vdso_data, _vdso_data
 3:	seqcnt_acquire
@@ -156,7 +167,11 @@ ENTRY(__kernel_clock_gettime)
 	lsr	x11, x11, x12
 	stp	x10, x11, [x1, #TSPEC_TV_SEC]
 	mov	x0, xzr
+<<<<<<< HEAD
 	ret	x2
+=======
+	ret
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 7:
 	mov	x30, x2
 8:	/* Syscall fallback. */

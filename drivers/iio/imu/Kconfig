@@ -23,6 +23,7 @@ config ADIS16480
 	  Say yes here to build support for Analog Devices ADIS16375, ADIS16480,
 	  ADIS16485, ADIS16488 inertial sensors.
 
+<<<<<<< HEAD
 config ST_LSM6DS3_IIO
 	tristate "STMicroelectronics LSM6DS3 sensor"
 	depends on (I2C || SPI) && SYSFS
@@ -34,6 +35,8 @@ config ST_LSM6DS3_IIO
 	  This driver can be built as a module. The module will be called
 	  st-lsm6ds3.
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 endmenu
 
 config IIO_ADIS_LIB
@@ -49,4 +52,7 @@ config IIO_ADIS_LIB_BUFFER
 	  family.
 
 source "drivers/iio/imu/inv_mpu6050/Kconfig"
+<<<<<<< HEAD
 source "drivers/iio/imu/inv_mpu6515/Kconfig"
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

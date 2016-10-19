@@ -135,6 +135,7 @@ fw-shipped-$(CONFIG_USB_SERIAL_XIRCOM) += keyspan_pda/xircom_pgs.fw
 fw-shipped-$(CONFIG_USB_VICAM) += vicam/firmware.fw
 fw-shipped-$(CONFIG_VIDEO_CPIA2) += cpia2/stv0672_vp4.bin
 fw-shipped-$(CONFIG_YAM) += yam/1200.bin yam/9600.bin
+<<<<<<< HEAD
 fw-shipped-$(CONFIG_KEYBOARD_CYPRESS_TOUCH) += cypress/cypress_ha_m07.fw cypress/cypress_ha_m09.fw
 fw-shipped-$(CONFIG_KEYBOARD_CYPRESS_TOUCH_20055) += cypress/cypress_slte.fw cypress/cypress_klimt.fw
 fw-shipped-$(CONFIG_KEYBOARD_CYPRESS_TOUCH_20075) += \
@@ -201,6 +202,8 @@ fw-shipped-$(CONFIG_TOUCHSCREEN_FTS) += \
 else
 $(warning '$(TSPFIRMWARE_DIRECTORY)' directory dose not exist)
 endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 fw-shipped-all := $(fw-shipped-y) $(fw-shipped-m) $(fw-shipped-)
 

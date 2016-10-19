@@ -19,7 +19,11 @@
 #include <linux/platform_device.h>
 #include <linux/uaccess.h>
 #include <linux/ratelimit.h>
+<<<<<<< HEAD
 #include <mach/usb_bridge.h>
+=======
+#include <linux/usb/usb_bridge.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define MAX_RX_URBS			100
 #define RMNET_RX_BUFSIZE		2048
@@ -1186,6 +1190,10 @@ static const struct usb_device_id bridge_ids[] = {
 	.driver_info = (unsigned long)rmnet_hsic_bridge_names,
 	},
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	{ } /* Terminating entry */
 };
 MODULE_DEVICE_TABLE(usb, bridge_ids);

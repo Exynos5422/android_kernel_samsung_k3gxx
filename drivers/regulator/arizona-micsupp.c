@@ -15,12 +15,18 @@
 #include <linux/moduleparam.h>
 #include <linux/init.h>
 #include <linux/bitops.h>
+<<<<<<< HEAD
 #include <linux/delay.h>
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <linux/err.h>
 #include <linux/platform_device.h>
 #include <linux/regulator/driver.h>
 #include <linux/regulator/machine.h>
+<<<<<<< HEAD
 #include <linux/regulator/of_regulator.h>
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <linux/gpio.h>
 #include <linux/slab.h>
 #include <linux/workqueue.h>
@@ -32,9 +38,12 @@
 
 #define ARIZONA_MICSUPP_MAX_SELECTOR 0x1f
 
+<<<<<<< HEAD
 #define ARIZONA_MICSUPP_RANGE1_MAX_SELECTOR 0x14
 #define ARIZONA_MICSUPP_RANGE2_MAX_SELECTOR 0x27
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 struct arizona_micsupp {
 	struct regulator_dev *regulator;
 	struct arizona *arizona;
@@ -45,7 +54,12 @@ struct arizona_micsupp {
 	struct work_struct check_cp_work;
 };
 
+<<<<<<< HEAD
 static int arizona_micsupp_sel_to_voltage(unsigned int selector)
+=======
+static int arizona_micsupp_list_voltage(struct regulator_dev *rdev,
+					unsigned int selector)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	if (selector > ARIZONA_MICSUPP_MAX_SELECTOR)
 		return -EINVAL;
@@ -56,6 +70,7 @@ static int arizona_micsupp_sel_to_voltage(unsigned int selector)
 		return (selector * 50000) + 1700000;
 }
 
+<<<<<<< HEAD
 static int arizona_micsupp_ext_sel_to_voltage(unsigned int selector)
 {
 	if (selector > ARIZONA_MICSUPP_RANGE2_MAX_SELECTOR)
@@ -83,6 +98,30 @@ static int arizona_micsupp_list_voltage(struct regulator_dev *rdev,
 		default:
 			return arizona_micsupp_ext_sel_to_voltage(selector);
 	}
+=======
+static int arizona_micsupp_map_voltage(struct regulator_dev *rdev,
+				       int min_uV, int max_uV)
+{
+	unsigned int voltage;
+	int selector;
+
+	if (min_uV < 1700000)
+		min_uV = 1700000;
+
+	if (min_uV > 3200000)
+		selector = ARIZONA_MICSUPP_MAX_SELECTOR;
+	else
+		selector = DIV_ROUND_UP(min_uV - 1700000, 50000);
+
+	if (selector < 0)
+		return -EINVAL;
+
+	voltage = arizona_micsupp_list_voltage(rdev, selector);
+	if (voltage < min_uV || voltage > max_uV)
+		return -EINVAL;
+
+	return selector;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static void arizona_micsupp_check_cp(struct work_struct *work)
@@ -102,6 +141,7 @@ static void arizona_micsupp_check_cp(struct work_struct *work)
 	}
 
 	if (dapm) {
+<<<<<<< HEAD
 		mutex_lock_nested(&dapm->card->dapm_mutex,
 				  SND_SOC_DAPM_CLASS_RUNTIME);
 
@@ -115,6 +155,13 @@ static void arizona_micsupp_check_cp(struct work_struct *work)
 		}
 
 		mutex_unlock(&dapm->card->dapm_mutex);
+=======
+		if ((reg & (ARIZONA_CPMIC_ENA | ARIZONA_CPMIC_BYPASS)) ==
+		    ARIZONA_CPMIC_ENA)
+			snd_soc_dapm_force_enable_pin(dapm, "MICSUPP");
+		else
+			snd_soc_dapm_disable_pin(dapm, "MICSUPP");
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 		snd_soc_dapm_sync(dapm);
 	}
@@ -151,7 +198,10 @@ static int arizona_micsupp_set_bypass(struct regulator_dev *rdev, bool ena)
 	int ret;
 
 	ret = regulator_set_bypass_regmap(rdev, ena);
+<<<<<<< HEAD
 	udelay(1000);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (ret == 0)
 		schedule_work(&micsupp->check_cp_work);
 
@@ -164,7 +214,11 @@ static struct regulator_ops arizona_micsupp_ops = {
 	.is_enabled = regulator_is_enabled_regmap,
 
 	.list_voltage = arizona_micsupp_list_voltage,
+<<<<<<< HEAD
 	.map_voltage = regulator_map_voltage_ascend,
+=======
+	.map_voltage = arizona_micsupp_map_voltage,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	.get_voltage_sel = regulator_get_voltage_sel_regmap,
 	.set_voltage_sel = regulator_set_voltage_sel_regmap,
@@ -187,6 +241,7 @@ static const struct regulator_desc arizona_micsupp = {
 	.bypass_reg = ARIZONA_MIC_CHARGE_PUMP_1,
 	.bypass_mask = ARIZONA_CPMIC_BYPASS,
 
+<<<<<<< HEAD
 	.enable_time = 6000,
 
 	.owner = THIS_MODULE,
@@ -206,6 +261,8 @@ static const struct regulator_desc arizona_micsupp_ext = {
 	.bypass_reg = ARIZONA_MIC_CHARGE_PUMP_1,
 	.bypass_mask = ARIZONA_CPMIC_BYPASS,
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	.enable_time = 3000,
 
 	.owner = THIS_MODULE,
@@ -223,6 +280,7 @@ static const struct regulator_init_data arizona_micsupp_default = {
 	.num_consumer_supplies = 1,
 };
 
+<<<<<<< HEAD
 static const struct regulator_init_data arizona_micsupp_ext_default = {
 	.constraints = {
 		.valid_ops_mask = REGULATOR_CHANGE_STATUS |
@@ -265,6 +323,11 @@ static int arizona_micsupp_probe(struct platform_device *pdev)
 {
 	struct arizona *arizona = dev_get_drvdata(pdev->dev.parent);
 	const struct regulator_desc *desc;
+=======
+static int arizona_micsupp_probe(struct platform_device *pdev)
+{
+	struct arizona *arizona = dev_get_drvdata(pdev->dev.parent);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct regulator_config config = { };
 	struct arizona_micsupp *micsupp;
 	int ret;
@@ -283,6 +346,7 @@ static int arizona_micsupp_probe(struct platform_device *pdev)
 	 * default init_data for it.  This will be overridden with
 	 * platform data if provided.
 	 */
+<<<<<<< HEAD
 	switch (arizona->type) {
 	case WM5102:
 	case WM8997:
@@ -296,6 +360,9 @@ static int arizona_micsupp_probe(struct platform_device *pdev)
 		micsupp->init_data = arizona_micsupp_ext_default;
 		break;
 	}
+=======
+	micsupp->init_data = arizona_micsupp_default;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	micsupp->init_data.consumer_supplies = &micsupp->supply;
 	micsupp->supply.supply = "MICVDD";
 	micsupp->supply.dev_name = dev_name(arizona->dev);
@@ -304,6 +371,7 @@ static int arizona_micsupp_probe(struct platform_device *pdev)
 	config.driver_data = micsupp;
 	config.regmap = arizona->regmap;
 
+<<<<<<< HEAD
 	if (IS_ENABLED(CONFIG_OF)) {
 		if (!dev_get_platdata(arizona->dev)) {
 			ret = arizona_micsupp_of_get_pdata(arizona, &config);
@@ -312,6 +380,8 @@ static int arizona_micsupp_probe(struct platform_device *pdev)
 		}
 	}
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (arizona->pdata.micvdd)
 		config.init_data = arizona->pdata.micvdd;
 	else
@@ -321,10 +391,14 @@ static int arizona_micsupp_probe(struct platform_device *pdev)
 	regmap_update_bits(arizona->regmap, ARIZONA_MIC_CHARGE_PUMP_1,
 			   ARIZONA_CPMIC_BYPASS, 0);
 
+<<<<<<< HEAD
 	micsupp->regulator = regulator_register(desc, &config);
 
 	of_node_put(config.of_node);
 
+=======
+	micsupp->regulator = regulator_register(&arizona_micsupp, &config);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (IS_ERR(micsupp->regulator)) {
 		ret = PTR_ERR(micsupp->regulator);
 		dev_err(arizona->dev, "Failed to register mic supply: %d\n",

@@ -18,6 +18,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+<<<<<<< HEAD
+=======
+#include <linux/clockchips.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <linux/export.h>
 #include <linux/kernel.h>
 #include <linux/interrupt.h>
@@ -33,6 +37,10 @@
 #include <linux/irq.h>
 #include <linux/delay.h>
 #include <linux/clocksource.h>
+<<<<<<< HEAD
+=======
+#include <linux/clk-provider.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #include <clocksource/arm_arch_timer.h>
 
@@ -61,6 +69,7 @@ unsigned long profile_pc(struct pt_regs *regs)
 EXPORT_SYMBOL(profile_pc);
 #endif
 
+<<<<<<< HEAD
 static u64 sched_clock_mult __read_mostly;
 
 unsigned long long notrace sched_clock(void)
@@ -74,19 +83,32 @@ int read_current_timer(unsigned long *timer_value)
 	return 0;
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 void __init time_init(void)
 {
 	u32 arch_timer_rate;
 
+<<<<<<< HEAD
 	clocksource_of_init();
 
+=======
+	of_clk_init(NULL);
+	clocksource_of_init();
+
+	tick_setup_hrtimer_broadcast();
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	arch_timer_rate = arch_timer_get_rate();
 	if (!arch_timer_rate)
 		panic("Unable to initialise architected timer.\n");
 
+<<<<<<< HEAD
 	/* Cache the sched_clock multiplier to save a divide in the hot path. */
 	sched_clock_mult = NSEC_PER_SEC / arch_timer_rate;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* Calibrate the delay loop directly */
 	lpj_fine = arch_timer_rate / HZ;
 }

@@ -160,12 +160,17 @@
 
 #define EXYNOS5_DRD_PHYPIPE			(0x0c)
 
+<<<<<<< HEAD
 #define PHY_CLOCK_SEL				(0x1 << 4)
 
 #define EXYNOS5_DRD_PHYCLKRST			(0x10)
 
 #define PHYCLKRST_EN_UTMISUSPEND		(0x1 << 31)
 
+=======
+#define EXYNOS5_DRD_PHYCLKRST			(0x10)
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define PHYCLKRST_SSC_REFCLKSEL_MASK		(0xff << 23)
 #define PHYCLKRST_SSC_REFCLKSEL(_x)		((_x) << 23)
 
@@ -200,6 +205,7 @@
 #define PHYCLKRST_COMMONONN			(0x1 << 0)
 
 #define EXYNOS5_DRD_PHYREG0			(0x14)
+<<<<<<< HEAD
 #define EXYNOS5_DRD_PHYREG0_CR_WRITE		(1 << 19)
 #define EXYNOS5_DRD_PHYREG0_CR_READ		(1 << 18)
 #define EXYNOS5_DRD_PHYREG0_CR_DATA_IN(_x)	((_x) << 2)
@@ -209,6 +215,9 @@
 #define EXYNOS5_DRD_PHYREG1			(0x18)
 #define EXYNOS5_DRD_PHYREG1_CR_DATA_OUT(_x)	((_x) << 1)
 #define EXYNOS5_DRD_PHYREG1_CR_ACK		(1 << 0)
+=======
+#define EXYNOS5_DRD_PHYREG1			(0x18)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define EXYNOS5_DRD_PHYPARAM0			(0x1c)
 
@@ -216,6 +225,7 @@
 #define PHYPARAM0_REF_LOSLEVEL_MASK		(0x1f << 26)
 #define PHYPARAM0_REF_LOSLEVEL			(0x9 << 26)
 
+<<<<<<< HEAD
 #define PHYPARAM0_TXVREFTUNE_MASK		(0xf << 22)
 #define PHYPARAM0_TXVREFTUNE(_x)		((_x) << 22)
 
@@ -228,6 +238,8 @@
 #define PHYPARAM0_TXPREEMPAMPTUNE_MASK		(0x3 << 15)
 #define PHYPARAM0_TXPREEMPAMPTUNE(_x)		((_x) << 15)
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define EXYNOS5_DRD_PHYPARAM1			(0x20)
 
 #define PHYPARAM1_PCS_TXDEEMPH_MASK		(0x1f << 0)
@@ -262,6 +274,7 @@
 #define EXYNOS_USBPHY_ENABLE			(0x1 << 0)
 #define EXYNOS_USB20PHY_CFG_HOST_LINK		(0x1 << 0)
 
+<<<<<<< HEAD
 #define EXYNOS5_USB2PHY_CTRL_OFFSET		(0x8)
 
 /* USB 3.0 DRD SS Function Control Regs used to access by CR PORT */
@@ -289,13 +302,18 @@
 #define DIS_INC_TUNE_MASK			(0x1 << 2)
 #define DIS_INC_TUNE(_x)			((0x1 & _x) << 2)
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 enum samsung_cpu_type {
 	TYPE_S3C64XX,
 	TYPE_EXYNOS4210,
 	TYPE_EXYNOS5250,
+<<<<<<< HEAD
 	TYPE_EXYNOS5420,
 	TYPE_EXYNOS5430,
 	TYPE_EXYNOS5,
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 /*
@@ -320,11 +338,16 @@ struct samsung_usbphy_drvdata {
 	int cpu_type;
 	int devphy_en_mask;
 	int hostphy_en_mask;
+<<<<<<< HEAD
 	int hsicphy_en_mask;
 	u32 devphy_reg_offset;
 	u32 hostphy_reg_offset;
 	u32 hsicphy_reg_offset;
 	bool need_crport_tuning;
+=======
+	u32 devphy_reg_offset;
+	u32 hostphy_reg_offset;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 /*
@@ -333,12 +356,18 @@ struct samsung_usbphy_drvdata {
  * @plat: platform data
  * @dev: The parent device supplied to the probe function
  * @clk: usb phy clock
+<<<<<<< HEAD
  * @lpa_nb: notifier block for LPA events
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  * @regs: usb phy controller registers memory base
  * @pmuregs: USB device PHY_CONTROL register memory base
  * @sysreg: USB2.0 PHY_CFG register memory base
  * @ref_clk_freq: reference clock frequency selection
+<<<<<<< HEAD
  * @usage_count: phy usage counter
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  * @drv_data: driver data available for different SoCs
  * @phy_type: Samsung SoCs specific phy types:	#HOST
  *						#DEVICE
@@ -350,18 +379,27 @@ struct samsung_usbphy {
 	struct samsung_usbphy_data *plat;
 	struct device	*dev;
 	struct clk	*clk;
+<<<<<<< HEAD
 	struct notifier_block lpa_nb;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	void __iomem	*regs;
 	void __iomem	*pmuregs;
 	void __iomem	*sysreg;
 	int		ref_clk_freq;
+<<<<<<< HEAD
 	int		usage_count;
 	int		has_hsic_pmureg;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	const struct samsung_usbphy_drvdata *drv_data;
 	enum samsung_usb_phy_type phy_type;
 	atomic_t	phy_usage;
 	spinlock_t	lock;
+<<<<<<< HEAD
 	struct raw_notifier_head notifier;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 #define phy_to_sphy(x)		container_of((x), struct samsung_usbphy, phy)
@@ -384,7 +422,10 @@ static inline const struct samsung_usbphy_drvdata
 
 extern int samsung_usbphy_parse_dt(struct samsung_usbphy *sphy);
 extern void samsung_usbphy_set_isolation(struct samsung_usbphy *sphy, bool on);
+<<<<<<< HEAD
 extern void samsung_hsicphy_set_isolation(struct samsung_usbphy *sphy, bool on);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 extern void samsung_usbphy_cfg_sel(struct samsung_usbphy *sphy);
 extern int samsung_usbphy_set_type(struct usb_phy *phy,
 					enum samsung_usb_phy_type phy_type);

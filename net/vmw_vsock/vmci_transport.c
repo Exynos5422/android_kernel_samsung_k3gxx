@@ -1746,8 +1746,11 @@ static int vmci_transport_dgram_dequeue(struct kiocb *kiocb,
 	if (flags & MSG_OOB || flags & MSG_ERRQUEUE)
 		return -EOPNOTSUPP;
 
+<<<<<<< HEAD
 	msg->msg_namelen = 0;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* Retrieve the head sk_buff from the socket's receive queue. */
 	err = 0;
 	skb = skb_recv_datagram(&vsk->sk, flags, noblock, &err);

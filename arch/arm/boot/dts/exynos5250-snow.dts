@@ -9,8 +9,13 @@
 */
 
 /dts-v1/;
+<<<<<<< HEAD
 #include "exynos5250.dtsi"
 #include "cros5250-common.dtsi"
+=======
+/include/ "exynos5250.dtsi"
+/include/ "cros5250-common.dtsi"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 / {
 	model = "Google Snow";
@@ -171,10 +176,13 @@
 		};
 	};
 
+<<<<<<< HEAD
 	rtc {
 		status = "okay";
 	};
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/*
 	 * On Snow we've got SIP WiFi and so can keep drive strengths low to
 	 * reduce EMI.

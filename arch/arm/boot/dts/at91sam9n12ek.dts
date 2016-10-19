@@ -14,11 +14,19 @@
 	compatible = "atmel,at91sam9n12ek", "atmel,at91sam9n12", "atmel,at91sam9";
 
 	chosen {
+<<<<<<< HEAD
 		bootargs = "mem=128M console=ttyS0,115200 root=/dev/mtdblock1 rw rootfstype=jffs2";
 	};
 
 	memory {
 		reg = <0x20000000 0x10000000>;
+=======
+		bootargs = "console=ttyS0,115200 root=/dev/mtdblock1 rw rootfstype=jffs2";
+	};
+
+	memory {
+		reg = <0x20000000 0x8000000>;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	};
 
 	clocks {

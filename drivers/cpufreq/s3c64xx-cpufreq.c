@@ -87,7 +87,11 @@ static int s3c64xx_cpufreq_set_target(struct cpufreq_policy *policy,
 	freqs.old = clk_get_rate(armclk) / 1000;
 	freqs.new = s3c64xx_freq_table[i].frequency;
 	freqs.flags = 0;
+<<<<<<< HEAD
 	dvfs = &s3c64xx_dvfs_table[s3c64xx_freq_table[i].index];
+=======
+	dvfs = &s3c64xx_dvfs_table[s3c64xx_freq_table[i].driver_data];
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (freqs.old == freqs.new)
 		return 0;
@@ -259,7 +263,10 @@ static int s3c64xx_cpufreq_driver_init(struct cpufreq_policy *policy)
 }
 
 static struct cpufreq_driver s3c64xx_cpufreq_driver = {
+<<<<<<< HEAD
 	.owner		= THIS_MODULE,
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	.flags          = 0,
 	.verify		= s3c64xx_cpufreq_verify_speed,
 	.target		= s3c64xx_cpufreq_set_target,

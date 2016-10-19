@@ -472,6 +472,7 @@ void path_put(const struct path *path)
 }
 EXPORT_SYMBOL(path_put);
 
+<<<<<<< HEAD
 /**
  * path_connected - Verify that a path->dentry is below path->mnt.mnt_root
  * @path: nameidate to verify
@@ -490,6 +491,8 @@ static bool path_connected(const struct path *path)
 	return is_subdir(path->dentry, mnt->mnt_root);
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * Path walking has 2 modes, rcu-walk and ref-walk (see
  * Documentation/filesystems/path-lookup.txt).  In situations when we can't
@@ -1165,8 +1168,11 @@ static int follow_dotdot_rcu(struct nameidata *nd)
 				goto failed;
 			nd->path.dentry = parent;
 			nd->seq = seq;
+<<<<<<< HEAD
 			if (unlikely(!path_connected(&nd->path)))
 				goto failed;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			break;
 		}
 		if (!follow_up_rcu(&nd->path))
@@ -1250,7 +1256,11 @@ static void follow_mount(struct path *path)
 	}
 }
 
+<<<<<<< HEAD
 static int follow_dotdot(struct nameidata *nd)
+=======
+static void follow_dotdot(struct nameidata *nd)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	set_root(nd);
 
@@ -1265,10 +1275,13 @@ static int follow_dotdot(struct nameidata *nd)
 			/* rare case of legitimate dget_parent()... */
 			nd->path.dentry = dget_parent(nd->path.dentry);
 			dput(old);
+<<<<<<< HEAD
 			if (unlikely(!path_connected(&nd->path))) {
 				path_put(&nd->path);
 				return -ENOENT;
 			}
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			break;
 		}
 		if (!follow_up(&nd->path))
@@ -1276,7 +1289,10 @@ static int follow_dotdot(struct nameidata *nd)
 	}
 	follow_mount(&nd->path);
 	nd->inode = nd->path.dentry->d_inode;
+<<<<<<< HEAD
 	return 0;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 /*
@@ -1500,7 +1516,11 @@ static inline int handle_dots(struct nameidata *nd, int type)
 			if (follow_dotdot_rcu(nd))
 				return -ECHILD;
 		} else
+<<<<<<< HEAD
 			return follow_dotdot(nd);
+=======
+			follow_dotdot(nd);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 	return 0;
 }
@@ -2289,6 +2309,10 @@ static int may_delete(struct inode *dir,struct dentry *victim,int isdir)
  */
 static inline int may_create(struct inode *dir, struct dentry *child)
 {
+<<<<<<< HEAD
+=======
+	audit_inode_child(dir, child, AUDIT_TYPE_CHILD_CREATE);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (child->d_inode)
 		return -EEXIST;
 	if (IS_DEADDIR(dir))
@@ -2353,6 +2377,14 @@ int vfs_create(struct inode *dir, struct dentry *dentry, umode_t mode,
 	if (error)
 		return error;
 	error = dir->i_op->create(dir, dentry, mode, want_excl);
+<<<<<<< HEAD
+=======
+	if (error)
+		return error;
+	error = security_inode_post_create(dir, dentry, mode);
+	if (error)
+		return error;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (!error)
 		fsnotify_create(dir, dentry);
 	return error;
@@ -3163,9 +3195,22 @@ int vfs_mknod(struct inode *dir, struct dentry *dentry, umode_t mode, dev_t dev)
 		return error;
 
 	error = dir->i_op->mknod(dir, dentry, mode, dev);
+<<<<<<< HEAD
 	if (!error)
 		fsnotify_create(dir, dentry);
 	return error;
+=======
+	if (error)
+		return error;
+
+	error = security_inode_post_create(dir, dentry, mode);
+	if (error)
+		return error;
+
+	fsnotify_create(dir, dentry);
+
+	return 0;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static int may_mknod(umode_t mode)
@@ -3456,8 +3501,11 @@ static long do_unlinkat(int dfd, const char __user *pathname)
 	struct nameidata nd;
 	struct inode *inode = NULL;
 	unsigned int lookup_flags = 0;
+<<<<<<< HEAD
 	char *path_buf = NULL;
 	char *propagate_path = NULL;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 retry:
 	name = user_path_parent(dfd, pathname, &nd, lookup_flags);
 	if (IS_ERR(name))
@@ -3482,10 +3530,13 @@ retry:
 		inode = dentry->d_inode;
 		if (!inode)
 			goto slashes;
+<<<<<<< HEAD
 		if (inode->i_sb->s_op->unlink_callback) {
 			path_buf = kmalloc(PATH_MAX, GFP_KERNEL);
 			propagate_path = dentry_path_raw(dentry, path_buf, PATH_MAX);
 		}
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		ihold(inode);
 		error = security_path_unlink(&nd.path, dentry);
 		if (error)
@@ -3495,10 +3546,13 @@ exit2:
 		dput(dentry);
 	}
 	mutex_unlock(&nd.path.dentry->d_inode->i_mutex);
+<<<<<<< HEAD
 	if (path_buf && !error) {
 		inode->i_sb->s_op->unlink_callback(inode->i_sb, propagate_path);
 		kfree(path_buf);
 	}
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (inode)
 		iput(inode);	/* truncate the inode here */
 	mnt_drop_write(nd.path.mnt);
@@ -3690,6 +3744,10 @@ retry:
 out_dput:
 	done_path_create(&new_path, new_dentry);
 	if (retry_estale(error, how)) {
+<<<<<<< HEAD
+=======
+		path_put(&old_path);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		how |= LOOKUP_REVAL;
 		goto retry;
 	}

@@ -43,13 +43,21 @@ static void kvm_iommu_put_pages(struct kvm *kvm,
 				gfn_t base_gfn, unsigned long npages);
 
 static pfn_t kvm_pin_pages(struct kvm_memory_slot *slot, gfn_t gfn,
+<<<<<<< HEAD
 			   unsigned long npages)
+=======
+			   unsigned long size)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	gfn_t end_gfn;
 	pfn_t pfn;
 
 	pfn     = gfn_to_pfn_memslot(slot, gfn);
+<<<<<<< HEAD
 	end_gfn = gfn + npages;
+=======
+	end_gfn = gfn + (size >> PAGE_SHIFT);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	gfn    += 1;
 
 	if (is_error_noslot_pfn(pfn))
@@ -61,6 +69,7 @@ static pfn_t kvm_pin_pages(struct kvm_memory_slot *slot, gfn_t gfn,
 	return pfn;
 }
 
+<<<<<<< HEAD
 static void kvm_unpin_pages(struct kvm *kvm, pfn_t pfn, unsigned long npages)
 {
 	unsigned long i;
@@ -69,6 +78,8 @@ static void kvm_unpin_pages(struct kvm *kvm, pfn_t pfn, unsigned long npages)
 		kvm_release_pfn_clean(pfn + i);
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 int kvm_iommu_map_pages(struct kvm *kvm, struct kvm_memory_slot *slot)
 {
 	gfn_t gfn, end_gfn;
@@ -111,11 +122,22 @@ int kvm_iommu_map_pages(struct kvm *kvm, struct kvm_memory_slot *slot)
 		while ((gfn << PAGE_SHIFT) & (page_size - 1))
 			page_size >>= 1;
 
+<<<<<<< HEAD
+=======
+		/* Make sure hva is aligned to the page size we want to map */
+		while (__gfn_to_hva_memslot(slot, gfn) & (page_size - 1))
+			page_size >>= 1;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		/*
 		 * Pin all pages we are about to map in memory. This is
 		 * important because we unmap and unpin in 4kb steps later.
 		 */
+<<<<<<< HEAD
 		pfn = kvm_pin_pages(slot, gfn, page_size >> PAGE_SHIFT);
+=======
+		pfn = kvm_pin_pages(slot, gfn, page_size);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (is_error_noslot_pfn(pfn)) {
 			gfn += 1;
 			continue;
@@ -127,7 +149,10 @@ int kvm_iommu_map_pages(struct kvm *kvm, struct kvm_memory_slot *slot)
 		if (r) {
 			printk(KERN_ERR "kvm_iommu_map_address:"
 			       "iommu failed to map pfn=%llx\n", pfn);
+<<<<<<< HEAD
 			kvm_unpin_pages(kvm, pfn, page_size >> PAGE_SHIFT);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			goto unmap_pages;
 		}
 
@@ -139,7 +164,11 @@ int kvm_iommu_map_pages(struct kvm *kvm, struct kvm_memory_slot *slot)
 	return 0;
 
 unmap_pages:
+<<<<<<< HEAD
 	kvm_iommu_put_pages(kvm, slot->base_gfn, gfn - slot->base_gfn);
+=======
+	kvm_iommu_put_pages(kvm, slot->base_gfn, gfn);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return r;
 }
 
@@ -249,7 +278,11 @@ int kvm_iommu_map_guest(struct kvm *kvm)
 
 	mutex_lock(&kvm->slots_lock);
 
+<<<<<<< HEAD
 	kvm->arch.iommu_domain = iommu_domain_alloc(&pci_bus_type);
+=======
+	kvm->arch.iommu_domain = iommu_domain_alloc(&pci_bus_type, 0);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (!kvm->arch.iommu_domain) {
 		r = -ENOMEM;
 		goto out_unlock;
@@ -277,6 +310,17 @@ out_unlock:
 	return r;
 }
 
+<<<<<<< HEAD
+=======
+static void kvm_unpin_pages(struct kvm *kvm, pfn_t pfn, unsigned long npages)
+{
+	unsigned long i;
+
+	for (i = 0; i < npages; ++i)
+		kvm_release_pfn_clean(pfn + i);
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static void kvm_iommu_put_pages(struct kvm *kvm,
 				gfn_t base_gfn, unsigned long npages)
 {

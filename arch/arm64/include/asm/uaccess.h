@@ -83,7 +83,11 @@ static inline void set_fs(mm_segment_t fs)
  * Returns 1 if the range is valid, 0 otherwise.
  *
  * This is equivalent to the following test:
+<<<<<<< HEAD
  * (u65)addr + (u65)size < (u65)current->addr_limit
+=======
+ * (u65)addr + (u65)size <= current->addr_limit
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  *
  * This needs 65-bit arithmetic.
  */
@@ -91,7 +95,11 @@ static inline void set_fs(mm_segment_t fs)
 ({									\
 	unsigned long flag, roksum;					\
 	__chk_user_ptr(addr);						\
+<<<<<<< HEAD
 	asm("adds %1, %1, %3; ccmp %1, %4, #2, cc; cset %0, cc"		\
+=======
+	asm("adds %1, %1, %3; ccmp %1, %4, #2, cc; cset %0, ls"		\
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		: "=&r" (flag), "=&r" (roksum)				\
 		: "1" (addr), "Ir" (size),				\
 		  "r" (current_thread_info()->addr_limit)		\
@@ -100,6 +108,10 @@ static inline void set_fs(mm_segment_t fs)
 })
 
 #define access_ok(type, addr, size)	__range_ok(addr, size)
+<<<<<<< HEAD
+=======
+#define user_addr_max			get_fs
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /*
  * The "__xxx" versions of the user access functions do not verify the address
@@ -166,9 +178,16 @@ do {									\
 
 #define get_user(x, ptr)						\
 ({									\
+<<<<<<< HEAD
 	might_sleep();							\
 	access_ok(VERIFY_READ, (ptr), sizeof(*(ptr))) ?			\
 		__get_user((x), (ptr)) :				\
+=======
+	__typeof__(*(ptr)) __user *__p = (ptr);				\
+	might_fault();							\
+	access_ok(VERIFY_READ, __p, sizeof(*__p)) ?			\
+		__get_user((x), __p) :					\
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		((x) = 0, -EFAULT);					\
 })
 
@@ -227,9 +246,16 @@ do {									\
 
 #define put_user(x, ptr)						\
 ({									\
+<<<<<<< HEAD
 	might_sleep();							\
 	access_ok(VERIFY_WRITE, (ptr), sizeof(*(ptr))) ?		\
 		__put_user((x), (ptr)) :				\
+=======
+	__typeof__(*(ptr)) __user *__p = (ptr);				\
+	might_fault();							\
+	access_ok(VERIFY_WRITE, __p, sizeof(*__p)) ?			\
+		__put_user((x), __p) :					\
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		-EFAULT;						\
 })
 
@@ -238,9 +264,12 @@ extern unsigned long __must_check __copy_to_user(void __user *to, const void *fr
 extern unsigned long __must_check __copy_in_user(void __user *to, const void __user *from, unsigned long n);
 extern unsigned long __must_check __clear_user(void __user *addr, unsigned long n);
 
+<<<<<<< HEAD
 extern unsigned long __must_check __strncpy_from_user(char *to, const char __user *from, unsigned long count);
 extern unsigned long __must_check __strnlen_user(const char __user *s, long n);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static inline unsigned long __must_check copy_from_user(void *to, const void __user *from, unsigned long n)
 {
 	if (access_ok(VERIFY_READ, from, n))
@@ -274,6 +303,7 @@ static inline unsigned long __must_check clear_user(void __user *to, unsigned lo
 	return n;
 }
 
+<<<<<<< HEAD
 static inline long __must_check strncpy_from_user(char *dst, const char __user *src, long count)
 {
 	long res = -EFAULT;
@@ -293,5 +323,11 @@ static inline long __must_check strnlen_user(const char __user *s, long n)
 
 	return res;
 }
+=======
+extern long strncpy_from_user(char *dest, const char __user *src, long count);
+
+extern __must_check long strlen_user(const char __user *str);
+extern __must_check long strnlen_user(const char __user *str, long n);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #endif /* __ASM_UACCESS_H */

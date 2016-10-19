@@ -9,7 +9,11 @@ config PLAT_SAMSUNG
 	depends on PLAT_S3C24XX || ARCH_S3C64XX || PLAT_S5P
 	default y
 	select GENERIC_IRQ_CHIP
+<<<<<<< HEAD
 	select NO_IOPORT
+=======
+	select NO_IOPORT_MAP
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	help
 	  Base platform code for all Samsung SoC based systems
 
@@ -21,7 +25,11 @@ config PLAT_S5P
 	select ARM_GIC if ARCH_EXYNOS
 	select ARM_VIC if !ARCH_EXYNOS
 	select GIC_NON_BANKED if ARCH_EXYNOS4
+<<<<<<< HEAD
 	select NO_IOPORT
+=======
+	select NO_IOPORT_MAP
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	select PLAT_SAMSUNG
 	select S3C_GPIO_TRACK
 	select S5P_GPIO_DRVSTR
@@ -33,6 +41,7 @@ config PLAT_S5P
 
 if PLAT_SAMSUNG
 
+<<<<<<< HEAD
 comment "Base Address for SFR mapping"
 
 config S3C_ADDR_BASE
@@ -41,6 +50,8 @@ config S3C_ADDR_BASE
 	help
 	  This value will be base address for S3C SFR mapping
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 # boot configurations
 
 comment "Boot options"
@@ -503,10 +514,13 @@ config DEBUG_S3C_UART
 	default "2" if DEBUG_S3C_UART2
 	default "3" if DEBUG_S3C_UART3
 
+<<<<<<< HEAD
 config SAMSUNG_CORE_TEST
 	tristate "core configuration debugging"
 	depends on ARCH_EXYNOS5
 	help
 	  Debug core configuration.
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 endif

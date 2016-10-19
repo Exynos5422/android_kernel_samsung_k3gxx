@@ -20,6 +20,7 @@
 # error "please don't include this file directly"
 #endif
 
+<<<<<<< HEAD
 /* We only require natural alignment for exclusive accesses. */
 #define __lock_aligned
 
@@ -28,6 +29,21 @@ typedef struct {
 } arch_spinlock_t;
 
 #define __ARCH_SPIN_LOCK_UNLOCKED	{ 0 }
+=======
+#define TICKET_SHIFT	16
+
+typedef struct {
+#ifdef __AARCH64EB__
+	u16 next;
+	u16 owner;
+#else
+	u16 owner;
+	u16 next;
+#endif
+} __aligned(4) arch_spinlock_t;
+
+#define __ARCH_SPIN_LOCK_UNLOCKED	{ 0 , 0 }
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 typedef struct {
 	volatile unsigned int lock;

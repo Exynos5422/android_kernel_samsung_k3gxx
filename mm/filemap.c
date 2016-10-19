@@ -35,10 +35,13 @@
 #include <linux/cleancache.h>
 #include "internal.h"
 
+<<<<<<< HEAD
 #ifdef CONFIG_SDP
 #include <sdp/cache_cleanup.h>
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define CREATE_TRACE_POINTS
 #include <trace/events/filemap.h>
 
@@ -120,11 +123,14 @@ void __delete_from_page_cache(struct page *page)
 {
 	struct address_space *mapping = page->mapping;
 
+<<<<<<< HEAD
 #ifdef CONFIG_SDP
 	if(mapping_sensitive(mapping))
 		sdp_page_cleanup(page);
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	trace_mm_filemap_delete_from_page_cache(page);
 	/*
 	 * if we're uptodate, flush out into the cleancache, otherwise
@@ -616,7 +622,11 @@ void unlock_page(struct page *page)
 {
 	VM_BUG_ON(!PageLocked(page));
 	clear_bit_unlock(PG_locked, &page->flags);
+<<<<<<< HEAD
 	smp_mb__after_clear_bit();
+=======
+	smp_mb__after_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	wake_up_page(page, PG_locked);
 }
 EXPORT_SYMBOL(unlock_page);
@@ -633,7 +643,11 @@ void end_page_writeback(struct page *page)
 	if (!test_clear_page_writeback(page))
 		BUG();
 
+<<<<<<< HEAD
 	smp_mb__after_clear_bit();
+=======
+	smp_mb__after_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	wake_up_page(page, PG_writeback);
 }
 EXPORT_SYMBOL(end_page_writeback);
@@ -1118,11 +1132,14 @@ static void do_generic_file_read(struct file *filp, loff_t *ppos,
 	unsigned int prev_offset;
 	int error;
 
+<<<<<<< HEAD
 #ifdef CONFIG_SCFS_LOWER_PAGECACHE_INVALIDATION
 	//struct scfs_sb_info *sbi;
 	int is_sequential = (ra->prev_pos == *ppos) ? 1 : 0;
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	index = *ppos >> PAGE_CACHE_SHIFT;
 	prev_index = ra->prev_pos >> PAGE_CACHE_SHIFT;
 	prev_offset = ra->prev_pos & (PAGE_CACHE_SIZE-1);
@@ -1205,9 +1222,12 @@ page_ok:
 		 * only mark it as accessed the first time.
 		 */
 		if (prev_index != index || offset != prev_offset)
+<<<<<<< HEAD
 #ifdef CONFIG_SCFS_LOWER_PAGECACHE_INVALIDATION
 			if (!(filp->f_flags & O_SCFSLOWER))
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			mark_page_accessed(page);
 		prev_index = index;
 
@@ -1227,6 +1247,7 @@ page_ok:
 		offset &= ~PAGE_CACHE_MASK;
 		prev_offset = offset;
 
+<<<<<<< HEAD
 #ifdef CONFIG_SCFS_LOWER_PAGECACHE_INVALIDATION
 		if (filp->f_flags & O_SCFSLOWER) {
 			/*
@@ -1251,6 +1272,8 @@ page_ok:
 		}
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		page_cache_release(page);
 		if (ret == nr && desc->count)
 			continue;
@@ -1605,6 +1628,7 @@ static void do_sync_mmap_readahead(struct vm_area_struct *vma,
 	/*
 	 * mmap read-around
 	 */
+<<<<<<< HEAD
 
 #if CONFIG_MMAP_READAROUND_LIMIT == 0
 	ra_pages = max_sane_readahead(ra->ra_pages);
@@ -1615,6 +1639,9 @@ static void do_sync_mmap_readahead(struct vm_area_struct *vma,
 		ra_pages = max_sane_readahead(ra->ra_pages);
 #endif
 
+=======
+	ra_pages = max_sane_readahead(ra->ra_pages);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ra->start = max_t(long, 0, offset - ra_pages / 2);
 	ra->size = ra_pages;
 	ra->async_size = ra_pages / 4;
@@ -2331,9 +2358,23 @@ repeat:
 	if (page)
 		goto found;
 
+<<<<<<< HEAD
 	page = __page_cache_alloc(gfp_mask & ~gfp_notmask);
 	if (!page)
 		return NULL;
+=======
+retry:
+	page = __page_cache_alloc(gfp_mask & ~gfp_notmask);
+	if (!page)
+		return NULL;
+
+	if (is_cma_pageblock(page)) {
+		__free_page(page);
+		gfp_notmask |= __GFP_MOVABLE;
+		goto retry;
+	}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	status = add_to_page_cache_lru(page, mapping, index,
 						GFP_KERNEL & ~gfp_notmask);
 	if (unlikely(status)) {

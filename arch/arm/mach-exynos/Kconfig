@@ -24,7 +24,10 @@ config ARCH_EXYNOS5
 	bool "SAMSUNG EXYNOS5"
 	select HAVE_ARM_SCU if SMP
 	select HAVE_SMP
+<<<<<<< HEAD
 	select HAVE_EXYNOS5_HSI2C if I2C
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	help
 	  Samsung EXYNOS5 (Cortex-A15) SoC based systems
 
@@ -72,6 +75,7 @@ config SOC_EXYNOS5250
 	help
 	  Enable EXYNOS5250 SoC support
 
+<<<<<<< HEAD
 config SOC_EXYNOS5422
 	bool "SAMSUNG EXYNOS5422"
 	default n
@@ -249,6 +253,8 @@ config EXYNOS5422_BTS
 	help
 	  Enable BTS (Bus traffic shaper) support
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 config SOC_EXYNOS5440
 	bool "SAMSUNG EXYNOS5440"
 	default y
@@ -262,6 +268,7 @@ config SOC_EXYNOS5440
 	help
 	  Enable EXYNOS5440 SoC support
 
+<<<<<<< HEAD
 menuconfig EXYNOS_CORESIGHT
 	bool "Enable Coresight of exynos"
 	depends on ARCH_EXYNOS
@@ -364,6 +371,8 @@ config EXYNOS_CONTENT_PATH_PROTECTION
 	help
 	  Enable content path protection of EXYNOS.
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 config EXYNOS_ATAGS
 	bool "ATAGS based boot for EXYNOS (deprecated)"
 	depends on !ARCH_MULTIPLATFORM
@@ -375,6 +384,7 @@ config EXYNOS_ATAGS
 	  the traditional ATAGS boot format.
 	  Note that this option is not available for multiplatform builds.
 
+<<<<<<< HEAD
 config EXYNOS5_SETUP_MIPIPHY
 	bool
 	depends on (VIDEO_EXYNOS_FIMC_IS || DECON_MIPI_DSI)
@@ -405,6 +415,8 @@ config SAMSUNG_PRODUCT_SHIP
 	bool "set up for product shipping"
 	default n
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 if EXYNOS_ATAGS
 
 config EXYNOS_DEV_DMA
@@ -739,13 +751,17 @@ config MACH_EXYNOS5_DT
 	depends on ARCH_EXYNOS5
 	select ARM_AMBA
 	select CLKSRC_OF
+<<<<<<< HEAD
 	select PINCTRL
 	select PINCTRL_EXYNOS
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	select USE_OF
 	help
 	  Machine support for Samsung EXYNOS5 machine with device tree enabled.
 	  Select this if a fdt blob is available for the EXYNOS5 SoC based board.
 
+<<<<<<< HEAD
 config MACH_SMDK5422
 	bool "SAMSUNG SMDK5422 Machine using device tree"
 	default y
@@ -841,6 +857,8 @@ config MACH_UNIVERSAL5433
 	  Machine support for Samsung EXYNOS5433 machine with device tree enabled.
 	  Select this if a fdt blob is available for the EXYNOS5433 SoC based board.
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 if ARCH_EXYNOS4
 
 comment "Configuration for HSMMC 8-bit bus width"
@@ -860,6 +878,7 @@ endif
 
 endmenu
 
+<<<<<<< HEAD
 # Reset IPs during LPA/DSTOP
 config EXYNOS_HSI2C_RESET_DURING_DSTOP
 	bool
@@ -1106,3 +1125,6 @@ config EXYNOS5433_ASV_NEON_WORKAROUND
 	help
 	  Increase ATL voltage
 
+=======
+endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

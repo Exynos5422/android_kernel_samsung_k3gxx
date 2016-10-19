@@ -356,7 +356,12 @@ static int report_latency(cycle_t delta)
 }
 
 static void
+<<<<<<< HEAD
 probe_wakeup_migrate_task(void *ignore, struct task_struct *task, int cpu)
+=======
+probe_wakeup_migrate_task(void *ignore, struct task_struct *task, int cpu,
+							unsigned int load)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	if (task != wakeup_task)
 		return;

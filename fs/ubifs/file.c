@@ -80,7 +80,11 @@ static int read_block(struct inode *inode, void *addr, unsigned int block,
 
 	dlen = le32_to_cpu(dn->ch.len) - UBIFS_DATA_NODE_SZ;
 	out_len = UBIFS_BLOCK_SIZE;
+<<<<<<< HEAD
 	err = ubifs_decompress(&dn->data, dlen, addr, &out_len,
+=======
+	err = ubifs_decompress(c, &(dn->data), dlen, addr, &out_len,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			       le16_to_cpu(dn->compr_type));
 	if (err || len != out_len)
 		goto dump;
@@ -96,7 +100,11 @@ static int read_block(struct inode *inode, void *addr, unsigned int block,
 	return 0;
 
 dump:
+<<<<<<< HEAD
 	ubifs_err("bad data node (block %u, inode %lu)",
+=======
+	ubifs_err("bad data node (block %u, inode %lu)", c->vi.ubi_num,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		  block, inode->i_ino);
 	ubifs_dump_node(c, dn);
 	return -EINVAL;
@@ -161,14 +169,27 @@ static int do_readpage(struct page *page)
 		addr += UBIFS_BLOCK_SIZE;
 	}
 	if (err) {
+<<<<<<< HEAD
+=======
+		int ubi_num = UBIFS_UNKNOWN_DEV_NUM;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (err == -ENOENT) {
 			/* Not found, so it must be a hole */
 			SetPageChecked(page);
 			dbg_gen("hole");
 			goto out_free;
 		}
+<<<<<<< HEAD
 		ubifs_err("cannot read page %lu of inode %lu, error %d",
 			  page->index, inode->i_ino, err);
+=======
+		if ((struct ubifs_info *)(inode->i_sb->s_fs_info))
+			ubi_num = ((struct ubifs_info *)
+					(inode->i_sb->s_fs_info))->vi.ubi_num;
+		ubifs_err("cannot read page %lu of inode %lu, error %d",
+			  ubi_num, page->index, inode->i_ino, err);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		goto error;
 	}
 
@@ -649,7 +670,12 @@ static int populate_page(struct ubifs_info *c, struct page *page,
 
 			dlen = le32_to_cpu(dn->ch.len) - UBIFS_DATA_NODE_SZ;
 			out_len = UBIFS_BLOCK_SIZE;
+<<<<<<< HEAD
 			err = ubifs_decompress(&dn->data, dlen, addr, &out_len,
+=======
+			err = ubifs_decompress(c, &dn->data, dlen, addr,
+					       &out_len,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 					       le16_to_cpu(dn->compr_type));
 			if (err || len != out_len)
 				goto out_err;
@@ -697,7 +723,11 @@ out_err:
 	SetPageError(page);
 	flush_dcache_page(page);
 	kunmap(page);
+<<<<<<< HEAD
 	ubifs_err("bad data node (block %u, inode %lu)",
+=======
+	ubifs_err("bad data node (block %u, inode %lu)", c->vi.ubi_num,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		  page_block, inode->i_ino);
 	return -EINVAL;
 }
@@ -801,7 +831,12 @@ out_free:
 	return ret;
 
 out_warn:
+<<<<<<< HEAD
 	ubifs_warn("ignoring error %d and skipping bulk-read", err);
+=======
+	ubifs_warn("ignoring error %d and skipping bulk-read", c->vi.ubi_num,
+			err);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	goto out_free;
 
 out_bu_off:
@@ -929,7 +964,11 @@ static int do_writepage(struct page *page, int len)
 	if (err) {
 		SetPageError(page);
 		ubifs_err("cannot write page %lu of inode %lu, error %d",
+<<<<<<< HEAD
 			  page->index, inode->i_ino, err);
+=======
+			  c->vi.ubi_num, page->index, inode->i_ino, err);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		ubifs_ro_mode(c, err);
 	}
 
@@ -1488,7 +1527,11 @@ static int ubifs_vm_page_mkwrite(struct vm_area_struct *vma,
 	if (unlikely(err)) {
 		if (err == -ENOSPC)
 			ubifs_warn("out of space for mmapped file (inode number %lu)",
+<<<<<<< HEAD
 				   inode->i_ino);
+=======
+					c->vi.ubi_num, inode->i_ino);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return VM_FAULT_SIGBUS;
 	}
 
@@ -1524,8 +1567,12 @@ static int ubifs_vm_page_mkwrite(struct vm_area_struct *vma,
 	}
 
 	wait_for_stable_page(page);
+<<<<<<< HEAD
 	unlock_page(page);
 	return 0;
+=======
+	return VM_FAULT_LOCKED;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 out_unlock:
 	unlock_page(page);

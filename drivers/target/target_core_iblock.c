@@ -289,7 +289,11 @@ static void iblock_bio_done(struct bio *bio, int err)
 		 * Bump the ib_bio_err_cnt and release bio.
 		 */
 		atomic_inc(&ibr->ib_bio_err_cnt);
+<<<<<<< HEAD
 		smp_mb__after_atomic_inc();
+=======
+		smp_mb__after_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	bio_put(bio);

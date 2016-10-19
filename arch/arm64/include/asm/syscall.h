@@ -18,6 +18,10 @@
 
 #include <linux/err.h>
 
+<<<<<<< HEAD
+=======
+extern const void *sys_call_table[];
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 static inline int syscall_get_nr(struct task_struct *task,
 				 struct pt_regs *regs)
@@ -59,6 +63,12 @@ static inline void syscall_get_arguments(struct task_struct *task,
 					 unsigned int i, unsigned int n,
 					 unsigned long *args)
 {
+<<<<<<< HEAD
+=======
+	if (n == 0)
+		return;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (i + n > SYSCALL_MAX_ARGS) {
 		unsigned long *args_bad = args + SYSCALL_MAX_ARGS - i;
 		unsigned int n_bad = n + i - SYSCALL_MAX_ARGS;
@@ -82,6 +92,12 @@ static inline void syscall_set_arguments(struct task_struct *task,
 					 unsigned int i, unsigned int n,
 					 const unsigned long *args)
 {
+<<<<<<< HEAD
+=======
+	if (n == 0)
+		return;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (i + n > SYSCALL_MAX_ARGS) {
 		pr_warning("%s called with max args %d, handling only %d\n",
 			   __func__, i + n, SYSCALL_MAX_ARGS);

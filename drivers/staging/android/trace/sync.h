@@ -5,7 +5,11 @@
 #if !defined(_TRACE_SYNC_H) || defined(TRACE_HEADER_MULTI_READ)
 #define _TRACE_SYNC_H
 
+<<<<<<< HEAD
 #include "../sync.h"
+=======
+#include <linux/sync.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <linux/tracepoint.h>
 
 TRACE_EVENT(sync_timeline,

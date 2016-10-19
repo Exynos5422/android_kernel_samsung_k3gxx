@@ -250,7 +250,11 @@ static int __fib_validate_source(struct sk_buff *skb, __be32 src, __be32 dst,
 	bool dev_match;
 
 	fl4.flowi4_oif = 0;
+<<<<<<< HEAD
 	fl4.flowi4_iif = oif;
+=======
+	fl4.flowi4_iif = oif ? : LOOPBACK_IFINDEX;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	fl4.daddr = src;
 	fl4.saddr = dst;
 	fl4.flowi4_tos = tos;
@@ -1050,6 +1054,11 @@ static int fib_netdev_event(struct notifier_block *this, unsigned long event, vo
 	}
 
 	in_dev = __in_dev_get_rtnl(dev);
+<<<<<<< HEAD
+=======
+	if (!in_dev)
+		return NOTIFY_DONE;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	switch (event) {
 	case NETDEV_UP:

@@ -39,6 +39,12 @@
  */
 #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
 
+<<<<<<< HEAD
+=======
+/* Max transfer size done by I2C transfer functions */
+#define MAX_XFER_SIZE  256
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define NXT2002_DEFAULT_FIRMWARE "dvb-fe-nxt2002.fw"
 #define NXT2004_DEFAULT_FIRMWARE "dvb-fe-nxt2004.fw"
 #define CRC_CCIT_MASK 0x1021
@@ -95,10 +101,23 @@ static int i2c_readbytes(struct nxt200x_state *state, u8 addr, u8 *buf, u8 len)
 static int nxt200x_writebytes (struct nxt200x_state* state, u8 reg,
 			       const u8 *buf, u8 len)
 {
+<<<<<<< HEAD
 	u8 buf2 [len+1];
 	int err;
 	struct i2c_msg msg = { .addr = state->config->demod_address, .flags = 0, .buf = buf2, .len = len + 1 };
 
+=======
+	u8 buf2[MAX_XFER_SIZE];
+	int err;
+	struct i2c_msg msg = { .addr = state->config->demod_address, .flags = 0, .buf = buf2, .len = len + 1 };
+
+	if (1 + len > sizeof(buf2)) {
+		pr_warn("%s: i2c wr reg=%04x: len=%d is too big!\n",
+			 __func__, reg, len);
+		return -EINVAL;
+	}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	buf2[0] = reg;
 	memcpy(&buf2[1], buf, len);
 

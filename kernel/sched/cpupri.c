@@ -70,8 +70,12 @@ int cpupri_find(struct cpupri *cp, struct task_struct *p,
 	int idx = 0;
 	int task_pri = convert_prio(p->prio);
 
+<<<<<<< HEAD
 	if (task_pri >= MAX_RT_PRIO)
 		return 0;
+=======
+	BUG_ON(task_pri >= CPUPRI_NR_PRIORITIES);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	for (idx = 0; idx < task_pri; idx++) {
 		struct cpupri_vec *vec  = &cp->pri_to_cpu[idx];
@@ -165,7 +169,11 @@ void cpupri_set(struct cpupri *cp, int cpu, int newpri)
 		 * do a write memory barrier, and then update the count, to
 		 * make sure the vector is visible when count is set.
 		 */
+<<<<<<< HEAD
 		smp_mb__before_atomic_inc();
+=======
+		smp_mb__before_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		atomic_inc(&(vec)->count);
 		do_mb = 1;
 	}
@@ -185,14 +193,22 @@ void cpupri_set(struct cpupri *cp, int cpu, int newpri)
 		 * the new priority vec.
 		 */
 		if (do_mb)
+<<<<<<< HEAD
 			smp_mb__after_atomic_inc();
+=======
+			smp_mb__after_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 		/*
 		 * When removing from the vector, we decrement the counter first
 		 * do a memory barrier and then clear the mask.
 		 */
 		atomic_dec(&(vec)->count);
+<<<<<<< HEAD
 		smp_mb__after_atomic_inc();
+=======
+		smp_mb__after_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		cpumask_clear_cpu(cpu, vec->mask);
 	}
 

@@ -76,6 +76,10 @@ struct ubifs_compressor *ubifs_compressors[UBIFS_COMPR_TYPES_CNT];
 
 /**
  * ubifs_compress - compress data.
+<<<<<<< HEAD
+=======
+ * @c: UBIFS file-system description object
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  * @in_buf: data to compress
  * @in_len: length of the data to compress
  * @out_buf: output buffer where compressed data should be stored
@@ -92,8 +96,13 @@ struct ubifs_compressor *ubifs_compressors[UBIFS_COMPR_TYPES_CNT];
  * Note, if the input buffer was not compressed, it is copied to the output
  * buffer and %UBIFS_COMPR_NONE is returned in @compr_type.
  */
+<<<<<<< HEAD
 void ubifs_compress(const void *in_buf, int in_len, void *out_buf, int *out_len,
 		    int *compr_type)
+=======
+void ubifs_compress(struct ubifs_info *c, const void *in_buf, int in_len,
+		    void *out_buf, int *out_len, int *compr_type)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	int err;
 	struct ubifs_compressor *compr = ubifs_compressors[*compr_type];
@@ -113,7 +122,11 @@ void ubifs_compress(const void *in_buf, int in_len, void *out_buf, int *out_len,
 		mutex_unlock(compr->comp_mutex);
 	if (unlikely(err)) {
 		ubifs_warn("cannot compress %d bytes, compressor %s, error %d, leave data uncompressed",
+<<<<<<< HEAD
 			   in_len, compr->name, err);
+=======
+				c->vi.ubi_num, in_len, compr->name, err);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		 goto no_compr;
 	}
 
@@ -134,6 +147,10 @@ no_compr:
 
 /**
  * ubifs_decompress - decompress data.
+<<<<<<< HEAD
+=======
+ * @c: UBIFS file-system description object
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  * @in_buf: data to decompress
  * @in_len: length of the data to decompress
  * @out_buf: output buffer where decompressed data should
@@ -144,21 +161,36 @@ no_compr:
  * The length of the uncompressed data is returned in @out_len. This functions
  * returns %0 on success or a negative error code on failure.
  */
+<<<<<<< HEAD
 int ubifs_decompress(const void *in_buf, int in_len, void *out_buf,
 		     int *out_len, int compr_type)
+=======
+int ubifs_decompress(struct ubifs_info *c, const void *in_buf, int in_len,
+		     void *out_buf, int *out_len, int compr_type)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	int err;
 	struct ubifs_compressor *compr;
 
 	if (unlikely(compr_type < 0 || compr_type >= UBIFS_COMPR_TYPES_CNT)) {
+<<<<<<< HEAD
 		ubifs_err("invalid compression type %d", compr_type);
+=======
+		ubifs_err("invalid compression type %d",
+				c->vi.ubi_num, compr_type);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return -EINVAL;
 	}
 
 	compr = ubifs_compressors[compr_type];
 
 	if (unlikely(!compr->capi_name)) {
+<<<<<<< HEAD
 		ubifs_err("%s compression is not compiled in", compr->name);
+=======
+		ubifs_err("%s compression is not compiled in",
+				c->vi.ubi_num, compr->name);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return -EINVAL;
 	}
 
@@ -176,7 +208,11 @@ int ubifs_decompress(const void *in_buf, int in_len, void *out_buf,
 		mutex_unlock(compr->decomp_mutex);
 	if (err)
 		ubifs_err("cannot decompress %d bytes, compressor %s, error %d",
+<<<<<<< HEAD
 			  in_len, compr->name, err);
+=======
+			  c->vi.ubi_num, in_len, compr->name, err);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return err;
 }
@@ -194,7 +230,12 @@ static int __init compr_init(struct ubifs_compressor *compr)
 		compr->cc = crypto_alloc_comp(compr->capi_name, 0, 0);
 		if (IS_ERR(compr->cc)) {
 			ubifs_err("cannot initialize compressor %s, error %ld",
+<<<<<<< HEAD
 				  compr->name, PTR_ERR(compr->cc));
+=======
+					UBIFS_UNKNOWN_DEV_NUM, compr->name,
+					PTR_ERR(compr->cc));
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			return PTR_ERR(compr->cc);
 		}
 	}

@@ -150,18 +150,30 @@ struct rpc_task_setup {
 				test_and_set_bit(RPC_TASK_RUNNING, &(t)->tk_runstate)
 #define rpc_clear_running(t)	\
 	do { \
+<<<<<<< HEAD
 		smp_mb__before_clear_bit(); \
 		clear_bit(RPC_TASK_RUNNING, &(t)->tk_runstate); \
 		smp_mb__after_clear_bit(); \
+=======
+		smp_mb__before_atomic(); \
+		clear_bit(RPC_TASK_RUNNING, &(t)->tk_runstate); \
+		smp_mb__after_atomic(); \
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	} while (0)
 
 #define RPC_IS_QUEUED(t)	test_bit(RPC_TASK_QUEUED, &(t)->tk_runstate)
 #define rpc_set_queued(t)	set_bit(RPC_TASK_QUEUED, &(t)->tk_runstate)
 #define rpc_clear_queued(t)	\
 	do { \
+<<<<<<< HEAD
 		smp_mb__before_clear_bit(); \
 		clear_bit(RPC_TASK_QUEUED, &(t)->tk_runstate); \
 		smp_mb__after_clear_bit(); \
+=======
+		smp_mb__before_atomic(); \
+		clear_bit(RPC_TASK_QUEUED, &(t)->tk_runstate); \
+		smp_mb__after_atomic(); \
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	} while (0)
 
 #define RPC_IS_ACTIVATED(t)	test_bit(RPC_TASK_ACTIVE, &(t)->tk_runstate)

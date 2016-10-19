@@ -201,4 +201,16 @@ config PWM_VT8500
 	  To compile this driver as a module, choose M here: the module
 	  will be called pwm-vt8500.
 
+<<<<<<< HEAD
+=======
+config PWM_QPNP
+	depends on SPMI
+	depends on OF_SPMI
+        tristate "Qualcomm QPNP LPG/PWM support"
+        help
+          This driver supports PWM/LPG devices in Qualcomm PMIC chips which
+          comply with QPNP.  QPNP is a SPMI based PMIC implementation.  These
+          devices support Pulse Width Modulation output with user generated
+          patterns. They share a lookup table with size of 64 entries.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 endif

@@ -1,6 +1,10 @@
 /*
  *  linux/mm/oom_kill.c
+<<<<<<< HEAD
  *
+=======
+ * 
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  *  Copyright (C)  1998,2000  Rik van Riel
  *	Thanks go out to Claus Fischer for some serious inspiration and
  *	for goading me into coding this file...
@@ -39,11 +43,15 @@
 #define CREATE_TRACE_POINTS
 #include <trace/events/oom.h>
 
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_DEBUG_MIF_OOM
 int sysctl_panic_on_oom = 1;
 #else
 int sysctl_panic_on_oom;
 #endif
+=======
+int sysctl_panic_on_oom;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 int sysctl_oom_kill_allocating_task;
 int sysctl_oom_dump_tasks = 1;
 static DEFINE_SPINLOCK(zone_scan_lock);
@@ -51,13 +59,18 @@ static DEFINE_SPINLOCK(zone_scan_lock);
 #ifdef CONFIG_NUMA
 /**
  * has_intersects_mems_allowed() - check task eligiblity for kill
+<<<<<<< HEAD
  * @start: task struct of which task to consider
+=======
+ * @tsk: task struct of which task to consider
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  * @mask: nodemask passed to page allocator for mempolicy ooms
  *
  * Task eligibility is determined by whether or not a candidate task, @tsk,
  * shares the same mempolicy nodes as current if it is bound by such a policy
  * and whether or not it has the same set of allowed cpuset nodes.
  */
+<<<<<<< HEAD
 static bool has_intersects_mems_allowed(struct task_struct *start,
 					const nodemask_t *mask)
 {
@@ -66,6 +79,14 @@ static bool has_intersects_mems_allowed(struct task_struct *start,
 
 	rcu_read_lock();
 	for_each_thread(start, tsk) {
+=======
+static bool has_intersects_mems_allowed(struct task_struct *tsk,
+					const nodemask_t *mask)
+{
+	struct task_struct *start = tsk;
+
+	do {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (mask) {
 			/*
 			 * If this is a mempolicy constrained oom, tsk's
@@ -73,12 +94,18 @@ static bool has_intersects_mems_allowed(struct task_struct *start,
 			 * mempolicy intersects current, otherwise it may be
 			 * needlessly killed.
 			 */
+<<<<<<< HEAD
 			ret = mempolicy_nodemask_intersects(tsk, mask);
+=======
+			if (mempolicy_nodemask_intersects(tsk, mask))
+				return true;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		} else {
 			/*
 			 * This is not a mempolicy constrained oom, so only
 			 * check the mems of tsk's cpuset.
 			 */
+<<<<<<< HEAD
 			ret = cpuset_mems_allowed_intersects(current, tsk);
 		}
 		if (ret)
@@ -87,6 +114,14 @@ static bool has_intersects_mems_allowed(struct task_struct *start,
 	rcu_read_unlock();
 
 	return ret;
+=======
+			if (cpuset_mems_allowed_intersects(current, tsk))
+				return true;
+		}
+	} while_each_thread(start, tsk);
+
+	return false;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 #else
 static bool has_intersects_mems_allowed(struct task_struct *tsk,
@@ -104,6 +139,7 @@ static bool has_intersects_mems_allowed(struct task_struct *tsk,
  */
 struct task_struct *find_lock_task_mm(struct task_struct *p)
 {
+<<<<<<< HEAD
 	struct task_struct *t;
 
 	rcu_read_lock();
@@ -121,6 +157,19 @@ found:
 	return t;
 }
 
+=======
+	struct task_struct *t = p;
+
+	do {
+		task_lock(t);
+		if (likely(t->mm))
+			return t;
+		task_unlock(t);
+	} while_each_thread(p, t);
+
+	return NULL;
+}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /* return true if the task is not adequate as candidate victim task. */
 static bool oom_unkillable_task(struct task_struct *p,
@@ -141,6 +190,7 @@ static bool oom_unkillable_task(struct task_struct *p,
 
 	return false;
 }
+<<<<<<< HEAD
 #ifdef CONFIG_ZOOM_KILLER
 static inline long CM(long test)
 {
@@ -195,6 +245,9 @@ unsigned long oom_badness_low(struct task_struct *p, struct mem_cgroup *memcg,
 	return points > 0 ? points : 1;
 }
 #endif
+=======
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /**
  * oom_badness - heuristic function to determine which candidate task to kill
  * @p: task struct of which task we should calculate
@@ -229,7 +282,10 @@ unsigned long oom_badness(struct task_struct *p, struct mem_cgroup *memcg,
 	 */
 	points = get_mm_rss(p->mm) + p->mm->nr_ptes +
 		 get_mm_counter(p->mm, MM_SWAPENTS);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	task_unlock(p);
 
 	/*
@@ -237,7 +293,11 @@ unsigned long oom_badness(struct task_struct *p, struct mem_cgroup *memcg,
 	 * implementation used by LSMs.
 	 */
 	if (has_capability_noaudit(p, CAP_SYS_ADMIN))
+<<<<<<< HEAD
 		adj -= 30;
+=======
+		points -= (points * 3) / 100;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/* Normalize to oom_score_adj units */
 	adj *= totalpages / 1000;
@@ -317,6 +377,7 @@ enum oom_scan_t oom_scan_process_thread(struct task_struct *task,
 		unsigned long totalpages, const nodemask_t *nodemask,
 		bool force_kill)
 {
+<<<<<<< HEAD
 	if (task->exit_state) {
 #ifdef CONFIG_OOM_SCAN_WA_PREVENT_WRONG_SEARCH
 		if (task->pid == task->tgid)
@@ -324,6 +385,10 @@ enum oom_scan_t oom_scan_process_thread(struct task_struct *task,
 #endif
 		return OOM_SCAN_CONTINUE;
 	}
+=======
+	if (task->exit_state)
+		return OOM_SCAN_CONTINUE;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (oom_unkillable_task(task, NULL, nodemask))
 		return OOM_SCAN_CONTINUE;
 
@@ -357,6 +422,7 @@ enum oom_scan_t oom_scan_process_thread(struct task_struct *task,
 	}
 	return OOM_SCAN_OK;
 }
+<<<<<<< HEAD
 #ifdef CONFIG_ZOOM_KILLER
 /*
  * Simple selection loop. We chose the process with the highest
@@ -433,6 +499,9 @@ static struct task_struct *select_bad_process_low(unsigned int *ppoints,
 	return chosen;
 }
 #endif
+=======
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * Simple selection loop. We chose the process with the highest
  * number of 'points'.
@@ -447,6 +516,7 @@ static struct task_struct *select_bad_process(unsigned int *ppoints,
 	struct task_struct *chosen = NULL;
 	unsigned long chosen_points = 0;
 
+<<<<<<< HEAD
 #ifdef CONFIG_OOM_SCAN_WA_PREVENT_WRONG_SEARCH
 	bool skip_search_thread = false;
 #endif
@@ -457,6 +527,12 @@ static struct task_struct *select_bad_process(unsigned int *ppoints,
 #ifdef CONFIG_OOM_SCAN_WA_PREVENT_WRONG_SEARCH
 		skip_search_thread = false;
 #endif
+=======
+	rcu_read_lock();
+	do_each_thread(g, p) {
+		unsigned int points;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		switch (oom_scan_process_thread(p, totalpages, nodemask,
 						force_kill)) {
 		case OOM_SCAN_SELECT:
@@ -468,6 +544,7 @@ static struct task_struct *select_bad_process(unsigned int *ppoints,
 		case OOM_SCAN_ABORT:
 			rcu_read_unlock();
 			return ERR_PTR(-1UL);
+<<<<<<< HEAD
 #ifdef CONFIG_OOM_SCAN_WA_PREVENT_WRONG_SEARCH
 		case OOM_SCAN_SKIP_SEARCH_THREAD:
 			skip_search_thread = true;
@@ -481,11 +558,17 @@ static struct task_struct *select_bad_process(unsigned int *ppoints,
 		if(skip_search_thread)
 			break;
 #endif
+=======
+		case OOM_SCAN_OK:
+			break;
+		};
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		points = oom_badness(p, NULL, nodemask, totalpages);
 		if (points > chosen_points) {
 			chosen = p;
 			chosen_points = points;
 		}
+<<<<<<< HEAD
 	}
 
 	if (chosen)
@@ -502,6 +585,11 @@ static struct task_struct *select_bad_process(unsigned int *ppoints,
 #endif
 		get_task_struct(chosen);
 	}
+=======
+	} while_each_thread(g, p);
+	if (chosen)
+		get_task_struct(chosen);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	rcu_read_unlock();
 
 	*ppoints = chosen_points * 1000 / totalpages;
@@ -519,16 +607,24 @@ static struct task_struct *select_bad_process(unsigned int *ppoints,
  * State information includes task's pid, uid, tgid, vm size, rss, nr_ptes,
  * swapents, oom_score_adj value, and name.
  */
+<<<<<<< HEAD
 static void dump_tasks(const struct mem_cgroup *memcg, const nodemask_t *nodemask)
+=======
+void dump_tasks(const struct mem_cgroup *memcg, const nodemask_t *nodemask)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	struct task_struct *p;
 	struct task_struct *task;
 
+<<<<<<< HEAD
 #ifdef CONFIG_ZOOM_KILLER
 	pr_info("[ pid ]   uid  tgid total_vm      rss nr_ptes swapents file-rss anon-rss-low file-rss-low oom_score_adj name\n");
 #else
 	pr_info("[ pid ]   uid  tgid total_vm      rss nr_ptes swapents oom_score_adj name\n");
 #endif
+=======
+	pr_info("[ pid ]   uid  tgid total_vm      rss nr_ptes swapents oom_score_adj name\n");
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	rcu_read_lock();
 	for_each_process(p) {
 		if (oom_unkillable_task(p, memcg, nodemask))
@@ -544,16 +640,21 @@ static void dump_tasks(const struct mem_cgroup *memcg, const nodemask_t *nodemas
 			continue;
 		}
 
+<<<<<<< HEAD
 #ifdef CONFIG_ZOOM_KILLER
 		pr_info("[%5d] %5d %5d %8lu %8lu %7lu %8lu %7lu     %7lu     %7lu         %5hd %s\n",
 #else
 		pr_info("[%5d] %5d %5d %8lu %8lu %7lu %8lu         %5hd %s\n",
 #endif
 
+=======
+		pr_info("[%5d] %5d %5d %8lu %8lu %7lu %8lu         %5hd %s\n",
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			task->pid, from_kuid(&init_user_ns, task_uid(task)),
 			task->tgid, task->mm->total_vm, get_mm_rss(task->mm),
 			task->mm->nr_ptes,
 			get_mm_counter(task->mm, MM_SWAPENTS),
+<<<<<<< HEAD
 #ifdef CONFIG_ZOOM_KILLER
 			get_mm_counter(task->mm, MM_FILEPAGES),
 			get_mm_counter(task->mm, MM_LOW_ANONPAGES),
@@ -561,6 +662,9 @@ static void dump_tasks(const struct mem_cgroup *memcg, const nodemask_t *nodemas
 #endif
 			task->signal->oom_score_adj,
 			task->comm);
+=======
+			task->signal->oom_score_adj, task->comm);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		task_unlock(task);
 	}
 	rcu_read_unlock();
@@ -597,7 +701,11 @@ void oom_kill_process(struct task_struct *p, gfp_t gfp_mask, int order,
 {
 	struct task_struct *victim = p;
 	struct task_struct *child;
+<<<<<<< HEAD
 	struct task_struct *t;
+=======
+	struct task_struct *t = p;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct mm_struct *mm;
 	unsigned int victim_points = 0;
 	static DEFINE_RATELIMIT_STATE(oom_rs, DEFAULT_RATELIMIT_INTERVAL,
@@ -628,7 +736,11 @@ void oom_kill_process(struct task_struct *p, gfp_t gfp_mask, int order,
 	 * still freeing memory.
 	 */
 	read_lock(&tasklist_lock);
+<<<<<<< HEAD
 	for_each_thread(p, t) {
+=======
+	do {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		list_for_each_entry(child, &t->children, sibling) {
 			unsigned int child_points;
 
@@ -637,6 +749,7 @@ void oom_kill_process(struct task_struct *p, gfp_t gfp_mask, int order,
 			/*
 			 * oom_badness() returns 0 if the thread is unkillable
 			 */
+<<<<<<< HEAD
 #ifdef CONFIG_ZOOM_KILLER
 			if (gfp_mask & (__GFP_HIGHMEM | __GFP_MOVABLE))
 				child_points = oom_badness(child, memcg, nodemask, totalpages);
@@ -645,6 +758,10 @@ void oom_kill_process(struct task_struct *p, gfp_t gfp_mask, int order,
 #else
 			child_points = oom_badness(child, memcg, nodemask, totalpages);
 #endif
+=======
+			child_points = oom_badness(child, memcg, nodemask,
+								totalpages);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			if (child_points > victim_points) {
 				put_task_struct(victim);
 				victim = child;
@@ -652,11 +769,21 @@ void oom_kill_process(struct task_struct *p, gfp_t gfp_mask, int order,
 				get_task_struct(victim);
 			}
 		}
+<<<<<<< HEAD
 	}
 	read_unlock(&tasklist_lock);
 
 	p = find_lock_task_mm(victim);
 	if (!p) {
+=======
+	} while_each_thread(p, t);
+	read_unlock(&tasklist_lock);
+
+	rcu_read_lock();
+	p = find_lock_task_mm(victim);
+	if (!p) {
+		rcu_read_unlock();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		put_task_struct(victim);
 		return;
 	} else if (victim != p) {
@@ -667,6 +794,7 @@ void oom_kill_process(struct task_struct *p, gfp_t gfp_mask, int order,
 
 	/* mm cannot safely be dereferenced after task_unlock(victim) */
 	mm = victim->mm;
+<<<<<<< HEAD
 #ifdef CONFIG_ZOOM_KILLER
 	pr_err("Killed process %d (%s) total-vm:%lukB, anon-rss:%lukB, file-rss:%lukB, anon-rss-low:%lukB, file-rss-low:%lukB\n",
 		task_pid_nr(victim), victim->comm, K(victim->mm->total_vm),
@@ -675,12 +803,17 @@ void oom_kill_process(struct task_struct *p, gfp_t gfp_mask, int order,
 		K(get_mm_counter(victim->mm, MM_LOW_ANONPAGES)),
 		K(get_mm_counter(victim->mm, MM_LOW_FILEPAGES)));
 #else
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	pr_err("Killed process %d (%s) total-vm:%lukB, anon-rss:%lukB, file-rss:%lukB\n",
 		task_pid_nr(victim), victim->comm, K(victim->mm->total_vm),
 		K(get_mm_counter(victim->mm, MM_ANONPAGES)),
 		K(get_mm_counter(victim->mm, MM_FILEPAGES)));
+<<<<<<< HEAD
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	task_unlock(victim);
 
 	/*
@@ -692,7 +825,10 @@ void oom_kill_process(struct task_struct *p, gfp_t gfp_mask, int order,
 	 * That thread will now get access to memory reserves since it has a
 	 * pending fatal signal.
 	 */
+<<<<<<< HEAD
 	rcu_read_lock();
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	for_each_process(p)
 		if (p->mm == mm && !same_thread_group(p, victim) &&
 		    !(p->flags & PF_KTHREAD)) {
@@ -799,10 +935,13 @@ void clear_zonelist_oom(struct zonelist *zonelist, gfp_t gfp_mask)
 	spin_unlock(&zone_scan_lock);
 }
 
+<<<<<<< HEAD
 #if defined(CONFIG_SEC_SLOWPATH)
 extern unsigned int oomk_state; /* 0 none, bit_0 time's up, bit_1 OOMK */
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /**
  * out_of_memory - kill the "best" process when we run out of memory
  * @zonelist: zonelist pointer
@@ -827,10 +966,13 @@ void out_of_memory(struct zonelist *zonelist, gfp_t gfp_mask,
 	enum oom_constraint constraint = CONSTRAINT_NONE;
 	int killed = 0;
 
+<<<<<<< HEAD
 #if defined(CONFIG_SEC_SLOWPATH)
 	oomk_state |= 0x02;
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	blocking_notifier_call_chain(&oom_notify_list, 0, &freed);
 	if (freed > 0)
 		/* Got some memory back in the last second. */
@@ -864,6 +1006,7 @@ void out_of_memory(struct zonelist *zonelist, gfp_t gfp_mask,
 				 "Out of memory (oom_kill_allocating_task)");
 		goto out;
 	}
+<<<<<<< HEAD
 #ifdef CONFIG_ZOOM_KILLER
 	if (gfp_mask & (__GFP_HIGHMEM | __GFP_MOVABLE))
 		p = select_bad_process(&points, totalpages, mpol_mask, force_kill);
@@ -873,6 +1016,10 @@ void out_of_memory(struct zonelist *zonelist, gfp_t gfp_mask,
 	p = select_bad_process(&points, totalpages, mpol_mask, force_kill);
 #endif
 
+=======
+
+	p = select_bad_process(&points, totalpages, mpol_mask, force_kill);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* Found nothing?!?! Either we hang forever, or we panic. */
 	if (!p) {
 		dump_header(NULL, gfp_mask, order, NULL, mpol_mask);

@@ -915,7 +915,12 @@ static const struct driver_info ax88178_info = {
 	.status = asix_status,
 	.link_reset = ax88178_link_reset,
 	.reset = ax88178_reset,
+<<<<<<< HEAD
 	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_LINK_INTR,
+=======
+	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_LINK_INTR |
+		 FLAG_MULTI_PACKET,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	.rx_fixup = asix_rx_fixup_common,
 	.tx_fixup = asix_tx_fixup,
 };

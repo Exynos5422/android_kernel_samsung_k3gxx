@@ -14,6 +14,7 @@ enum samsung_usb_phy_type {
 	USB_PHY_TYPE_DEVICE,
 	USB_PHY_TYPE_HOST,
 };
+<<<<<<< HEAD
 
 /* Samsung USB LPA notifier chain */
 #define USB_LPA_PREPARE	0
@@ -21,3 +22,5 @@ enum samsung_usb_phy_type {
 
 extern int register_samsung_usb_lpa_notifier(struct notifier_block *nb);
 extern int unregister_samsung_usb_lpa_notifier(struct notifier_block *nb);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

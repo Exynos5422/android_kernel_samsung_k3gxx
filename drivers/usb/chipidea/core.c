@@ -47,7 +47,10 @@
  * - Handle requests which spawns into several TDs
  * - GET_STATUS(device) - always reports 0
  * - Gadget API (majority of optional features)
+<<<<<<< HEAD
  * - Suspend & Remote Wakeup
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  */
 #include <linux/delay.h>
 #include <linux/device.h>
@@ -92,6 +95,10 @@ static uintptr_t ci_regs_nolpm[] = {
 	[OP_ENDPTSTAT]		= 0x078UL,
 	[OP_ENDPTCOMPLETE]	= 0x07CUL,
 	[OP_ENDPTCTRL]		= 0x080UL,
+<<<<<<< HEAD
+=======
+	[OP_ENDPTPIPEID]	= 0x0BCUL,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 static uintptr_t ci_regs_lpm[] = {
@@ -114,6 +121,10 @@ static uintptr_t ci_regs_lpm[] = {
 	[OP_ENDPTSTAT]		= 0x0E4UL,
 	[OP_ENDPTCOMPLETE]	= 0x0E8UL,
 	[OP_ENDPTCTRL]		= 0x0ECUL,
+<<<<<<< HEAD
+=======
+	[OP_ENDPTPIPEID]	= 0x0BCUL,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 static int hw_alloc_regmap(struct ci13xxx *ci, bool is_lpm)
@@ -216,28 +227,61 @@ static int hw_device_init(struct ci13xxx *ci, void __iomem *base)
  */
 int hw_device_reset(struct ci13xxx *ci, u32 mode)
 {
+<<<<<<< HEAD
+=======
+	int delay_count = 25; /* 250 usec */
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* should flush & stop before reset */
 	hw_write(ci, OP_ENDPTFLUSH, ~0, ~0);
 	hw_write(ci, OP_USBCMD, USBCMD_RS, 0);
 
 	hw_write(ci, OP_USBCMD, USBCMD_RST, USBCMD_RST);
+<<<<<<< HEAD
 	while (hw_read(ci, OP_USBCMD, USBCMD_RST))
 		udelay(10);		/* not RTOS friendly */
 
+=======
+	while (delay_count-- && hw_read(ci, OP_USBCMD, USBCMD_RST))
+		udelay(10);
+	if (delay_count < 0)
+		pr_err("USB controller reset failed\n");
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (ci->platdata->notify_event)
 		ci->platdata->notify_event(ci,
 			CI13XXX_CONTROLLER_RESET_EVENT);
 
+<<<<<<< HEAD
 	if (ci->platdata->flags & CI13XXX_DISABLE_STREAMING)
 		hw_write(ci, OP_USBMODE, USBMODE_CI_SDIS, USBMODE_CI_SDIS);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* USBMODE should be configured step by step */
 	hw_write(ci, OP_USBMODE, USBMODE_CM, USBMODE_CM_IDLE);
 	hw_write(ci, OP_USBMODE, USBMODE_CM, mode);
 	/* HW >= 2.3 */
 	hw_write(ci, OP_USBMODE, USBMODE_SLOM, USBMODE_SLOM);
 
+<<<<<<< HEAD
+=======
+	/*
+	 * ITC (Interrupt Threshold Control) field is to set the maximum
+	 * rate at which the device controller will issue interrupts.
+	 * The maximum interrupt interval measured in micro frames.
+	 * Valid values are 0, 1, 2, 4, 8, 16, 32, 64. The default value is
+	 * 8 micro frames. If CPU can handle interrupts at faster rate, ITC
+	 * can be set to lesser value to gain performance.
+	 */
+	if (ci->platdata->nz_itc)
+		hw_write(ci, OP_USBCMD, USBCMD_ITC_MASK,
+			USBCMD_ITC(ci->platdata->nz_itc));
+	if (ci->platdata->flags & CI13XXX_ZERO_ITC)
+		hw_write(ci, OP_USBCMD, USBCMD_ITC_MASK, USBCMD_ITC(0));
+
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (hw_read(ci, OP_USBMODE, USBMODE_CM) != mode) {
 		pr_err("cannot enter in %s mode", ci_role(ci)->name);
 		pr_err("lpm = %i", ci->hw_bank.lpm);
@@ -388,6 +432,11 @@ static int ci_hdrc_probe(struct platform_device *pdev)
 	else
 		ci->global_phy = true;
 
+<<<<<<< HEAD
+=======
+	ci->gadget.l1_supported = ci->platdata->l1_supported;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ret = hw_device_init(ci, base);
 	if (ret < 0) {
 		dev_err(dev, "can't initialize hardware\n");

@@ -12,6 +12,7 @@
 
 #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
 
+<<<<<<< HEAD
 #include <linux/cpufreq.h>
 #include <linux/init.h>
 #include <linux/kernel.h>
@@ -34,6 +35,18 @@
 #define DEF_SAMPLING_DOWN_FACTOR		(1)
 #define MAX_SAMPLING_DOWN_FACTOR		(100000)
 #define MICRO_FREQUENCY_DOWN_DIFFERENTIAL	(3)
+=======
+#include <linux/cpu.h>
+#include <linux/percpu-defs.h>
+#include <linux/slab.h>
+#include <linux/tick.h>
+#include "cpufreq_governor.h"
+
+/* On-demand governor macros */
+#define DEF_FREQUENCY_UP_THRESHOLD		(80)
+#define DEF_SAMPLING_DOWN_FACTOR		(1)
+#define MAX_SAMPLING_DOWN_FACTOR		(100000)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define MICRO_FREQUENCY_UP_THRESHOLD		(95)
 #define MICRO_FREQUENCY_MIN_SAMPLE_RATE		(10000)
 #define MIN_FREQUENCY_UP_THRESHOLD		(11)
@@ -144,6 +157,7 @@ static void ondemand_powersave_bias_init(void)
 	}
 }
 
+<<<<<<< HEAD
 static void dbs_freq_increase(struct cpufreq_policy *p, unsigned int freq)
 {
 	struct dbs_data *dbs_data = p->governor_data;
@@ -156,11 +170,26 @@ static void dbs_freq_increase(struct cpufreq_policy *p, unsigned int freq)
 		return;
 
 	__cpufreq_driver_target(p, freq, od_tuners->powersave_bias ?
+=======
+static void dbs_freq_increase(struct cpufreq_policy *policy, unsigned int freq)
+{
+	struct dbs_data *dbs_data = policy->governor_data;
+	struct od_dbs_tuners *od_tuners = dbs_data->tuners;
+
+	if (od_tuners->powersave_bias)
+		freq = od_ops.powersave_bias_target(policy, freq,
+				CPUFREQ_RELATION_H);
+	else if (policy->cur == policy->max)
+		return;
+
+	__cpufreq_driver_target(policy, freq, od_tuners->powersave_bias ?
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			CPUFREQ_RELATION_L : CPUFREQ_RELATION_H);
 }
 
 /*
  * Every sampling_rate, we check, if current idle time is less than 20%
+<<<<<<< HEAD
  * (default), then we try to increase frequency. Every sampling_rate, we look
  * for the lowest frequency which can sustain the load while keeping idle time
  * over 30%. If such a frequency exist, we try to decrease to this frequency.
@@ -169,6 +198,12 @@ static void dbs_freq_increase(struct cpufreq_policy *p, unsigned int freq)
  * happens at minimum steps of 5% (default) of current frequency
  */
 static void od_check_cpu(int cpu, unsigned int load_freq)
+=======
+ * (default), then we try to increase frequency. Else, we adjust the frequency
+ * proportional to load.
+ */
+static void od_check_cpu(int cpu, unsigned int load)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	struct od_cpu_dbs_info_s *dbs_info = &per_cpu(od_cpu_dbs_info, cpu);
 	struct cpufreq_policy *policy = dbs_info->cdbs.cur_policy;
@@ -178,12 +213,17 @@ static void od_check_cpu(int cpu, unsigned int load_freq)
 	dbs_info->freq_lo = 0;
 
 	/* Check for frequency increase */
+<<<<<<< HEAD
 	if (load_freq > od_tuners->up_threshold * policy->cur) {
+=======
+	if (load > od_tuners->up_threshold) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		/* If switching to max speed, apply sampling_down_factor */
 		if (policy->cur < policy->max)
 			dbs_info->rate_mult =
 				od_tuners->sampling_down_factor;
 		dbs_freq_increase(policy, policy->max);
+<<<<<<< HEAD
 		return;
 	}
 
@@ -201,13 +241,22 @@ static void od_check_cpu(int cpu, unsigned int load_freq)
 			* policy->cur) {
 		unsigned int freq_next;
 		freq_next = load_freq / od_tuners->adj_up_threshold;
+=======
+	} else {
+		/* Calculate the next frequency proportional to load */
+		unsigned int freq_next;
+		freq_next = load * policy->cpuinfo.max_freq / 100;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 		/* No longer fully busy, reset rate_mult */
 		dbs_info->rate_mult = 1;
 
+<<<<<<< HEAD
 		if (freq_next < policy->min)
 			freq_next = policy->min;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (!od_tuners->powersave_bias) {
 			__cpufreq_driver_target(policy, freq_next,
 					CPUFREQ_RELATION_L);
@@ -287,6 +336,10 @@ static void update_sampling_rate(struct dbs_data *dbs_data,
 	od_tuners->sampling_rate = new_rate = max(new_rate,
 			dbs_data->min_sampling_rate);
 
+<<<<<<< HEAD
+=======
+	get_online_cpus();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	for_each_online_cpu(cpu) {
 		struct cpufreq_policy *policy;
 		struct od_cpu_dbs_info_s *dbs_info;
@@ -324,6 +377,10 @@ static void update_sampling_rate(struct dbs_data *dbs_data,
 		}
 		mutex_unlock(&dbs_info->cdbs.timer_mutex);
 	}
+<<<<<<< HEAD
+=======
+	put_online_cpus();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static ssize_t store_sampling_rate(struct dbs_data *dbs_data, const char *buf,
@@ -374,9 +431,12 @@ static ssize_t store_up_threshold(struct dbs_data *dbs_data, const char *buf,
 			input < MIN_FREQUENCY_UP_THRESHOLD) {
 		return -EINVAL;
 	}
+<<<<<<< HEAD
 	/* Calculate the new adj_up_threshold */
 	od_tuners->adj_up_threshold += input;
 	od_tuners->adj_up_threshold -= od_tuners->up_threshold;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	od_tuners->up_threshold = input;
 	return count;
@@ -513,7 +573,11 @@ static int od_init(struct dbs_data *dbs_data)
 	u64 idle_time;
 	int cpu;
 
+<<<<<<< HEAD
 	tuners = kzalloc(sizeof(struct od_dbs_tuners), GFP_KERNEL);
+=======
+	tuners = kzalloc(sizeof(*tuners), GFP_KERNEL);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (!tuners) {
 		pr_err("%s: kzalloc failed\n", __func__);
 		return -ENOMEM;
@@ -525,8 +589,11 @@ static int od_init(struct dbs_data *dbs_data)
 	if (idle_time != -1ULL) {
 		/* Idle micro accounting is supported. Use finer thresholds */
 		tuners->up_threshold = MICRO_FREQUENCY_UP_THRESHOLD;
+<<<<<<< HEAD
 		tuners->adj_up_threshold = MICRO_FREQUENCY_UP_THRESHOLD -
 			MICRO_FREQUENCY_DOWN_DIFFERENTIAL;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		/*
 		 * In nohz/micro accounting case we set the minimum frequency
 		 * not depending on HZ, but fixed (very low). The deferred
@@ -535,8 +602,11 @@ static int od_init(struct dbs_data *dbs_data)
 		dbs_data->min_sampling_rate = MICRO_FREQUENCY_MIN_SAMPLE_RATE;
 	} else {
 		tuners->up_threshold = DEF_FREQUENCY_UP_THRESHOLD;
+<<<<<<< HEAD
 		tuners->adj_up_threshold = DEF_FREQUENCY_UP_THRESHOLD -
 			DEF_FREQUENCY_DOWN_DIFFERENTIAL;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 		/* For correct statistics, we need 10 ticks for each measure */
 		dbs_data->min_sampling_rate = MIN_SAMPLING_RATE_RATIO *

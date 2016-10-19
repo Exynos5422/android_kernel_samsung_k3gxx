@@ -51,6 +51,7 @@ struct platform_device *of_find_device_by_node(struct device_node *np)
 }
 EXPORT_SYMBOL(of_find_device_by_node);
 
+<<<<<<< HEAD
 struct amba_device *of_find_amba_device_by_node(struct device_node *np)
 {
 	struct device *dev;
@@ -60,6 +61,8 @@ struct amba_device *of_find_amba_device_by_node(struct device_node *np)
 }
 EXPORT_SYMBOL(of_find_amba_device_by_node);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #if defined(CONFIG_PPC_DCR)
 #include <asm/dcr.h>
 #endif
@@ -223,7 +226,11 @@ struct platform_device *of_platform_device_create_pdata(
 #if defined(CONFIG_MICROBLAZE)
 	dev->archdata.dma_mask = 0xffffffffUL;
 #endif
+<<<<<<< HEAD
 	dev->dev.coherent_dma_mask = DMA_BIT_MASK(32);
+=======
+	dev->dev.coherent_dma_mask = DMA_BIT_MASK(sizeof(dma_addr_t) * 8);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	dev->dev.bus = &platform_bus_type;
 	dev->dev.platform_data = platform_data;
 
@@ -399,6 +406,10 @@ static int of_platform_bus_create(struct device_node *bus,
 			break;
 		}
 	}
+<<<<<<< HEAD
+=======
+	of_node_set_flag(bus, OF_POPULATED_BUS);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return rc;
 }
 
@@ -477,6 +488,10 @@ int of_platform_populate(struct device_node *root,
 		if (rc)
 			break;
 	}
+<<<<<<< HEAD
+=======
+	of_node_set_flag(root, OF_POPULATED_BUS);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	of_node_put(root);
 	return rc;

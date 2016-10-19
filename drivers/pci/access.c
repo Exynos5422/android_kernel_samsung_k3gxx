@@ -484,28 +484,48 @@ static inline bool pcie_cap_has_lnkctl(const struct pci_dev *dev)
 {
 	int type = pci_pcie_type(dev);
 
+<<<<<<< HEAD
 	return pcie_cap_version(dev) > 1 ||
 	       type == PCI_EXP_TYPE_ROOT_PORT ||
 	       type == PCI_EXP_TYPE_ENDPOINT ||
 	       type == PCI_EXP_TYPE_LEG_END;
+=======
+	return type == PCI_EXP_TYPE_ENDPOINT ||
+	       type == PCI_EXP_TYPE_LEG_END ||
+	       type == PCI_EXP_TYPE_ROOT_PORT ||
+	       type == PCI_EXP_TYPE_UPSTREAM ||
+	       type == PCI_EXP_TYPE_DOWNSTREAM ||
+	       type == PCI_EXP_TYPE_PCI_BRIDGE ||
+	       type == PCI_EXP_TYPE_PCIE_BRIDGE;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static inline bool pcie_cap_has_sltctl(const struct pci_dev *dev)
 {
 	int type = pci_pcie_type(dev);
 
+<<<<<<< HEAD
 	return pcie_cap_version(dev) > 1 ||
 	       type == PCI_EXP_TYPE_ROOT_PORT ||
 	       (type == PCI_EXP_TYPE_DOWNSTREAM &&
 		pcie_caps_reg(dev) & PCI_EXP_FLAGS_SLOT);
+=======
+	return (type == PCI_EXP_TYPE_ROOT_PORT ||
+		type == PCI_EXP_TYPE_DOWNSTREAM) &&
+	       pcie_caps_reg(dev) & PCI_EXP_FLAGS_SLOT;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static inline bool pcie_cap_has_rtctl(const struct pci_dev *dev)
 {
 	int type = pci_pcie_type(dev);
 
+<<<<<<< HEAD
 	return pcie_cap_version(dev) > 1 ||
 	       type == PCI_EXP_TYPE_ROOT_PORT ||
+=======
+	return type == PCI_EXP_TYPE_ROOT_PORT ||
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	       type == PCI_EXP_TYPE_RC_EC;
 }
 

@@ -26,16 +26,20 @@
 #include <asm/mach/arch.h>
 #include <asm/mach-types.h>
 
+<<<<<<< HEAD
 void __init early_init_dt_add_memory_arch(u64 base, u64 size)
 {
 	arm_add_memory(base, size);
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 void * __init early_init_dt_alloc_memory_arch(u64 size, u64 align)
 {
 	return alloc_bootmem_align(size, align);
 }
 
+<<<<<<< HEAD
 void __init arm_dt_memblock_reserve(void)
 {
 	u64 *reserve_map, base, size;
@@ -63,6 +67,8 @@ void __init arm_dt_memblock_reserve(void)
 	}
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * arm_dt_init_cpu_maps - Function retrieves cpu nodes from the device tree
  * and builds the cpu logical map array containing MPIDR values related to
@@ -162,6 +168,7 @@ void __init arm_dt_init_cpu_maps(void)
 	 * a reg property, the DT CPU list can be considered valid and the
 	 * logical map created in smp_setup_processor_id() can be overridden
 	 */
+<<<<<<< HEAD
 	for (i = 0; i < cpuidx; i++) {
 		set_cpu_possible(i, true);
 		cpu_logical_map(i) = tmp_map[i];
@@ -169,6 +176,24 @@ void __init arm_dt_init_cpu_maps(void)
 	}
 }
 
+=======
+	for (i = 0; i < nr_cpu_ids; i++) {
+		if (i < cpuidx) {
+			set_cpu_possible(i, true);
+			cpu_logical_map(i) = tmp_map[i];
+			pr_debug("cpu logical map 0x%x\n", cpu_logical_map(i));
+		} else {
+			set_cpu_possible(i, false);
+		}
+	}
+}
+
+bool arch_match_cpu_phys_id(int cpu, u64 phys_id)
+{
+	return phys_id == cpu_logical_map(cpu);
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /**
  * setup_machine_fdt - Machine setup when an dtb was passed to the kernel
  * @dt_phys: physical address of dt blob
@@ -176,6 +201,7 @@ void __init arm_dt_init_cpu_maps(void)
  * If a dtb was passed to the kernel in r2, then use it to choose the
  * correct machine_desc and to setup the system.
  */
+<<<<<<< HEAD
 struct machine_desc * __init setup_machine_fdt(unsigned int dt_phys)
 {
 	struct boot_param_header *devtree;
@@ -184,12 +210,25 @@ struct machine_desc * __init setup_machine_fdt(unsigned int dt_phys)
 	unsigned long dt_root;
 	const char *model;
 	const char *cpu_model_name;
+=======
+const struct machine_desc * __init setup_machine_fdt(unsigned int dt_phys)
+{
+	struct boot_param_header *devtree;
+	const struct machine_desc *mdesc, *mdesc_best = NULL;
+	unsigned int score, mdesc_score = ~1;
+	unsigned long dt_root;
+	const char *model;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #ifdef CONFIG_ARCH_MULTIPLATFORM
 	DT_MACHINE_START(GENERIC_DT, "Generic DT based system")
 	MACHINE_END
 
+<<<<<<< HEAD
 	mdesc_best = (struct machine_desc *)&__mach_desc_GENERIC_DT;
+=======
+	mdesc_best = &__mach_desc_GENERIC_DT;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif
 
 	if (!dt_phys)
@@ -213,7 +252,11 @@ struct machine_desc * __init setup_machine_fdt(unsigned int dt_phys)
 	}
 	if (!mdesc_best) {
 		const char *prop;
+<<<<<<< HEAD
 		long size;
+=======
+		int size;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 		early_print("\nError: unrecognized/unsupported "
 			    "device tree compatible list:\n[ ");
@@ -234,11 +277,14 @@ struct machine_desc * __init setup_machine_fdt(unsigned int dt_phys)
 		model = of_get_flat_dt_prop(dt_root, "compatible", NULL);
 	if (!model)
 		model = "<unknown>";
+<<<<<<< HEAD
 
 	cpu_model_name = of_get_flat_dt_prop(dt_root, "cpu_vendor_model_name", NULL);
 	if (cpu_model_name)
 		mdesc_best->name = cpu_model_name;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	pr_info("Machine: %s, model: %s\n", mdesc_best->name, model);
 
 	/* Retrieve various information from the /chosen node */

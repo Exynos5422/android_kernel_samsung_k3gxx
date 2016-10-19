@@ -155,12 +155,20 @@ static int acpi_lpss_create_device(struct acpi_device *adev,
 			pdata->mmio_size = resource_size(&rentry->res);
 			pdata->mmio_base = ioremap(rentry->res.start,
 						   pdata->mmio_size);
+<<<<<<< HEAD
 			pdata->dev_desc = dev_desc;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			break;
 		}
 
 	acpi_dev_free_resource_list(&resource_list);
 
+<<<<<<< HEAD
+=======
+	pdata->dev_desc = dev_desc;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (dev_desc->clk_required) {
 		ret = register_device_clock(adev, pdata);
 		if (ret) {

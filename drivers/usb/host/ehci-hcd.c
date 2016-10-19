@@ -484,7 +484,10 @@ static int ehci_init(struct usb_hcd *hcd)
 	ehci->periodic_size = DEFAULT_I_TDPS;
 	INIT_LIST_HEAD(&ehci->async_unlink);
 	INIT_LIST_HEAD(&ehci->async_idle);
+<<<<<<< HEAD
 	INIT_LIST_HEAD(&ehci->intr_unlink_wait);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	INIT_LIST_HEAD(&ehci->intr_unlink);
 	INIT_LIST_HEAD(&ehci->intr_qh_list);
 	INIT_LIST_HEAD(&ehci->cached_itd_list);
@@ -528,6 +531,11 @@ static int ehci_init(struct usb_hcd *hcd)
 	hw->hw_alt_next = QTD_NEXT(ehci, ehci->async->dummy->qtd_dma);
 
 	/* clear interrupt enables, set irq latency */
+<<<<<<< HEAD
+=======
+	log2_irq_thresh = ehci->log2_irq_thresh;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (log2_irq_thresh < 0 || log2_irq_thresh > 6)
 		log2_irq_thresh = 0;
 	temp = 1 << (16 + log2_irq_thresh);
@@ -687,8 +695,20 @@ static irqreturn_t ehci_irq (struct usb_hcd *hcd)
 	struct ehci_hcd		*ehci = hcd_to_ehci (hcd);
 	u32			status, masked_status, pcd_status = 0, cmd;
 	int			bh;
+<<<<<<< HEAD
 
 	spin_lock (&ehci->lock);
+=======
+	unsigned long		flags;
+
+	/*
+	 * For threadirqs option we use spin_lock_irqsave() variant to prevent
+	 * deadlock with ehci hrtimer callback, because hrtimer callbacks run
+	 * in interrupt context even when threadirqs is specified. We can go
+	 * back to spin_lock() variant when hrtimer callbacks become threaded.
+	 */
+	spin_lock_irqsave(&ehci->lock, flags);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	status = ehci_readl(ehci, &ehci->regs->status);
 
@@ -706,7 +726,11 @@ static irqreturn_t ehci_irq (struct usb_hcd *hcd)
 
 	/* Shared IRQ? */
 	if (!masked_status || unlikely(ehci->rh_state == EHCI_RH_HALTED)) {
+<<<<<<< HEAD
 		spin_unlock(&ehci->lock);
+=======
+		spin_unlock_irqrestore(&ehci->lock, flags);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return IRQ_NONE;
 	}
 
@@ -780,6 +804,15 @@ static irqreturn_t ehci_irq (struct usb_hcd *hcd)
 			pstatus = ehci_readl(ehci,
 					 &ehci->regs->port_status[i]);
 
+<<<<<<< HEAD
+=======
+			/*set RS bit in case of remote wakeup*/
+			if (ehci_is_TDI(ehci) && !(cmd & CMD_RUN) &&
+					(pstatus & PORT_SUSPEND))
+				ehci_writel(ehci, cmd | CMD_RUN,
+						&ehci->regs->command);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			if (pstatus & PORT_OWNER)
 				continue;
 			if (!(test_bit(i, &ehci->suspended_ports) &&
@@ -805,6 +838,13 @@ static irqreturn_t ehci_irq (struct usb_hcd *hcd)
 	/* PCI errors [4.15.2.4] */
 	if (unlikely ((status & STS_FATAL) != 0)) {
 		ehci_err(ehci, "fatal error\n");
+<<<<<<< HEAD
+=======
+		if (hcd->driver->dump_regs) {
+			hcd->driver->dump_regs(hcd);
+			panic("System error\n");
+		}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		dbg_cmd(ehci, "fatal", cmd);
 		dbg_status(ehci, "fatal", status);
 dead:
@@ -824,7 +864,11 @@ dead:
 
 	if (bh)
 		ehci_work (ehci);
+<<<<<<< HEAD
 	spin_unlock (&ehci->lock);
+=======
+	spin_unlock_irqrestore(&ehci->lock, flags);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (pcd_status)
 		usb_hcd_poll_rh_status(hcd);
 	return IRQ_HANDLED;
@@ -1210,8 +1254,19 @@ void ehci_init_driver(struct hc_driver *drv,
 
 	if (over) {
 		drv->hcd_priv_size += over->extra_priv_size;
+<<<<<<< HEAD
 		if (over->reset)
 			drv->reset = over->reset;
+=======
+		if (over->flags)
+			drv->flags = over->flags;
+		if (over->reset)
+			drv->reset = over->reset;
+		if (over->bus_suspend)
+			drv->bus_suspend = over->bus_suspend;
+		if (over->bus_resume)
+			drv->bus_resume = over->bus_resume;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 }
 EXPORT_SYMBOL_GPL(ehci_init_driver);
@@ -1287,6 +1342,14 @@ MODULE_LICENSE ("GPL");
 #define	PLATFORM_DRIVER		ehci_hcd_sead3_driver
 #endif
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_USB_EHCI_MSM_HSIC
+#include "ehci-msm-hsic.c"
+#define	PLATFORM_DRIVER		ehci_msm_hsic_driver
+#endif
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int __init ehci_hcd_init(void)
 {
 	int retval = 0;

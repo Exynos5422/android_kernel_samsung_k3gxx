@@ -612,7 +612,11 @@ static struct pcpu_chunk *pcpu_alloc_chunk(void)
 	chunk->map = pcpu_mem_zalloc(PCPU_DFL_MAP_ALLOC *
 						sizeof(chunk->map[0]));
 	if (!chunk->map) {
+<<<<<<< HEAD
 		kfree(chunk);
+=======
+		pcpu_mem_free(chunk, pcpu_chunk_struct_size);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return NULL;
 	}
 

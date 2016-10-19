@@ -23,6 +23,7 @@
 #include "arizona.h"
 
 static int arizona_i2c_probe(struct i2c_client *i2c,
+<<<<<<< HEAD
 			     const struct i2c_device_id *id)
 {
 	struct arizona *arizona;
@@ -37,11 +38,21 @@ static int arizona_i2c_probe(struct i2c_client *i2c,
 		type = id->driver_data;
 
 	switch (type) {
+=======
+					  const struct i2c_device_id *id)
+{
+	struct arizona *arizona;
+	const struct regmap_config *regmap_config;
+	int ret;
+
+	switch (id->driver_data) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifdef CONFIG_MFD_WM5102
 	case WM5102:
 		regmap_config = &wm5102_i2c_regmap;
 		break;
 #endif
+<<<<<<< HEAD
 #ifdef CONFIG_MFD_FLORIDA
 	case WM8280:
 	case WM5110:
@@ -64,6 +75,11 @@ static int arizona_i2c_probe(struct i2c_client *i2c,
 	case WM1840:
 		regmap_config = &clearwater_16bit_i2c_regmap;
 		regmap_32bit_config = &clearwater_32bit_i2c_regmap;
+=======
+#ifdef CONFIG_MFD_WM5110
+	case WM5110:
+		regmap_config = &wm5110_i2c_regmap;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		break;
 #endif
 	default:
@@ -84,6 +100,7 @@ static int arizona_i2c_probe(struct i2c_client *i2c,
 		return ret;
 	}
 
+<<<<<<< HEAD
 	if (regmap_32bit_config) {
 		arizona->regmap_32bit = devm_regmap_init_i2c(i2c,
 							   regmap_32bit_config);
@@ -96,6 +113,8 @@ static int arizona_i2c_probe(struct i2c_client *i2c,
 		}
 	}
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	arizona->type = id->driver_data;
 	arizona->dev = &i2c->dev;
 	arizona->irq = i2c->irq;
@@ -112,6 +131,7 @@ static int arizona_i2c_remove(struct i2c_client *i2c)
 
 static const struct i2c_device_id arizona_i2c_id[] = {
 	{ "wm5102", WM5102 },
+<<<<<<< HEAD
 	{ "wm8280", WM8280 },
 	{ "wm8281", WM8280 },
 	{ "wm5110", WM5110 },
@@ -120,6 +140,9 @@ static const struct i2c_device_id arizona_i2c_id[] = {
 	{ "wm1814", WM1814 },
 	{ "wm8285", WM8285 },
 	{ "wm1840", WM1840 },
+=======
+	{ "wm5110", WM5110 },
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	{ }
 };
 MODULE_DEVICE_TABLE(i2c, arizona_i2c_id);
@@ -129,7 +152,10 @@ static struct i2c_driver arizona_i2c_driver = {
 		.name	= "arizona",
 		.owner	= THIS_MODULE,
 		.pm	= &arizona_pm_ops,
+<<<<<<< HEAD
 		.of_match_table	= of_match_ptr(arizona_of_match),
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	},
 	.probe		= arizona_i2c_probe,
 	.remove		= arizona_i2c_remove,

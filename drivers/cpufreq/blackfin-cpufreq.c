@@ -20,6 +20,7 @@
 
 
 /* this is the table of CCLK frequencies, in Hz */
+<<<<<<< HEAD
 /* .index is the entry in the auxiliary dpm_state_table[] */
 static struct cpufreq_frequency_table bfin_freq_table[] = {
 	{
@@ -37,6 +38,25 @@ static struct cpufreq_frequency_table bfin_freq_table[] = {
 	{
 		.frequency = CPUFREQ_TABLE_END,
 		.index = 0,
+=======
+/* .driver_data is the entry in the auxiliary dpm_state_table[] */
+static struct cpufreq_frequency_table bfin_freq_table[] = {
+	{
+		.frequency = CPUFREQ_TABLE_END,
+		.driver_data = 0,
+	},
+	{
+		.frequency = CPUFREQ_TABLE_END,
+		.driver_data = 1,
+	},
+	{
+		.frequency = CPUFREQ_TABLE_END,
+		.driver_data = 2,
+	},
+	{
+		.frequency = CPUFREQ_TABLE_END,
+		.driver_data = 0,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	},
 };
 
@@ -225,7 +245,10 @@ static struct cpufreq_driver bfin_driver = {
 	.get = bfin_getfreq_khz,
 	.init = __bfin_cpu_init,
 	.name = "bfin cpufreq",
+<<<<<<< HEAD
 	.owner = THIS_MODULE,
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	.attr = bfin_freq_attr,
 };
 

@@ -198,7 +198,11 @@ ppp_asynctty_open(struct tty_struct *tty)
 		goto out_free;
 
 	tty->disc_data = ap;
+<<<<<<< HEAD
 	tty->receive_room = 65536;
+=======
+	tty->receive_room = 131072;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 
  out_free:
@@ -356,7 +360,12 @@ ppp_asynctty_receive(struct tty_struct *tty, const unsigned char *buf,
 	if (!skb_queue_empty(&ap->rqueue))
 		tasklet_schedule(&ap->tsk);
 	ap_put(ap);
+<<<<<<< HEAD
 	tty_unthrottle(tty);
+=======
+	if (tty->port && !tty->port->low_latency)
+		tty_unthrottle(tty);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static void

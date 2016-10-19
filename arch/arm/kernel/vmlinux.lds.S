@@ -11,7 +11,11 @@
 #ifdef CONFIG_STRICT_MEMORY_RWX
 #include <asm/pgtable.h>
 #endif
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define PROC_INFO							\
 	. = ALIGN(4);							\
 	VMLINUX_SYMBOL(__proc_info_begin) = .;				\
@@ -97,6 +101,13 @@ SECTIONS
 		_text = .;
 		HEAD_TEXT
 	}
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_STRICT_MEMORY_RWX
+	. = ALIGN(1<<SECTION_SHIFT);
+#endif
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	.text : {			/* Real text segment		*/
 		_stext = .;		/* Text and read-only data	*/
 			__exception_text_start = .;
@@ -118,6 +129,7 @@ SECTIONS
 		*(.got)			/* Global offset table		*/
 			ARM_CPU_KEEP(PROC_INFO)
 	}
+<<<<<<< HEAD
 #ifdef CONFIG_RKP_TEST_INFRA
 	_end_stext = .;			/* End of text */
 #endif /*CONFIG_RKP_TEST_INFRA*/
@@ -125,6 +137,12 @@ SECTIONS
 	. = ALIGN(1<<SECTION_SHIFT);
 #endif
 
+=======
+
+#ifdef CONFIG_STRICT_MEMORY_RWX
+	. = ALIGN(1<<SECTION_SHIFT);
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	RO_DATA(PAGE_SIZE)
 
 	. = ALIGN(4);
@@ -155,7 +173,10 @@ SECTIONS
 
 	NOTES
 
+<<<<<<< HEAD
 	. = ALIGN(PAGE_SIZE);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	_etext = .;			/* End of text and rodata section */
 
 #ifndef CONFIG_XIP_KERNEL
@@ -191,6 +212,12 @@ SECTIONS
 	.init.proc.info : {
 		ARM_CPU_DISCARD(PROC_INFO)
 	}
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_STRICT_MEMORY_RWX
+	. = ALIGN(1<<SECTION_SHIFT);
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	.init.arch.info : {
 		__arch_info_begin = .;
 		*(.arch.info.init)
@@ -220,14 +247,21 @@ SECTIONS
 		INIT_SETUP(16)
 		INIT_CALLS
 		CON_INITCALL
+<<<<<<< HEAD
+=======
+		COMPAT_EXPORTS
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		SECURITY_INITCALL
 		INIT_RAM_FS
 	}
 #ifndef CONFIG_XIP_KERNEL
+<<<<<<< HEAD
 #ifdef CONFIG_STRICT_MEMORY_RWX
 	. = ALIGN(1<<SECTION_SHIFT);
 #endif
 	__init_data = .;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	.exit.data : {
 		ARM_EXIT_KEEP(EXIT_DATA)
 	}
@@ -279,6 +313,7 @@ SECTIONS
 	}
 	_edata_loc = __data_loc + SIZEOF(.data);
 
+<<<<<<< HEAD
 #ifdef	CONFIG_TIMA_RKP_RO_CRED
 	 /* Creating a new section to store task credentials */
 	. = ALIGN(1<<SECTION_SHIFT);
@@ -299,6 +334,8 @@ SECTIONS
 	}
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifdef CONFIG_HAVE_TCM
         /*
 	 * We align everything to a page boundary so we can

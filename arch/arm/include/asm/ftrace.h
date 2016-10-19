@@ -52,6 +52,7 @@ extern inline void *return_address(unsigned int level)
 
 #endif
 
+<<<<<<< HEAD
 #define HAVE_ARCH_CALLER_ADDR
 
 #define CALLER_ADDR0 ((unsigned long)__builtin_return_address(0))
@@ -61,6 +62,9 @@ extern inline void *return_address(unsigned int level)
 #define CALLER_ADDR4 ((unsigned long)return_address(4))
 #define CALLER_ADDR5 ((unsigned long)return_address(5))
 #define CALLER_ADDR6 ((unsigned long)return_address(6))
+=======
+#define ftrace_return_address(n) return_address(n)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #endif /* ifndef __ASSEMBLY__ */
 

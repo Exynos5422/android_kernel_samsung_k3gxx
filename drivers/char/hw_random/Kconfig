@@ -302,6 +302,7 @@ config HW_RANDOM_EXYNOS
 
 	  If unsure, say Y.
 
+<<<<<<< HEAD
 config HW_RANDOM_EXYNOS_SWD
 	tristate "EXYNOS SWD HW random number generator support"
 	depends on HW_RANDOM && ARM_TRUSTZONE
@@ -333,6 +334,8 @@ config EXYRNG_FAIL_POLICY_RESET
 
 endchoice
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 config HW_RANDOM_TPM
 	tristate "TPM HW Random Number Generator support"
 	depends on HW_RANDOM && TCG_TPM
@@ -344,4 +347,20 @@ config HW_RANDOM_TPM
 	  To compile this driver as a module, choose M here: the
 	  module will be called tpm-rng.
 
+<<<<<<< HEAD
+=======
+config HW_RANDOM_MSM
+	tristate "Qualcomm MSM Random Number Generator support"
+	depends on HW_RANDOM && ARCH_MSM
+	select CRYPTO_AES
+	select CRYPTO_ECB
+	default n
+	---help---
+	  This driver provides kernel-side support for the Random Number
+	  Generator hardware found on Qualcomm MSM SoCs.
+
+	  To compile this driver as a module, choose M here: the
+	  module will be called msm_rng.
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	  If unsure, say Y.

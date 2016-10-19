@@ -411,7 +411,10 @@ struct page *read_swap_cache_async(swp_entry_t entry, gfp_t gfp_mask,
 struct page *swapin_readahead(swp_entry_t entry, gfp_t gfp_mask,
 			struct vm_area_struct *vma, unsigned long addr)
 {
+<<<<<<< HEAD
 #ifdef CONFIG_SWAP_ENABLE_READAHEAD
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct page *page;
 	unsigned long offset = swp_offset(entry);
 	unsigned long start_offset, end_offset;
@@ -436,6 +439,9 @@ struct page *swapin_readahead(swp_entry_t entry, gfp_t gfp_mask,
 	blk_finish_plug(&plug);
 
 	lru_add_drain();	/* Push any new pages onto the LRU now */
+<<<<<<< HEAD
 #endif /* CONFIG_SWAP_ENABLE_READAHEAD */
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return read_swap_cache_async(entry, gfp_mask, vma, addr);
 }

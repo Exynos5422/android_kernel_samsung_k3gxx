@@ -280,6 +280,19 @@ struct ext4_io_submit {
 /* Translate # of blks to # of clusters */
 #define EXT4_NUM_B2C(sbi, blks)	(((blks) + (sbi)->s_cluster_ratio - 1) >> \
 				 (sbi)->s_cluster_bits)
+<<<<<<< HEAD
+=======
+/* Mask out the low bits to get the starting block of the cluster */
+#define EXT4_PBLK_CMASK(s, pblk) ((pblk) &				\
+				  ~((ext4_fsblk_t) (s)->s_cluster_ratio - 1))
+#define EXT4_LBLK_CMASK(s, lblk) ((lblk) &				\
+				  ~((ext4_lblk_t) (s)->s_cluster_ratio - 1))
+/* Get the cluster offset */
+#define EXT4_PBLK_COFF(s, pblk) ((pblk) &				\
+				 ((ext4_fsblk_t) (s)->s_cluster_ratio - 1))
+#define EXT4_LBLK_COFF(s, lblk) ((lblk) &				\
+				 ((ext4_lblk_t) (s)->s_cluster_ratio - 1))
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /*
  * Structure of a blocks group descriptor
@@ -764,6 +777,11 @@ do {									       \
 	if (EXT4_FITS_IN_INODE(raw_inode, einode, xtime))		       \
 		(einode)->xtime.tv_sec = 				       \
 			(signed)le32_to_cpu((raw_inode)->xtime);	       \
+<<<<<<< HEAD
+=======
+	else								       \
+		(einode)->xtime.tv_sec = 0;				       \
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (EXT4_FITS_IN_INODE(raw_inode, einode, xtime ## _extra))	       \
 		ext4_decode_extra_time(&(einode)->xtime,		       \
 				       raw_inode->xtime ## _extra);	       \
@@ -1176,7 +1194,10 @@ struct ext4_sb_info {
 	unsigned int s_mount_flags;
 	unsigned int s_def_mount_opt;
 	ext4_fsblk_t s_sb_block;
+<<<<<<< HEAD
 	atomic64_t s_r_blocks_count;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	atomic64_t s_resv_clusters;
 	kuid_t s_resuid;
 	kgid_t s_resgid;
@@ -2138,12 +2159,16 @@ extern int search_dir(struct buffer_head *bh,
 		      struct inode *dir,
 		      const struct qstr *d_name,
 		      unsigned int offset,
+<<<<<<< HEAD
 #ifdef CONFIG_SDCARD_FS_CI_SEARCH
 		      struct ext4_dir_entry_2 **res_dir,
 		      char *ci_name_buf);
 #else
 		      struct ext4_dir_entry_2 **res_dir);
 #endif
+=======
+		      struct ext4_dir_entry_2 **res_dir);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 extern int ext4_generic_delete_entry(handle_t *handle,
 				     struct inode *dir,
 				     struct ext4_dir_entry_2 *de_del,
@@ -2250,6 +2275,7 @@ extern void ext4_group_desc_csum_set(struct super_block *sb, __u32 group,
 				     struct ext4_group_desc *gdp);
 extern int ext4_register_li_request(struct super_block *sb,
 				    ext4_group_t first_not_zeroed);
+<<<<<<< HEAD
 /* for debugging, sangwoo2.lee */
 extern void print_iloc_info(struct super_block *sb,
 				struct ext4_iloc iloc);
@@ -2258,6 +2284,8 @@ extern void print_bh(struct super_block *sb,
 extern void print_block_data(struct super_block *sb, sector_t blocknr,
                   unsigned char *data_to_dump, int start, int len);
 /* for debugging */
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 static inline int ext4_has_group_desc_csum(struct super_block *sb)
 {

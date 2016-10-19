@@ -183,6 +183,7 @@ struct net_bridge_port
 
 static inline struct net_bridge_port *br_port_get_rcu(const struct net_device *dev)
 {
+<<<<<<< HEAD
 	struct net_bridge_port *port =
 			rcu_dereference_rtnl(dev->rx_handler_data);
 
@@ -190,6 +191,12 @@ static inline struct net_bridge_port *br_port_get_rcu(const struct net_device *d
 }
 
 static inline struct net_bridge_port *br_port_get_rtnl(struct net_device *dev)
+=======
+	return rcu_dereference(dev->rx_handler_data);
+}
+
+static inline struct net_bridge_port *br_port_get_rtnl(const struct net_device *dev)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	return br_port_exists(dev) ?
 		rtnl_dereference(dev->rx_handler_data) : NULL;
@@ -714,6 +721,10 @@ extern struct net_bridge_port *br_get_port(struct net_bridge *br,
 extern void br_init_port(struct net_bridge_port *p);
 extern void br_become_designated_port(struct net_bridge_port *p);
 
+<<<<<<< HEAD
+=======
+extern void __br_set_forward_delay(struct net_bridge *br, unsigned long t);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 extern int br_set_forward_delay(struct net_bridge *br, unsigned long x);
 extern int br_set_hello_time(struct net_bridge *br, unsigned long x);
 extern int br_set_max_age(struct net_bridge *br, unsigned long x);

@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * Copyright (c) 2012 Qualcomm Atheros, Inc.
+=======
+ * Copyright (c) 2012-2014 Qualcomm Atheros, Inc.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -20,13 +24,44 @@
 #define BUF_SW_OWNED    (1)
 #define BUF_HW_OWNED    (0)
 
+<<<<<<< HEAD
 /* size of max. Rx packet */
 #define RX_BUF_LEN      (2048)
 #define TX_BUF_LEN      (2048)
+=======
+/* size of max. Tx/Rx buffers, as supported by FW */
+#define RX_BUF_LEN      (2242)
+#define TX_BUF_LEN      (2242)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /* how many bytes to reserve for rtap header? */
 #define WIL6210_RTAP_SIZE (128)
 
 /* Tx/Rx path */
+<<<<<<< HEAD
+=======
+
+/*
+ * Common representation of physical address in Vring
+ */
+struct vring_dma_addr {
+	__le32 addr_low;
+	__le16 addr_high;
+} __packed;
+
+static inline dma_addr_t wil_desc_addr(struct vring_dma_addr *addr)
+{
+	return le32_to_cpu(addr->addr_low) |
+			   ((u64)le16_to_cpu(addr->addr_high) << 32);
+}
+
+static inline void wil_desc_addr_set(struct vring_dma_addr *addr,
+				     dma_addr_t pa)
+{
+	addr->addr_low = cpu_to_le32(lower_32_bits(pa));
+	addr->addr_high = cpu_to_le16((u16)upper_32_bits(pa));
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * Tx descriptor - MAC part
  * [dword 0]
@@ -179,6 +214,13 @@ struct vring_tx_mac {
 #define DMA_CFG_DESC_TX_0_CMD_EOP_LEN 1
 #define DMA_CFG_DESC_TX_0_CMD_EOP_MSK 0x100
 
+<<<<<<< HEAD
+=======
+#define DMA_CFG_DESC_TX_0_CMD_MARK_WB_POS 9
+#define DMA_CFG_DESC_TX_0_CMD_MARK_WB_LEN 1
+#define DMA_CFG_DESC_TX_0_CMD_MARK_WB_MSK 0x200
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define DMA_CFG_DESC_TX_0_CMD_DMA_IT_POS 10
 #define DMA_CFG_DESC_TX_0_CMD_DMA_IT_LEN 1
 #define DMA_CFG_DESC_TX_0_CMD_DMA_IT_MSK 0x400
@@ -209,20 +251,40 @@ struct vring_tx_mac {
 
 #define DMA_CFG_DESC_TX_0_L4_TYPE_POS 30
 #define DMA_CFG_DESC_TX_0_L4_TYPE_LEN 2
+<<<<<<< HEAD
 #define DMA_CFG_DESC_TX_0_L4_TYPE_MSK 0xC0000000
 
+=======
+#define DMA_CFG_DESC_TX_0_L4_TYPE_MSK 0xC0000000 /* L4 type: 0-UDP, 2-TCP */
+
+#define DMA_CFG_DESC_TX_OFFLOAD_CFG_MAC_LEN_POS 0
+#define DMA_CFG_DESC_TX_OFFLOAD_CFG_MAC_LEN_LEN 7
+#define DMA_CFG_DESC_TX_OFFLOAD_CFG_MAC_LEN_MSK 0x7F /* MAC hdr len */
+
+#define DMA_CFG_DESC_TX_OFFLOAD_CFG_L3T_IPV4_POS 7
+#define DMA_CFG_DESC_TX_OFFLOAD_CFG_L3T_IPV4_LEN 1
+#define DMA_CFG_DESC_TX_OFFLOAD_CFG_L3T_IPV4_MSK 0x80 /* 1-IPv4, 0-IPv6 */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define TX_DMA_STATUS_DU         BIT(0)
 
 struct vring_tx_dma {
 	u32 d0;
+<<<<<<< HEAD
 	u32 addr_low;
 	u16 addr_high;
+=======
+	struct vring_dma_addr addr;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	u8  ip_length;
 	u8  b11;       /* 0..6: mac_length; 7:ip_version */
 	u8  error;     /* 0..2: err; 3..7: reserved; */
 	u8  status;    /* 0: used; 1..7; reserved */
+<<<<<<< HEAD
 	u16 length;
+=======
+	__le16 length;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 } __packed;
 
 /*
@@ -309,19 +371,40 @@ struct vring_rx_mac {
 
 #define RX_DMA_D0_CMD_DMA_IT     BIT(10)
 
+<<<<<<< HEAD
 #define RX_DMA_STATUS_DU         BIT(0)
 #define RX_DMA_STATUS_ERROR      BIT(2)
+=======
+/* Error field, offload bits */
+#define RX_DMA_ERROR_L3_ERR   BIT(4)
+#define RX_DMA_ERROR_L4_ERR   BIT(5)
+
+/* Status field */
+#define RX_DMA_STATUS_DU         BIT(0)
+#define RX_DMA_STATUS_ERROR      BIT(2)
+
+#define RX_DMA_STATUS_L3_IDENT   BIT(4)
+#define RX_DMA_STATUS_L4_IDENT   BIT(5)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define RX_DMA_STATUS_PHY_INFO   BIT(6)
 
 struct vring_rx_dma {
 	u32 d0;
+<<<<<<< HEAD
 	u32 addr_low;
 	u16 addr_high;
+=======
+	struct vring_dma_addr addr;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	u8  ip_length;
 	u8  b11;
 	u8  error;
 	u8  status;
+<<<<<<< HEAD
 	u16 length;
+=======
+	__le16 length;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 } __packed;
 
 struct vring_tx_desc {
@@ -394,4 +477,14 @@ static inline struct vring_rx_desc *wil_skb_rxdesc(struct sk_buff *skb)
 	return (void *)skb->cb;
 }
 
+<<<<<<< HEAD
+=======
+void wil_netif_rx_any(struct sk_buff *skb, struct net_device *ndev);
+void wil_rx_reorder(struct wil6210_priv *wil, struct sk_buff *skb);
+struct wil_tid_ampdu_rx *wil_tid_ampdu_rx_alloc(struct wil6210_priv *wil,
+						int size, u16 ssn);
+void wil_tid_ampdu_rx_free(struct wil6210_priv *wil,
+			   struct wil_tid_ampdu_rx *r);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif /* WIL6210_TXRX_H */

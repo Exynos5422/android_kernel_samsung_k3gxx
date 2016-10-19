@@ -32,6 +32,11 @@ static int all_versions = 0;
 static int external_module = 0;
 /* Warn about section mismatch in vmlinux if set to 1 */
 static int vmlinux_section_warnings = 1;
+<<<<<<< HEAD
+=======
+/* Exit with an error when there is a section mismatch if set to 1 */
+static int section_error_on_mismatch;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /* Only warn about unresolved symbols */
 static int warn_unresolved = 0;
 /* How a symbol is exported */
@@ -573,12 +578,24 @@ static int ignore_undef_symbol(struct elf_info *info, const char *symname)
 		if (strncmp(symname, "_restgpr_", sizeof("_restgpr_") - 1) == 0 ||
 		    strncmp(symname, "_savegpr_", sizeof("_savegpr_") - 1) == 0 ||
 		    strncmp(symname, "_rest32gpr_", sizeof("_rest32gpr_") - 1) == 0 ||
+<<<<<<< HEAD
 		    strncmp(symname, "_save32gpr_", sizeof("_save32gpr_") - 1) == 0)
+=======
+		    strncmp(symname, "_save32gpr_", sizeof("_save32gpr_") - 1) == 0 ||
+		    strncmp(symname, "_restvr_", sizeof("_restvr_") - 1) == 0 ||
+		    strncmp(symname, "_savevr_", sizeof("_savevr_") - 1) == 0)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			return 1;
 	if (info->hdr->e_machine == EM_PPC64)
 		/* Special register function linked on all modules during final link of .ko */
 		if (strncmp(symname, "_restgpr0_", sizeof("_restgpr0_") - 1) == 0 ||
+<<<<<<< HEAD
 		    strncmp(symname, "_savegpr0_", sizeof("_savegpr0_") - 1) == 0)
+=======
+		    strncmp(symname, "_savegpr0_", sizeof("_savegpr0_") - 1) == 0 ||
+		    strncmp(symname, "_restvr_", sizeof("_restvr_") - 1) == 0 ||
+		    strncmp(symname, "_savevr_", sizeof("_savevr_") - 1) == 0)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			return 1;
 	/* Do not ignore this symbol */
 	return 0;
@@ -2152,7 +2169,11 @@ int main(int argc, char **argv)
 	struct ext_sym_list *extsym_iter;
 	struct ext_sym_list *extsym_start = NULL;
 
+<<<<<<< HEAD
 	while ((opt = getopt(argc, argv, "i:I:e:msST:o:awM:K:")) != -1) {
+=======
+	while ((opt = getopt(argc, argv, "i:I:e:msST:o:awM:K:E")) != -1) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		switch (opt) {
 		case 'i':
 			kernel_read = optarg;
@@ -2190,6 +2211,12 @@ int main(int argc, char **argv)
 		case 'w':
 			warn_unresolved = 1;
 			break;
+<<<<<<< HEAD
+=======
+		case 'E':
+			section_error_on_mismatch = 1;
+			break;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		default:
 			exit(1);
 		}
@@ -2242,11 +2269,31 @@ int main(int argc, char **argv)
 
 	if (dump_write)
 		write_dump(dump_write);
+<<<<<<< HEAD
 	if (sec_mismatch_count && !sec_mismatch_verbose)
 		warn("modpost: Found %d section mismatch(es).\n"
 		     "To see full details build your kernel with:\n"
 		     "'make CONFIG_DEBUG_SECTION_MISMATCH=y'\n",
 		     sec_mismatch_count);
+=======
+
+	if (sec_mismatch_count && !sec_mismatch_verbose) {
+		merror(
+		"modpost: Found %d section mismatch(es).\n"
+		"To see full details build your kernel with:\n"
+		"'make CONFIG_DEBUG_SECTION_MISMATCH=y'\n",
+		sec_mismatch_count);
+
+	}
+
+	if (sec_mismatch_count && section_error_on_mismatch) {
+		err |= 1;
+		printf(
+		"To build the kernel despite the mismatches, "
+		"build with:\n'make CONFIG_NO_ERROR_ON_MISMATCH=y'\n"
+		"(NOTE: This is not recommended)\n");
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return err;
 }

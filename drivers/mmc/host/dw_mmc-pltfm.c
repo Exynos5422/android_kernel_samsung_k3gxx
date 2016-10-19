@@ -105,6 +105,7 @@ static int dw_mci_pltfm_resume(struct device *dev)
 
 	return 0;
 }
+<<<<<<< HEAD
 
 static int dw_mci_pltfm_early_resume(struct device *dev)
 {
@@ -126,6 +127,14 @@ struct dev_pm_ops dw_mci_pltfm_pmops = {
 	.resume   = dw_mci_pltfm_resume,
 	.resume_early   = dw_mci_pltfm_early_resume,
 };
+=======
+#else
+#define dw_mci_pltfm_suspend	NULL
+#define dw_mci_pltfm_resume	NULL
+#endif /* CONFIG_PM_SLEEP */
+
+SIMPLE_DEV_PM_OPS(dw_mci_pltfm_pmops, dw_mci_pltfm_suspend, dw_mci_pltfm_resume);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 EXPORT_SYMBOL_GPL(dw_mci_pltfm_pmops);
 
 static const struct of_device_id dw_mci_pltfm_match[] = {

@@ -40,6 +40,10 @@
 #include "objsec.h"
 #include "security.h"
 #include "netlabel.h"
+<<<<<<< HEAD
+=======
+#include "avc.h"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /**
  * selinux_netlbl_sidlookup_cached - Cache a SID lookup
@@ -442,8 +446,12 @@ int selinux_netlbl_socket_connect(struct sock *sk, struct sockaddr *addr)
 	    sksec->nlbl_state != NLBL_CONNLABELED)
 		return 0;
 
+<<<<<<< HEAD
 	local_bh_disable();
 	bh_lock_sock_nested(sk);
+=======
+	lock_sock(sk);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/* connected sockets are allowed to disconnect when the address family
 	 * is set to AF_UNSPEC, if that is what is happening we want to reset
@@ -464,7 +472,11 @@ int selinux_netlbl_socket_connect(struct sock *sk, struct sockaddr *addr)
 		sksec->nlbl_state = NLBL_CONNLABELED;
 
 socket_connect_return:
+<<<<<<< HEAD
 	bh_unlock_sock(sk);
 	local_bh_enable();
+=======
+	release_sock(sk);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return rc;
 }

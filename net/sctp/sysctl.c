@@ -65,8 +65,16 @@ extern int sysctl_sctp_wmem[3];
 static int proc_sctp_do_hmac_alg(ctl_table *ctl,
 				int write,
 				void __user *buffer, size_t *lenp,
+<<<<<<< HEAD
 
 				loff_t *ppos);
+=======
+				loff_t *ppos);
+static int proc_sctp_do_auth(struct ctl_table *ctl, int write,
+			     void __user *buffer, size_t *lenp,
+			     loff_t *ppos);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static ctl_table sctp_table[] = {
 	{
 		.procname	= "sctp_mem",
@@ -267,7 +275,11 @@ static ctl_table sctp_net_table[] = {
 		.data		= &init_net.sctp.auth_enable,
 		.maxlen		= sizeof(int),
 		.mode		= 0644,
+<<<<<<< HEAD
 		.proc_handler	= proc_dointvec,
+=======
+		.proc_handler	= proc_sctp_do_auth,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	},
 	{
 		.procname	= "addr_scope_policy",
@@ -348,6 +360,40 @@ static int proc_sctp_do_hmac_alg(ctl_table *ctl,
 	return ret;
 }
 
+<<<<<<< HEAD
+=======
+static int proc_sctp_do_auth(struct ctl_table *ctl, int write,
+			     void __user *buffer, size_t *lenp,
+			     loff_t *ppos)
+{
+	struct net *net = current->nsproxy->net_ns;
+	struct ctl_table tbl;
+	int new_value, ret;
+
+	memset(&tbl, 0, sizeof(struct ctl_table));
+	tbl.maxlen = sizeof(unsigned int);
+
+	if (write)
+		tbl.data = &new_value;
+	else
+		tbl.data = &net->sctp.auth_enable;
+
+	ret = proc_dointvec(&tbl, write, buffer, lenp, ppos);
+
+	if (write) {
+		struct sock *sk = net->sctp.ctl_sock;
+
+		net->sctp.auth_enable = new_value;
+		/* Update the value in the control socket */
+		lock_sock(sk);
+		sctp_sk(sk)->ep->auth_enable = new_value;
+		release_sock(sk);
+	}
+
+	return ret;
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 int sctp_sysctl_net_register(struct net *net)
 {
 	struct ctl_table *table;

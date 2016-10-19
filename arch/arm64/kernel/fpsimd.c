@@ -17,10 +17,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+<<<<<<< HEAD
+=======
+#include <linux/cpu_pm.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <linux/kernel.h>
 #include <linux/init.h>
 #include <linux/sched.h>
 #include <linux/signal.h>
+<<<<<<< HEAD
+=======
+#include <linux/hardirq.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #include <asm/fpsimd.h>
 #include <asm/cputype.h>
@@ -32,6 +40,10 @@
 #define FPEXC_IXF	(1 << 4)
 #define FPEXC_IDF	(1 << 7)
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * Trapped FP/ASIMD access.
  */
@@ -70,20 +82,137 @@ void do_fpsimd_exc(unsigned int esr, struct pt_regs *regs)
 
 void fpsimd_thread_switch(struct task_struct *next)
 {
+<<<<<<< HEAD
 	/* check if not kernel threads */
 	if (current->mm)
 		fpsimd_save_state(&current->thread.fpsimd_state);
+=======
+	if (current->mm)
+		fpsimd_save_state(&current->thread.fpsimd_state);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (next->mm)
 		fpsimd_load_state(&next->thread.fpsimd_state);
 }
 
 void fpsimd_flush_thread(void)
 {
+<<<<<<< HEAD
 	memset(&current->thread.fpsimd_state, 0, sizeof(struct fpsimd_state));
 	fpsimd_load_state(&current->thread.fpsimd_state);
 }
 
 /*
+=======
+	preempt_disable();
+	memset(&current->thread.fpsimd_state, 0, sizeof(struct fpsimd_state));
+	fpsimd_load_state(&current->thread.fpsimd_state);
+	preempt_enable();
+}
+
+/*
+ * Save the userland FPSIMD state of 'current' to memory, but only if the state
+ * currently held in the registers does in fact belong to 'current'
+ */
+void fpsimd_preserve_current_state(void)
+{
+	preempt_disable();
+	fpsimd_save_state(&current->thread.fpsimd_state);
+	preempt_enable();
+}
+
+/*
+ * Load an updated userland FPSIMD state for 'current' from memory
+ */
+void fpsimd_update_current_state(struct fpsimd_state *state)
+{
+	preempt_disable();
+	fpsimd_load_state(state);
+	preempt_enable();
+}
+
+#ifdef CONFIG_KERNEL_MODE_NEON
+
+static DEFINE_PER_CPU(struct fpsimd_partial_state, hardirq_fpsimdstate);
+static DEFINE_PER_CPU(struct fpsimd_partial_state, softirq_fpsimdstate);
+
+/*
+ * Kernel-side NEON support functions
+ */
+void kernel_neon_begin_partial(u32 num_regs)
+{
+	if (in_interrupt()) {
+		struct fpsimd_partial_state *s = this_cpu_ptr(
+			in_irq() ? &hardirq_fpsimdstate : &softirq_fpsimdstate);
+
+		BUG_ON(num_regs > 32);
+		fpsimd_save_partial_state(s, roundup(num_regs, 2));
+	} else {
+		/*
+		 * Save the userland FPSIMD state if we have one and if we
+		 * haven't done so already. Clear fpsimd_last_state to indicate
+		 * that there is no longer userland FPSIMD state in the
+		 * registers.
+		 */
+		preempt_disable();
+		if (current->mm)
+			fpsimd_save_state(&current->thread.fpsimd_state);
+	}
+}
+EXPORT_SYMBOL(kernel_neon_begin_partial);
+
+void kernel_neon_end(void)
+{
+	if (in_interrupt()) {
+		struct fpsimd_partial_state *s = this_cpu_ptr(
+			in_irq() ? &hardirq_fpsimdstate : &softirq_fpsimdstate);
+		fpsimd_load_partial_state(s);
+	} else {
+		if (current->mm)
+			fpsimd_load_state(&current->thread.fpsimd_state);
+
+		preempt_enable();
+	}
+}
+EXPORT_SYMBOL(kernel_neon_end);
+
+#endif /* CONFIG_KERNEL_MODE_NEON */
+
+#ifdef CONFIG_CPU_PM
+static int fpsimd_cpu_pm_notifier(struct notifier_block *self,
+				  unsigned long cmd, void *v)
+{
+	switch (cmd) {
+	case CPU_PM_ENTER:
+		if (current->mm)
+			fpsimd_save_state(&current->thread.fpsimd_state);
+		break;
+	case CPU_PM_EXIT:
+		if (current->mm)
+			fpsimd_load_state(&current->thread.fpsimd_state);
+		break;
+	case CPU_PM_ENTER_FAILED:
+	default:
+		return NOTIFY_DONE;
+	}
+	return NOTIFY_OK;
+}
+
+static struct notifier_block fpsimd_cpu_pm_notifier_block = {
+	.notifier_call = fpsimd_cpu_pm_notifier,
+};
+
+static void fpsimd_pm_init(void)
+{
+	cpu_pm_register_notifier(&fpsimd_cpu_pm_notifier_block);
+}
+
+#else
+static inline void fpsimd_pm_init(void) { }
+#endif /* CONFIG_CPU_PM */
+
+/*
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  * FP/SIMD support code initialisation.
  */
 static int __init fpsimd_init(void)
@@ -101,6 +230,11 @@ static int __init fpsimd_init(void)
 	else
 		elf_hwcap |= HWCAP_ASIMD;
 
+<<<<<<< HEAD
+=======
+	fpsimd_pm_init();
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 late_initcall(fpsimd_init);

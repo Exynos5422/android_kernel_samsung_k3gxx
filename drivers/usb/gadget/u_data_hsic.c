@@ -20,9 +20,16 @@
 #include <linux/debugfs.h>
 #include <linux/bitops.h>
 #include <linux/termios.h>
+<<<<<<< HEAD
 #include <mach/usb_bridge.h>
 #include <mach/usb_gadget_xport.h>
 //#include "f_qdss.h"
+=======
+#include <linux/usb/usb_bridge.h>
+
+#include "f_qdss.h"
+#include "usb_gadget_xport.h"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 static unsigned int no_data_ports;
 
@@ -32,10 +39,17 @@ static unsigned int no_data_ports;
 #define GHSIC_DATA_SERIAL_TX_Q_SIZE		20
 #define GHSIC_DATA_RX_REQ_SIZE			2048
 #define GHSIC_DATA_TX_INTR_THRESHOLD		20
+<<<<<<< HEAD
 //#define GHSIC_DATA_QDSS_TX_Q_SIZE		300
 
 //static unsigned int ghsic_data_qdss_tx_q_size = GHSIC_DATA_QDSS_TX_Q_SIZE;
 //module_param(ghsic_data_qdss_tx_q_size, uint, S_IRUGO | S_IWUSR);
+=======
+#define GHSIC_DATA_QDSS_TX_Q_SIZE		300
+
+static unsigned int ghsic_data_qdss_tx_q_size = GHSIC_DATA_QDSS_TX_Q_SIZE;
+module_param(ghsic_data_qdss_tx_q_size, uint, S_IRUGO | S_IWUSR);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 static unsigned int ghsic_data_rmnet_tx_q_size = GHSIC_DATA_RMNET_TX_Q_SIZE;
 module_param(ghsic_data_rmnet_tx_q_size, uint, S_IRUGO | S_IWUSR);
@@ -794,8 +808,13 @@ int ghsic_data_connect(void *gptr, int port_num)
 {
 	struct gdata_port		*port;
 	struct gserial			*gser;
+<<<<<<< HEAD
 	//struct gqdss			*qdss;
 	//struct grmnet			*gr;
+=======
+	struct gqdss			*qdss;
+	struct grmnet			*gr;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	unsigned long			flags;
 	int				ret = 0;
 
@@ -828,9 +847,13 @@ int ghsic_data_connect(void *gptr, int port_num)
 		port->rx_q_size = ghsic_data_serial_rx_q_size;
 		gser->in->driver_data = port;
 		gser->out->driver_data = port;
+<<<<<<< HEAD
 	}
 #if 0 
 	else if (port->gtype == USB_GADGET_RMNET) {
+=======
+	} else if (port->gtype == USB_GADGET_RMNET) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		gr = gptr;
 		spin_lock_irqsave(&port->tx_lock, flags);
 		port->in = gr->in;
@@ -844,9 +867,13 @@ int ghsic_data_connect(void *gptr, int port_num)
 		port->rx_q_size = ghsic_data_rmnet_rx_q_size;
 		gr->in->driver_data = port;
 		gr->out->driver_data = port;
+<<<<<<< HEAD
 	}
 #endif 
 /*else if (port->gtype == USB_GADGET_QDSS) {
+=======
+	} else if (port->gtype == USB_GADGET_QDSS) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		pr_debug("%s:: port type = USB_GADGET_QDSS\n", __func__);
 		qdss = gptr;
 		spin_lock_irqsave(&port->tx_lock, flags);
@@ -855,7 +882,11 @@ int ghsic_data_connect(void *gptr, int port_num)
 		port->tx_q_size = ghsic_data_qdss_tx_q_size;
 		qdss->data->driver_data = port;
 	}
+<<<<<<< HEAD
 */
+=======
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ret = usb_ep_enable(port->in);
 	if (ret) {
 		pr_err("%s: usb_ep_enable failed eptype:IN ep:%p",

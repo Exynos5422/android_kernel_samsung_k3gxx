@@ -112,12 +112,23 @@ static const char *ata_lpm_policy_names[] = {
 	[ATA_LPM_MIN_POWER]	= "min_power",
 };
 
+<<<<<<< HEAD
 static ssize_t ata_scsi_lpm_store(struct device *dev,
 				  struct device_attribute *attr,
 				  const char *buf, size_t count)
 {
 	struct Scsi_Host *shost = class_to_shost(dev);
 	struct ata_port *ap = ata_shost_to_port(shost);
+=======
+static ssize_t ata_scsi_lpm_store(struct device *device,
+				  struct device_attribute *attr,
+				  const char *buf, size_t count)
+{
+	struct Scsi_Host *shost = class_to_shost(device);
+	struct ata_port *ap = ata_shost_to_port(shost);
+	struct ata_link *link;
+	struct ata_device *dev;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	enum ata_lpm_policy policy;
 	unsigned long flags;
 
@@ -133,10 +144,27 @@ static ssize_t ata_scsi_lpm_store(struct device *dev,
 		return -EINVAL;
 
 	spin_lock_irqsave(ap->lock, flags);
+<<<<<<< HEAD
 	ap->target_lpm_policy = policy;
 	ata_port_schedule_eh(ap);
 	spin_unlock_irqrestore(ap->lock, flags);
 
+=======
+
+	ata_for_each_link(link, ap, EDGE) {
+		ata_for_each_dev(dev, &ap->link, ENABLED) {
+			if (dev->horkage & ATA_HORKAGE_NOLPM) {
+				count = -EOPNOTSUPP;
+				goto out_unlock;
+			}
+		}
+	}
+
+	ap->target_lpm_policy = policy;
+	ata_port_schedule_eh(ap);
+out_unlock:
+	spin_unlock_irqrestore(ap->lock, flags);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return count;
 }
 
@@ -3614,6 +3642,10 @@ int ata_scsi_add_hosts(struct ata_host *host, struct scsi_host_template *sht)
 		shost->max_lun = 1;
 		shost->max_channel = 1;
 		shost->max_cmd_len = 16;
+<<<<<<< HEAD
+=======
+		shost->no_write_same = 1;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 		/* Schedule policy is determined by ->qc_defer()
 		 * callback and it needs to see every deferred qc.
@@ -3863,6 +3895,30 @@ void ata_scsi_hotplug(struct work_struct *work)
 		return;
 	}
 
+<<<<<<< HEAD
+=======
+	/*
+	 * XXX - UGLY HACK
+	 *
+	 * The block layer suspend/resume path is fundamentally broken due
+	 * to freezable kthreads and workqueue and may deadlock if a block
+	 * device gets removed while resume is in progress.  I don't know
+	 * what the solution is short of removing freezable kthreads and
+	 * workqueues altogether.
+	 *
+	 * The following is an ugly hack to avoid kicking off device
+	 * removal while freezer is active.  This is a joke but does avoid
+	 * this particular deadlock scenario.
+	 *
+	 * https://bugzilla.kernel.org/show_bug.cgi?id=62801
+	 * http://marc.info/?l=linux-kernel&m=138695698516487
+	 */
+#ifdef CONFIG_FREEZER
+	while (pm_freezing)
+		msleep(10);
+#endif
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	DPRINTK("ENTER\n");
 	mutex_lock(&ap->scsi_scan_mutex);
 

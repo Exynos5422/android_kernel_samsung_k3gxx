@@ -862,7 +862,11 @@ lowpan_process_data(struct sk_buff *skb)
 	 * Traffic class carried in-line
 	 * ECN + DSCP (1 byte), Flow Label is elided
 	 */
+<<<<<<< HEAD
 	case 1: /* 10b */
+=======
+	case 2: /* 10b */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (lowpan_fetch_skb_u8(skb, &tmp))
 			goto drop;
 
@@ -875,7 +879,11 @@ lowpan_process_data(struct sk_buff *skb)
 	 * Flow Label carried in-line
 	 * ECN + 2-bit Pad + Flow Label (3 bytes), DSCP is elided
 	 */
+<<<<<<< HEAD
 	case 2: /* 01b */
+=======
+	case 1: /* 01b */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (lowpan_fetch_skb_u8(skb, &tmp))
 			goto drop;
 
@@ -1173,7 +1181,31 @@ static struct header_ops lowpan_header_ops = {
 	.create	= lowpan_header_create,
 };
 
+<<<<<<< HEAD
 static const struct net_device_ops lowpan_netdev_ops = {
+=======
+static struct lock_class_key lowpan_tx_busylock;
+static struct lock_class_key lowpan_netdev_xmit_lock_key;
+
+static void lowpan_set_lockdep_class_one(struct net_device *dev,
+					 struct netdev_queue *txq,
+					 void *_unused)
+{
+	lockdep_set_class(&txq->_xmit_lock,
+			  &lowpan_netdev_xmit_lock_key);
+}
+
+
+static int lowpan_dev_init(struct net_device *dev)
+{
+	netdev_for_each_tx_queue(dev, lowpan_set_lockdep_class_one, NULL);
+	dev->qdisc_tx_busylock = &lowpan_tx_busylock;
+	return 0;
+}
+
+static const struct net_device_ops lowpan_netdev_ops = {
+	.ndo_init		= lowpan_dev_init,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	.ndo_start_xmit		= lowpan_xmit,
 	.ndo_set_mac_address	= lowpan_set_address,
 };

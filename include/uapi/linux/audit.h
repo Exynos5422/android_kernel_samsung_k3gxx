@@ -106,7 +106,10 @@
 #define AUDIT_NETFILTER_PKT	1324	/* Packets traversing netfilter chains */
 #define AUDIT_NETFILTER_CFG	1325	/* Netfilter chain modifications */
 #define AUDIT_SECCOMP		1326	/* Secure Computing event */
+<<<<<<< HEAD
 #define AUDIT_PROCTITLE		1327	/* Proctitle emit event */
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define AUDIT_AVC		1400	/* SE Linux avc denial or grant */
 #define AUDIT_SELINUX_ERR	1401	/* Internal SE Linux Errors */

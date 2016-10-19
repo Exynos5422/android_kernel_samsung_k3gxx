@@ -66,7 +66,11 @@ config PCMCIA_3C589
 
 config VORTEX
 	tristate "3c590/3c900 series (592/595/597) \"Vortex/Boomerang\" support"
+<<<<<<< HEAD
 	depends on (PCI || EISA) && HAS_IOPORT
+=======
+	depends on (PCI || EISA) && HAS_IOPORT_MAP
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	select NET_CORE
 	select MII
 	---help---

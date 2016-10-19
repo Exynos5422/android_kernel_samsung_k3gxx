@@ -135,11 +135,15 @@ config CFG80211_WEXT
 	bool "cfg80211 wireless extensions compatibility"
 	depends on CFG80211
 	select WEXT_CORE
+<<<<<<< HEAD
 	default y
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	help
 	  Enable this option if you need old userspace for wireless
 	  extensions with cfg80211-based drivers.
 
+<<<<<<< HEAD
 config WIRELESS_EXT_SYSFS
 	bool "Wireless extensions sysfs files"
 	depends on WEXT_CORE && SYSFS
@@ -155,13 +159,21 @@ config WIRELESS_EXT_SYSFS
 
 config LIB80211
 	tristate "Common routines for IEEE802.11 drivers"
+=======
+config LIB80211
+	tristate
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	default n
 	help
 	  This options enables a library of common routines used
 	  by IEEE802.11 wireless LAN drivers.
 
+<<<<<<< HEAD
 	  Drivers should select this themselves if needed.  Say Y if
 	  you want this built into your kernel.
+=======
+	  Drivers should select this themselves if needed.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 config LIB80211_CRYPT_WEP
 	tristate
@@ -192,6 +204,7 @@ config CFG80211_ALLOW_RECONNECT
 
 	  Select this option ONLY for wlan drivers that are specifically
 	  built for such purposes.
+<<<<<<< HEAD
 
 config CFG80211_REG_NOT_UPDATED
 	bool "Do not update Regulatory configuration"
@@ -201,3 +214,5 @@ config CFG80211_REG_NOT_UPDATED
 	  Regulation should not updated even if device found other country
 	  Access Point Beacon once since device should find around other
 	  Access Points.
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

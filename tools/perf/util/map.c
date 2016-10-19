@@ -21,6 +21,10 @@ const char *map_type__name[MAP__NR_TYPES] = {
 static inline int is_anon_memory(const char *filename)
 {
 	return !strcmp(filename, "//anon") ||
+<<<<<<< HEAD
+=======
+	       !strcmp(filename, "/dev/zero (deleted)") ||
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	       !strcmp(filename, "/anon_hugepage (deleted)");
 }
 

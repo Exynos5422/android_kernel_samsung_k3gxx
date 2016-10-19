@@ -2561,8 +2561,13 @@ static int be_close(struct net_device *netdev)
 	/* Wait for all pending tx completions to arrive so that
 	 * all tx skbs are freed.
 	 */
+<<<<<<< HEAD
 	be_tx_compl_clean(adapter);
 	netif_tx_disable(netdev);
+=======
+	netif_tx_disable(netdev);
+	be_tx_compl_clean(adapter);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	be_rx_qs_destroy(adapter);
 

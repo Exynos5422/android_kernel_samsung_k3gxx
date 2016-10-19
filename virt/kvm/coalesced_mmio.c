@@ -154,6 +154,7 @@ int kvm_vm_ioctl_register_coalesced_mmio(struct kvm *kvm,
 	list_add_tail(&dev->list, &kvm->coalesced_zones);
 	mutex_unlock(&kvm->slots_lock);
 
+<<<<<<< HEAD
 	return ret;
 
 out_free_dev:
@@ -165,6 +166,15 @@ out_free_dev:
 		return -ENXIO;
 
 	return 0;
+=======
+	return 0;
+
+out_free_dev:
+	mutex_unlock(&kvm->slots_lock);
+	kfree(dev);
+
+	return ret;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 int kvm_vm_ioctl_unregister_coalesced_mmio(struct kvm *kvm,

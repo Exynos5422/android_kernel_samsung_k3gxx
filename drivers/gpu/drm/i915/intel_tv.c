@@ -921,6 +921,17 @@ intel_tv_compute_config(struct intel_encoder *encoder,
 	DRM_DEBUG_KMS("forcing bpc to 8 for TV\n");
 	pipe_config->pipe_bpp = 8*3;
 
+<<<<<<< HEAD
+=======
+	/* TV has it's own notion of sync and other mode flags, so clear them. */
+	pipe_config->adjusted_mode.flags = 0;
+
+	/*
+	 * FIXME: We don't check whether the input mode is actually what we want
+	 * or whether userspace is doing something stupid.
+	 */
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return true;
 }
 

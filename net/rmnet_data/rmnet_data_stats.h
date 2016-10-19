@@ -37,6 +37,11 @@ enum rmnet_skb_free_e {
 	RMNET_STATS_SKBFREE_DEAGG_MALFORMED,
 	RMNET_STATS_SKBFREE_DEAGG_CLONE_FAIL,
 	RMNET_STATS_SKBFREE_DEAGG_UNKOWN_IP_TYP,
+<<<<<<< HEAD
+=======
+	RMNET_STATS_SKBFREE_DEAGG_DATA_LEN_0,
+	RMNET_STATS_SKBFREE_INGRESS_BAD_MAP_CKSUM,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	RMNET_STATS_SKBFREE_MAX
 };
 
@@ -53,4 +58,8 @@ void rmnet_kfree_skb(struct sk_buff *skb, unsigned int reason);
 void rmnet_stats_queue_xmit(int rc, unsigned int reason);
 void rmnet_stats_deagg_pkts(int aggcount);
 void rmnet_stats_agg_pkts(int aggcount);
+<<<<<<< HEAD
+=======
+void rmnet_stats_dl_checksum(unsigned int rc);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif /* _RMNET_DATA_STATS_H_ */

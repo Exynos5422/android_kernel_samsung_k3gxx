@@ -46,6 +46,10 @@
 #include <linux/if_ether.h>
 #include <linux/can.h>
 #include <linux/can/dev.h>
+<<<<<<< HEAD
+=======
+#include <linux/can/skb.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <linux/slab.h>
 #include <net/rtnetlink.h>
 
@@ -109,25 +113,41 @@ static netdev_tx_t vcan_tx(struct sk_buff *skb, struct net_device *dev)
 			stats->rx_packets++;
 			stats->rx_bytes += cfd->len;
 		}
+<<<<<<< HEAD
 		kfree_skb(skb);
+=======
+		consume_skb(skb);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return NETDEV_TX_OK;
 	}
 
 	/* perform standard echo handling for CAN network interfaces */
 
 	if (loop) {
+<<<<<<< HEAD
 		struct sock *srcsk = skb->sk;
 
 		skb = skb_share_check(skb, GFP_ATOMIC);
+=======
+
+		skb = can_create_echo_skb(skb);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (!skb)
 			return NETDEV_TX_OK;
 
 		/* receive with packet counting */
+<<<<<<< HEAD
 		skb->sk = srcsk;
 		vcan_rx(skb, dev);
 	} else {
 		/* no looped packets => no counting */
 		kfree_skb(skb);
+=======
+		vcan_rx(skb, dev);
+	} else {
+		/* no looped packets => no counting */
+		consume_skb(skb);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 	return NETDEV_TX_OK;
 }

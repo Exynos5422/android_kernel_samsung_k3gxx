@@ -491,13 +491,20 @@ static void qh_link_periodic(struct ehci_hcd *ehci, struct ehci_qh *qh)
 	unsigned	i;
 	unsigned	period = qh->period;
 
+<<<<<<< HEAD
 #if !defined(CONFIG_LINK_DEVICE_HSIC)
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	dev_dbg (&qh->dev->dev,
 		"link qh%d-%04x/%p start %d [%d/%d us]\n",
 		period, hc32_to_cpup(ehci, &qh->hw->hw_info2)
 			& (QH_CMASK | QH_SMASK),
 		qh, qh->start, qh->usecs, qh->c_usecs);
+<<<<<<< HEAD
 #endif
+=======
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* high bandwidth, or otherwise every microframe */
 	if (period == 0)
 		period = 1;
@@ -586,13 +593,20 @@ static void qh_unlink_periodic(struct ehci_hcd *ehci, struct ehci_qh *qh)
 		? ((qh->usecs + qh->c_usecs) / qh->period)
 		: (qh->usecs * 8);
 
+<<<<<<< HEAD
 #if !defined(CONFIG_LINK_DEVICE_HSIC)
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	dev_dbg (&qh->dev->dev,
 		"unlink qh%d-%04x/%p start %d [%d/%d us]\n",
 		qh->period,
 		hc32_to_cpup(ehci, &qh->hw->hw_info2) & (QH_CMASK | QH_SMASK),
 		qh, qh->start, qh->usecs, qh->c_usecs);
+<<<<<<< HEAD
 #endif
+=======
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* qh->qh_next still "live" to HC */
 	qh->qh_state = QH_STATE_UNLINK;
 	qh->qh_next.ptr = NULL;
@@ -603,6 +617,7 @@ static void qh_unlink_periodic(struct ehci_hcd *ehci, struct ehci_qh *qh)
 	list_del(&qh->intr_node);
 }
 
+<<<<<<< HEAD
 static void cancel_unlink_wait_intr(struct ehci_hcd *ehci, struct ehci_qh *qh)
 {
 	 if (qh->qh_state != QH_STATE_LINKED ||
@@ -617,15 +632,20 @@ static void cancel_unlink_wait_intr(struct ehci_hcd *ehci, struct ehci_qh *qh)
 	 */
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static void start_unlink_intr(struct ehci_hcd *ehci, struct ehci_qh *qh)
 {
 	/* If the QH isn't linked then there's nothing we can do. */
 	if (qh->qh_state != QH_STATE_LINKED)
 		return;
 
+<<<<<<< HEAD
 	/* if the qh is waiting for unlink, cancel it now */
 	cancel_unlink_wait_intr(ehci, qh);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	qh_unlink_periodic (ehci, qh);
 
 	/* Make sure the unlinks are visible before starting the timer */
@@ -651,6 +671,7 @@ static void start_unlink_intr(struct ehci_hcd *ehci, struct ehci_qh *qh)
 	}
 }
 
+<<<<<<< HEAD
 /*
  * It is common only one intr URB is scheduled on one qh, and
  * given complete() is run in tasklet context, introduce a bit
@@ -672,6 +693,8 @@ static void start_unlink_intr_wait(struct ehci_hcd *ehci,
 	 }
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static void end_unlink_intr(struct ehci_hcd *ehci, struct ehci_qh *qh)
 {
 	struct ehci_qh_hw	*hw = qh->hw;
@@ -877,11 +900,16 @@ static int qh_schedule(struct ehci_hcd *ehci, struct ehci_qh *qh)
 			? cpu_to_hc32(ehci, 1 << uframe)
 			: cpu_to_hc32(ehci, QH_SMASK);
 		hw->hw_info2 |= c_mask;
+<<<<<<< HEAD
 	}
 #if !defined(CONFIG_LINK_DEVICE_HSIC)
 	else
 		ehci_dbg (ehci, "reused qh %p schedule\n", qh);
 #endif
+=======
+	} else
+		ehci_dbg (ehci, "reused qh %p schedule\n", qh);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 done:
 	return status;
@@ -932,9 +960,12 @@ static int intr_submit (
 	if (qh->qh_state == QH_STATE_IDLE) {
 		qh_refresh(ehci, qh);
 		qh_link_periodic(ehci, qh);
+<<<<<<< HEAD
 	} else {
 		 /* cancel unlink wait for the qh */
 		 cancel_unlink_wait_intr(ehci, qh);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	/* ... update usbfs periodic stats */
@@ -970,11 +1001,17 @@ static void scan_intr(struct ehci_hcd *ehci)
 			 * in qh_unlink_periodic().
 			 */
 			temp = qh_completions(ehci, qh);
+<<<<<<< HEAD
 			if (unlikely(temp))
 				start_unlink_intr(ehci, qh);
 			else if (unlikely(list_empty(&qh->qtd_list) &&
 					qh->qh_state == QH_STATE_LINKED))
 				start_unlink_intr_wait(ehci, qh);
+=======
+			if (unlikely(temp || (list_empty(&qh->qtd_list) &&
+					qh->qh_state == QH_STATE_LINKED)))
+				start_unlink_intr(ehci, qh);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		}
 	}
 }
@@ -1075,8 +1112,16 @@ iso_stream_init (
 			/* c-mask as specified in USB 2.0 11.18.4 3.c */
 			tmp = (1 << (hs_transfers + 2)) - 1;
 			stream->raw_mask |= tmp << (8 + 2);
+<<<<<<< HEAD
 		} else
 			stream->raw_mask = smask_out [hs_transfers - 1];
+=======
+		} else if (hs_transfers <=
+				(sizeof(smask_out) / sizeof(smask_out[0]))) {
+			stream->raw_mask = smask_out [hs_transfers - 1];
+		}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		bandwidth = stream->usecs + stream->c_usecs;
 		bandwidth /= interval << 3;
 

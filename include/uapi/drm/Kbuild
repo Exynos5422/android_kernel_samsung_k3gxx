@@ -16,3 +16,7 @@ header-y += sis_drm.h
 header-y += tegra_drm.h
 header-y += via_drm.h
 header-y += vmwgfx_drm.h
+<<<<<<< HEAD
+=======
+header-y += kgsl_drm.h
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

@@ -330,7 +330,11 @@ static int __init olpc_ec_init_module(void)
 	return platform_driver_register(&olpc_ec_plat_driver);
 }
 
+<<<<<<< HEAD
 module_init(olpc_ec_init_module);
+=======
+arch_initcall(olpc_ec_init_module);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 MODULE_AUTHOR("Andres Salomon <dilinger@queued.net>");
 MODULE_LICENSE("GPL");

@@ -236,6 +236,12 @@ certainly invest a bit more effort into libata core layer).
 MEM
   devm_kzalloc()
   devm_kfree()
+<<<<<<< HEAD
+=======
+  devm_kmemdup()
+  devm_get_free_pages()
+  devm_free_pages()
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 IO region
   devm_request_region()

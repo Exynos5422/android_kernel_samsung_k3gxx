@@ -2,6 +2,7 @@
 # USB device configuration
 #
 
+<<<<<<< HEAD
 # many non-PCI SOC chips embed OHCI
 config USB_ARCH_HAS_OHCI
 	boolean
@@ -56,6 +57,17 @@ config USB_ARCH_HAS_XHCI
 	boolean
 	default y if ARCH_EXYNOS5
 	default PCI
+=======
+# These are unused now, remove them once they are no longer selected
+config USB_ARCH_HAS_OHCI
+	bool
+
+config USB_ARCH_HAS_EHCI
+	bool
+
+config USB_ARCH_HAS_XHCI
+	bool
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 menuconfig USB_SUPPORT
 	bool "USB support"
@@ -72,6 +84,7 @@ config USB_COMMON
 	default y
 	depends on USB || USB_GADGET
 
+<<<<<<< HEAD
 # Host-side USB depends on having a host controller
 # NOTE:  dummy_hcd is always an option, but it's ignored here ...
 # NOTE:  SL-811 option should be board-specific ...
@@ -85,6 +98,10 @@ config USB_ARCH_HAS_HCD
 	default y if BLACKFIN				# SL-811
 	default y if SUPERH				# r8a66597-hcd
 	default PCI
+=======
+config USB_ARCH_HAS_HCD
+	def_bool y
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 # ARM SA1111 chips have a non-PCI based "OHCI-compatible" USB host interface.
 config USB
@@ -145,8 +162,11 @@ source "drivers/usb/image/Kconfig"
 
 endif
 
+<<<<<<< HEAD
 source "drivers/usb/notify/Kconfig"
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 source "drivers/usb/dwc3/Kconfig"
 
 source "drivers/usb/chipidea/Kconfig"

@@ -2935,9 +2935,17 @@ static int r100_debugfs_cp_ring_info(struct seq_file *m, void *data)
 	seq_printf(m, "CP_RB_RPTR 0x%08x\n", rdp);
 	seq_printf(m, "%u free dwords in ring\n", ring->ring_free_dw);
 	seq_printf(m, "%u dwords in ring\n", count);
+<<<<<<< HEAD
 	for (j = 0; j <= count; j++) {
 		i = (rdp + j) & ring->ptr_mask;
 		seq_printf(m, "r[%04d]=0x%08x\n", i, ring->ring[i]);
+=======
+	if (ring->ready) {
+		for (j = 0; j <= count; j++) {
+			i = (rdp + j) & ring->ptr_mask;
+			seq_printf(m, "r[%04d]=0x%08x\n", i, ring->ring[i]);
+		}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 	return 0;
 }

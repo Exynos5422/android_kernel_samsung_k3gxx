@@ -98,10 +98,19 @@ static int zd1201_fw_upload(struct usb_device *dev, int apfw)
 		goto exit;
 
 	err = usb_control_msg(dev, usb_rcvctrlpipe(dev, 0), 0x4,
+<<<<<<< HEAD
 	    USB_DIR_IN | 0x40, 0,0, &ret, sizeof(ret), ZD1201_FW_TIMEOUT);
 	if (err < 0)
 		goto exit;
 
+=======
+	    USB_DIR_IN | 0x40, 0, 0, buf, sizeof(ret), ZD1201_FW_TIMEOUT);
+	if (err < 0)
+		goto exit;
+
+	memcpy(&ret, buf, sizeof(ret));
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (ret & 0x80) {
 		err = -EIO;
 		goto exit;

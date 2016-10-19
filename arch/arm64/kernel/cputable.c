@@ -22,7 +22,11 @@
 
 extern unsigned long __cpu_setup(void);
 
+<<<<<<< HEAD
 struct cpu_info __initdata cpu_table[] = {
+=======
+struct cpu_info cpu_table[] = {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	{
 		.cpu_id_val	= 0x000f0000,
 		.cpu_id_mask	= 0x000f0000,

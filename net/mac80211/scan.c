@@ -202,6 +202,12 @@ static bool ieee80211_prep_hw_scan(struct ieee80211_local *local)
 	enum ieee80211_band band;
 	int i, ielen, n_chans;
 
+<<<<<<< HEAD
+=======
+	if (test_bit(SCAN_HW_CANCELLED, &local->scanning))
+		return false;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	do {
 		if (local->hw_scan_band == IEEE80211_NUM_BANDS)
 			return false;
@@ -878,7 +884,27 @@ void ieee80211_scan_cancel(struct ieee80211_local *local)
 	if (!local->scan_req)
 		goto out;
 
+<<<<<<< HEAD
 	if (test_bit(SCAN_HW_SCANNING, &local->scanning)) {
+=======
+	/*
+	 * We have a scan running and the driver already reported completion,
+	 * but the worker hasn't run yet or is stuck on the mutex - mark it as
+	 * cancelled.
+	 */
+	if (test_bit(SCAN_HW_SCANNING, &local->scanning) &&
+	    test_bit(SCAN_COMPLETED, &local->scanning)) {
+		set_bit(SCAN_HW_CANCELLED, &local->scanning);
+		goto out;
+	}
+
+	if (test_bit(SCAN_HW_SCANNING, &local->scanning)) {
+		/*
+		 * Make sure that __ieee80211_scan_completed doesn't trigger a
+		 * scan on another band.
+		 */
+		set_bit(SCAN_HW_CANCELLED, &local->scanning);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (local->ops->cancel_hw_scan)
 			drv_cancel_hw_scan(local,
 				rcu_dereference_protected(local->scan_sdata,

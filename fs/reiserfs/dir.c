@@ -128,6 +128,10 @@ int reiserfs_readdir_dentry(struct dentry *dentry, void *dirent,
 				char *d_name;
 				off_t d_off;
 				ino_t d_ino;
+<<<<<<< HEAD
+=======
+				loff_t cur_pos = deh_offset(deh);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 				if (!de_visible(deh))
 					/* it is hidden entry */
@@ -200,8 +204,14 @@ int reiserfs_readdir_dentry(struct dentry *dentry, void *dirent,
 				if (local_buf != small_buf) {
 					kfree(local_buf);
 				}
+<<<<<<< HEAD
 				// next entry should be looked for with such offset
 				next_pos = deh_offset(deh) + 1;
+=======
+
+				/* deh_offset(deh) may be invalid now. */
+				next_pos = cur_pos + 1;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 				if (item_moved(&tmp_ih, &path_to_entry)) {
 					set_cpu_key_k_offset(&pos_key,

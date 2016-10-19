@@ -511,7 +511,11 @@ static int ext4_has_free_clusters(struct ext4_sb_info *sbi,
 	 * r_blocks_count should always be multiple of the cluster ratio so
 	 * we are safe to do a plane bit shift only.
 	 */
+<<<<<<< HEAD
 	rsv = (atomic64_read(&sbi->s_r_blocks_count) >> sbi->s_cluster_bits) +
+=======
+	rsv = (ext4_r_blocks_count(sbi->s_es) >> sbi->s_cluster_bits) +
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	      resv_clusters;
 
 	if (free_clusters - (nclusters + rsv + dirty_clusters) <

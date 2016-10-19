@@ -17,7 +17,20 @@ config SECURITY_DMESG_RESTRICT
 	  unless the dmesg_restrict sysctl is explicitly set to (1).
 
 	  If you are unsure how to answer this question, answer N.
+<<<<<<< HEAD
 	  
+=======
+
+config SECURITY_PERF_EVENTS_RESTRICT
+	bool "Restrict unprivileged use of performance events"
+	depends on PERF_EVENTS
+	help
+	  If you say Y here, the kernel.perf_event_paranoid sysctl
+	  will be set to 3 by default, and no unprivileged use of the
+	  perf_event_open syscall will be permitted unless it is
+	  changed.
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 config SECURITY
 	bool "Enable different security models"
 	depends on SYSFS
@@ -70,6 +83,19 @@ config SECURITY_PATH
 	  implement pathname based access controls.
 	  If you are unsure how to answer this question, answer N.
 
+<<<<<<< HEAD
+=======
+config SECURITY_PFT
+	bool "Security hooks for Per File Encryption"
+	depends on SECURITY
+	depends on PFT
+	help
+	  This enables the security hooks for Per File Encryption.
+	  If enabled, a security module can use these hooks to
+	  implement file based access controls and encryption.
+	  If you are unsure how to answer this question, answer N.
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 config INTEL_TXT
 	bool "Enable Intel(R) Trusted Execution Technology (Intel(R) TXT)"
 	depends on HAVE_INTEL_TXT
@@ -124,7 +150,10 @@ source security/apparmor/Kconfig
 source security/yama/Kconfig
 
 source security/integrity/Kconfig
+<<<<<<< HEAD
 source security/tz_iccc/Kconfig
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 choice
 	prompt "Default security module"
@@ -133,6 +162,10 @@ choice
 	default DEFAULT_SECURITY_TOMOYO if SECURITY_TOMOYO
 	default DEFAULT_SECURITY_APPARMOR if SECURITY_APPARMOR
 	default DEFAULT_SECURITY_YAMA if SECURITY_YAMA
+<<<<<<< HEAD
+=======
+	default DEFAULT_SECURITY_PFT if SECURITY_PFT
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	default DEFAULT_SECURITY_DAC
 
 	help
@@ -154,6 +187,12 @@ choice
 	config DEFAULT_SECURITY_YAMA
 		bool "Yama" if SECURITY_YAMA=y
 
+<<<<<<< HEAD
+=======
+	config DEFAULT_SECURITY_PFT
+		bool "PFT" if SECURITY_PFT=y
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	config DEFAULT_SECURITY_DAC
 		bool "Unix Discretionary Access Controls"
 
@@ -166,6 +205,10 @@ config DEFAULT_SECURITY
 	default "tomoyo" if DEFAULT_SECURITY_TOMOYO
 	default "apparmor" if DEFAULT_SECURITY_APPARMOR
 	default "yama" if DEFAULT_SECURITY_YAMA
+<<<<<<< HEAD
+=======
+	default "pft" if DEFAULT_SECURITY_PFT
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	default "" if DEFAULT_SECURITY_DAC
 
 endmenu

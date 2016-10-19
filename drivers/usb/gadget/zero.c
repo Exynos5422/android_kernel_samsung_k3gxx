@@ -280,7 +280,11 @@ static int __init zero_bind(struct usb_composite_dev *cdev)
 	ss_opts->isoc_interval = gzero_options.isoc_interval;
 	ss_opts->isoc_maxpacket = gzero_options.isoc_maxpacket;
 	ss_opts->isoc_mult = gzero_options.isoc_mult;
+<<<<<<< HEAD
 	ss_opts->isoc_maxburst = gzero_options.isoc_maxpacket;
+=======
+	ss_opts->isoc_maxburst = gzero_options.isoc_maxburst;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ss_opts->bulk_buflen = gzero_options.bulk_buflen;
 
 	func_ss = usb_get_function(func_inst_ss);

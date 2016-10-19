@@ -10,14 +10,22 @@
 */
 
 /dts-v1/;
+<<<<<<< HEAD
 #include "exynos5440.dtsi"
+=======
+/include/ "exynos5440.dtsi"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 / {
 	model = "SAMSUNG SD5v1 board based on EXYNOS5440";
 	compatible = "samsung,sd5v1", "samsung,exynos5440";
 
 	chosen {
+<<<<<<< HEAD
 		bootargs = "root=/dev/sda2 rw rootwait ignore_loglevel early_printk no_console_suspend mem=2048M@0x80000000 mem=6144M@0x100000000 console=ttySAC0,115200";
+=======
+		bootargs = "root=/dev/sda2 rw rootwait ignore_loglevel early_printk no_console_suspend mem=2048M@0x80000000 console=ttySAC0,115200";
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	};
 
 	fixed-rate-clocks {

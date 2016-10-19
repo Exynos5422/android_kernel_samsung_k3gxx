@@ -214,7 +214,17 @@ STORE(__cached_dev)
 	}
 
 	if (attr == &sysfs_label) {
+<<<<<<< HEAD
 		memcpy(dc->sb.label, buf, SB_LABEL_SIZE);
+=======
+		if (size > SB_LABEL_SIZE)
+			return -EINVAL;
+		memcpy(dc->sb.label, buf, size);
+		if (size < SB_LABEL_SIZE)
+			dc->sb.label[size] = '\0';
+		if (size && dc->sb.label[size - 1] == '\n')
+			dc->sb.label[size - 1] = '\0';
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		bch_write_bdev_super(dc, NULL);
 		if (dc->disk.c) {
 			memcpy(dc->disk.c->uuids[dc->disk.id].label,

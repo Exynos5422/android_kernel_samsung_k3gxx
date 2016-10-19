@@ -1,7 +1,10 @@
 /*
  * arizona-spi.c  --  Arizona SPI bus interface
  *
+<<<<<<< HEAD
  * Copyright 2014 Cirrus Logic
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  * Copyright 2012 Wolfson Microelectronics plc
  *
  * Author: Mark Brown <broonie@opensource.wolfsonmicro.com>
@@ -28,6 +31,7 @@ static int arizona_spi_probe(struct spi_device *spi)
 	const struct spi_device_id *id = spi_get_device_id(spi);
 	struct arizona *arizona;
 	const struct regmap_config *regmap_config;
+<<<<<<< HEAD
 	const struct regmap_config *regmap_32bit_config = NULL;
 	unsigned long type;
 	int ret;
@@ -38,11 +42,17 @@ static int arizona_spi_probe(struct spi_device *spi)
 		type = id->driver_data;
 
 	switch (type) {
+=======
+	int ret;
+
+	switch (id->driver_data) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifdef CONFIG_MFD_WM5102
 	case WM5102:
 		regmap_config = &wm5102_spi_regmap;
 		break;
 #endif
+<<<<<<< HEAD
 #ifdef CONFIG_MFD_FLORIDA
 	case WM8280:
 	case WM5110:
@@ -60,6 +70,11 @@ static int arizona_spi_probe(struct spi_device *spi)
 	case WM1831:
 	case CS47L24:
 		regmap_config = &cs47l24_spi_regmap;
+=======
+#ifdef CONFIG_MFD_WM5110
+	case WM5110:
+		regmap_config = &wm5110_spi_regmap;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		break;
 #endif
 	default:
@@ -80,6 +95,7 @@ static int arizona_spi_probe(struct spi_device *spi)
 		return ret;
 	}
 
+<<<<<<< HEAD
 	if (regmap_32bit_config) {
 		arizona->regmap_32bit = devm_regmap_init_spi(spi,
 							   regmap_32bit_config);
@@ -92,6 +108,8 @@ static int arizona_spi_probe(struct spi_device *spi)
 		}
 	}
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	arizona->type = id->driver_data;
 	arizona->dev = &spi->dev;
 	arizona->irq = spi->irq;
@@ -108,6 +126,7 @@ static int arizona_spi_remove(struct spi_device *spi)
 
 static const struct spi_device_id arizona_spi_ids[] = {
 	{ "wm5102", WM5102 },
+<<<<<<< HEAD
 	{ "wm8280", WM8280 },
 	{ "wm8281", WM8280 },
 	{ "wm5110", WM5110 },
@@ -115,6 +134,9 @@ static const struct spi_device_id arizona_spi_ids[] = {
 	{ "wm1840", WM1840 },
 	{ "wm1831", WM1831 },
 	{ "cs47l24", CS47L24 },
+=======
+	{ "wm5110", WM5110 },
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	{ },
 };
 MODULE_DEVICE_TABLE(spi, arizona_spi_ids);
@@ -124,7 +146,10 @@ static struct spi_driver arizona_spi_driver = {
 		.name	= "arizona",
 		.owner	= THIS_MODULE,
 		.pm	= &arizona_pm_ops,
+<<<<<<< HEAD
 		.of_match_table	= of_match_ptr(arizona_of_match),
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	},
 	.probe		= arizona_spi_probe,
 	.remove		= arizona_spi_remove,

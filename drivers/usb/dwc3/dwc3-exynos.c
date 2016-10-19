@@ -6,6 +6,7 @@
  *
  * Author: Anton Tikhomirov <av.tikhomirov@samsung.com>
  *
+<<<<<<< HEAD
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2  of
  * the License as published by the Free Software Foundation.
@@ -14,13 +15,22 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+=======
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  */
 
 #include <linux/module.h>
 #include <linux/kernel.h>
 #include <linux/slab.h>
 #include <linux/platform_device.h>
+<<<<<<< HEAD
 #include <linux/mutex.h>
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <linux/platform_data/dwc3-exynos.h>
 #include <linux/dma-mapping.h>
 #include <linux/clk.h>
@@ -28,6 +38,7 @@
 #include <linux/usb/nop-usb-xceiv.h>
 #include <linux/of.h>
 #include <linux/of_platform.h>
+<<<<<<< HEAD
 #include <linux/of_gpio.h>
 #include <linux/io.h>
 #include <linux/pinctrl/consumer.h>
@@ -43,6 +54,8 @@ struct dwc3_exynos_rsw {
 	int			id_gpio;
 	int			b_sess_gpio;
 };
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 struct dwc3_exynos {
 	struct platform_device	*usb2_phy;
@@ -50,6 +63,7 @@ struct dwc3_exynos {
 	struct device		*dev;
 
 	struct clk		*clk;
+<<<<<<< HEAD
 
 	struct dwc3_exynos_rsw	rsw;
 };
@@ -376,6 +390,10 @@ static void dwc3_exynos_rsw_init(struct dwc3_exynos *exynos)
 		dev_info(exynos->dev, "failed to configure pins\n");
 }
 
+=======
+};
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int dwc3_exynos_register_phys(struct dwc3_exynos *exynos)
 {
 	struct nop_usb_xceiv_platform_data pdata;
@@ -473,7 +491,11 @@ static int dwc3_exynos_probe(struct platform_device *pdev)
 	}
 
 	clk = devm_clk_get(dev, "usbdrd30");
+<<<<<<< HEAD
 	if (IS_ERR_OR_NULL(clk)) {
+=======
+	if (IS_ERR(clk)) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		dev_err(dev, "couldn't get clock\n");
 		ret = -EINVAL;
 		goto err1;
@@ -484,11 +506,14 @@ static int dwc3_exynos_probe(struct platform_device *pdev)
 
 	clk_prepare_enable(exynos->clk);
 
+<<<<<<< HEAD
 	pm_runtime_set_active(dev);
 	pm_runtime_enable(dev);
 
 	dwc3_exynos_rsw_init(exynos);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (node) {
 		ret = of_platform_populate(node, NULL, NULL, dev);
 		if (ret) {
@@ -504,9 +529,13 @@ static int dwc3_exynos_probe(struct platform_device *pdev)
 	return 0;
 
 err2:
+<<<<<<< HEAD
 	pm_runtime_disable(&pdev->dev);
 	clk_disable_unprepare(clk);
 	pm_runtime_set_suspended(&pdev->dev);
+=======
+	clk_disable_unprepare(clk);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 err1:
 	return ret;
 }
@@ -519,6 +548,7 @@ static int dwc3_exynos_remove(struct platform_device *pdev)
 	platform_device_unregister(exynos->usb2_phy);
 	platform_device_unregister(exynos->usb3_phy);
 
+<<<<<<< HEAD
 	pm_runtime_disable(&pdev->dev);
 	if (!pm_runtime_status_suspended(&pdev->dev)) {
 		clk_disable(exynos->clk);
@@ -537,10 +567,14 @@ static int dwc3_exynos_runtime_suspend(struct device *dev)
 	dev_dbg(dev, "%s\n", __func__);
 
 	clk_disable(exynos->clk);
+=======
+	clk_disable_unprepare(exynos->clk);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return 0;
 }
 
+<<<<<<< HEAD
 static int dwc3_exynos_runtime_resume(struct device *dev)
 {
 	struct dwc3_exynos *exynos = dev_get_drvdata(dev);
@@ -556,6 +590,14 @@ static int dwc3_exynos_runtime_resume(struct device *dev)
 
 	return 0;
 }
+=======
+#ifdef CONFIG_OF
+static const struct of_device_id exynos_dwc3_match[] = {
+	{ .compatible = "samsung,exynos5250-dwusb3" },
+	{},
+};
+MODULE_DEVICE_TABLE(of, exynos_dwc3_match);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif
 
 #ifdef CONFIG_PM_SLEEP
@@ -563,11 +605,14 @@ static int dwc3_exynos_suspend(struct device *dev)
 {
 	struct dwc3_exynos *exynos = dev_get_drvdata(dev);
 
+<<<<<<< HEAD
 	dev_dbg(dev, "%s\n", __func__);
 
 	if (pm_runtime_suspended(dev))
 		return 0;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	clk_disable(exynos->clk);
 
 	return 0;
@@ -576,6 +621,7 @@ static int dwc3_exynos_suspend(struct device *dev)
 static int dwc3_exynos_resume(struct device *dev)
 {
 	struct dwc3_exynos *exynos = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	int ret = 0;
 
 	dev_dbg(dev, "%s\n", __func__);
@@ -585,6 +631,10 @@ static int dwc3_exynos_resume(struct device *dev)
 		dev_err(dev, "%s: clk_enable failed\n", __func__);
 		return ret;
 	}
+=======
+
+	clk_enable(exynos->clk);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/* runtime set active to reflect active state. */
 	pm_runtime_disable(dev);
@@ -596,8 +646,11 @@ static int dwc3_exynos_resume(struct device *dev)
 
 static const struct dev_pm_ops dwc3_exynos_dev_pm_ops = {
 	SET_SYSTEM_SLEEP_PM_OPS(dwc3_exynos_suspend, dwc3_exynos_resume)
+<<<<<<< HEAD
 	SET_RUNTIME_PM_OPS(dwc3_exynos_runtime_suspend,
 			dwc3_exynos_runtime_resume, NULL)
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 #define DEV_PM_OPS	(&dwc3_exynos_dev_pm_ops)
@@ -612,9 +665,12 @@ static struct platform_driver dwc3_exynos_driver = {
 		.name	= "exynos-dwc3",
 		.of_match_table = of_match_ptr(exynos_dwc3_match),
 		.pm	= DEV_PM_OPS,
+<<<<<<< HEAD
 #ifdef CONFIG_MULTITHREAD_PROBE
 		.multithread_probe = 1,
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	},
 };
 
@@ -622,5 +678,9 @@ module_platform_driver(dwc3_exynos_driver);
 
 MODULE_ALIAS("platform:exynos-dwc3");
 MODULE_AUTHOR("Anton Tikhomirov <av.tikhomirov@samsung.com>");
+<<<<<<< HEAD
 MODULE_LICENSE("GPL v2");
+=======
+MODULE_LICENSE("GPL");
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 MODULE_DESCRIPTION("DesignWare USB3 EXYNOS Glue Layer");

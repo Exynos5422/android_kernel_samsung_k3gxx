@@ -1,7 +1,10 @@
 /*
  *  Universal TUN/TAP device driver.
  *  Copyright (C) 1999-2000 Maxim Krasnyansky <max_mk@yahoo.com>
+<<<<<<< HEAD
  *  Copyright (c) 2015 Samsung Electronics Co., Ltd.
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -13,6 +16,7 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *  GNU General Public License for more details.
  */
+<<<<<<< HEAD
 /*
  *  Changes:
  *  KwnagHyun Kim <kh0304.kim@samsung.com> 2015/07/08
@@ -22,6 +26,8 @@
  *
  */
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #ifndef _UAPI__IF_TUN_H
 #define _UAPI__IF_TUN_H
@@ -86,6 +92,7 @@
 #define TUN_F_TSO_ECN	0x08	/* I can handle TSO with ECN bits. */
 #define TUN_F_UFO	0x10	/* I can handle UFO packets */
 
+<<<<<<< HEAD
 // ------------- START of KNOX_VPN ------------------//
 #define TUN_META_HDR	0x0800
 #define TUNGETMETAPARAM _IOR('T', 218, int)
@@ -95,6 +102,8 @@
 #define DEFAULT_IHL 5
 // ------------- END of KNOX_VPN -------------------//
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /* Protocol info prepended to the packets (when IFF_NO_PI is not set) */
 #define TUN_PKT_STRIP	0x0001
 struct tun_pi {

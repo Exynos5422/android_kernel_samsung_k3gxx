@@ -57,6 +57,7 @@
 
 #define DESCRIPTOR_DATA				5
 
+<<<<<<< HEAD
 /* vendor specific data block */
 #define VSDB_LATENCY_FIELD		7
 #define VSDB_LATENCY_FIELD_MASK		(1 << 7)
@@ -76,6 +77,8 @@
 #define VSDB_3D_MT_PRESENT		5
 #define VSDB_3D_MT_PRESENT_MASK		(0x3 << 5)
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define UPPER_NIBBLE( x ) \
         (((128|64|32|16) & (x)) >> 4)
 

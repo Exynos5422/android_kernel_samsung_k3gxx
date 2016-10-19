@@ -50,7 +50,11 @@ static char *pre_emph_names[] = {
  * or from atom. Note that atom operates on
  * dw units.
  */
+<<<<<<< HEAD
 static void radeon_copy_swap(u8 *dst, u8 *src, u8 num_bytes, bool to_le)
+=======
+void radeon_atom_copy_swap(u8 *dst, u8 *src, u8 num_bytes, bool to_le)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 #ifdef __BIG_ENDIAN
 	u8 src_tmp[20], dst_tmp[20]; /* used for byteswapping */
@@ -100,7 +104,11 @@ static int radeon_process_aux_ch(struct radeon_i2c_chan *chan,
 
 	base = (unsigned char *)(rdev->mode_info.atom_context->scratch + 1);
 
+<<<<<<< HEAD
 	radeon_copy_swap(base, send, send_bytes, true);
+=======
+	radeon_atom_copy_swap(base, send, send_bytes, true);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	args.v1.lpAuxRequest = cpu_to_le16((u16)(0 + 4));
 	args.v1.lpDataOut = cpu_to_le16((u16)(16 + 4));
@@ -137,7 +145,11 @@ static int radeon_process_aux_ch(struct radeon_i2c_chan *chan,
 		recv_bytes = recv_size;
 
 	if (recv && recv_size)
+<<<<<<< HEAD
 		radeon_copy_swap(recv, base + 16, recv_bytes, false);
+=======
+		radeon_atom_copy_swap(recv, base + 16, recv_bytes, false);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return recv_bytes;
 }
@@ -384,6 +396,22 @@ static int dp_get_max_dp_pix_clock(int link_rate,
 
 /***** radeon specific DP functions *****/
 
+<<<<<<< HEAD
+=======
+static int radeon_dp_get_max_link_rate(struct drm_connector *connector,
+				       u8 dpcd[DP_DPCD_SIZE])
+{
+	int max_link_rate;
+
+	if (radeon_connector_is_dp12_capable(connector))
+		max_link_rate = min(drm_dp_max_link_rate(dpcd), 540000);
+	else
+		max_link_rate = min(drm_dp_max_link_rate(dpcd), 270000);
+
+	return max_link_rate;
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /* First get the min lane# when low rate is used according to pixel clock
  * (prefer low rate), second check max lane# supported by DP panel,
  * if the max lane# < low rate lane# then use max lane# instead.
@@ -393,7 +421,11 @@ static int radeon_dp_get_dp_lane_number(struct drm_connector *connector,
 					int pix_clock)
 {
 	int bpp = convert_bpc_to_bpp(radeon_get_monitor_bpc(connector));
+<<<<<<< HEAD
 	int max_link_rate = drm_dp_max_link_rate(dpcd);
+=======
+	int max_link_rate = radeon_dp_get_max_link_rate(connector, dpcd);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	int max_lane_num = drm_dp_max_lane_count(dpcd);
 	int lane_num;
 	int max_dp_pix_clock;
@@ -431,7 +463,11 @@ static int radeon_dp_get_dp_link_clock(struct drm_connector *connector,
 			return 540000;
 	}
 
+<<<<<<< HEAD
 	return drm_dp_max_link_rate(dpcd);
+=======
+	return radeon_dp_get_max_link_rate(connector, dpcd);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static u8 radeon_dp_encoder_service(struct radeon_device *rdev,

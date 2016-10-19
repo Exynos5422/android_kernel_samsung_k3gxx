@@ -18,7 +18,12 @@
 #ifndef __ASM__VIRT_H
 #define __ASM__VIRT_H
 
+<<<<<<< HEAD
 #define BOOT_CPU_MODE_EL2	(0x0e12b007)
+=======
+#define BOOT_CPU_MODE_EL1	(0xe11)
+#define BOOT_CPU_MODE_EL2	(0xe12)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #ifndef __ASSEMBLY__
 

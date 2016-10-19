@@ -184,8 +184,13 @@ struct mapped_device {
 	/* forced geometry settings */
 	struct hd_geometry geometry;
 
+<<<<<<< HEAD
 	/* sysfs handle */
 	struct kobject kobj;
+=======
+	/* kobject and completion */
+	struct dm_kobject_holder kobj_holder;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/* zero-length flush that will be cloned and submitted to targets */
 	struct bio flush_bio;
@@ -744,7 +749,11 @@ static void free_rq_clone(struct request *clone)
  * Complete the clone and the original request.
  * Must be called without queue lock.
  */
+<<<<<<< HEAD
 static void dm_end_request(struct request *clone, int error)
+=======
+void dm_end_request(struct request *clone, int error)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	int rw = rq_data_dir(clone);
 	struct dm_rq_target_io *tio = clone->end_io_data;
@@ -1685,7 +1694,11 @@ static void dm_request_fn(struct request_queue *q)
 	while (!blk_queue_stopped(q)) {
 		rq = blk_peek_request(q);
 		if (!rq)
+<<<<<<< HEAD
 			goto delay_and_out;
+=======
+			goto out;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 		/* always use block 0 to find the target for flushes for now */
 		pos = 0;
@@ -1904,6 +1917,10 @@ static struct mapped_device *alloc_dev(int minor)
 	init_waitqueue_head(&md->wait);
 	INIT_WORK(&md->work, dm_wq_work);
 	init_waitqueue_head(&md->eventq);
+<<<<<<< HEAD
+=======
+	init_completion(&md->kobj_holder.completion);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	md->disk->major = _major;
 	md->disk->first_minor = minor;
@@ -2219,6 +2236,20 @@ struct target_type *dm_get_immutable_target_type(struct mapped_device *md)
 }
 
 /*
+<<<<<<< HEAD
+=======
+ * The queue_limits are only valid as long as you have a reference
+ * count on 'md'.
+ */
+struct queue_limits *dm_get_queue_limits(struct mapped_device *md)
+{
+	BUG_ON(!atomic_read(&md->holders));
+	return &md->queue->limits;
+}
+EXPORT_SYMBOL_GPL(dm_get_queue_limits);
+
+/*
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  * Fully initialize a request-based queue (->elevator, ->request_fn, etc).
  */
 static int dm_init_request_based_queue(struct mapped_device *md)
@@ -2431,7 +2462,11 @@ static void dm_wq_work(struct work_struct *work)
 static void dm_queue_flush(struct mapped_device *md)
 {
 	clear_bit(DMF_BLOCK_IO_FOR_SUSPEND, &md->flags);
+<<<<<<< HEAD
 	smp_mb__after_clear_bit();
+=======
+	smp_mb__after_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	queue_work(md->wq, &md->work);
 }
 
@@ -2724,6 +2759,7 @@ struct gendisk *dm_disk(struct mapped_device *md)
 
 struct kobject *dm_kobject(struct mapped_device *md)
 {
+<<<<<<< HEAD
 	return &md->kobj;
 }
 
@@ -2731,13 +2767,22 @@ struct kobject *dm_kobject(struct mapped_device *md)
  * struct mapped_device should not be exported outside of dm.c
  * so use this check to verify that kobj is part of md structure
  */
+=======
+	return &md->kobj_holder.kobj;
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 struct mapped_device *dm_get_from_kobject(struct kobject *kobj)
 {
 	struct mapped_device *md;
 
+<<<<<<< HEAD
 	md = container_of(kobj, struct mapped_device, kobj);
 	if (&md->kobj != kobj)
 		return NULL;
+=======
+	md = container_of(kobj, struct mapped_device, kobj_holder.kobj);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (test_bit(DMF_FREEING, &md->flags) ||
 	    dm_deleting_md(md))

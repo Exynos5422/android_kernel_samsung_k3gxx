@@ -38,6 +38,7 @@ struct dm_transaction_manager *dm_tm_create_non_blocking_clone(struct dm_transac
 /*
  * We use a 2-phase commit here.
  *
+<<<<<<< HEAD
  * i) In the first phase the block manager is told to start flushing, and
  * the changes to the space map are written to disk.  You should interrogate
  * your particular space map to get detail of its root node etc. to be
@@ -50,6 +51,19 @@ struct dm_transaction_manager *dm_tm_create_non_blocking_clone(struct dm_transac
  */
 int dm_tm_pre_commit(struct dm_transaction_manager *tm);
 int dm_tm_commit(struct dm_transaction_manager *tm, struct dm_block *root);
+=======
+ * i) Make all changes for the transaction *except* for the superblock.
+ * Then call dm_tm_pre_commit() to flush them to disk.
+ *
+ * ii) Lock your superblock.  Update.  Then call dm_tm_commit() which will
+ * unlock the superblock and flush it.  No other blocks should be updated
+ * during this period.  Care should be taken to never unlock a partially
+ * updated superblock; perform any operations that could fail *before* you
+ * take the superblock lock.
+ */
+int dm_tm_pre_commit(struct dm_transaction_manager *tm);
+int dm_tm_commit(struct dm_transaction_manager *tm, struct dm_block *superblock);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /*
  * These methods are the only way to get hold of a writeable block.

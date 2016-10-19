@@ -1266,9 +1266,17 @@ int ahci_do_softreset(struct ata_link *link, unsigned int *class,
 {
 	struct ata_port *ap = link->ap;
 	struct ahci_host_priv *hpriv = ap->host->private_data;
+<<<<<<< HEAD
 	const char *reason = NULL;
 	unsigned long now, msecs;
 	struct ata_taskfile tf;
+=======
+	struct ahci_port_priv *pp = ap->private_data;
+	const char *reason = NULL;
+	unsigned long now, msecs;
+	struct ata_taskfile tf;
+	bool fbs_disabled = false;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	int rc;
 
 	DPRINTK("ENTER\n");
@@ -1278,6 +1286,19 @@ int ahci_do_softreset(struct ata_link *link, unsigned int *class,
 	if (rc && rc != -EOPNOTSUPP)
 		ata_link_warn(link, "failed to reset engine (errno=%d)\n", rc);
 
+<<<<<<< HEAD
+=======
+	/*
+	 * According to AHCI-1.2 9.3.9: if FBS is enable, software shall
+	 * clear PxFBS.EN to '0' prior to issuing software reset to devices
+	 * that is attached to port multiplier.
+	 */
+	if (!ata_is_host_link(link) && pp->fbs_enabled) {
+		ahci_disable_fbs(ap);
+		fbs_disabled = true;
+	}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ata_tf_init(link->device, &tf);
 
 	/* issue the first D2H Register FIS */
@@ -1318,6 +1339,13 @@ int ahci_do_softreset(struct ata_link *link, unsigned int *class,
 	} else
 		*class = ahci_dev_classify(ap);
 
+<<<<<<< HEAD
+=======
+	/* re-enable FBS if disabled before */
+	if (fbs_disabled)
+		ahci_enable_fbs(ap);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	DPRINTK("EXIT, class=%u\n", *class);
 	return 0;
 

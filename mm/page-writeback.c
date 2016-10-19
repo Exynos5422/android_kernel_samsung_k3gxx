@@ -36,8 +36,16 @@
 #include <linux/pagevec.h>
 #include <linux/timer.h>
 #include <linux/sched/rt.h>
+<<<<<<< HEAD
 #include <trace/events/writeback.h>
 
+=======
+#include <linux/mm_inline.h>
+#include <trace/events/writeback.h>
+
+#include "internal.h"
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * Sleep at most 200ms at a time in balance_dirty_pages().
  */
@@ -67,13 +75,21 @@ static long ratelimit_pages = 32;
 /*
  * Start background writeback (via writeback threads) at this percentage
  */
+<<<<<<< HEAD
 int dirty_background_ratio = 0;
+=======
+int dirty_background_ratio = 10;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /*
  * dirty_background_bytes starts at 0 (disabled) so that it is a function of
  * dirty_background_ratio * the amount of dirtyable memory
  */
+<<<<<<< HEAD
 unsigned long dirty_background_bytes = 25 * 1024 * 1024;
+=======
+unsigned long dirty_background_bytes;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /*
  * free highmem will not be subtracted from the total free memory
@@ -84,13 +100,21 @@ int vm_highmem_is_dirtyable;
 /*
  * The generator of dirty data starts writeback at this percentage
  */
+<<<<<<< HEAD
 int vm_dirty_ratio = 0;
+=======
+int vm_dirty_ratio = 20;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /*
  * vm_dirty_bytes starts at 0 (disabled) so that it is a function of
  * vm_dirty_ratio * the amount of dirtyable memory
  */
+<<<<<<< HEAD
 unsigned long vm_dirty_bytes = 50 * 1024 * 1024;
+=======
+unsigned long vm_dirty_bytes;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /*
  * The interval between `kupdate'-style writebacks
@@ -188,6 +212,29 @@ static unsigned long writeout_period_time = 0;
  * global dirtyable memory first.
  */
 
+<<<<<<< HEAD
+=======
+/**
+ * zone_dirtyable_memory - number of dirtyable pages in a zone
+ * @zone: the zone
+ *
+ * Returns the zone's number of pages potentially available for dirty
+ * page cache.  This is the base value for the per-zone dirty limits.
+ */
+static unsigned long zone_dirtyable_memory(struct zone *zone)
+{
+	unsigned long nr_pages;
+
+	nr_pages = zone_page_state(zone, NR_FREE_PAGES);
+	nr_pages -= min(nr_pages, zone->dirty_balance_reserve);
+
+	nr_pages += zone_page_state(zone, NR_INACTIVE_FILE);
+	nr_pages += zone_page_state(zone, NR_ACTIVE_FILE);
+
+	return nr_pages;
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static unsigned long highmem_dirtyable_memory(unsigned long total)
 {
 #ifdef CONFIG_HIGHMEM
@@ -195,11 +242,17 @@ static unsigned long highmem_dirtyable_memory(unsigned long total)
 	unsigned long x = 0;
 
 	for_each_node_state(node, N_HIGH_MEMORY) {
+<<<<<<< HEAD
 		struct zone *z =
 			&NODE_DATA(node)->node_zones[ZONE_HIGHMEM];
 
 		x += zone_page_state(z, NR_FREE_PAGES) +
 		     zone_reclaimable_pages(z) - z->dirty_balance_reserve;
+=======
+		struct zone *z = &NODE_DATA(node)->node_zones[ZONE_HIGHMEM];
+
+		x += zone_dirtyable_memory(z);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 	/*
 	 * Unreclaimable memory (kernel memory or anonymous memory
@@ -235,9 +288,18 @@ static unsigned long global_dirtyable_memory(void)
 {
 	unsigned long x;
 
+<<<<<<< HEAD
 	x = global_page_state(NR_FREE_PAGES) + global_reclaimable_pages();
 	x -= min(x, dirty_balance_reserve);
 
+=======
+	x = global_page_state(NR_FREE_PAGES);
+	x -= min(x, dirty_balance_reserve);
+
+	x += global_page_state(NR_INACTIVE_FILE);
+	x += global_page_state(NR_ACTIVE_FILE);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (!vm_highmem_is_dirtyable)
 		x -= highmem_dirtyable_memory(x);
 
@@ -275,6 +337,7 @@ void global_dirty_limits(unsigned long *pbackground, unsigned long *pdirty)
 		background = DIV_ROUND_UP(dirty_background_bytes, PAGE_SIZE);
 	else
 		background = (dirty_background_ratio * available_memory) / 100;
+<<<<<<< HEAD
 #if defined(CONFIG_MIN_DIRTY_THRESH_PAGES) && CONFIG_MIN_DIRTY_THRESH_PAGES > 0
 	if (!vm_dirty_bytes && dirty < CONFIG_MIN_DIRTY_THRESH_PAGES) {
 		dirty = CONFIG_MIN_DIRTY_THRESH_PAGES;
@@ -282,6 +345,8 @@ void global_dirty_limits(unsigned long *pbackground, unsigned long *pdirty)
 			background = dirty / 2;
 	}
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (background >= dirty)
 		background = dirty / 2;
@@ -296,6 +361,7 @@ void global_dirty_limits(unsigned long *pbackground, unsigned long *pdirty)
 }
 
 /**
+<<<<<<< HEAD
  * zone_dirtyable_memory - number of dirtyable pages in a zone
  * @zone: the zone
  *
@@ -322,6 +388,8 @@ static unsigned long zone_dirtyable_memory(struct zone *zone)
 }
 
 /**
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  * zone_dirty_limit - maximum number of dirty pages allowed in a zone
  * @zone: the zone
  *
@@ -1111,11 +1179,19 @@ static unsigned long dirty_poll_interval(unsigned long dirty,
 	return 1;
 }
 
+<<<<<<< HEAD
 static long bdi_max_pause(struct backing_dev_info *bdi,
 			  unsigned long bdi_dirty)
 {
 	long bw = bdi->avg_write_bandwidth;
 	long t;
+=======
+static unsigned long bdi_max_pause(struct backing_dev_info *bdi,
+				   unsigned long bdi_dirty)
+{
+	unsigned long bw = bdi->avg_write_bandwidth;
+	unsigned long t;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/*
 	 * Limit pause time for small memory systems. If sleeping for too long
@@ -1127,7 +1203,11 @@ static long bdi_max_pause(struct backing_dev_info *bdi,
 	t = bdi_dirty / (1 + bw / roundup_pow_of_two(1 + HZ / 8));
 	t++;
 
+<<<<<<< HEAD
 	return min_t(long, t, MAX_PAUSE);
+=======
+	return min_t(unsigned long, t, MAX_PAUSE);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static long bdi_min_pause(struct backing_dev_info *bdi,
@@ -2038,11 +2118,19 @@ int __set_page_dirty_nobuffers(struct page *page)
 	if (!TestSetPageDirty(page)) {
 		struct address_space *mapping = page_mapping(page);
 		struct address_space *mapping2;
+<<<<<<< HEAD
+=======
+		unsigned long flags;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 		if (!mapping)
 			return 1;
 
+<<<<<<< HEAD
 		spin_lock_irq(&mapping->tree_lock);
+=======
+		spin_lock_irqsave(&mapping->tree_lock, flags);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		mapping2 = page_mapping(page);
 		if (mapping2) { /* Race with truncate? */
 			BUG_ON(mapping2 != mapping);
@@ -2051,7 +2139,11 @@ int __set_page_dirty_nobuffers(struct page *page)
 			radix_tree_tag_set(&mapping->page_tree,
 				page_index(page), PAGECACHE_TAG_DIRTY);
 		}
+<<<<<<< HEAD
 		spin_unlock_irq(&mapping->tree_lock);
+=======
+		spin_unlock_irqrestore(&mapping->tree_lock, flags);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (mapping->host) {
 			/* !PageAnon && !swapper_space */
 			__mark_inode_dirty(mapping->host, I_DIRTY_PAGES);

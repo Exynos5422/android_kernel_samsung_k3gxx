@@ -182,11 +182,14 @@ int notify_change(struct dentry * dentry, struct iattr * attr)
 			return -EPERM;
 	}
 
+<<<<<<< HEAD
 	if ((ia_valid & ATTR_SIZE) && IS_I_VERSION(inode)) {
 		if (attr->ia_size != inode->i_size)
 			inode_inc_iversion(inode);
 	}
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if ((ia_valid & ATTR_MODE)) {
 		umode_t amode = attr->ia_mode;
 		/* Flag setting protected by i_mutex */

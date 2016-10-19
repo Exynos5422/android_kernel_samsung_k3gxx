@@ -11,6 +11,7 @@
 
 #include <linux/irqflags.h>
 #include <linux/compiler.h>
+<<<<<<< HEAD
 
 /*
  * clear_bit may not imply a memory barrier
@@ -19,6 +20,9 @@
 #define smp_mb__before_clear_bit()	smp_mb()
 #define smp_mb__after_clear_bit()	smp_mb()
 #endif
+=======
+#include <asm/barrier.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #include <asm-generic/bitops/__ffs.h>
 #include <asm-generic/bitops/ffz.h>

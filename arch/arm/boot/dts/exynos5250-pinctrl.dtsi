@@ -553,6 +553,7 @@
 			samsung,pin-pud = <0>;
 			samaung,pin-drv = <0>;
 		};
+<<<<<<< HEAD
 
 		dp_hpd: dp_hpd {
 			samsung,pins = "gpx0-7";
@@ -560,6 +561,8 @@
 			samsung,pin-pud = <0>;
 			samaung,pin-drv = <0>;
 		};
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	};
 
 	pinctrl@13400000 {

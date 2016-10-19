@@ -66,6 +66,7 @@ static int ecryptfs_writepage(struct page *page, struct writeback_control *wbc)
 {
 	int rc;
 
+<<<<<<< HEAD
 	// WTL_EDM_START
 	/* MDM 3.1 START */
 	struct inode *inode;
@@ -95,6 +96,8 @@ static int ecryptfs_writepage(struct page *page, struct writeback_control *wbc)
 	/* MDM 3.1 END */
 	// WTL_EDM_END
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	rc = ecryptfs_encrypt_page(page);
 	if (rc) {
 		ecryptfs_printk(KERN_WARNING, "Error encrypting "
@@ -103,7 +106,10 @@ static int ecryptfs_writepage(struct page *page, struct writeback_control *wbc)
 		goto out;
 	}
 	SetPageUptodate(page);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 out:
 	unlock_page(page);
 	return rc;
@@ -265,9 +271,14 @@ static int ecryptfs_readpage(struct file *file, struct page *page)
 out:
 	if (rc)
 		ClearPageUptodate(page);
+<<<<<<< HEAD
 	else {
 		SetPageUptodate(page);
 	}
+=======
+	else
+		SetPageUptodate(page);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ecryptfs_printk(KERN_DEBUG, "Unlocking page with index = [0x%.16lx]\n",
 			page->index);
 	unlock_page(page);
@@ -545,7 +556,10 @@ static int ecryptfs_write_end(struct file *file,
 			"zeros in page with index = [0x%.16lx]\n", index);
 		goto out;
 	}
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	rc = ecryptfs_encrypt_page(page);
 	if (rc) {
 		ecryptfs_printk(KERN_WARNING, "Error encrypting page (upper "

@@ -33,6 +33,12 @@
 #include "stv0367_regs.h"
 #include "stv0367_priv.h"
 
+<<<<<<< HEAD
+=======
+/* Max transfer size done by I2C transfer functions */
+#define MAX_XFER_SIZE  64
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int stvdebug;
 module_param_named(debug, stvdebug, int, 0644);
 
@@ -767,7 +773,11 @@ static struct st_register def0367cab[STV0367CAB_NBREGS] = {
 static
 int stv0367_writeregs(struct stv0367_state *state, u16 reg, u8 *data, int len)
 {
+<<<<<<< HEAD
 	u8 buf[len + 2];
+=======
+	u8 buf[MAX_XFER_SIZE];
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct i2c_msg msg = {
 		.addr = state->config->demod_address,
 		.flags = 0,
@@ -776,6 +786,17 @@ int stv0367_writeregs(struct stv0367_state *state, u16 reg, u8 *data, int len)
 	};
 	int ret;
 
+<<<<<<< HEAD
+=======
+	if (2 + len > sizeof(buf)) {
+		printk(KERN_WARNING
+		       "%s: i2c wr reg=%04x: len=%d is too big!\n",
+		       KBUILD_MODNAME, reg, len);
+		return -EINVAL;
+	}
+
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	buf[0] = MSB(reg);
 	buf[1] = LSB(reg);
 	memcpy(buf + 2, data, len);

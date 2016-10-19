@@ -70,6 +70,7 @@ void copy_to_user_page(struct vm_area_struct *vma, struct page *page,
 #endif
 }
 
+<<<<<<< HEAD
 void __flush_dcache_page(struct page *page)
 {
 	__flush_dcache_area(page_address(page), PAGE_SIZE);
@@ -87,6 +88,19 @@ void __sync_icache_dcache(pte_t pte, unsigned long addr)
 	page = pfn_to_page(pfn);
 	if (!test_and_set_bit(PG_dcache_clean, &page->flags)) {
 		__flush_dcache_page(page);
+=======
+void __sync_icache_dcache(pte_t pte, unsigned long addr)
+{
+	struct page *page = pte_page(pte);
+
+	/* no flushing needed for anonymous pages */
+	if (!page_mapping(page))
+		return;
+
+	if (!test_and_set_bit(PG_dcache_clean, &page->flags)) {
+		__flush_dcache_area(page_address(page),
+				PAGE_SIZE << compound_order(page));
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		__flush_icache_all();
 	} else if (icache_is_aivivt()) {
 		__flush_icache_all();
@@ -94,6 +108,7 @@ void __sync_icache_dcache(pte_t pte, unsigned long addr)
 }
 
 /*
+<<<<<<< HEAD
  * Ensure cache coherency between kernel mapping and userspace mapping of this
  * page.
  */
@@ -116,6 +131,16 @@ void flush_dcache_page(struct page *page)
 	} else {
 		clear_bit(PG_dcache_clean, &page->flags);
 	}
+=======
+ * This function is called when a page has been modified by the kernel. Mark
+ * it as dirty for later flushing when mapped in user space (if executable,
+ * see __sync_icache_dcache).
+ */
+void flush_dcache_page(struct page *page)
+{
+	if (test_bit(PG_dcache_clean, &page->flags))
+		clear_bit(PG_dcache_clean, &page->flags);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 EXPORT_SYMBOL(flush_dcache_page);
 

@@ -48,7 +48,11 @@ static inline int32_t div_fp(int32_t x, int32_t y)
 }
 
 struct sample {
+<<<<<<< HEAD
 	int core_pct_busy;
+=======
+	int32_t core_pct_busy;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	u64 aperf;
 	u64 mperf;
 	int freq;
@@ -68,7 +72,11 @@ struct _pid {
 	int32_t i_gain;
 	int32_t d_gain;
 	int deadband;
+<<<<<<< HEAD
 	int last_err;
+=======
+	int32_t last_err;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 struct cpudata {
@@ -153,6 +161,7 @@ static inline void pid_d_gain_set(struct _pid *pid, int percent)
 	pid->d_gain = div_fp(int_tofp(percent), int_tofp(100));
 }
 
+<<<<<<< HEAD
 static signed int pid_calc(struct _pid *pid, int busy)
 {
 	signed int err, result;
@@ -163,6 +172,17 @@ static signed int pid_calc(struct _pid *pid, int busy)
 	fp_error = int_tofp(err);
 
 	if (abs(err) <= pid->deadband)
+=======
+static signed int pid_calc(struct _pid *pid, int32_t busy)
+{
+	signed int result;
+	int32_t pterm, dterm, fp_error;
+	int32_t integral_limit;
+
+	fp_error = int_tofp(pid->setpoint) - busy;
+
+	if (abs(fp_error) <= int_tofp(pid->deadband))
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return 0;
 
 	pterm = mul_fp(pid->p_gain, fp_error);
@@ -176,8 +196,13 @@ static signed int pid_calc(struct _pid *pid, int busy)
 	if (pid->integral < -integral_limit)
 		pid->integral = -integral_limit;
 
+<<<<<<< HEAD
 	dterm = mul_fp(pid->d_gain, (err - pid->last_err));
 	pid->last_err = err;
+=======
+	dterm = mul_fp(pid->d_gain, fp_error - pid->last_err);
+	pid->last_err = fp_error;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	result = pterm + mul_fp(pid->integral, pid->i_gain) + dterm;
 
@@ -367,12 +392,21 @@ static int intel_pstate_turbo_pstate(void)
 static void intel_pstate_get_min_max(struct cpudata *cpu, int *min, int *max)
 {
 	int max_perf = cpu->pstate.turbo_pstate;
+<<<<<<< HEAD
+=======
+	int max_perf_adj;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	int min_perf;
 	if (limits.no_turbo)
 		max_perf = cpu->pstate.max_pstate;
 
+<<<<<<< HEAD
 	max_perf = fp_toint(mul_fp(int_tofp(max_perf), limits.max_perf));
 	*max = clamp_t(int, max_perf,
+=======
+	max_perf_adj = fp_toint(mul_fp(int_tofp(max_perf), limits.max_perf));
+	*max = clamp_t(int, max_perf_adj,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			cpu->pstate.min_pstate, cpu->pstate.turbo_pstate);
 
 	min_perf = fp_toint(mul_fp(int_tofp(max_perf), limits.min_perf));
@@ -394,7 +428,14 @@ static void intel_pstate_set_pstate(struct cpudata *cpu, int pstate)
 	trace_cpu_frequency(pstate * 100000, cpu->cpu);
 
 	cpu->pstate.current_pstate = pstate;
+<<<<<<< HEAD
 	wrmsrl(MSR_IA32_PERF_CTL, pstate << 8);
+=======
+	if (limits.no_turbo)
+		wrmsrl(MSR_IA32_PERF_CTL, BIT(32) | (pstate << 8));
+	else
+		wrmsrl(MSR_IA32_PERF_CTL, pstate << 8);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 }
 
@@ -432,8 +473,14 @@ static inline void intel_pstate_calc_busy(struct cpudata *cpu,
 					struct sample *sample)
 {
 	u64 core_pct;
+<<<<<<< HEAD
 	core_pct = div64_u64(sample->aperf * 100, sample->mperf);
 	sample->freq = cpu->pstate.max_pstate * core_pct * 1000;
+=======
+	core_pct = div64_u64(int_tofp(sample->aperf * 100),
+			     sample->mperf);
+	sample->freq = fp_toint(cpu->pstate.max_pstate * core_pct * 1000);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	sample->core_pct_busy = core_pct;
 }
@@ -465,6 +512,7 @@ static inline void intel_pstate_set_sample_time(struct cpudata *cpu)
 	mod_timer_pinned(&cpu->timer, jiffies + delay);
 }
 
+<<<<<<< HEAD
 static inline int intel_pstate_get_scaled_busy(struct cpudata *cpu)
 {
 	int32_t busy_scaled;
@@ -476,11 +524,25 @@ static inline int intel_pstate_get_scaled_busy(struct cpudata *cpu)
 	busy_scaled = mul_fp(core_busy, div_fp(max_pstate, current_pstate));
 
 	return fp_toint(busy_scaled);
+=======
+static inline int32_t intel_pstate_get_scaled_busy(struct cpudata *cpu)
+{
+	int32_t core_busy, max_pstate, current_pstate;
+
+	core_busy = cpu->samples[cpu->sample_ptr].core_pct_busy;
+	max_pstate = int_tofp(cpu->pstate.max_pstate);
+	current_pstate = int_tofp(cpu->pstate.current_pstate);
+	return mul_fp(core_busy, div_fp(max_pstate, current_pstate));
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static inline void intel_pstate_adjust_busy_pstate(struct cpudata *cpu)
 {
+<<<<<<< HEAD
 	int busy_scaled;
+=======
+	int32_t busy_scaled;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct _pid *pid;
 	signed int ctl = 0;
 	int steps;
@@ -516,12 +578,25 @@ static void intel_pstate_timer_func(unsigned long __data)
 }
 
 #define ICPU(model, policy) \
+<<<<<<< HEAD
 	{ X86_VENDOR_INTEL, 6, model, X86_FEATURE_ANY, (unsigned long)&policy }
+=======
+	{ X86_VENDOR_INTEL, 6, model, X86_FEATURE_APERFMPERF,\
+			(unsigned long)&policy }
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 static const struct x86_cpu_id intel_pstate_cpu_ids[] = {
 	ICPU(0x2a, default_policy),
 	ICPU(0x2d, default_policy),
 	ICPU(0x3a, default_policy),
+<<<<<<< HEAD
+=======
+	ICPU(0x3c, default_policy),
+	ICPU(0x3e, default_policy),
+	ICPU(0x3f, default_policy),
+	ICPU(0x45, default_policy),
+	ICPU(0x46, default_policy),
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	{}
 };
 MODULE_DEVICE_TABLE(x86cpu, intel_pstate_cpu_ids);
@@ -543,6 +618,14 @@ static int intel_pstate_init_cpu(unsigned int cpunum)
 	cpu = all_cpu_data[cpunum];
 
 	intel_pstate_get_cpu_pstates(cpu);
+<<<<<<< HEAD
+=======
+	if (!cpu->pstate.current_pstate) {
+		all_cpu_data[cpunum] = NULL;
+		kfree(cpu);
+		return -ENODATA;
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	cpu->cpu = cpunum;
 	cpu->pstate_policy =
@@ -606,9 +689,13 @@ static int intel_pstate_set_policy(struct cpufreq_policy *policy)
 
 static int intel_pstate_verify_policy(struct cpufreq_policy *policy)
 {
+<<<<<<< HEAD
 	cpufreq_verify_within_limits(policy,
 				policy->cpuinfo.min_freq,
 				policy->cpuinfo.max_freq);
+=======
+	cpufreq_verify_within_cpu_limits(policy);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if ((policy->policy != CPUFREQ_POLICY_POWERSAVE) &&
 		(policy->policy != CPUFREQ_POLICY_PERFORMANCE))
@@ -617,7 +704,11 @@ static int intel_pstate_verify_policy(struct cpufreq_policy *policy)
 	return 0;
 }
 
+<<<<<<< HEAD
 static int __cpuinit intel_pstate_cpu_exit(struct cpufreq_policy *policy)
+=======
+static int intel_pstate_cpu_exit(struct cpufreq_policy *policy)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	int cpu = policy->cpu;
 
@@ -627,10 +718,17 @@ static int __cpuinit intel_pstate_cpu_exit(struct cpufreq_policy *policy)
 	return 0;
 }
 
+<<<<<<< HEAD
 static int __cpuinit intel_pstate_cpu_init(struct cpufreq_policy *policy)
 {
 	int rc, min_pstate, max_pstate;
 	struct cpudata *cpu;
+=======
+static int intel_pstate_cpu_init(struct cpufreq_policy *policy)
+{
+	struct cpudata *cpu;
+	int rc;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	rc = intel_pstate_init_cpu(policy->cpu);
 	if (rc)
@@ -644,9 +742,14 @@ static int __cpuinit intel_pstate_cpu_init(struct cpufreq_policy *policy)
 	else
 		policy->policy = CPUFREQ_POLICY_POWERSAVE;
 
+<<<<<<< HEAD
 	intel_pstate_get_min_max(cpu, &min_pstate, &max_pstate);
 	policy->min = min_pstate * 100000;
 	policy->max = max_pstate * 100000;
+=======
+	policy->min = cpu->pstate.min_pstate * 100000;
+	policy->max = cpu->pstate.turbo_pstate * 100000;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/* cpuinfo and default policy values */
 	policy->cpuinfo.min_freq = cpu->pstate.min_pstate * 100000;
@@ -665,7 +768,10 @@ static struct cpufreq_driver intel_pstate_driver = {
 	.init		= intel_pstate_cpu_init,
 	.exit		= intel_pstate_cpu_exit,
 	.name		= "intel_pstate",
+<<<<<<< HEAD
 	.owner		= THIS_MODULE,
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 static int __initdata no_load;

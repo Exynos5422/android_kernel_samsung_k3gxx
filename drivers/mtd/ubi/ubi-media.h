@@ -1,5 +1,11 @@
 /*
  * Copyright (c) International Business Machines Corp., 2006
+<<<<<<< HEAD
+=======
+ * Copyright (c) 2014, Linux Foundation. All rights reserved.
+ * Linux Foundation chooses to take subject only to the GPLv2
+ * license terms, and distributes only under these terms.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,6 +44,18 @@
 /* The highest erase counter value supported by this implementation */
 #define UBI_MAX_ERASECOUNTER 0x7FFFFFFF
 
+<<<<<<< HEAD
+=======
+/* The highest read counter value supported by this implementation */
+#define UBI_MAX_READCOUNTER 0x7FFFFFFD /* (0x7FFFFFFF - 2)*/
+
+/*
+ * The highest data retention threshold value supported
+ * by this implementation
+ */
+#define UBI_MAX_DT_THRESHOLD 0x7FFFFFFF
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /* The initial CRC32 value used when calculating CRC checksums */
 #define UBI_CRC32_INIT 0xFFFFFFFFU
 
@@ -130,6 +148,10 @@ enum {
  * @vid_hdr_offset: where the VID header starts
  * @data_offset: where the user data start
  * @image_seq: image sequence number
+<<<<<<< HEAD
+=======
+ * @last_erase_time: time stamp of the last erase operation
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  * @padding2: reserved for future, zeroes
  * @hdr_crc: erase counter header CRC checksum
  *
@@ -162,7 +184,12 @@ struct ubi_ec_hdr {
 	__be32  vid_hdr_offset;
 	__be32  data_offset;
 	__be32  image_seq;
+<<<<<<< HEAD
 	__u8    padding2[32];
+=======
+	__be64  last_erase_time; /*curr time in sec == unsigned long time_t*/
+	__u8    padding2[24];
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	__be32  hdr_crc;
 } __packed;
 
@@ -413,6 +440,11 @@ struct ubi_vtbl_record {
  * @used_blocks: number of PEBs used by this fastmap
  * @block_loc: an array containing the location of all PEBs of the fastmap
  * @block_ec: the erase counter of each used PEB
+<<<<<<< HEAD
+=======
+ * @block_rc: the read counter of each used PEB
+ * @block_let: the last erase timestamp of each used PEB
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  * @sqnum: highest sequence number value at the time while taking the fastmap
  *
  */
@@ -424,6 +456,11 @@ struct ubi_fm_sb {
 	__be32 used_blocks;
 	__be32 block_loc[UBI_FM_MAX_BLOCKS];
 	__be32 block_ec[UBI_FM_MAX_BLOCKS];
+<<<<<<< HEAD
+=======
+	__be32 block_rc[UBI_FM_MAX_BLOCKS];
+	__be64 block_let[UBI_FM_MAX_BLOCKS];
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	__be64 sqnum;
 	__u8 padding2[32];
 } __packed;
@@ -469,13 +506,26 @@ struct ubi_fm_scan_pool {
 /* ubi_fm_scan_pool is followed by nfree+nused struct ubi_fm_ec records */
 
 /**
+<<<<<<< HEAD
  * struct ubi_fm_ec - stores the erase counter of a PEB
  * @pnum: PEB number
  * @ec: ec of this PEB
+=======
+ * struct ubi_fm_ec - stores the erase/read counter of a PEB
+ * @pnum: PEB number
+ * @ec: ec of this PEB
+ * @rc: rc of this PEB
+ * @last_erase_time: last erase time stamp of this PEB
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  */
 struct ubi_fm_ec {
 	__be32 pnum;
 	__be32 ec;
+<<<<<<< HEAD
+=======
+	__be32 rc;
+	__be64 last_erase_time;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 } __packed;
 
 /**
@@ -506,10 +556,21 @@ struct ubi_fm_volhdr {
  * @magic: EBA table magic number
  * @reserved_pebs: number of table entries
  * @pnum: PEB number of LEB (LEB is the index)
+<<<<<<< HEAD
+=======
+ * @rc: Read counter of the LEBs PEB (LEB is the index)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  */
 struct ubi_fm_eba {
 	__be32 magic;
 	__be32 reserved_pebs;
+<<<<<<< HEAD
 	__be32 pnum[0];
+=======
+	struct {
+		__be32 pnum;
+		__be32 rc;
+	} peb_data[0];
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 } __packed;
 #endif /* !__UBI_MEDIA_H__ */

@@ -748,6 +748,11 @@ static u8 smp_cmd_security_req(struct l2cap_conn *conn, struct sk_buff *skb)
 		return 0;
 
 	smp = smp_chan_create(conn);
+<<<<<<< HEAD
+=======
+	if (!smp)
+		return SMP_UNSPECIFIED;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	skb_pull(skb, sizeof(*rp));
 

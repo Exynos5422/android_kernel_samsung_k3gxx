@@ -86,6 +86,13 @@ static int genelink_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
 	u32			size;
 	u32			count;
 
+<<<<<<< HEAD
+=======
+	/* This check is no longer done by usbnet */
+	if (skb->len < dev->net->hard_header_len)
+		return 0;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	header = (struct gl_header *) skb->data;
 
 	// get the packet count of the received skb

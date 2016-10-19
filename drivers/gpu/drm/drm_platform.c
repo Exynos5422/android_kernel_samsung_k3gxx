@@ -3,7 +3,11 @@
  *
  * Copyright 2003 José Fonseca.
  * Copyright 2003 Leif Delgass.
+<<<<<<< HEAD
  * Copyright (c) 2009, Code Aurora Forum.
+=======
+ * Copyright (c) 2009, The Linux Foundation.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  * All Rights Reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a

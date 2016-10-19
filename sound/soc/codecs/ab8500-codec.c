@@ -1225,13 +1225,25 @@ static int anc_status_control_put(struct snd_kcontrol *kcontrol,
 	struct ab8500_codec_drvdata *drvdata = dev_get_drvdata(codec->dev);
 	struct device *dev = codec->dev;
 	bool apply_fir, apply_iir;
+<<<<<<< HEAD
 	int req, status;
+=======
+	unsigned int req;
+	int status;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	dev_dbg(dev, "%s: Enter.\n", __func__);
 
 	mutex_lock(&drvdata->anc_lock);
 
 	req = ucontrol->value.integer.value[0];
+<<<<<<< HEAD
+=======
+	if (req >= ARRAY_SIZE(enum_anc_state)) {
+		status = -EINVAL;
+		goto cleanup;
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (req != ANC_APPLY_FIR_IIR && req != ANC_APPLY_FIR &&
 		req != ANC_APPLY_IIR) {
 		dev_err(dev, "%s: ERROR: Unsupported status to set '%s'!\n",

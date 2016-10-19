@@ -209,6 +209,10 @@ skip_error:
 static void wdm_int_callback(struct urb *urb)
 {
 	int rv = 0;
+<<<<<<< HEAD
+=======
+	int responding;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	int status = urb->status;
 	struct wdm_device *desc;
 	struct usb_cdc_notification *dr;
@@ -262,8 +266,13 @@ static void wdm_int_callback(struct urb *urb)
 
 	spin_lock(&desc->iuspin);
 	clear_bit(WDM_READ, &desc->flags);
+<<<<<<< HEAD
 	set_bit(WDM_RESPONDING, &desc->flags);
 	if (!test_bit(WDM_DISCONNECTING, &desc->flags)
+=======
+	responding = test_and_set_bit(WDM_RESPONDING, &desc->flags);
+	if (!responding && !test_bit(WDM_DISCONNECTING, &desc->flags)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		&& !test_bit(WDM_SUSPENDING, &desc->flags)) {
 		rv = usb_submit_urb(desc->response, GFP_ATOMIC);
 		dev_dbg(&desc->intf->dev, "%s: usb_submit_urb %d",
@@ -685,16 +694,31 @@ static void wdm_rxwork(struct work_struct *work)
 {
 	struct wdm_device *desc = container_of(work, struct wdm_device, rxwork);
 	unsigned long flags;
+<<<<<<< HEAD
 	int rv;
+=======
+	int rv = 0;
+	int responding;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	spin_lock_irqsave(&desc->iuspin, flags);
 	if (test_bit(WDM_DISCONNECTING, &desc->flags)) {
 		spin_unlock_irqrestore(&desc->iuspin, flags);
 	} else {
+<<<<<<< HEAD
 		spin_unlock_irqrestore(&desc->iuspin, flags);
 		rv = usb_submit_urb(desc->response, GFP_KERNEL);
 		if (rv < 0 && rv != -EPERM) {
 			spin_lock_irqsave(&desc->iuspin, flags);
+=======
+		responding = test_and_set_bit(WDM_RESPONDING, &desc->flags);
+		spin_unlock_irqrestore(&desc->iuspin, flags);
+		if (!responding)
+			rv = usb_submit_urb(desc->response, GFP_KERNEL);
+		if (rv < 0 && rv != -EPERM) {
+			spin_lock_irqsave(&desc->iuspin, flags);
+			clear_bit(WDM_RESPONDING, &desc->flags);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			if (!test_bit(WDM_DISCONNECTING, &desc->flags))
 				schedule_work(&desc->rxwork);
 			spin_unlock_irqrestore(&desc->iuspin, flags);
@@ -815,6 +839,7 @@ static int wdm_manage_power(struct usb_interface *intf, int on)
 {
 	/* need autopm_get/put here to ensure the usbcore sees the new value */
 	int rv = usb_autopm_get_interface(intf);
+<<<<<<< HEAD
 	if (rv < 0)
 		goto err;
 
@@ -822,6 +847,13 @@ static int wdm_manage_power(struct usb_interface *intf, int on)
 	usb_autopm_put_interface(intf);
 err:
 	return rv;
+=======
+
+	intf->needs_remote_wakeup = on;
+	if (!rv)
+		usb_autopm_put_interface(intf);
+	return 0;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static int wdm_probe(struct usb_interface *intf, const struct usb_device_id *id)

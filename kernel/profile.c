@@ -591,6 +591,7 @@ out_cleanup:
 int __ref create_proc_profile(void) /* false positive from hotcpu_notifier */
 {
 	struct proc_dir_entry *entry;
+<<<<<<< HEAD
 
 	if (!prof_on)
 		return 0;
@@ -603,6 +604,30 @@ int __ref create_proc_profile(void) /* false positive from hotcpu_notifier */
 	proc_set_size(entry, (1 + prof_len) * sizeof(atomic_t));
 	hotcpu_notifier(profile_cpu_callback, 0);
 	return 0;
+=======
+	int err = 0;
+
+	if (!prof_on)
+		return 0;
+
+	cpu_notifier_register_begin();
+
+	if (create_hash_tables()) {
+		err = -ENOMEM;
+		goto out;
+	}
+
+	entry = proc_create("profile", S_IWUSR | S_IRUGO,
+			    NULL, &proc_profile_operations);
+	if (!entry)
+		goto out;
+	proc_set_size(entry, (1 + prof_len) * sizeof(atomic_t));
+	__hotcpu_notifier(profile_cpu_callback, 0);
+
+out:
+	cpu_notifier_register_done();
+	return err;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 module_init(create_proc_profile);
 #endif /* CONFIG_PROC_FS */

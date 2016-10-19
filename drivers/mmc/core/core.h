@@ -25,6 +25,10 @@ struct mmc_bus_ops {
 	int (*power_save)(struct mmc_host *);
 	int (*power_restore)(struct mmc_host *);
 	int (*alive)(struct mmc_host *);
+<<<<<<< HEAD
+=======
+	int (*change_bus_speed)(struct mmc_host *, unsigned long *);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 void mmc_attach_bus(struct mmc_host *host, const struct mmc_bus_ops *ops);
@@ -32,6 +36,11 @@ void mmc_detach_bus(struct mmc_host *host);
 
 void mmc_init_erase(struct mmc_card *card);
 
+<<<<<<< HEAD
+=======
+void mmc_power_up(struct mmc_host *host);
+void mmc_power_off(struct mmc_host *host);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 void mmc_set_chip_select(struct mmc_host *host, int mode);
 void mmc_set_clock(struct mmc_host *host, unsigned int hz);
 void mmc_gate_clock(struct mmc_host *host);
@@ -52,6 +61,11 @@ static inline void mmc_delay(unsigned int ms)
 	if (ms < 1000 / HZ) {
 		cond_resched();
 		mdelay(ms);
+<<<<<<< HEAD
+=======
+	} else if (ms < jiffies_to_msecs(2)) {
+		usleep_range(ms * 1000, (ms + 1) * 1000);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	} else {
 		msleep(ms);
 	}
@@ -78,5 +92,15 @@ void mmc_add_card_debugfs(struct mmc_card *card);
 void mmc_remove_card_debugfs(struct mmc_card *card);
 
 void mmc_init_context_info(struct mmc_host *host);
+<<<<<<< HEAD
+=======
+
+extern void mmc_disable_clk_scaling(struct mmc_host *host);
+extern bool mmc_can_scale_clk(struct mmc_host *host);
+extern void mmc_init_clk_scaling(struct mmc_host *host);
+extern void mmc_exit_clk_scaling(struct mmc_host *host);
+extern void mmc_reset_clk_scale_stats(struct mmc_host *host);
+extern unsigned long mmc_get_max_frequency(struct mmc_host *host);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif
 

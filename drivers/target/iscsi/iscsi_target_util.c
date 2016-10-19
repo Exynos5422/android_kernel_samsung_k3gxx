@@ -734,7 +734,11 @@ void iscsit_free_cmd(struct iscsi_cmd *cmd, bool shutdown)
 		 * Fallthrough
 		 */
 	case ISCSI_OP_SCSI_TMFUNC:
+<<<<<<< HEAD
 		rc = transport_generic_free_cmd(&cmd->se_cmd, 1);
+=======
+		rc = transport_generic_free_cmd(&cmd->se_cmd, shutdown);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (!rc && shutdown && se_cmd && se_cmd->se_sess) {
 			__iscsit_free_cmd(cmd, true, shutdown);
 			target_put_sess_cmd(se_cmd->se_sess, se_cmd);
@@ -750,7 +754,11 @@ void iscsit_free_cmd(struct iscsi_cmd *cmd, bool shutdown)
 			se_cmd = &cmd->se_cmd;
 			__iscsit_free_cmd(cmd, true, shutdown);
 
+<<<<<<< HEAD
 			rc = transport_generic_free_cmd(&cmd->se_cmd, 1);
+=======
+			rc = transport_generic_free_cmd(&cmd->se_cmd, shutdown);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			if (!rc && shutdown && se_cmd->se_sess) {
 				__iscsit_free_cmd(cmd, true, shutdown);
 				target_put_sess_cmd(se_cmd->se_sess, se_cmd);
@@ -1288,6 +1296,11 @@ int iscsit_tx_login_rsp(struct iscsi_conn *conn, u8 status_class, u8 status_deta
 	login->login_failed = 1;
 	iscsit_collect_login_stats(conn, status_class, status_detail);
 
+<<<<<<< HEAD
+=======
+	memset(&login->rsp[0], 0, ISCSI_HDR_LEN);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	hdr	= (struct iscsi_login_rsp *)&login->rsp[0];
 	hdr->opcode		= ISCSI_OP_LOGIN_RSP;
 	hdr->status_class	= status_class;

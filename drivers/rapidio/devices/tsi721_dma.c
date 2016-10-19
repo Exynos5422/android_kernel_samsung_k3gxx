@@ -206,8 +206,13 @@ void tsi721_bdma_handler(struct tsi721_bdma_chan *bdma_chan)
 {
 	/* Disable BDMA channel interrupts */
 	iowrite32(0, bdma_chan->regs + TSI721_DMAC_INTE);
+<<<<<<< HEAD
 
 	tasklet_schedule(&bdma_chan->tasklet);
+=======
+	if (bdma_chan->active)
+		tasklet_schedule(&bdma_chan->tasklet);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 #ifdef CONFIG_PCI_MSI
@@ -562,7 +567,11 @@ static int tsi721_alloc_chan_resources(struct dma_chan *dchan)
 	}
 #endif /* CONFIG_PCI_MSI */
 
+<<<<<<< HEAD
 	tasklet_enable(&bdma_chan->tasklet);
+=======
+	bdma_chan->active = true;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	tsi721_bdma_interrupt_enable(bdma_chan, 1);
 
 	return bdma_chan->bd_num - 1;
@@ -576,9 +585,13 @@ err_out:
 static void tsi721_free_chan_resources(struct dma_chan *dchan)
 {
 	struct tsi721_bdma_chan *bdma_chan = to_tsi721_chan(dchan);
+<<<<<<< HEAD
 #ifdef CONFIG_PCI_MSI
 	struct tsi721_device *priv = to_tsi721(dchan->device);
 #endif
+=======
+	struct tsi721_device *priv = to_tsi721(dchan->device);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	LIST_HEAD(list);
 
 	dev_dbg(dchan->device->dev, "%s: Entry\n", __func__);
@@ -589,14 +602,34 @@ static void tsi721_free_chan_resources(struct dma_chan *dchan)
 	BUG_ON(!list_empty(&bdma_chan->active_list));
 	BUG_ON(!list_empty(&bdma_chan->queue));
 
+<<<<<<< HEAD
 	tasklet_disable(&bdma_chan->tasklet);
+=======
+	tsi721_bdma_interrupt_enable(bdma_chan, 0);
+	bdma_chan->active = false;
+
+#ifdef CONFIG_PCI_MSI
+	if (priv->flags & TSI721_USING_MSIX) {
+		synchronize_irq(priv->msix[TSI721_VECT_DMA0_DONE +
+					   bdma_chan->id].vector);
+		synchronize_irq(priv->msix[TSI721_VECT_DMA0_INT +
+					   bdma_chan->id].vector);
+	} else
+#endif
+	synchronize_irq(priv->pdev->irq);
+
+	tasklet_kill(&bdma_chan->tasklet);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	spin_lock_bh(&bdma_chan->lock);
 	list_splice_init(&bdma_chan->free_list, &list);
 	spin_unlock_bh(&bdma_chan->lock);
 
+<<<<<<< HEAD
 	tsi721_bdma_interrupt_enable(bdma_chan, 0);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifdef CONFIG_PCI_MSI
 	if (priv->flags & TSI721_USING_MSIX) {
 		free_irq(priv->msix[TSI721_VECT_DMA0_DONE +
@@ -790,6 +823,10 @@ int tsi721_register_dma(struct tsi721_device *priv)
 		bdma_chan->dchan.cookie = 1;
 		bdma_chan->dchan.chan_id = i;
 		bdma_chan->id = i;
+<<<<<<< HEAD
+=======
+		bdma_chan->active = false;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 		spin_lock_init(&bdma_chan->lock);
 
@@ -799,7 +836,10 @@ int tsi721_register_dma(struct tsi721_device *priv)
 
 		tasklet_init(&bdma_chan->tasklet, tsi721_dma_tasklet,
 			     (unsigned long)bdma_chan);
+<<<<<<< HEAD
 		tasklet_disable(&bdma_chan->tasklet);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		list_add_tail(&bdma_chan->dchan.device_node,
 			      &mport->dma.channels);
 	}

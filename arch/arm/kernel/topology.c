@@ -23,7 +23,10 @@
 #include <linux/slab.h>
 
 #include <asm/cputype.h>
+<<<<<<< HEAD
 #include <asm/smp_plat.h>
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <asm/topology.h>
 
 /*
@@ -53,6 +56,16 @@ static void set_power_scale(unsigned int cpu, unsigned long power)
 	per_cpu(cpu_scale, cpu) = power;
 }
 
+<<<<<<< HEAD
+=======
+static DEFINE_PER_CPU(unsigned long, cpu_efficiency) = SCHED_POWER_SCALE;
+
+unsigned long arch_get_cpu_efficiency(int cpu)
+{
+	return per_cpu(cpu_efficiency, cpu);
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifdef CONFIG_OF
 struct cpu_efficiency {
 	const char *compatible;
@@ -75,12 +88,17 @@ struct cpu_efficiency table_efficiency[] = {
 	{NULL, },
 };
 
+<<<<<<< HEAD
 struct cpu_capacity {
 	unsigned long hwid;
 	unsigned long capacity;
 };
 
 struct cpu_capacity *cpu_capacity;
+=======
+unsigned long *__cpu_capacity;
+#define cpu_capacity(cpu)	__cpu_capacity[cpu]
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 unsigned long middle_capacity = 1;
 
@@ -101,6 +119,7 @@ static void __init parse_dt_topology(void)
 	unsigned long capacity = 0;
 	int alloc_size, cpu = 0;
 
+<<<<<<< HEAD
 	alloc_size = nr_cpu_ids * sizeof(struct cpu_capacity);
 	cpu_capacity = kzalloc(alloc_size, GFP_NOWAIT);
 
@@ -110,6 +129,21 @@ static void __init parse_dt_topology(void)
 
 		if (cpu >= num_possible_cpus())
 			break;
+=======
+	alloc_size = nr_cpu_ids * sizeof(*__cpu_capacity);
+	__cpu_capacity = kzalloc(alloc_size, GFP_NOWAIT);
+
+	for_each_possible_cpu(cpu) {
+		const u32 *rate;
+		int len;
+
+		/* too early to use cpu->of_node */
+		cn = of_get_cpu_node(cpu, NULL);
+		if (!cn) {
+			pr_err("missing device node for CPU %d\n", cpu);
+			continue;
+		}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 		for (cpu_eff = table_efficiency; cpu_eff->compatible; cpu_eff++)
 			if (of_device_is_compatible(cn, cpu_eff->compatible))
@@ -118,6 +152,11 @@ static void __init parse_dt_topology(void)
 		if (cpu_eff->compatible == NULL)
 			continue;
 
+<<<<<<< HEAD
+=======
+		per_cpu(cpu_efficiency, cpu) = cpu_eff->efficiency;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		rate = of_get_property(cn, "clock-frequency", &len);
 		if (!rate || len != 4) {
 			pr_err("%s missing clock-frequency property\n",
@@ -125,12 +164,15 @@ static void __init parse_dt_topology(void)
 			continue;
 		}
 
+<<<<<<< HEAD
 		reg = of_get_property(cn, "reg", &len);
 		if (!reg || len != 4) {
 			pr_err("%s missing reg property\n", cn->full_name);
 			continue;
 		}
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		capacity = ((be32_to_cpup(rate)) >> 20) * cpu_eff->efficiency;
 
 		/* Save min capacity of the system */
@@ -141,6 +183,7 @@ static void __init parse_dt_topology(void)
 		if (capacity > max_capacity)
 			max_capacity = capacity;
 
+<<<<<<< HEAD
 		cpu_capacity[cpu].capacity = capacity;
 		cpu_capacity[cpu++].hwid = be32_to_cpup(reg);
 	}
@@ -148,6 +191,11 @@ static void __init parse_dt_topology(void)
 	if (cpu < num_possible_cpus())
 		cpu_capacity[cpu].hwid = (unsigned long)(-1);
 
+=======
+		cpu_capacity(cpu) = capacity;
+	}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* If min and max capacities are equals, we bypass the update of the
 	 * cpu_scale because all CPUs have the same capacity. Otherwise, we
 	 * compute a middle_capacity factor that will ensure that the capacity
@@ -155,9 +203,13 @@ static void __init parse_dt_topology(void)
 	 * SCHED_POWER_SCALE, which is the default value, but with the
 	 * constraint explained near table_efficiency[].
 	 */
+<<<<<<< HEAD
 	if (min_capacity == max_capacity)
 		cpu_capacity[0].hwid = (unsigned long)(-1);
 	else if (4*max_capacity < (3*(max_capacity + min_capacity)))
+=======
+	if (4*max_capacity < (3*(max_capacity + min_capacity)))
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		middle_capacity = (min_capacity + max_capacity)
 				>> (SCHED_POWER_SHIFT+1);
 	else
@@ -171,6 +223,7 @@ static void __init parse_dt_topology(void)
  * boot. The update of all CPUs is in O(n^2) for heteregeneous system but the
  * function returns directly for SMP system.
  */
+<<<<<<< HEAD
 void update_cpu_power(unsigned int cpu, unsigned long hwid)
 {
 	unsigned int idx = 0;
@@ -188,6 +241,14 @@ void update_cpu_power(unsigned int cpu, unsigned long hwid)
 		return;
 
 	set_power_scale(cpu, cpu_capacity[idx].capacity / middle_capacity);
+=======
+void update_cpu_power(unsigned int cpu)
+{
+	if (!cpu_capacity(cpu))
+		return;
+
+	set_power_scale(cpu, cpu_capacity(cpu) / middle_capacity);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	printk(KERN_INFO "CPU%u: update cpu_power %lu\n",
 		cpu, arch_scale_freq_power(NULL, cpu));
@@ -195,7 +256,11 @@ void update_cpu_power(unsigned int cpu, unsigned long hwid)
 
 #else
 static inline void parse_dt_topology(void) {}
+<<<<<<< HEAD
 static inline void update_cpu_power(unsigned int cpuid, unsigned int mpidr) {}
+=======
+static inline void update_cpu_power(unsigned int cpuid) {}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif
 
  /*
@@ -282,7 +347,11 @@ void store_cpu_topology(unsigned int cpuid)
 
 	update_siblings_masks(cpuid);
 
+<<<<<<< HEAD
 	update_cpu_power(cpuid, mpidr & MPIDR_HWID_BITMASK);
+=======
+	update_cpu_power(cpuid);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	printk(KERN_INFO "CPU%u: thread %d, cpu %d, socket %d, mpidr %x\n",
 		cpuid, cpu_topology[cpuid].thread_id,
@@ -290,6 +359,7 @@ void store_cpu_topology(unsigned int cpuid)
 		cpu_topology[cpuid].socket_id, mpidr);
 }
 
+<<<<<<< HEAD
 
 #ifdef CONFIG_SCHED_HMP
 
@@ -426,6 +496,8 @@ int cluster_to_logical_mask(unsigned int socket_id, cpumask_t *cluster_mask)
 	return -EINVAL;
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * init_cpu_topology is called at boot when only one cpu is running
  * which prevent simultaneous write access to cpu_topology array

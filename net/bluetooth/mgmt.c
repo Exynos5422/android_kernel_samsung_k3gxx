@@ -2333,8 +2333,18 @@ static int user_pairing_resp(struct sock *sk, struct hci_dev *hdev,
 	}
 
 	if (addr->type == BDADDR_LE_PUBLIC || addr->type == BDADDR_LE_RANDOM) {
+<<<<<<< HEAD
 		/* Continue with pairing via SMP */
 		err = smp_user_confirm_reply(conn, mgmt_op, passkey);
+=======
+		/* Continue with pairing via SMP. The hdev lock must be
+		 * released as SMP may try to recquire it for crypto
+		 * purposes.
+		 */
+		hci_dev_unlock(hdev);
+		err = smp_user_confirm_reply(conn, mgmt_op, passkey);
+		hci_dev_lock(hdev);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 		if (!err)
 			err = cmd_complete(sk, hdev->id, mgmt_op,

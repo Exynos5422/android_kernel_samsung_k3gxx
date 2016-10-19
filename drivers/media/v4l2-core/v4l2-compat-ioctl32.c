@@ -178,6 +178,12 @@ struct v4l2_create_buffers32 {
 
 static int __get_v4l2_format32(struct v4l2_format *kp, struct v4l2_format32 __user *up)
 {
+<<<<<<< HEAD
+=======
+	if (get_user(kp->type, &up->type))
+		return -EFAULT;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	switch (kp->type) {
 	case V4L2_BUF_TYPE_VIDEO_CAPTURE:
 	case V4L2_BUF_TYPE_VIDEO_OUTPUT:
@@ -204,17 +210,27 @@ static int __get_v4l2_format32(struct v4l2_format *kp, struct v4l2_format32 __us
 
 static int get_v4l2_format32(struct v4l2_format *kp, struct v4l2_format32 __user *up)
 {
+<<<<<<< HEAD
 	if (!access_ok(VERIFY_READ, up, sizeof(struct v4l2_format32)) ||
 			get_user(kp->type, &up->type))
 			return -EFAULT;
+=======
+	if (!access_ok(VERIFY_READ, up, sizeof(struct v4l2_format32)))
+		return -EFAULT;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return __get_v4l2_format32(kp, up);
 }
 
 static int get_v4l2_create32(struct v4l2_create_buffers *kp, struct v4l2_create_buffers32 __user *up)
 {
 	if (!access_ok(VERIFY_READ, up, sizeof(struct v4l2_create_buffers32)) ||
+<<<<<<< HEAD
 	    copy_from_user(kp, up, offsetof(struct v4l2_create_buffers32, format.fmt)))
 			return -EFAULT;
+=======
+	    copy_from_user(kp, up, offsetof(struct v4l2_create_buffers32, format)))
+		return -EFAULT;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return __get_v4l2_format32(&kp->format, &up->format);
 }
 
@@ -334,6 +350,13 @@ static int get_v4l2_plane32(struct v4l2_plane *up, struct v4l2_plane32 *up32,
 
 	if (copy_in_user(up, up32, 2 * sizeof(__u32)) ||
 		copy_in_user(&up->data_offset, &up32->data_offset,
+<<<<<<< HEAD
+=======
+				sizeof(__u32)) ||
+		copy_in_user(up->reserved, up32->reserved,
+				sizeof(up->reserved)) ||
+		copy_in_user(&up->length, &up32->length,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				sizeof(__u32)))
 		return -EFAULT;
 
@@ -359,6 +382,11 @@ static int put_v4l2_plane32(struct v4l2_plane *up, struct v4l2_plane32 *up32,
 				enum v4l2_memory memory)
 {
 	if (copy_in_user(up32, up, 2 * sizeof(__u32)) ||
+<<<<<<< HEAD
+=======
+		copy_in_user(up32->reserved, up->reserved,
+				sizeof(up32->reserved)) ||
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		copy_in_user(&up32->data_offset, &up->data_offset,
 				sizeof(__u32)))
 		return -EFAULT;
@@ -401,6 +429,19 @@ static int get_v4l2_buffer32(struct v4l2_buffer *kp, struct v4l2_buffer32 __user
 					&up->timestamp.tv_usec))
 			return -EFAULT;
 
+<<<<<<< HEAD
+=======
+	if (V4L2_TYPE_IS_PRIVATE(kp->type)) {
+		compat_long_t tmp;
+
+		if (get_user(kp->length, &up->length) ||
+				get_user(tmp, &up->m.userptr))
+			return -EFAULT;
+
+		kp->m.userptr = (unsigned long)compat_ptr(tmp);
+	}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (V4L2_TYPE_IS_MULTIPLANAR(kp->type)) {
 		if (get_user(kp->length, &up->length))
 			return -EFAULT;
@@ -491,6 +532,15 @@ static int put_v4l2_buffer32(struct v4l2_buffer *kp, struct v4l2_buffer32 __user
 		put_user(kp->reserved, &up->reserved))
 			return -EFAULT;
 
+<<<<<<< HEAD
+=======
+	if (V4L2_TYPE_IS_PRIVATE(kp->type)) {
+		if (put_user(kp->length, &up->length) ||
+				put_user(kp->m.userptr, &up->m.userptr))
+			return -EFAULT;
+	}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (V4L2_TYPE_IS_MULTIPLANAR(kp->type)) {
 		num_planes = kp->length;
 		if (num_planes == 0)
@@ -717,6 +767,12 @@ static int put_v4l2_ext_controls32(struct v4l2_ext_controls *kp, struct v4l2_ext
 struct v4l2_event32 {
 	__u32				type;
 	union {
+<<<<<<< HEAD
+=======
+		struct v4l2_event_vsync		vsync;
+		struct v4l2_event_ctrl		ctrl;
+		struct v4l2_event_frame_sync	frame_sync;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		__u8			data[64];
 	} u;
 	__u32				pending;
@@ -787,8 +843,13 @@ static int put_v4l2_subdev_edid32(struct v4l2_subdev_edid *kp, struct v4l2_subde
 #define VIDIOC_DQBUF32		_IOWR('V', 17, struct v4l2_buffer32)
 #define VIDIOC_ENUMSTD32	_IOWR('V', 25, struct v4l2_standard32)
 #define VIDIOC_ENUMINPUT32	_IOWR('V', 26, struct v4l2_input32)
+<<<<<<< HEAD
 #define VIDIOC_SUBDEV_G_EDID32	_IOWR('V', 63, struct v4l2_subdev_edid32)
 #define VIDIOC_SUBDEV_S_EDID32	_IOWR('V', 64, struct v4l2_subdev_edid32)
+=======
+#define VIDIOC_SUBDEV_G_EDID32	_IOWR('V', 40, struct v4l2_subdev_edid32)
+#define VIDIOC_SUBDEV_S_EDID32	_IOWR('V', 41, struct v4l2_subdev_edid32)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define VIDIOC_TRY_FMT32      	_IOWR('V', 64, struct v4l2_format32)
 #define VIDIOC_G_EXT_CTRLS32    _IOWR('V', 71, struct v4l2_ext_controls32)
 #define VIDIOC_S_EXT_CTRLS32    _IOWR('V', 72, struct v4l2_ext_controls32)

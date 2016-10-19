@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * Copyright (c) 2011, Code Aurora Forum. All rights reserved.
+=======
+ * Copyright (c) 2011, The Linux Foundation. All rights reserved.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -24,6 +28,10 @@
 struct pm8xxx_irq_core_data {
 	u32		rev;
 	int		nirqs;
+<<<<<<< HEAD
+=======
+	unsigned int	base_addr;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 struct pm8xxx_irq_platform_data {
@@ -31,6 +39,10 @@ struct pm8xxx_irq_platform_data {
 	struct pm8xxx_irq_core_data	irq_cdata;
 	int				devirq;
 	int				irq_trigger_flag;
+<<<<<<< HEAD
+=======
+	int				dev_id;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 struct pm_irq_chip;
@@ -45,8 +57,12 @@ static inline int pm8xxx_get_irq_stat(struct pm_irq_chip *chip, int irq)
 {
 	return -ENXIO;
 }
+<<<<<<< HEAD
 static inline struct pm_irq_chip *pm8xxx_irq_init(
 				const struct device *dev,
+=======
+static inline struct pm_irq_chip *pm8xxx_irq_init(const struct device *dev,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				const struct pm8xxx_irq_platform_data *pdata)
 {
 	return ERR_PTR(-ENXIO);

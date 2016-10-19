@@ -125,7 +125,11 @@ static struct spear_shirq spear320_shirq_ras2 = {
 };
 
 static struct spear_shirq spear320_shirq_ras3 = {
+<<<<<<< HEAD
 	.irq_nr = 3,
+=======
+	.irq_nr = 7,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	.irq_bit_off = 0,
 	.invalid_irq = 1,
 	.regs = {

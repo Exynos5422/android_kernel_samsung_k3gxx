@@ -126,12 +126,16 @@ static inline void pte_free(struct mm_struct *mm, pgtable_t pte)
 	__free_page(pte);
 }
 
+<<<<<<< HEAD
 extern int boot_mode_security;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static inline void __pmd_populate(pmd_t *pmdp, phys_addr_t pte,
 				  pmdval_t prot)
 {
 	pmdval_t pmdval = (pte + PTE_HWTABLE_OFF) | prot;
+<<<<<<< HEAD
 #ifdef	CONFIG_TIMA_RKP_L1_TABLES
 	unsigned long cmd_id = 0x83809000;
 	unsigned long tima_wr_out;
@@ -172,10 +176,13 @@ static inline void __pmd_populate(pmd_t *pmdp, phys_addr_t pte,
 		"ldmfd  sp!,  {r0-r4}\n"
 		:"=r"(tima_wr_out):"r"(cmd_id),"r"((unsigned long)pmdp),"r"(__pmd(pmdval)),"r"(__pmd(pmdval + 256 * sizeof(pte_t))):"r0","r1", "r2","r3","r4","cc");
  } else {
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	pmdp[0] = __pmd(pmdval);
 #ifndef CONFIG_ARM_LPAE
 	pmdp[1] = __pmd(pmdval + 256 * sizeof(pte_t));
 #endif
+<<<<<<< HEAD
  }
 
 #else
@@ -184,6 +191,8 @@ static inline void __pmd_populate(pmd_t *pmdp, phys_addr_t pte,
 	pmdp[1] = __pmd(pmdval + 256 * sizeof(pte_t));
 #endif
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	flush_pmd_entry(pmdp);
 }
 

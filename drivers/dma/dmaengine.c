@@ -66,12 +66,15 @@
 #include <linux/acpi_dma.h>
 #include <linux/of_dma.h>
 
+<<<<<<< HEAD
 #if defined(CONFIG_PL330TEST_LOG)
 #define DBG_PRINT(x...)		exynos_ss_printk(x);
 #else
 #define DBG_PRINT(x...)		do {} while (0)
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static DEFINE_MUTEX(dma_list_mutex);
 static DEFINE_IDR(dma_idr);
 static LIST_HEAD(dma_device_list);
@@ -552,7 +555,11 @@ struct dma_chan *__dma_request_channel(const dma_cap_mask_t *mask,
 	}
 	mutex_unlock(&dma_list_mutex);
 
+<<<<<<< HEAD
 	DBG_PRINT("[%s] %s (%s)\n",
+=======
+	pr_debug("%s: %s (%s)\n",
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		 __func__,
 		 chan ? "success" : "fail",
 		 chan ? dma_chan_name(chan) : NULL);

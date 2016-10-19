@@ -48,7 +48,11 @@ static void hci_cc_inquiry_cancel(struct hci_dev *hdev, struct sk_buff *skb)
 	}
 
 	clear_bit(HCI_INQUIRY, &hdev->flags);
+<<<<<<< HEAD
 	smp_mb__after_clear_bit(); /* wake_up_bit advises about this barrier */
+=======
+	smp_mb__after_atomic(); /* wake_up_bit advises about this barrier */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	wake_up_bit(&hdev->flags, HCI_INQUIRY);
 
 	hci_dev_lock(hdev);
@@ -1601,7 +1605,11 @@ static void hci_inquiry_complete_evt(struct hci_dev *hdev, struct sk_buff *skb)
 	if (!test_and_clear_bit(HCI_INQUIRY, &hdev->flags))
 		return;
 
+<<<<<<< HEAD
 	smp_mb__after_clear_bit(); /* wake_up_bit advises about this barrier */
+=======
+	smp_mb__after_atomic(); /* wake_up_bit advises about this barrier */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	wake_up_bit(&hdev->flags, HCI_INQUIRY);
 
 	if (!test_bit(HCI_MGMT, &hdev->dev_flags))
@@ -1726,6 +1734,12 @@ static void hci_conn_complete_evt(struct hci_dev *hdev, struct sk_buff *skb)
 			hci_send_cmd(hdev, HCI_OP_CHANGE_CONN_PTYPE, sizeof(cp),
 				     &cp);
 		}
+<<<<<<< HEAD
+=======
+
+		/* Change the ACL LINK POLICY to disable role switch */
+		hci_cfg_link_policy(conn);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	} else {
 		conn->state = BT_CLOSED;
 		if (conn->type == ACL_LINK)
@@ -2128,6 +2142,12 @@ static void hci_cmd_complete_evt(struct hci_dev *hdev, struct sk_buff *skb)
 
 	opcode = __le16_to_cpu(ev->opcode);
 
+<<<<<<< HEAD
+=======
+	if (test_bit(HCI_RESET, &hdev->flags) && (opcode != HCI_OP_RESET))
+		return;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	switch (opcode) {
 	case HCI_OP_INQUIRY_CANCEL:
 		hci_cc_inquiry_cancel(hdev, skb);
@@ -2972,6 +2992,12 @@ static void hci_sync_conn_complete_evt(struct hci_dev *hdev,
 		conn->state  = BT_CONNECTED;
 
 		hci_conn_add_sysfs(conn);
+<<<<<<< HEAD
+=======
+		BT_DBG("SCO conn complete");
+		if (hdev->notify)
+			hdev->notify(hdev, HCI_NOTIFY_SCO_COMPLETE);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		break;
 
 	case 0x10:	/* Connection Accept Timeout */
@@ -3063,6 +3089,15 @@ static void hci_key_refresh_complete_evt(struct hci_dev *hdev,
 	if (!conn)
 		goto unlock;
 
+<<<<<<< HEAD
+=======
+	/* For BR/EDR the necessary steps are taken through the
+	 * auth_complete event.
+	 */
+	if (conn->type != LE_LINK)
+		goto unlock;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (!ev->status)
 		conn->sec_level = conn->pending_sec_level;
 
@@ -3224,8 +3259,16 @@ static void hci_user_confirm_request_evt(struct hci_dev *hdev,
 
 		/* If we're not the initiators request authorization to
 		 * proceed from user space (mgmt_user_confirm with
+<<<<<<< HEAD
 		 * confirm_hint set to 1). */
 		if (!test_bit(HCI_CONN_AUTH_PEND, &conn->flags)) {
+=======
+		 * confirm_hint set to 1). The exception is if neither
+		 * side had MITM in which case we do auto-accept.
+		 */
+		if (!test_bit(HCI_CONN_AUTH_PEND, &conn->flags) &&
+		    (loc_mitm || rem_mitm)) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			BT_DBG("Confirming auto-accept as acceptor");
 			confirm_hint = 1;
 			goto confirm;
@@ -3623,11 +3666,29 @@ static void hci_le_ltk_request_evt(struct hci_dev *hdev, struct sk_buff *skb)
 	cp.handle = cpu_to_le16(conn->handle);
 
 	if (ltk->authenticated)
+<<<<<<< HEAD
 		conn->sec_level = BT_SECURITY_HIGH;
 
 	hci_send_cmd(hdev, HCI_OP_LE_LTK_REPLY, sizeof(cp), &cp);
 
 	if (ltk->type & HCI_SMP_STK) {
+=======
+		conn->pending_sec_level = BT_SECURITY_HIGH;
+	else
+		conn->pending_sec_level = BT_SECURITY_MEDIUM;
+
+	conn->enc_key_size = ltk->enc_size;
+
+	hci_send_cmd(hdev, HCI_OP_LE_LTK_REPLY, sizeof(cp), &cp);
+
+	/* Ref. Bluetooth Core SPEC pages 1975 and 2004. STK is a
+	 * temporary key used to encrypt a connection following
+	 * pairing. It is used during the Encrypted Session Setup to
+	 * distribute the keys. Later, security can be re-established
+	 * using a distributed LTK.
+	 */
+	if (ltk->type == HCI_SMP_STK_SLAVE) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		list_del(&ltk->list);
 		kfree(ltk);
 	}

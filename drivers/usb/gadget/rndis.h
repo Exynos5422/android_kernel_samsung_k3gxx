@@ -189,14 +189,27 @@ typedef struct rndis_params
 	struct net_device	*dev;
 
 	u32			vendorID;
+<<<<<<< HEAD
 #ifdef CONFIG_USB_RNDIS_MULTIPACKET
 	u8			max_pkt_per_xfer;
 	u8			pkt_alignment_factor;
 #endif
+=======
+	u8			max_pkt_per_xfer;
+	u8			pkt_alignment_factor;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	const char		*vendorDescr;
 	void			(*resp_avail)(void *v);
 	void			*v;
 	struct list_head	resp_queue;
+<<<<<<< HEAD
+=======
+	spinlock_t		lock;
+	u32			host_rndis_major_ver;
+	u32			host_rndis_minor_ver;
+	u32			ul_max_xfer_size;
+	u32			dl_max_xfer_size;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 } rndis_params;
 
 /* RNDIS Message parser and other useless functions */
@@ -208,9 +221,15 @@ int  rndis_set_param_dev (u8 configNr, struct net_device *dev,
 int  rndis_set_param_vendor (u8 configNr, u32 vendorID,
 			    const char *vendorDescr);
 int  rndis_set_param_medium (u8 configNr, u32 medium, u32 speed);
+<<<<<<< HEAD
 #ifdef CONFIG_USB_RNDIS_MULTIPACKET
 void rndis_set_max_pkt_xfer(u8 configNr, u8 max_pkt_per_xfer);
 #endif
+=======
+void rndis_set_max_pkt_xfer(u8 configNr, u8 max_pkt_per_xfer);
+u32  rndis_get_ul_max_xfer_size(u8 configNr);
+u32  rndis_get_dl_max_xfer_size(u8 configNr);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 void rndis_add_hdr (struct sk_buff *skb);
 int rndis_rm_hdr(struct gether *port, struct sk_buff *skb,
 			struct sk_buff_head *list);
@@ -222,7 +241,11 @@ int  rndis_signal_connect (int configNr);
 int  rndis_signal_disconnect (int configNr);
 int  rndis_state (int configNr);
 extern void rndis_set_host_mac (int configNr, const u8 *addr);
+<<<<<<< HEAD
 
+=======
+extern bool is_rndis_ipa_supported(void);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 int rndis_init(void);
 void rndis_exit (void);
 

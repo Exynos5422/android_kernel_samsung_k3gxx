@@ -177,9 +177,12 @@ sctp_chunk_length_valid(struct sctp_chunk *chunk,
 {
 	__u16 chunk_length = ntohs(chunk->chunk_hdr->length);
 
+<<<<<<< HEAD
 	/* Previously already marked? */
 	if (unlikely(chunk->pdiscard))
 		return 0;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (unlikely(chunk_length < required_length))
 		return 0;
 
@@ -367,7 +370,11 @@ sctp_disposition_t sctp_sf_do_5_1B_init(struct net *net,
 
 	/* Verify the INIT chunk before processing it. */
 	err_chunk = NULL;
+<<<<<<< HEAD
 	if (!sctp_verify_init(net, asoc, chunk->chunk_hdr->type,
+=======
+	if (!sctp_verify_init(net, ep, asoc, chunk->chunk_hdr->type,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			      (sctp_init_chunk_t *)chunk->chunk_hdr, chunk,
 			      &err_chunk)) {
 		/* This chunk contains fatal error. It is to be discarded.
@@ -534,7 +541,11 @@ sctp_disposition_t sctp_sf_do_5_1C_ack(struct net *net,
 
 	/* Verify the INIT chunk before processing it. */
 	err_chunk = NULL;
+<<<<<<< HEAD
 	if (!sctp_verify_init(net, asoc, chunk->chunk_hdr->type,
+=======
+	if (!sctp_verify_init(net, ep, asoc, chunk->chunk_hdr->type,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			      (sctp_init_chunk_t *)chunk->chunk_hdr, chunk,
 			      &err_chunk)) {
 
@@ -768,6 +779,15 @@ sctp_disposition_t sctp_sf_do_5_1D_ce(struct net *net,
 		struct sctp_chunk auth;
 		sctp_ierror_t ret;
 
+<<<<<<< HEAD
+=======
+		/* Make sure that we and the peer are AUTH capable */
+		if (!net->sctp.auth_enable || !new_asoc->peer.auth_capable) {
+			sctp_association_free(new_asoc);
+			return sctp_sf_pdiscard(net, ep, asoc, type, arg, commands);
+		}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		/* set-up our fake chunk so that we can process it */
 		auth.skb = chunk->auth_chunk;
 		auth.asoc = chunk->asoc;
@@ -778,10 +798,13 @@ sctp_disposition_t sctp_sf_do_5_1D_ce(struct net *net,
 		auth.transport = chunk->transport;
 
 		ret = sctp_sf_authenticate(net, ep, new_asoc, type, &auth);
+<<<<<<< HEAD
 
 		/* We can now safely free the auth_chunk clone */
 		kfree_skb(chunk->auth_chunk);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (ret != SCTP_IERROR_NO_ERROR) {
 			sctp_association_free(new_asoc);
 			return sctp_sf_pdiscard(net, ep, asoc, type, arg, commands);
@@ -1438,7 +1461,11 @@ static sctp_disposition_t sctp_sf_do_unexpected_init(
 
 	/* Verify the INIT chunk before processing it. */
 	err_chunk = NULL;
+<<<<<<< HEAD
 	if (!sctp_verify_init(net, asoc, chunk->chunk_hdr->type,
+=======
+	if (!sctp_verify_init(net, ep, asoc, chunk->chunk_hdr->type,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			      (sctp_init_chunk_t *)chunk->chunk_hdr, chunk,
 			      &err_chunk)) {
 		/* This chunk contains fatal error. It is to be discarded.
@@ -3581,7 +3608,13 @@ sctp_disposition_t sctp_sf_do_asconf(struct net *net,
 	struct sctp_chunk	*asconf_ack = NULL;
 	struct sctp_paramhdr	*err_param = NULL;
 	sctp_addiphdr_t		*hdr;
+<<<<<<< HEAD
 	__u32			serial;
+=======
+	union sctp_addr_param	*addr_param;
+	__u32			serial;
+	int			length;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (!sctp_vtag_verify(chunk, asoc)) {
 		sctp_add_cmd_sf(commands, SCTP_CMD_REPORT_BAD_TAG,
@@ -3606,8 +3639,22 @@ sctp_disposition_t sctp_sf_do_asconf(struct net *net,
 	hdr = (sctp_addiphdr_t *)chunk->skb->data;
 	serial = ntohl(hdr->serial);
 
+<<<<<<< HEAD
 	/* Verify the ASCONF chunk before processing it. */
 	if (!sctp_verify_asconf(asoc, chunk, true, &err_param))
+=======
+	addr_param = (union sctp_addr_param *)hdr->params;
+	length = ntohs(addr_param->p.length);
+	if (length < sizeof(sctp_paramhdr_t))
+		return sctp_sf_violation_paramlen(net, ep, asoc, type, arg,
+			   (void *)addr_param, commands);
+
+	/* Verify the ASCONF chunk before processing it. */
+	if (!sctp_verify_asconf(asoc,
+			    (sctp_paramhdr_t *)((void *)addr_param + length),
+			    (void *)chunk->chunk_end,
+			    &err_param))
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return sctp_sf_violation_paramlen(net, ep, asoc, type, arg,
 						  (void *)err_param, commands);
 
@@ -3725,7 +3772,14 @@ sctp_disposition_t sctp_sf_do_asconf_ack(struct net *net,
 	rcvd_serial = ntohl(addip_hdr->serial);
 
 	/* Verify the ASCONF-ACK chunk before processing it. */
+<<<<<<< HEAD
 	if (!sctp_verify_asconf(asoc, asconf_ack, false, &err_param))
+=======
+	if (!sctp_verify_asconf(asoc,
+	    (sctp_paramhdr_t *)addip_hdr->params,
+	    (void *)asconf_ack->chunk_end,
+	    &err_param))
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return sctp_sf_violation_paramlen(net, ep, asoc, type, arg,
 			   (void *)err_param, commands);
 

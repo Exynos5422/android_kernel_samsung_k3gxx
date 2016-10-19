@@ -179,6 +179,7 @@
 #define S3C64XX_UINTM		0x38
 
 #define S3C64XX_UINTM_RXD	(0)
+<<<<<<< HEAD
 #define S3C64XX_UINTM_ERR	(1)
 #define S3C64XX_UINTM_TXD	(2)
 #define S3C64XX_UINTM_RXD_MSK	(1 << S3C64XX_UINTM_RXD)
@@ -217,6 +218,12 @@
 
 #define UTRSTAT_TIMEOUT         EXYNOS5_UTRSTAT_TIMEOUT
 
+=======
+#define S3C64XX_UINTM_TXD	(2)
+#define S3C64XX_UINTM_RXD_MSK	(1 << S3C64XX_UINTM_RXD)
+#define S3C64XX_UINTM_TXD_MSK	(1 << S3C64XX_UINTM_TXD)
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /* Following are specific to S5PV210 */
 #define S5PV210_UCON_CLKMASK	(1<<10)
 #define S5PV210_UCON_CLKSHIFT	(10)
@@ -267,8 +274,11 @@
 
 #ifndef __ASSEMBLY__
 
+<<<<<<< HEAD
 struct uart_port;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /* configuration structure for per-machine configurations for the
  * serial port
  *
@@ -276,9 +286,12 @@ struct uart_port;
  * arch/arm/mach-s3c2410/ directory.
 */
 
+<<<<<<< HEAD
 typedef void (*s3c_wake_peer_t)(struct uart_port *port);
 extern s3c_wake_peer_t s3c2410_serial_wake_peer[CONFIG_SERIAL_SAMSUNG_UARTS];
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 struct s3c2410_uartcfg {
 	unsigned char	   hwport;	 /* hardware port number */
 	unsigned char	   unused;
@@ -291,8 +304,11 @@ struct s3c2410_uartcfg {
 	unsigned long	   ucon;	 /* value of ucon for port */
 	unsigned long	   ulcon;	 /* value of ulcon for port */
 	unsigned long	   ufcon;	 /* value of ufcon for port */
+<<<<<<< HEAD
 
 	s3c_wake_peer_t wake_peer[CONFIG_SERIAL_SAMSUNG_UARTS];
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 #endif /* __ASSEMBLY__ */

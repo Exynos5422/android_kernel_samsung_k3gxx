@@ -525,12 +525,22 @@ static int __init intel_irq_remapping_supported(void)
 	if (disable_irq_remap)
 		return 0;
 	if (irq_remap_broken) {
+<<<<<<< HEAD
 		WARN_TAINT(1, TAINT_FIRMWARE_WORKAROUND,
 			   "This system BIOS has enabled interrupt remapping\n"
 			   "on a chipset that contains an erratum making that\n"
 			   "feature unstable.  To maintain system stability\n"
 			   "interrupt remapping is being disabled.  Please\n"
 			   "contact your BIOS vendor for an update\n");
+=======
+		printk(KERN_WARNING
+			"This system BIOS has enabled interrupt remapping\n"
+			"on a chipset that contains an erratum making that\n"
+			"feature unstable.  To maintain system stability\n"
+			"interrupt remapping is being disabled.  Please\n"
+			"contact your BIOS vendor for an update\n");
+		add_taint(TAINT_FIRMWARE_WORKAROUND, LOCKDEP_STILL_OK);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		disable_irq_remap = 1;
 		return 0;
 	}

@@ -16,3 +16,8 @@ obj-$(CONFIG_RENESAS_INTC_IRQPIN)	+= irq-renesas-intc-irqpin.o
 obj-$(CONFIG_RENESAS_IRQC)		+= irq-renesas-irqc.o
 obj-$(CONFIG_VERSATILE_FPGA_IRQ)	+= irq-versatile-fpga.o
 obj-$(CONFIG_ARCH_VT8500)		+= irq-vt8500.o
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_MSM_IRQ)			+= irq-msm.o
+obj-$(CONFIG_MSM_SHOW_RESUME_IRQ)       += msm_show_resume_irq.o
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

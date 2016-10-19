@@ -600,6 +600,10 @@ int hci_conn_check_secure(struct hci_conn *conn, __u8 sec_level);
 int hci_conn_security(struct hci_conn *conn, __u8 sec_level, __u8 auth_type);
 int hci_conn_change_link_key(struct hci_conn *conn);
 int hci_conn_switch_role(struct hci_conn *conn, __u8 role);
+<<<<<<< HEAD
+=======
+int hci_cfg_link_policy(struct hci_conn *conn);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 void hci_conn_enter_active_mode(struct hci_conn *conn, __u8 force_active);
 

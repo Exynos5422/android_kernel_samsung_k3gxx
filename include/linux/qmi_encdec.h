@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 /* Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+=======
+/* Copyright (c) 2012-2014, The Linux Foundation. All rights reserved.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -39,6 +43,10 @@ enum elem_type {
 	QMI_SIGNED_2_BYTE_ENUM,
 	QMI_SIGNED_4_BYTE_ENUM,
 	QMI_STRUCT,
+<<<<<<< HEAD
+=======
+	QMI_STRING,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	QMI_EOTI,
 };
 

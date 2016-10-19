@@ -107,7 +107,11 @@ static int acquire_in_xmit(struct rds_connection *conn)
 static void release_in_xmit(struct rds_connection *conn)
 {
 	clear_bit(RDS_IN_XMIT, &conn->c_flags);
+<<<<<<< HEAD
 	smp_mb__after_clear_bit();
+=======
+	smp_mb__after_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/*
 	 * We don't use wait_on_bit()/wake_up_bit() because our waking is in a
 	 * hot path and finding waiters is very rare.  We don't want to walk
@@ -661,7 +665,11 @@ void rds_send_drop_acked(struct rds_connection *conn, u64 ack,
 
 	/* order flag updates with spin locks */
 	if (!list_empty(&list))
+<<<<<<< HEAD
 		smp_mb__after_clear_bit();
+=======
+		smp_mb__after_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	spin_unlock_irqrestore(&conn->c_lock, flags);
 
@@ -691,7 +699,11 @@ void rds_send_drop_to(struct rds_sock *rs, struct sockaddr_in *dest)
 	}
 
 	/* order flag updates with the rs lock */
+<<<<<<< HEAD
 	smp_mb__after_clear_bit();
+=======
+	smp_mb__after_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	spin_unlock_irqrestore(&rs->rs_lock, flags);
 
@@ -955,6 +967,7 @@ int rds_sendmsg(struct kiocb *iocb, struct socket *sock, struct msghdr *msg,
 		release_sock(sk);
 	}
 
+<<<<<<< HEAD
 	lock_sock(sk);
 	if (daddr == 0 || rs->rs_bound_addr == 0) {
 		release_sock(sk);
@@ -962,6 +975,13 @@ int rds_sendmsg(struct kiocb *iocb, struct socket *sock, struct msghdr *msg,
 		goto out;
 	}
 	release_sock(sk);
+=======
+	/* racing with another thread binding seems ok here */
+	if (daddr == 0 || rs->rs_bound_addr == 0) {
+		ret = -ENOTCONN; /* XXX not a great errno */
+		goto out;
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/* size of rm including all sgs */
 	ret = rds_rm_size(msg, payload_len);

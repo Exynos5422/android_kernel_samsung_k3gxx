@@ -22,11 +22,20 @@ obj-$(CONFIG_INPUT_MOUSE)	+= mouse/
 obj-$(CONFIG_INPUT_JOYSTICK)	+= joystick/
 obj-$(CONFIG_INPUT_TABLET)	+= tablet/
 obj-$(CONFIG_INPUT_TOUCHSCREEN)	+= touchscreen/
+<<<<<<< HEAD
 obj-$(CONFIG_INPUT_WACOM)	+= wacom/
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 obj-$(CONFIG_INPUT_MISC)	+= misc/
 
 obj-$(CONFIG_INPUT_APMPOWER)	+= apm-power.o
 obj-$(CONFIG_INPUT_KEYRESET)	+= keyreset.o
+<<<<<<< HEAD
 obj-$(CONFIG_HALL)		+= hall.o
 obj-$(CONFIG_HALL_ACCESSORY)	+= hall_accessory.o
 obj-$(CONFIG_CERTIFY_HALL)	+= certify_hall.o
+=======
+obj-$(CONFIG_INPUT_KEYCOMBO)	+= keycombo.o
+obj-$(CONFIG_HALL_SENSOR)	+= hall_sensor.o
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

@@ -268,7 +268,11 @@ static void bcm_can_tx(struct bcm_op *op)
 
 	/* send with loopback */
 	skb->dev = dev;
+<<<<<<< HEAD
 	skb->sk = op->sk;
+=======
+	can_skb_set_owner(skb, op->sk);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	can_send(skb, 1);
 
 	/* update statistics */
@@ -1223,7 +1227,11 @@ static int bcm_tx_send(struct msghdr *msg, int ifindex, struct sock *sk)
 
 	can_skb_prv(skb)->ifindex = dev->ifindex;
 	skb->dev = dev;
+<<<<<<< HEAD
 	skb->sk  = sk;
+=======
+	can_skb_set_owner(skb, sk);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	err = can_send(skb, 1); /* send with loopback */
 	dev_put(dev);
 

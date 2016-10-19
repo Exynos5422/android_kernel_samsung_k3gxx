@@ -36,7 +36,10 @@ enum bh_state_bits {
 	BH_Quiet,	/* Buffer Error Prinks to be quiet */
 	BH_Meta,	/* Buffer contains metadata */
 	BH_Prio,	/* Buffer should be submitted with REQ_PRIO */
+<<<<<<< HEAD
 	BH_Sync_Flush,
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	BH_PrivateStart,/* not a state bit, but the first bit available
 			 * for private allocation by other entities
@@ -129,7 +132,10 @@ BUFFER_FNS(Write_EIO, write_io_error)
 BUFFER_FNS(Unwritten, unwritten)
 BUFFER_FNS(Meta, meta)
 BUFFER_FNS(Prio, prio)
+<<<<<<< HEAD
 BUFFER_FNS(Sync_Flush, sync_flush)
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define bh_offset(bh)		((unsigned long)(bh)->b_data & ~PAGE_MASK)
 
@@ -141,12 +147,21 @@ BUFFER_FNS(Sync_Flush, sync_flush)
 	})
 #define page_has_buffers(page)	PagePrivate(page)
 
+<<<<<<< HEAD
+=======
+void buffer_check_dirty_writeback(struct page *page,
+				     bool *dirty, bool *writeback);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * Declarations
  */
 
 void mark_buffer_dirty(struct buffer_head *bh);
+<<<<<<< HEAD
 void mark_buffer_dirty_sync(struct buffer_head *bh);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 void init_buffer(struct buffer_head *, bh_end_io_t *, void *);
 void touch_buffer(struct buffer_head *bh);
 void set_bh_page(struct buffer_head *bh,
@@ -162,7 +177,10 @@ void end_buffer_async_write(struct buffer_head *bh, int uptodate);
 
 /* Things to do with buffers at mapping->private_list */
 void mark_buffer_dirty_inode(struct buffer_head *bh, struct inode *inode);
+<<<<<<< HEAD
 void mark_buffer_dirty_inode_sync(struct buffer_head *bh, struct inode *inode);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 int inode_has_buffers(struct inode *);
 void invalidate_inode_buffers(struct inode *);
 int remove_inode_buffers(struct inode *inode);
@@ -276,7 +294,11 @@ static inline void get_bh(struct buffer_head *bh)
 
 static inline void put_bh(struct buffer_head *bh)
 {
+<<<<<<< HEAD
         smp_mb__before_atomic_dec();
+=======
+        smp_mb__before_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
         atomic_dec(&bh->b_count);
 }
 

@@ -59,7 +59,11 @@ static void kirkwood_cpufreq_set_cpu_state(struct cpufreq_policy *policy,
 		unsigned int index)
 {
 	struct cpufreq_freqs freqs;
+<<<<<<< HEAD
 	unsigned int state = kirkwood_freq_table[index].index;
+=======
+	unsigned int state = kirkwood_freq_table[index].driver_data;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	unsigned long reg;
 
 	freqs.old = kirkwood_cpufreq_get_cpu_frequency(0);
@@ -158,7 +162,10 @@ static struct cpufreq_driver kirkwood_cpufreq_driver = {
 	.init	= kirkwood_cpufreq_cpu_init,
 	.exit	= kirkwood_cpufreq_cpu_exit,
 	.name	= "kirkwood-cpufreq",
+<<<<<<< HEAD
 	.owner	= THIS_MODULE,
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	.attr	= kirkwood_cpufreq_attr,
 };
 

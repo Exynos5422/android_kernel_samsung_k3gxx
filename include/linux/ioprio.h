@@ -3,12 +3,17 @@
 
 #include <linux/sched.h>
 #include <linux/iocontext.h>
+<<<<<<< HEAD
 
 /*
  * Gives us 8 prio classes with 13-bits of data for each class
  */
 #define IOPRIO_BITS		(16)
 #define IOPRIO_CLASS_SHIFT	(13)
+=======
+#include <uapi/linux/ioprio.h>
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define IOPRIO_PRIO_MASK	((1UL << IOPRIO_CLASS_SHIFT) - 1)
 
 #define IOPRIO_PRIO_CLASS(mask)	((mask) >> IOPRIO_CLASS_SHIFT)
@@ -18,6 +23,7 @@
 #define ioprio_valid(mask)	(IOPRIO_PRIO_CLASS((mask)) != IOPRIO_CLASS_NONE)
 
 /*
+<<<<<<< HEAD
  * These are the io priority groups as implemented by CFQ. RT is the realtime
  * class, it always gets premium service. BE is the best-effort scheduling
  * class, the default for any process. IDLE is the idle scheduling class, it
@@ -42,6 +48,8 @@ enum {
 };
 
 /*
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  * Fallback BE priority
  */
 #define IOPRIO_NORM	(4)
@@ -76,4 +84,8 @@ extern int ioprio_best(unsigned short aprio, unsigned short bprio);
 
 extern int set_task_ioprio(struct task_struct *task, int ioprio);
 
+<<<<<<< HEAD
 #endif
+=======
+#endif /* IOPRIO_H */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

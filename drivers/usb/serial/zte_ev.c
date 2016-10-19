@@ -281,8 +281,12 @@ static const struct usb_device_id id_table[] = {
 	{ USB_DEVICE(0x19d2, 0xfffd) },
 	{ USB_DEVICE(0x19d2, 0xfffc) },
 	{ USB_DEVICE(0x19d2, 0xfffb) },
+<<<<<<< HEAD
 	/* AC2726, AC8710_V3 */
 	{ USB_DEVICE_AND_INTERFACE_INFO(0x19d2, 0xfff1, 0xff, 0xff, 0xff) },
+=======
+	/* AC8710_V3 */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	{ USB_DEVICE(0x19d2, 0xfff6) },
 	{ USB_DEVICE(0x19d2, 0xfff7) },
 	{ USB_DEVICE(0x19d2, 0xfff8) },

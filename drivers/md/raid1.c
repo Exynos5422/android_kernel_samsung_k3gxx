@@ -94,6 +94,10 @@ static void * r1buf_pool_alloc(gfp_t gfp_flags, void *data)
 	struct pool_info *pi = data;
 	struct r1bio *r1_bio;
 	struct bio *bio;
+<<<<<<< HEAD
+=======
+	int need_pages;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	int i, j;
 
 	r1_bio = r1bio_pool_alloc(gfp_flags, pi);
@@ -116,15 +120,26 @@ static void * r1buf_pool_alloc(gfp_t gfp_flags, void *data)
 	 * RESYNC_PAGES for each bio.
 	 */
 	if (test_bit(MD_RECOVERY_REQUESTED, &pi->mddev->recovery))
+<<<<<<< HEAD
 		j = pi->raid_disks;
 	else
 		j = 1;
 	while(j--) {
+=======
+		need_pages = pi->raid_disks;
+	else
+		need_pages = 1;
+	for (j = 0; j < need_pages; j++) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		bio = r1_bio->bios[j];
 		bio->bi_vcnt = RESYNC_PAGES;
 
 		if (bio_alloc_pages(bio, gfp_flags))
+<<<<<<< HEAD
 			goto out_free_bio;
+=======
+			goto out_free_pages;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 	/* If not user-requests, copy the page pointers to all bios */
 	if (!test_bit(MD_RECOVERY_REQUESTED, &pi->mddev->recovery)) {
@@ -138,6 +153,17 @@ static void * r1buf_pool_alloc(gfp_t gfp_flags, void *data)
 
 	return r1_bio;
 
+<<<<<<< HEAD
+=======
+out_free_pages:
+	while (--j >= 0) {
+		struct bio_vec *bv;
+
+		bio_for_each_segment_all(bv, r1_bio->bios[j], i)
+			__free_page(bv->bv_page);
+	}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 out_free_bio:
 	while (++j < pi->raid_disks)
 		bio_put(r1_bio->bios[j]);
@@ -1479,6 +1505,10 @@ static int raid1_spare_active(struct mddev *mddev)
 			}
 		}
 		if (rdev
+<<<<<<< HEAD
+=======
+		    && rdev->recovery_offset == MaxSector
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		    && !test_bit(Faulty, &rdev->flags)
 		    && !test_and_set_bit(In_sync, &rdev->flags)) {
 			count++;
@@ -1853,11 +1883,23 @@ static int process_checks(struct r1bio *r1_bio)
 	for (i = 0; i < conf->raid_disks * 2; i++) {
 		int j;
 		int size;
+<<<<<<< HEAD
 		struct bio *b = r1_bio->bios[i];
 		if (b->bi_end_io != end_sync_read)
 			continue;
 		/* fixup the bio for reuse */
 		bio_reset(b);
+=======
+		int uptodate;
+		struct bio *b = r1_bio->bios[i];
+		if (b->bi_end_io != end_sync_read)
+			continue;
+		/* fixup the bio for reuse, but preserve BIO_UPTODATE */
+		uptodate = test_bit(BIO_UPTODATE, &b->bi_flags);
+		bio_reset(b);
+		if (!uptodate)
+			clear_bit(BIO_UPTODATE, &b->bi_flags);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		b->bi_vcnt = vcnt;
 		b->bi_size = r1_bio->sectors << 9;
 		b->bi_sector = r1_bio->sector +
@@ -1890,11 +1932,22 @@ static int process_checks(struct r1bio *r1_bio)
 		int j;
 		struct bio *pbio = r1_bio->bios[primary];
 		struct bio *sbio = r1_bio->bios[i];
+<<<<<<< HEAD
 
 		if (sbio->bi_end_io != end_sync_read)
 			continue;
 
 		if (test_bit(BIO_UPTODATE, &sbio->bi_flags)) {
+=======
+		int uptodate = test_bit(BIO_UPTODATE, &sbio->bi_flags);
+
+		if (sbio->bi_end_io != end_sync_read)
+			continue;
+		/* Now we can 'fixup' the BIO_UPTODATE flag */
+		set_bit(BIO_UPTODATE, &sbio->bi_flags);
+
+		if (uptodate) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			for (j = vcnt; j-- ; ) {
 				struct page *p, *s;
 				p = pbio->bi_io_vec[j].bv_page;
@@ -1909,7 +1962,11 @@ static int process_checks(struct r1bio *r1_bio)
 		if (j >= 0)
 			atomic64_add(r1_bio->sectors, &mddev->resync_mismatches);
 		if (j < 0 || (test_bit(MD_RECOVERY_CHECK, &mddev->recovery)
+<<<<<<< HEAD
 			      && test_bit(BIO_UPTODATE, &sbio->bi_flags))) {
+=======
+			      && uptodate)) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			/* No need to write to this device. */
 			sbio->bi_end_io = NULL;
 			rdev_dec_pending(conf->mirrors[i].rdev, mddev);

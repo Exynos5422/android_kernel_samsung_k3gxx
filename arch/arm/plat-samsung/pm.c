@@ -171,7 +171,11 @@ void s3c_pm_do_save(struct sleep_save *ptr, int count)
 {
 	for (; count > 0; count--, ptr++) {
 		ptr->val = __raw_readl(ptr->reg);
+<<<<<<< HEAD
 		pr_debug("saved %p value %08lx\n", ptr->reg, ptr->val);
+=======
+		S3C_PMDBG("saved %p value %08lx\n", ptr->reg, ptr->val);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 }
 
@@ -232,8 +236,12 @@ static void __maybe_unused s3c_pm_show_resume_irqs(int start,
 	}
 }
 
+<<<<<<< HEAD
 void (*pm_logic_prep)(void);
 void (*pm_logic_finish)(void);
+=======
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 void (*pm_cpu_prep)(void);
 int (*pm_cpu_sleep)(unsigned long);
 
@@ -284,12 +292,26 @@ static int s3c_pm_enter(suspend_state_t state)
 	/* set the irq configuration for wake */
 
 	s3c_pm_configure_extint();
+<<<<<<< HEAD
+=======
+
+	S3C_PMDBG("sleep: irq wakeup masks: %08lx,%08lx\n",
+	    s3c_irqwake_intmask, s3c_irqwake_eintmask);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	s3c_pm_arch_prepare_irqs();
 
 	/* call cpu specific preparation */
 
 	pm_cpu_prep();
 
+<<<<<<< HEAD
+=======
+	/* flush cache back to ram */
+
+	flush_cache_all();
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	s3c_pm_check_store();
 
 	/* send the cpu to sleep... */
@@ -338,16 +360,22 @@ static int s3c_pm_prepare(void)
 	/* prepare check area if configured */
 
 	s3c_pm_check_prepare();
+<<<<<<< HEAD
 	if (pm_logic_prep)
 		pm_logic_prep();
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 
 static void s3c_pm_finish(void)
 {
 	s3c_pm_check_cleanup();
+<<<<<<< HEAD
 	if (pm_logic_finish)
 		pm_logic_finish();
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static const struct platform_suspend_ops s3c_pm_ops = {

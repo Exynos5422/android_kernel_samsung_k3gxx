@@ -23,6 +23,7 @@
 static struct lock_class_key irq_desc_lock_class;
 
 #if defined(CONFIG_SMP)
+<<<<<<< HEAD
 static int __init irq_affinity_setup(char *str)
 {
 	zalloc_cpumask_var(&irq_default_affinity, GFP_NOWAIT);
@@ -51,6 +52,12 @@ static void __init init_irq_default_affinity(void)
 #else
 		cpumask_setall(irq_default_affinity);
 #endif
+=======
+static void __init init_irq_default_affinity(void)
+{
+	alloc_cpumask_var(&irq_default_affinity, GFP_NOWAIT);
+	cpumask_setall(irq_default_affinity);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 #else
 static void __init init_irq_default_affinity(void)
@@ -298,6 +305,10 @@ struct irq_desc *irq_to_desc(unsigned int irq)
 {
 	return (irq < NR_IRQS) ? irq_desc + irq : NULL;
 }
+<<<<<<< HEAD
+=======
+EXPORT_SYMBOL(irq_to_desc);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 static void free_desc(unsigned int irq)
 {

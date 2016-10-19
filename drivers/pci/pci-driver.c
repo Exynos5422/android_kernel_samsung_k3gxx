@@ -19,6 +19,10 @@
 #include <linux/cpu.h>
 #include <linux/pm_runtime.h>
 #include <linux/suspend.h>
+<<<<<<< HEAD
+=======
+#include <linux/kexec.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include "pci.h"
 
 struct pci_dynid {
@@ -388,6 +392,7 @@ static void pci_device_shutdown(struct device *dev)
 	pci_msi_shutdown(pci_dev);
 	pci_msix_shutdown(pci_dev);
 
+<<<<<<< HEAD
 	/*
 	 * Turn off Bus Master bit on the device to tell it to not
 	 * continue to do DMA. Don't touch devices in D3cold or unknown states.
@@ -395,6 +400,19 @@ static void pci_device_shutdown(struct device *dev)
 
 	if (pci_dev->current_state <= PCI_D3hot)
 		pci_clear_master(pci_dev);
+=======
+#ifdef CONFIG_KEXEC
+	/*
+	 * If this is a kexec reboot, turn off Bus Master bit on the
+	 * device to tell it to not continue to do DMA. Don't touch
+	 * devices in D3cold or unknown states.
+	 * If it is not a kexec reboot, firmware will hit the PCI
+	 * devices with big hammer and stop their DMA any way.
+	 */
+	if (kexec_in_progress && (pci_dev->current_state <= PCI_D3hot))
+		pci_clear_master(pci_dev);
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 #ifdef CONFIG_PM
@@ -411,12 +429,18 @@ static int pci_restore_standard_config(struct pci_dev *pci_dev)
 
 	if (pci_dev->current_state != PCI_D0) {
 		int error = pci_set_power_state(pci_dev, PCI_D0);
+<<<<<<< HEAD
 		if (error) {
 			printk("%s: [device %04x:%04x], Failed to set D0\n",
                         __FUNCTION__, pci_dev->vendor, pci_dev->device); 
 			return error;
 	}
 	}
+=======
+		if (error)
+			return error;
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	pci_restore_state(pci_dev);
 	return 0;
@@ -1154,7 +1178,10 @@ int __pci_register_driver(struct pci_driver *drv, struct module *owner,
 void
 pci_unregister_driver(struct pci_driver *drv)
 {
+<<<<<<< HEAD
 	printk(KERN_EMERG "\n\n%s: Enter\n", __func__);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	driver_unregister(&drv->driver);
 	pci_free_dynids(drv);
 }

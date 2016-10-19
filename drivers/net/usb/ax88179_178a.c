@@ -36,8 +36,13 @@
 #define AX_RXHDR_L4_TYPE_TCP			16
 #define AX_RXHDR_L3CSUM_ERR			2
 #define AX_RXHDR_L4CSUM_ERR			1
+<<<<<<< HEAD
 #define AX_RXHDR_CRC_ERR			((u32)BIT(31))
 #define AX_RXHDR_DROP_ERR			((u32)BIT(30))
+=======
+#define AX_RXHDR_CRC_ERR			((u32)BIT(29))
+#define AX_RXHDR_DROP_ERR			((u32)BIT(31))
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define AX_ACCESS_MAC				0x01
 #define AX_ACCESS_PHY				0x02
 #define AX_ACCESS_EEPROM			0x04
@@ -1109,6 +1114,13 @@ static int ax88179_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
 	u16 hdr_off;
 	u32 *pkt_hdr;
 
+<<<<<<< HEAD
+=======
+	/* This check is no longer done by usbnet */
+	if (skb->len < dev->net->hard_header_len)
+		return 0;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	skb_trim(skb, skb->len - 4);
 	memcpy(&rx_hdr, skb_tail_pointer(skb), 4);
 	le32_to_cpus(&rx_hdr);

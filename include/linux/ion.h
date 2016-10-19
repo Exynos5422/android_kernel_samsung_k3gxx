@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*
  * include/linux/ion.h
  *
@@ -416,3 +417,11 @@ struct ion_preload_data {
 #define ION_IOC_CUSTOM		_IOWR(ION_IOC_MAGIC, 6, struct ion_custom_data)
 
 #endif /* _LINUX_ION_H */
+=======
+#ifndef __LINUX_ION_H__
+#define __LINUX_ION_H__
+
+#include "../../drivers/staging/android/ion/ion.h"
+
+#endif /* __LINUX_ION_H__ */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

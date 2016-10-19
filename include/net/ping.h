@@ -31,7 +31,12 @@
 
 /* Compatibility glue so we can support IPv6 when it's compiled as a module */
 struct pingv6_ops {
+<<<<<<< HEAD
 	int (*ipv6_recv_error)(struct sock *sk, struct msghdr *msg, int len);
+=======
+	int (*ipv6_recv_error)(struct sock *sk, struct msghdr *msg, int len,
+			       int *addr_len);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	int (*ip6_datagram_recv_ctl)(struct sock *sk, struct msghdr *msg,
 				     struct sk_buff *skb);
 	int (*icmpv6_err_convert)(u8 type, u8 code, int *err);
@@ -49,7 +54,10 @@ struct ping_table {
 struct ping_iter_state {
 	struct seq_net_private  p;
 	int			bucket;
+<<<<<<< HEAD
 	sa_family_t		family;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 extern struct proto ping_prot;
@@ -88,6 +96,7 @@ int  ping_queue_rcv_skb(struct sock *sk, struct sk_buff *skb);
 void ping_rcv(struct sk_buff *skb);
 
 #ifdef CONFIG_PROC_FS
+<<<<<<< HEAD
 struct ping_seq_afinfo {
 	char				*name;
 	sa_family_t			family;
@@ -103,6 +112,8 @@ void ping_seq_stop(struct seq_file *seq, void *v);
 int ping_proc_register(struct net *net, struct ping_seq_afinfo *afinfo);
 void ping_proc_unregister(struct net *net, struct ping_seq_afinfo *afinfo);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 extern int __init ping_proc_init(void);
 extern void ping_proc_exit(void);
 #endif

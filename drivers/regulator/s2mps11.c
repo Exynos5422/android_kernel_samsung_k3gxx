@@ -17,8 +17,11 @@
 #include <linux/gpio.h>
 #include <linux/slab.h>
 #include <linux/module.h>
+<<<<<<< HEAD
 #include <linux/regmap.h>
 #include <linux/regulator/of_regulator.h>
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <linux/platform_device.h>
 #include <linux/regulator/driver.h>
 #include <linux/regulator/machine.h>
@@ -27,6 +30,7 @@
 
 struct s2mps11_info {
 	struct regulator_dev *rdev[S2MPS11_REGULATOR_MAX];
+<<<<<<< HEAD
 	unsigned int opmode[S2MPS11_REGULATOR_MAX];
 };
 
@@ -68,6 +72,21 @@ static int s2m_enable(struct regulator_dev *rdev)
 				  rdev->desc->enable_mask,
 				  s2mps11->opmode[rdev_get_id(rdev)]);
 }
+=======
+
+	int ramp_delay2;
+	int ramp_delay34;
+	int ramp_delay5;
+	int ramp_delay16;
+	int ramp_delay7810;
+	int ramp_delay9;
+
+	bool buck6_ramp;
+	bool buck2_ramp;
+	bool buck3_ramp;
+	bool buck4_ramp;
+};
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 static int get_ramp_delay(int ramp_delay)
 {
@@ -84,6 +103,7 @@ static int get_ramp_delay(int ramp_delay)
 	return cnt;
 }
 
+<<<<<<< HEAD
 static int s2m_set_ramp_delay(struct regulator_dev *rdev, int ramp_delay)
 {
 	int ramp_reg, ramp_shift, reg_id = rdev_get_id(rdev);
@@ -164,22 +184,33 @@ static int s2m_set_voltage_time_sel(struct regulator_dev *rdev,
 }
 
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static struct regulator_ops s2mps11_ldo_ops = {
 	.list_voltage		= regulator_list_voltage_linear,
 	.map_voltage		= regulator_map_voltage_linear,
 	.is_enabled		= regulator_is_enabled_regmap,
+<<<<<<< HEAD
 	.enable			= s2m_enable,
 	.disable		= regulator_disable_regmap,
 	.get_voltage_sel	= regulator_get_voltage_sel_regmap,
 	.set_voltage_sel	= regulator_set_voltage_sel_regmap,
 	.set_voltage_time_sel	= s2m_set_voltage_time_sel,
 	.set_mode		= s2m_set_mode,
+=======
+	.enable			= regulator_enable_regmap,
+	.disable		= regulator_disable_regmap,
+	.get_voltage_sel	= regulator_get_voltage_sel_regmap,
+	.set_voltage_sel	= regulator_set_voltage_sel_regmap,
+	.set_voltage_time_sel	= regulator_set_voltage_time_sel,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 static struct regulator_ops s2mps11_buck_ops = {
 	.list_voltage		= regulator_list_voltage_linear,
 	.map_voltage		= regulator_map_voltage_linear,
 	.is_enabled		= regulator_is_enabled_regmap,
+<<<<<<< HEAD
 	.enable			= s2m_enable,
 	.disable		= regulator_disable_regmap,
 	.get_voltage_sel	= regulator_get_voltage_sel_regmap,
@@ -346,10 +377,174 @@ static int s2mps11_pmic_dt_parse_pdata(struct sec_pmic_dev *iodev,
 	return 0;
 }
 #endif /* CONFIG_OF */
+=======
+	.enable			= regulator_enable_regmap,
+	.disable		= regulator_disable_regmap,
+	.get_voltage_sel	= regulator_get_voltage_sel_regmap,
+	.set_voltage_sel	= regulator_set_voltage_sel_regmap,
+	.set_voltage_time_sel	= regulator_set_voltage_time_sel,
+};
+
+#define regulator_desc_ldo1(num)	{		\
+	.name		= "LDO"#num,			\
+	.id		= S2MPS11_LDO##num,		\
+	.ops		= &s2mps11_ldo_ops,		\
+	.type		= REGULATOR_VOLTAGE,		\
+	.owner		= THIS_MODULE,			\
+	.min_uV		= S2MPS11_LDO_MIN,		\
+	.uV_step	= S2MPS11_LDO_STEP1,		\
+	.n_voltages	= S2MPS11_LDO_N_VOLTAGES,	\
+	.vsel_reg	= S2MPS11_REG_L1CTRL + num - 1,	\
+	.vsel_mask	= S2MPS11_LDO_VSEL_MASK,	\
+	.enable_reg	= S2MPS11_REG_L1CTRL + num - 1,	\
+	.enable_mask	= S2MPS11_ENABLE_MASK		\
+}
+#define regulator_desc_ldo2(num)	{		\
+	.name		= "LDO"#num,			\
+	.id		= S2MPS11_LDO##num,		\
+	.ops		= &s2mps11_ldo_ops,		\
+	.type		= REGULATOR_VOLTAGE,		\
+	.owner		= THIS_MODULE,			\
+	.min_uV		= S2MPS11_LDO_MIN,		\
+	.uV_step	= S2MPS11_LDO_STEP2,		\
+	.n_voltages	= S2MPS11_LDO_N_VOLTAGES,	\
+	.vsel_reg	= S2MPS11_REG_L1CTRL + num - 1,	\
+	.vsel_mask	= S2MPS11_LDO_VSEL_MASK,	\
+	.enable_reg	= S2MPS11_REG_L1CTRL + num - 1,	\
+	.enable_mask	= S2MPS11_ENABLE_MASK		\
+}
+
+#define regulator_desc_buck1_4(num)	{			\
+	.name		= "BUCK"#num,				\
+	.id		= S2MPS11_BUCK##num,			\
+	.ops		= &s2mps11_buck_ops,			\
+	.type		= REGULATOR_VOLTAGE,			\
+	.owner		= THIS_MODULE,				\
+	.min_uV		= S2MPS11_BUCK_MIN1,			\
+	.uV_step	= S2MPS11_BUCK_STEP1,			\
+	.n_voltages	= S2MPS11_BUCK_N_VOLTAGES,		\
+	.vsel_reg	= S2MPS11_REG_B1CTRL2 + (num - 1) * 2,	\
+	.vsel_mask	= S2MPS11_BUCK_VSEL_MASK,		\
+	.enable_reg	= S2MPS11_REG_B1CTRL1 + (num - 1) * 2,	\
+	.enable_mask	= S2MPS11_ENABLE_MASK			\
+}
+
+#define regulator_desc_buck5	{				\
+	.name		= "BUCK5",				\
+	.id		= S2MPS11_BUCK5,			\
+	.ops		= &s2mps11_buck_ops,			\
+	.type		= REGULATOR_VOLTAGE,			\
+	.owner		= THIS_MODULE,				\
+	.min_uV		= S2MPS11_BUCK_MIN1,			\
+	.uV_step	= S2MPS11_BUCK_STEP1,			\
+	.n_voltages	= S2MPS11_BUCK_N_VOLTAGES,		\
+	.vsel_reg	= S2MPS11_REG_B5CTRL2,			\
+	.vsel_mask	= S2MPS11_BUCK_VSEL_MASK,		\
+	.enable_reg	= S2MPS11_REG_B5CTRL1,			\
+	.enable_mask	= S2MPS11_ENABLE_MASK			\
+}
+
+#define regulator_desc_buck6_8(num)	{			\
+	.name		= "BUCK"#num,				\
+	.id		= S2MPS11_BUCK##num,			\
+	.ops		= &s2mps11_buck_ops,			\
+	.type		= REGULATOR_VOLTAGE,			\
+	.owner		= THIS_MODULE,				\
+	.min_uV		= S2MPS11_BUCK_MIN1,			\
+	.uV_step	= S2MPS11_BUCK_STEP1,			\
+	.n_voltages	= S2MPS11_BUCK_N_VOLTAGES,		\
+	.vsel_reg	= S2MPS11_REG_B6CTRL2 + (num - 6) * 2,	\
+	.vsel_mask	= S2MPS11_BUCK_VSEL_MASK,		\
+	.enable_reg	= S2MPS11_REG_B6CTRL1 + (num - 6) * 2,	\
+	.enable_mask	= S2MPS11_ENABLE_MASK			\
+}
+
+#define regulator_desc_buck9	{				\
+	.name		= "BUCK9",				\
+	.id		= S2MPS11_BUCK9,			\
+	.ops		= &s2mps11_buck_ops,			\
+	.type		= REGULATOR_VOLTAGE,			\
+	.owner		= THIS_MODULE,				\
+	.min_uV		= S2MPS11_BUCK_MIN3,			\
+	.uV_step	= S2MPS11_BUCK_STEP3,			\
+	.n_voltages	= S2MPS11_BUCK_N_VOLTAGES,		\
+	.vsel_reg	= S2MPS11_REG_B9CTRL2,			\
+	.vsel_mask	= S2MPS11_BUCK_VSEL_MASK,		\
+	.enable_reg	= S2MPS11_REG_B9CTRL1,			\
+	.enable_mask	= S2MPS11_ENABLE_MASK			\
+}
+
+#define regulator_desc_buck10	{				\
+	.name		= "BUCK10",				\
+	.id		= S2MPS11_BUCK10,			\
+	.ops		= &s2mps11_buck_ops,			\
+	.type		= REGULATOR_VOLTAGE,			\
+	.owner		= THIS_MODULE,				\
+	.min_uV		= S2MPS11_BUCK_MIN2,			\
+	.uV_step	= S2MPS11_BUCK_STEP2,			\
+	.n_voltages	= S2MPS11_BUCK_N_VOLTAGES,		\
+	.vsel_reg	= S2MPS11_REG_B10CTRL2,			\
+	.vsel_mask	= S2MPS11_BUCK_VSEL_MASK,		\
+	.enable_reg	= S2MPS11_REG_B10CTRL1,			\
+	.enable_mask	= S2MPS11_ENABLE_MASK			\
+}
+
+static struct regulator_desc regulators[] = {
+	regulator_desc_ldo2(1),
+	regulator_desc_ldo1(2),
+	regulator_desc_ldo1(3),
+	regulator_desc_ldo1(4),
+	regulator_desc_ldo1(5),
+	regulator_desc_ldo2(6),
+	regulator_desc_ldo1(7),
+	regulator_desc_ldo1(8),
+	regulator_desc_ldo1(9),
+	regulator_desc_ldo1(10),
+	regulator_desc_ldo2(11),
+	regulator_desc_ldo1(12),
+	regulator_desc_ldo1(13),
+	regulator_desc_ldo1(14),
+	regulator_desc_ldo1(15),
+	regulator_desc_ldo1(16),
+	regulator_desc_ldo1(17),
+	regulator_desc_ldo1(18),
+	regulator_desc_ldo1(19),
+	regulator_desc_ldo1(20),
+	regulator_desc_ldo1(21),
+	regulator_desc_ldo2(22),
+	regulator_desc_ldo2(23),
+	regulator_desc_ldo1(24),
+	regulator_desc_ldo1(25),
+	regulator_desc_ldo1(26),
+	regulator_desc_ldo2(27),
+	regulator_desc_ldo1(28),
+	regulator_desc_ldo1(29),
+	regulator_desc_ldo1(30),
+	regulator_desc_ldo1(31),
+	regulator_desc_ldo1(32),
+	regulator_desc_ldo1(33),
+	regulator_desc_ldo1(34),
+	regulator_desc_ldo1(35),
+	regulator_desc_ldo1(36),
+	regulator_desc_ldo1(37),
+	regulator_desc_ldo1(38),
+	regulator_desc_buck1_4(1),
+	regulator_desc_buck1_4(2),
+	regulator_desc_buck1_4(3),
+	regulator_desc_buck1_4(4),
+	regulator_desc_buck5,
+	regulator_desc_buck6_8(6),
+	regulator_desc_buck6_8(7),
+	regulator_desc_buck6_8(8),
+	regulator_desc_buck9,
+	regulator_desc_buck10,
+};
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 static int s2mps11_pmic_probe(struct platform_device *pdev)
 {
 	struct sec_pmic_dev *iodev = dev_get_drvdata(pdev->dev.parent);
+<<<<<<< HEAD
 	struct sec_platform_data *pdata = iodev->pdata;
 	struct regulator_config config = { };
 	struct s2mps11_info *s2mps11;
@@ -364,6 +559,13 @@ static int s2mps11_pmic_probe(struct platform_device *pdev)
 		if (ret)
 			return ret;
 	}
+=======
+	struct sec_platform_data *pdata = dev_get_platdata(iodev->dev);
+	struct regulator_config config = { };
+	struct s2mps11_info *s2mps11;
+	int i, ret;
+	unsigned char ramp_enable, ramp_reg = 0;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (!pdata) {
 		dev_err(pdev->dev.parent, "Platform data not supplied\n");
@@ -377,17 +579,57 @@ static int s2mps11_pmic_probe(struct platform_device *pdev)
 
 	platform_set_drvdata(pdev, s2mps11);
 
+<<<<<<< HEAD
 	for (i = 0; i < pdata->num_regulators; i++) {
 		int id = pdata->regulators[i].id;
+=======
+	s2mps11->ramp_delay2 = pdata->buck2_ramp_delay;
+	s2mps11->ramp_delay34 = pdata->buck34_ramp_delay;
+	s2mps11->ramp_delay5 = pdata->buck5_ramp_delay;
+	s2mps11->ramp_delay16 = pdata->buck16_ramp_delay;
+	s2mps11->ramp_delay7810 = pdata->buck7810_ramp_delay;
+	s2mps11->ramp_delay9 = pdata->buck9_ramp_delay;
+
+	s2mps11->buck6_ramp = pdata->buck6_ramp_enable;
+	s2mps11->buck2_ramp = pdata->buck2_ramp_enable;
+	s2mps11->buck3_ramp = pdata->buck3_ramp_enable;
+	s2mps11->buck4_ramp = pdata->buck4_ramp_enable;
+
+	ramp_enable = (s2mps11->buck2_ramp << 3) | (s2mps11->buck3_ramp << 2) |
+		(s2mps11->buck4_ramp << 1) | s2mps11->buck6_ramp ;
+
+	if (ramp_enable) {
+		if (s2mps11->buck2_ramp)
+			ramp_reg |= get_ramp_delay(s2mps11->ramp_delay2) << 6;
+		if (s2mps11->buck3_ramp || s2mps11->buck4_ramp)
+			ramp_reg |= get_ramp_delay(s2mps11->ramp_delay34) << 4;
+		sec_reg_write(iodev, S2MPS11_REG_RAMP, ramp_reg | ramp_enable);
+	}
+
+	ramp_reg &= 0x00;
+	ramp_reg |= get_ramp_delay(s2mps11->ramp_delay5) << 6;
+	ramp_reg |= get_ramp_delay(s2mps11->ramp_delay16) << 4;
+	ramp_reg |= get_ramp_delay(s2mps11->ramp_delay7810) << 2;
+	ramp_reg |= get_ramp_delay(s2mps11->ramp_delay9);
+	sec_reg_write(iodev, S2MPS11_REG_RAMP_BUCK, ramp_reg);
+
+	for (i = 0; i < S2MPS11_REGULATOR_MAX; i++) {
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		config.dev = &pdev->dev;
 		config.regmap = iodev->regmap;
 		config.init_data = pdata->regulators[i].initdata;
 		config.driver_data = s2mps11;
+<<<<<<< HEAD
 		config.of_node = pdata->regulators[i].reg_node;
 		s2mps11->opmode[id] = regulators[S2MPS11_DESC_TYPE0][id].enable_mask;
 
 		s2mps11->rdev[i] = regulator_register(
 				&regulators[S2MPS11_DESC_TYPE0][id], &config);
+=======
+
+		s2mps11->rdev[i] = regulator_register(&regulators[i], &config);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (IS_ERR(s2mps11->rdev[i])) {
 			ret = PTR_ERR(s2mps11->rdev[i]);
 			dev_err(&pdev->dev, "regulator init failed for %d\n",

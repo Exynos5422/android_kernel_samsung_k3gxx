@@ -536,16 +536,22 @@ static int svc_export_parse(struct cache_detail *cd, char *mesg, int mlen)
 		if (err)
 			goto out3;
 		exp.ex_anon_uid= make_kuid(&init_user_ns, an_int);
+<<<<<<< HEAD
 		if (!uid_valid(exp.ex_anon_uid))
 			goto out3;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 		/* anon gid */
 		err = get_int(&mesg, &an_int);
 		if (err)
 			goto out3;
 		exp.ex_anon_gid= make_kgid(&init_user_ns, an_int);
+<<<<<<< HEAD
 		if (!gid_valid(exp.ex_anon_gid))
 			goto out3;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 		/* fsid */
 		err = get_int(&mesg, &an_int);
@@ -583,6 +589,20 @@ static int svc_export_parse(struct cache_detail *cd, char *mesg, int mlen)
 				   exp.ex_uuid);
 		if (err)
 			goto out4;
+<<<<<<< HEAD
+=======
+		/*
+		 * For some reason exportfs has been passing down an
+		 * invalid (-1) uid & gid on the "dummy" export which it
+		 * uses to test export support.  To make sure exportfs
+		 * sees errors from check_export we therefore need to
+		 * delay these checks till after check_export:
+		 */
+		if (!uid_valid(exp.ex_anon_uid))
+			goto out4;
+		if (!gid_valid(exp.ex_anon_gid))
+			goto out4;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	expp = svc_export_lookup(&exp);

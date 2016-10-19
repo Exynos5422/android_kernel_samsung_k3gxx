@@ -20,6 +20,12 @@
 
 #include "tda10071_priv.h"
 
+<<<<<<< HEAD
+=======
+/* Max transfer size done by I2C transfer functions */
+#define MAX_XFER_SIZE  64
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static struct dvb_frontend_ops tda10071_ops;
 
 /* write multiple registers */
@@ -27,16 +33,34 @@ static int tda10071_wr_regs(struct tda10071_priv *priv, u8 reg, u8 *val,
 	int len)
 {
 	int ret;
+<<<<<<< HEAD
 	u8 buf[len+1];
+=======
+	u8 buf[MAX_XFER_SIZE];
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct i2c_msg msg[1] = {
 		{
 			.addr = priv->cfg.demod_i2c_addr,
 			.flags = 0,
+<<<<<<< HEAD
 			.len = sizeof(buf),
+=======
+			.len = 1 + len,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			.buf = buf,
 		}
 	};
 
+<<<<<<< HEAD
+=======
+	if (1 + len > sizeof(buf)) {
+		dev_warn(&priv->i2c->dev,
+			 "%s: i2c wr reg=%04x: len=%d is too big!\n",
+			 KBUILD_MODNAME, reg, len);
+		return -EINVAL;
+	}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	buf[0] = reg;
 	memcpy(&buf[1], val, len);
 
@@ -56,7 +80,11 @@ static int tda10071_rd_regs(struct tda10071_priv *priv, u8 reg, u8 *val,
 	int len)
 {
 	int ret;
+<<<<<<< HEAD
 	u8 buf[len];
+=======
+	u8 buf[MAX_XFER_SIZE];
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct i2c_msg msg[2] = {
 		{
 			.addr = priv->cfg.demod_i2c_addr,
@@ -66,11 +94,25 @@ static int tda10071_rd_regs(struct tda10071_priv *priv, u8 reg, u8 *val,
 		}, {
 			.addr = priv->cfg.demod_i2c_addr,
 			.flags = I2C_M_RD,
+<<<<<<< HEAD
 			.len = sizeof(buf),
+=======
+			.len = len,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			.buf = buf,
 		}
 	};
 
+<<<<<<< HEAD
+=======
+	if (len > sizeof(buf)) {
+		dev_warn(&priv->i2c->dev,
+			 "%s: i2c wr reg=%04x: len=%d is too big!\n",
+			 KBUILD_MODNAME, reg, len);
+		return -EINVAL;
+	}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ret = i2c_transfer(priv->i2c, msg, 2);
 	if (ret == 2) {
 		memcpy(val, buf, len);

@@ -373,6 +373,7 @@ int udpv6_recvmsg(struct kiocb *iocb, struct sock *sk,
 	int is_udp4;
 	bool slow;
 
+<<<<<<< HEAD
 	if (addr_len)
 		*addr_len = sizeof(struct sockaddr_in6);
 
@@ -381,6 +382,13 @@ int udpv6_recvmsg(struct kiocb *iocb, struct sock *sk,
 
 	if (np->rxpmtu && np->rxopt.bits.rxpmtu)
 		return ipv6_recv_rxpmtu(sk, msg, len);
+=======
+	if (flags & MSG_ERRQUEUE)
+		return ipv6_recv_error(sk, msg, len, addr_len);
+
+	if (np->rxpmtu && np->rxopt.bits.rxpmtu)
+		return ipv6_recv_rxpmtu(sk, msg, len, addr_len);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 try_again:
 	skb = __skb_recv_datagram(sk, flags | (noblock ? MSG_DONTWAIT : 0),
@@ -461,7 +469,11 @@ try_again:
 				ipv6_iface_scope_id(&sin6->sin6_addr,
 						    IP6CB(skb)->iif);
 		}
+<<<<<<< HEAD
 
+=======
+		*addr_len = sizeof(*sin6);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 	if (is_udp4) {
 		if (inet->cmsg_flags)
@@ -497,8 +509,15 @@ csum_copy_err:
 	}
 	unlock_sock_fast(sk, slow);
 
+<<<<<<< HEAD
 	/* starting over for a new packet, but check if we need to yield */
 	cond_resched();
+=======
+	if (noblock)
+		return -EAGAIN;
+
+	/* starting over for a new packet */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	msg->msg_flags &= ~MSG_TRUNC;
 	goto try_again;
 }
@@ -1018,6 +1037,10 @@ int udpv6_sendmsg(struct kiocb *iocb, struct sock *sk,
 	struct sockaddr_in6 *sin6 = (struct sockaddr_in6 *) msg->msg_name;
 	struct in6_addr *daddr, *final_p, final;
 	struct ipv6_txoptions *opt = NULL;
+<<<<<<< HEAD
+=======
+	struct ipv6_txoptions *opt_to_free = NULL;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct ip6_flowlabel *flowlabel = NULL;
 	struct flowi6 fl6;
 	struct dst_entry *dst;
@@ -1172,8 +1195,15 @@ do_udp_sendmsg:
 			opt = NULL;
 		connected = 0;
 	}
+<<<<<<< HEAD
 	if (opt == NULL)
 		opt = np->opt;
+=======
+	if (!opt) {
+		opt = txopt_get(np);
+		opt_to_free = opt;
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (flowlabel)
 		opt = fl6_merge_options(&opt_space, flowlabel, opt);
 	opt = ipv6_fixup_options(&opt_space, opt);
@@ -1274,6 +1304,10 @@ do_append_data:
 out:
 	dst_release(dst);
 	fl6_sock_release(flowlabel);
+<<<<<<< HEAD
+=======
+	txopt_put(opt_to_free);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (!err)
 		return len;
 	/*

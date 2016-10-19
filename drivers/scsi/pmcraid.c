@@ -4314,6 +4314,10 @@ static struct scsi_host_template pmcraid_host_template = {
 	.this_id = -1,
 	.sg_tablesize = PMCRAID_MAX_IOADLS,
 	.max_sectors = PMCRAID_IOA_MAX_SECTORS,
+<<<<<<< HEAD
+=======
+	.no_write_same = 1,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	.cmd_per_lun = PMCRAID_MAX_CMD_PER_LUN,
 	.use_clustering = ENABLE_CLUSTERING,
 	.shost_attrs = pmcraid_host_attrs,

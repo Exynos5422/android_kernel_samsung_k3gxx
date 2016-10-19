@@ -71,7 +71,11 @@
 		ipu: ipu@18000000 {
 			#crtc-cells = <1>;
 			compatible = "fsl,imx53-ipu";
+<<<<<<< HEAD
 			reg = <0x18000000 0x080000000>;
+=======
+			reg = <0x18000000 0x08000000>;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			interrupts = <11 10>;
 			clocks = <&clks 59>, <&clks 110>, <&clks 61>;
 			clock-names = "bus", "di0", "di1";

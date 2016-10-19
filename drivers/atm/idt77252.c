@@ -3511,7 +3511,11 @@ static int init_card(struct atm_dev *dev)
 	tmp = dev_get_by_name(&init_net, tname);	/* jhs: was "tmp = dev_get(tname);" */
 	if (tmp) {
 		memcpy(card->atmdev->esi, tmp->dev_addr, 6);
+<<<<<<< HEAD
 
+=======
+		dev_put(tmp);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		printk("%s: ESI %pM\n", card->name, card->atmdev->esi);
 	}
 	/*

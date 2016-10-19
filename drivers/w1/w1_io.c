@@ -382,6 +382,7 @@ void w1_search_devices(struct w1_master *dev, u8 search_type, w1_slave_found_cal
 		w1_search(dev, search_type, cb);
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_W1_CF
 /**
  * Resets the bus and then selects the slave by sending either a skip rom
@@ -403,6 +404,8 @@ int w1_reset_overdrive_select_slave(struct w1_slave *sl)
 EXPORT_SYMBOL_GPL(w1_reset_overdrive_select_slave);
 #endif	/* CONFIG_W1_CF */
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /**
  * Resets the bus and then selects the slave by sending either a skip rom
  * or a rom match.

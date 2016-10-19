@@ -711,11 +711,20 @@ static int ethtool_reset(struct net_device *dev, char __user *useraddr)
 
 static int ethtool_get_wol(struct net_device *dev, char __user *useraddr)
 {
+<<<<<<< HEAD
 	struct ethtool_wolinfo wol = { .cmd = ETHTOOL_GWOL };
+=======
+	struct ethtool_wolinfo wol;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (!dev->ethtool_ops->get_wol)
 		return -EOPNOTSUPP;
 
+<<<<<<< HEAD
+=======
+	memset(&wol, 0, sizeof(struct ethtool_wolinfo));
+	wol.cmd = ETHTOOL_GWOL;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	dev->ethtool_ops->get_wol(dev, &wol);
 
 	if (copy_to_user(useraddr, &wol, sizeof(wol)))

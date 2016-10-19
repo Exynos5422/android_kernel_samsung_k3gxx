@@ -26,10 +26,17 @@
 #include <linux/io.h>
 #include <linux/of_address.h>
 #include <linux/of_irq.h>
+<<<<<<< HEAD
 
 #include <asm/mach/time.h>
 #include <asm/smp_twd.h>
 #include <asm/sched_clock.h>
+=======
+#include <linux/sched_clock.h>
+
+#include <asm/mach/time.h>
+#include <asm/smp_twd.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define RTC_SECONDS            0x08
 #define RTC_SHADOW_SECONDS     0x0c

@@ -113,6 +113,10 @@ struct packet_sock {
 	unsigned int		tp_loss:1;
 	unsigned int		tp_tx_has_off:1;
 	unsigned int		tp_tstamp;
+<<<<<<< HEAD
+=======
+	struct net_device __rcu	*cached_dev;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct packet_type	prot_hook ____cacheline_aligned_in_smp;
 };
 

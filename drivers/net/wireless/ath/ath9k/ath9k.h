@@ -79,10 +79,13 @@ struct ath_config {
 		       sizeof(struct ath_buf_state));		\
 	} while (0)
 
+<<<<<<< HEAD
 #define ATH_RXBUF_RESET(_bf) do {		\
 		(_bf)->bf_stale = false;	\
 	} while (0)
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /**
  * enum buffer_type - Buffer type flags
  *
@@ -316,6 +319,10 @@ struct ath_rx {
 	struct ath_descdma rxdma;
 	struct ath_rx_edma rx_edma[ATH9K_RX_QUEUE_MAX];
 
+<<<<<<< HEAD
+=======
+	struct ath_buf *buf_hold;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct sk_buff *frag;
 
 	u32 ampdu_ref;

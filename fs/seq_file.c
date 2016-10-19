@@ -8,6 +8,7 @@
 #include <linux/fs.h>
 #include <linux/export.h>
 #include <linux/seq_file.h>
+<<<<<<< HEAD
 #include <linux/slab.h>
 #include <linux/cred.h>
 
@@ -17,6 +18,15 @@
 #include <linux/mm.h>
 #include <linux/vmalloc.h>
 #endif
+=======
+#include <linux/vmalloc.h>
+#include <linux/slab.h>
+#include <linux/cred.h>
+#include <linux/mm.h>
+
+#include <asm/uaccess.h>
+#include <asm/page.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 
 /*
@@ -34,6 +44,21 @@ static void seq_set_overflow(struct seq_file *m)
 	m->count = m->size;
 }
 
+<<<<<<< HEAD
+=======
+static void *seq_buf_alloc(unsigned long size)
+{
+	void *buf;
+
+	if (size > PAGE_SIZE)
+		buf = vmalloc(size);
+	else
+		buf = kmalloc(size, GFP_KERNEL | __GFP_NOWARN);
+
+	return buf;
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /**
  *	seq_open -	initialize sequential file
  *	@file: file we initialize
@@ -100,7 +125,11 @@ static int traverse(struct seq_file *m, loff_t offset)
 		return 0;
 	}
 	if (!m->buf) {
+<<<<<<< HEAD
 		m->buf = kmalloc(m->size = PAGE_SIZE, GFP_KERNEL);
+=======
+		m->buf = seq_buf_alloc(m->size = PAGE_SIZE);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (!m->buf)
 			return -ENOMEM;
 	}
@@ -139,6 +168,7 @@ static int traverse(struct seq_file *m, loff_t offset)
 
 Eoverflow:
 	m->op->stop(m, p);
+<<<<<<< HEAD
 #ifdef CONFIG_LOW_ORDER_SEQ_MALLOC
 	is_vmalloc_addr(m->buf) ? vfree(m->buf) : kfree(m->buf);
 	m->size <<= 1;
@@ -150,6 +180,11 @@ Eoverflow:
 	kfree(m->buf);
 	m->buf = kmalloc(m->size <<= 1, GFP_KERNEL);
 #endif
+=======
+	kvfree(m->buf);
+	m->count = 0;
+	m->buf = seq_buf_alloc(m->size <<= 1);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return !m->buf ? -ENOMEM : -EAGAIN;
 }
 
@@ -204,7 +239,11 @@ ssize_t seq_read(struct file *file, char __user *buf, size_t size, loff_t *ppos)
 
 	/* grab buffer if we didn't have one */
 	if (!m->buf) {
+<<<<<<< HEAD
 		m->buf = kmalloc(m->size = PAGE_SIZE, GFP_KERNEL);
+=======
+		m->buf = seq_buf_alloc(m->size = PAGE_SIZE);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (!m->buf)
 			goto Enomem;
 	}
@@ -244,6 +283,7 @@ ssize_t seq_read(struct file *file, char __user *buf, size_t size, loff_t *ppos)
 		if (m->count < m->size)
 			goto Fill;
 		m->op->stop(m, p);
+<<<<<<< HEAD
 #ifdef CONFIG_LOW_ORDER_SEQ_MALLOC
 		is_vmalloc_addr(m->buf) ? vfree(m->buf) : kfree(m->buf);
 		m->size <<= 1;
@@ -258,6 +298,13 @@ ssize_t seq_read(struct file *file, char __user *buf, size_t size, loff_t *ppos)
 		if (!m->buf)
 			goto Enomem;
 		m->count = 0;
+=======
+		kvfree(m->buf);
+		m->count = 0;
+		m->buf = seq_buf_alloc(m->size <<= 1);
+		if (!m->buf)
+			goto Enomem;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		m->version = 0;
 		pos = m->index;
 		p = m->op->start(m, &pos);
@@ -350,6 +397,11 @@ loff_t seq_lseek(struct file *file, loff_t offset, int whence)
 				m->read_pos = offset;
 				retval = file->f_pos = offset;
 			}
+<<<<<<< HEAD
+=======
+		} else {
+			file->f_pos = offset;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		}
 	}
 	file->f_version = m->version;
@@ -369,11 +421,15 @@ EXPORT_SYMBOL(seq_lseek);
 int seq_release(struct inode *inode, struct file *file)
 {
 	struct seq_file *m = file->private_data;
+<<<<<<< HEAD
 #ifdef CONFIG_LOW_ORDER_SEQ_MALLOC
 	is_vmalloc_addr(m->buf) ? vfree(m->buf) : kfree(m->buf);
 #else
 	kfree(m->buf);
 #endif
+=======
+	kvfree(m->buf);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	kfree(m);
 	return 0;
 }
@@ -628,13 +684,21 @@ EXPORT_SYMBOL(single_open);
 int single_open_size(struct file *file, int (*show)(struct seq_file *, void *),
 		void *data, size_t size)
 {
+<<<<<<< HEAD
 	char *buf = kmalloc(size, GFP_KERNEL);
+=======
+	char *buf = seq_buf_alloc(size);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	int ret;
 	if (!buf)
 		return -ENOMEM;
 	ret = single_open(file, show, data);
 	if (ret) {
+<<<<<<< HEAD
 		kfree(buf);
+=======
+		kvfree(buf);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return ret;
 	}
 	((struct seq_file *)file->private_data)->buf = buf;
@@ -790,6 +854,24 @@ int seq_write(struct seq_file *seq, const void *data, size_t len)
 }
 EXPORT_SYMBOL(seq_write);
 
+<<<<<<< HEAD
+=======
+/**
+ * seq_pad - write padding spaces to buffer
+ * @m: seq_file identifying the buffer to which data should be written
+ * @c: the byte to append after padding if non-zero
+ */
+void seq_pad(struct seq_file *m, char c)
+{
+	int size = m->pad_until - m->count;
+	if (size > 0)
+		seq_printf(m, "%*s", size, "");
+	if (c)
+		seq_putc(m, c);
+}
+EXPORT_SYMBOL(seq_pad);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 struct list_head *seq_list_start(struct list_head *head, loff_t pos)
 {
 	struct list_head *lh;

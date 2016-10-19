@@ -590,6 +590,10 @@ void iwl_deactivate_station(struct iwl_priv *priv, const u8 sta_id,
 			sizeof(priv->tid_data[sta_id][tid]));
 
 	priv->stations[sta_id].used &= ~IWL_STA_DRIVER_ACTIVE;
+<<<<<<< HEAD
+=======
+	priv->stations[sta_id].used &= ~IWL_STA_UCODE_INPROGRESS;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	priv->num_stations--;
 

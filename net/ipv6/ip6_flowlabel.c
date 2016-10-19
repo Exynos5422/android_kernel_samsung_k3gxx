@@ -453,8 +453,15 @@ static int mem_check(struct sock *sk)
 	if (room > FL_MAX_SIZE - FL_MAX_PER_SOCK)
 		return 0;
 
+<<<<<<< HEAD
 	for_each_sk_fl_rcu(np, sfl)
 		count++;
+=======
+	rcu_read_lock_bh();
+	for_each_sk_fl_rcu(np, sfl)
+		count++;
+	rcu_read_unlock_bh();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (room <= 0 ||
 	    ((count >= FL_MAX_PER_SOCK ||

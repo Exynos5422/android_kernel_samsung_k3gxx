@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Select this to activate the generic irq options below
 config HAVE_GENERIC_HARDIRQS
 	bool
@@ -10,6 +11,9 @@ menu "IRQ subsystem"
 config GENERIC_HARDIRQS
        def_bool y
 
+=======
+menu "IRQ subsystem"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 # Options selectable by the architecture code
 
 # Make sparse irq Kconfig switch below available
@@ -84,4 +88,7 @@ config SPARSE_IRQ
 	  If you don't know what to do here, say N.
 
 endmenu
+<<<<<<< HEAD
 endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

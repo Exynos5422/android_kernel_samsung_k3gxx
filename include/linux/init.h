@@ -93,6 +93,7 @@
 
 #define __exit          __section(.exit.text) __exitused __cold notrace
 
+<<<<<<< HEAD
 /* Used for HOTPLUG */
 #define __devinit        __section(.devinit.text) __cold notrace
 #define __devinitdata    __section(.devinit.data)
@@ -101,6 +102,8 @@
 #define __devexitdata    __section(.devexit.data)
 #define __devexitconst   __section(.devexit.rodata)
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /* Used for HOTPLUG_CPU */
 #define __cpuinit        __section(.cpuinit.text) __cold notrace
 #define __cpuinitdata    __section(.cpuinit.data)
@@ -126,10 +129,13 @@
 #define __INITRODATA	.section	".init.rodata","a",%progbits
 #define __FINITDATA	.previous
 
+<<<<<<< HEAD
 #define __DEVINIT        .section	".devinit.text", "ax"
 #define __DEVINITDATA    .section	".devinit.data", "aw"
 #define __DEVINITRODATA  .section	".devinit.rodata", "a"
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define __CPUINIT        .section	".cpuinit.text", "ax"
 #define __CPUINITDATA    .section	".cpuinit.data", "aw"
 #define __CPUINITRODATA  .section	".cpuinit.rodata", "a"
@@ -236,12 +242,15 @@ extern bool initcall_debug;
 	static initcall_t __initcall_##fn \
 	__used __section(.security_initcall.init) = fn
 
+<<<<<<< HEAD
 #ifdef CONFIG_DEFERRED_INITCALLS
 #define deferred_initcall(fn) \
 	static initcall_t __initcall_##fn \
 	__used __section(.deferred_initcall.init) = fn
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 struct obs_kernel_param {
 	const char *str;
 	int (*setup_func)(char *);
@@ -284,9 +293,12 @@ void __init parse_early_options(char *cmdline);
  * be one per module.
  */
 #define module_init(x)	__initcall(x);
+<<<<<<< HEAD
 #ifdef CONFIG_DEFERRED_INITCALLS
 #define deferred_module_init(x)	deferred_initcall(x);
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /**
  * module_exit() - driver exit entry point
@@ -319,9 +331,12 @@ void __init parse_early_options(char *cmdline);
 	static inline initcall_t __inittest(void)		\
 	{ return initfn; }					\
 	int init_module(void) __attribute__((alias(#initfn)));
+<<<<<<< HEAD
 #ifdef CONFIG_DEFERRED_INITCALLS
 #define deferred_module_init(x)	module_init(x)
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /* This is only required if you want to be unloadable. */
 #define module_exit(exitfn)					\
@@ -354,6 +369,7 @@ void __init parse_early_options(char *cmdline);
 #define __INITRODATA_OR_MODULE __INITRODATA
 #endif /*CONFIG_MODULES*/
 
+<<<<<<< HEAD
 /* Functions marked as __devexit may be discarded at kernel link time, depending
    on config options.  Newer versions of binutils detect references from
    retained sections to discarded sections and flag an error.  Pointers to
@@ -366,6 +382,8 @@ void __init parse_early_options(char *cmdline);
 #define __devexit_p(x) NULL
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifdef MODULE
 #define __exit_p(x) x
 #else

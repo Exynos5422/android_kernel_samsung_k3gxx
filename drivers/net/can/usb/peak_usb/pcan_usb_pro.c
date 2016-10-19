@@ -927,6 +927,12 @@ static int pcan_usb_pro_init(struct peak_usb_device *dev)
 	/* set LED in default state (end of init phase) */
 	pcan_usb_pro_set_led(dev, 0, 1);
 
+<<<<<<< HEAD
+=======
+	kfree(bi);
+	kfree(fi);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 
  err_out:

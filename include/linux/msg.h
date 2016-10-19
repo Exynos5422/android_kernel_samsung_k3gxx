@@ -6,9 +6,15 @@
 
 /* one msg_msg structure for each message */
 struct msg_msg {
+<<<<<<< HEAD
 	struct list_head m_list; 
 	long  m_type;          
 	int m_ts;           /* message text size */
+=======
+	struct list_head m_list;
+	long m_type;
+	size_t m_ts;		/* message text size */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct msg_msgseg* next;
 	void *security;
 	/* the actual message follows immediately */

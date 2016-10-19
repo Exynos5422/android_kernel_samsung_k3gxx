@@ -14,6 +14,10 @@ config SND_USB_AUDIO
 	select SND_HWDEP
 	select SND_RAWMIDI
 	select SND_PCM
+<<<<<<< HEAD
+=======
+	select BITREVERSE
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	help
 	  Say Y here to include support for USB audio and USB MIDI
 	  devices.

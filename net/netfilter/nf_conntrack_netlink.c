@@ -1414,6 +1414,14 @@ ctnetlink_change_timeout(struct nf_conn *ct, const struct nlattr * const cda[])
 	ct->timeout.expires = jiffies + timeout * HZ;
 	add_timer(&ct->timeout);
 
+<<<<<<< HEAD
+=======
+/* Refresh the NAT type entry. */
+#if defined(CONFIG_IP_NF_TARGET_NATTYPE_MODULE)
+	(void)nattype_refresh_timer(ct->nattype_entry, ct->timeout.expires);
+#endif
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 

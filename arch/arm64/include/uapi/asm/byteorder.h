@@ -16,6 +16,14 @@
 #ifndef __ASM_BYTEORDER_H
 #define __ASM_BYTEORDER_H
 
+<<<<<<< HEAD
 #include <linux/byteorder/little_endian.h>
+=======
+#ifdef __AARCH64EB__
+#include <linux/byteorder/big_endian.h>
+#else
+#include <linux/byteorder/little_endian.h>
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #endif	/* __ASM_BYTEORDER_H */

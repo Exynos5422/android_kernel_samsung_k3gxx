@@ -275,11 +275,19 @@ static int __init eisa_request_resources(struct eisa_root_device *root,
 		}
 		
 		if (slot) {
+<<<<<<< HEAD
+=======
+			edev->res[i].name  = NULL;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			edev->res[i].start = SLOT_ADDRESS(root, slot)
 					     + (i * 0x400);
 			edev->res[i].end   = edev->res[i].start + 0xff;
 			edev->res[i].flags = IORESOURCE_IO;
 		} else {
+<<<<<<< HEAD
+=======
+			edev->res[i].name  = NULL;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			edev->res[i].start = SLOT_ADDRESS(root, slot)
 					     + EISA_VENDOR_ID_OFFSET;
 			edev->res[i].end   = edev->res[i].start + 3;
@@ -326,6 +334,7 @@ static int __init eisa_probe(struct eisa_root_device *root)
 		return -ENOMEM;
 	}
 		
+<<<<<<< HEAD
 	if (eisa_init_device(root, edev, 0)) {
 		kfree(edev);
 		if (!root->force_probe)
@@ -339,6 +348,22 @@ static int __init eisa_probe(struct eisa_root_device *root)
 		kfree(edev);
 		if (!root->force_probe)
 			return -EBUSY;
+=======
+	if (eisa_request_resources(root, edev, 0)) {
+		dev_warn(root->dev,
+		         "EISA: Cannot allocate resource for mainboard\n");
+		kfree(edev);
+		if (!root->force_probe)
+			return -EBUSY;
+		goto force_probe;
+	}
+
+	if (eisa_init_device(root, edev, 0)) {
+		eisa_release_resources(edev);
+		kfree(edev);
+		if (!root->force_probe)
+			return -ENODEV;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		goto force_probe;
 	}
 
@@ -361,11 +386,14 @@ static int __init eisa_probe(struct eisa_root_device *root)
 			continue;
 		}
 
+<<<<<<< HEAD
 		if (eisa_init_device(root, edev, i)) {
 			kfree(edev);
 			continue;
 		}
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (eisa_request_resources(root, edev, i)) {
 			dev_warn(root->dev,
 			         "Cannot allocate resource for EISA slot %d\n",
@@ -374,6 +402,15 @@ static int __init eisa_probe(struct eisa_root_device *root)
 			continue;
 		}
 
+<<<<<<< HEAD
+=======
+		if (eisa_init_device(root, edev, i)) {
+			eisa_release_resources(edev);
+			kfree(edev);
+			continue;
+		}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (edev->state == (EISA_CONFIG_ENABLED | EISA_CONFIG_FORCED))
 			enabled_str = " (forced enabled)";
 		else if (edev->state == EISA_CONFIG_FORCED)

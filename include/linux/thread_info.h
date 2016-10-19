@@ -107,6 +107,11 @@ static inline int test_ti_thread_flag(struct thread_info *ti, int flag)
 #define set_need_resched()	set_thread_flag(TIF_NEED_RESCHED)
 #define clear_need_resched()	clear_thread_flag(TIF_NEED_RESCHED)
 
+<<<<<<< HEAD
+=======
+#define tif_need_resched() test_thread_flag(TIF_NEED_RESCHED)
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #if defined TIF_RESTORE_SIGMASK && !defined HAVE_SET_RESTORE_SIGMASK
 /*
  * An arch can define its own version of set_restore_sigmask() to get the

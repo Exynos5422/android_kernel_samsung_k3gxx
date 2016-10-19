@@ -82,6 +82,11 @@ kallsyms()
 		kallsymopt="${kallsymopt} --all-symbols"
 	fi
 
+<<<<<<< HEAD
+=======
+	kallsymopt="${kallsymopt} --page-offset=$CONFIG_PAGE_OFFSET"
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	local aflags="${KBUILD_AFLAGS} ${KBUILD_AFLAGS_KERNEL}               \
 		      ${NOSTDINC_FLAGS} ${LINUXINCLUDE} ${KBUILD_CPPFLAGS}"
 
@@ -228,10 +233,13 @@ if [ -n "${CONFIG_KALLSYMS}" ]; then
 	fi
 fi
 
+<<<<<<< HEAD
 if [ -n "${CONFIG_CRYPTO_FIPS}" ]; then
     echo '  FIPS : Generating hmac of crypto and updating vmlinux... '
     ${CONFIG_SHELL} "${srctree}/scripts/fips_crypto_hmac.sh" "${objtree}/vmlinux" "${objtree}/System.map"
 fi
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 # We made a new kernel - delete old version file
 rm -f .old_version

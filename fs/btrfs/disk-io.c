@@ -3161,6 +3161,11 @@ static int barrier_all_devices(struct btrfs_fs_info *info)
 	/* send down all the barriers */
 	head = &info->fs_devices->devices;
 	list_for_each_entry_rcu(dev, head, dev_list) {
+<<<<<<< HEAD
+=======
+		if (dev->missing)
+			continue;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (!dev->bdev) {
 			errors_send++;
 			continue;
@@ -3175,6 +3180,11 @@ static int barrier_all_devices(struct btrfs_fs_info *info)
 
 	/* wait for all the barriers */
 	list_for_each_entry_rcu(dev, head, dev_list) {
+<<<<<<< HEAD
+=======
+		if (dev->missing)
+			continue;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (!dev->bdev) {
 			errors_wait++;
 			continue;
@@ -3514,6 +3524,14 @@ int close_ctree(struct btrfs_root *root)
 
 	btrfs_free_block_groups(fs_info);
 
+<<<<<<< HEAD
+=======
+	/*
+	 * we must make sure there is not any read request to
+	 * submit after we stopping all workers.
+	 */
+	invalidate_inode_pages2(fs_info->btree_inode->i_mapping);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	btrfs_stop_all_workers(fs_info);
 
 	del_fs_roots(fs_info);

@@ -35,7 +35,10 @@ config SND_SOC_ALL_CODECS
 	select SND_SOC_CS42L73 if I2C
 	select SND_SOC_CS4270 if I2C
 	select SND_SOC_CS4271 if SND_SOC_I2C_AND_SPI
+<<<<<<< HEAD
 	select SND_SOC_CS47L24 if MFD_CS47L24
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	select SND_SOC_CX20442 if TTY
 	select SND_SOC_DA7210 if I2C
 	select SND_SOC_DA7213 if I2C
@@ -49,12 +52,17 @@ config SND_SOC_ALL_CODECS
 	select SND_SOC_MAX98088 if I2C
 	select SND_SOC_MAX98090 if I2C
 	select SND_SOC_MAX98095 if I2C
+<<<<<<< HEAD
 	select SND_SOC_MAX98504 if I2C
 	select SND_SOC_MAX98504A if I2C
 	select SND_SOC_MAX9850 if I2C
 	select SND_SOC_MAX9768 if I2C
 	select SND_SOC_MAX9877 if I2C
 	select SND_SOC_NXP_TFA9897 if I2C
+=======
+	select SND_SOC_MAX9850 if I2C
+	select SND_SOC_MAX9877 if I2C
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	select SND_SOC_MC13783 if MFD_MC13XXX
 	select SND_SOC_ML26124 if I2C
 	select SND_SOC_OMAP_HDMI_CODEC if OMAP4_DSS_HDMI
@@ -83,11 +91,17 @@ config SND_SOC_ALL_CODECS
 	select SND_SOC_WM0010 if SPI_MASTER
 	select SND_SOC_WM1250_EV1 if I2C
 	select SND_SOC_WM2000 if I2C
+<<<<<<< HEAD
 	select SND_SOC_WM2200 if I2C
 	select SND_SOC_WM5100 if I2C
 	select SND_SOC_WM5102 if MFD_WM5102
 	select SND_SOC_FLORIDA if MFD_FLORIDA
 	select SND_SOC_CLEARWATER if MFD_CLEARWATER
+=======
+	select SND_SOC_WM5100 if I2C
+	select SND_SOC_WM5102 if MFD_WM5102
+	select SND_SOC_WM5110 if MFD_WM5110
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	select SND_SOC_WM8350 if MFD_WM8350
 	select SND_SOC_WM8400 if MFD_WM8400
 	select SND_SOC_WM8510 if SND_SOC_I2C_AND_SPI
@@ -106,7 +120,11 @@ config SND_SOC_ALL_CODECS
 	select SND_SOC_WM8782
 	select SND_SOC_WM8804 if SND_SOC_I2C_AND_SPI
 	select SND_SOC_WM8900 if I2C
+<<<<<<< HEAD
 	select SND_SOC_WM8903 if I2C && GENERIC_HARDIRQS
+=======
+	select SND_SOC_WM8903 if I2C
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	select SND_SOC_WM8904 if I2C
 	select SND_SOC_WM8940 if I2C
 	select SND_SOC_WM8955 if I2C
@@ -123,17 +141,25 @@ config SND_SOC_ALL_CODECS
 	select SND_SOC_WM8991 if I2C
 	select SND_SOC_WM8993 if I2C
 	select SND_SOC_WM8994 if MFD_WM8994
+<<<<<<< HEAD
 	select SND_SOC_RT5511 if MFD_RT5511
 	select SND_SOC_WM8995 if SND_SOC_I2C_AND_SPI
 	select SND_SOC_WM8996 if I2C
 	select SND_SOC_WM8997 if MFD_WM8997
 	select SND_SOC_VEGAS if MFD_VEGAS
+=======
+	select SND_SOC_WM8995 if SND_SOC_I2C_AND_SPI
+	select SND_SOC_WM8996 if I2C
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	select SND_SOC_WM9081 if I2C
 	select SND_SOC_WM9090 if I2C
 	select SND_SOC_WM9705 if SND_SOC_AC97_BUS
 	select SND_SOC_WM9712 if SND_SOC_AC97_BUS
 	select SND_SOC_WM9713 if SND_SOC_AC97_BUS
+<<<<<<< HEAD
 	select SND_SOC_ES515
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
         help
           Normally ASoC codec drivers are only built if a machine driver which
           uses them is also built since they are only usable with a machine
@@ -151,6 +177,7 @@ config SND_SOC_88PM860X
 config SND_SOC_ARIZONA
 	tristate
 	default y if SND_SOC_WM5102=y
+<<<<<<< HEAD
 	default y if SND_SOC_FLORIDA=y
 	default y if SND_SOC_CLEARWATER=y
 	default y if SND_SOC_WM8997=y
@@ -162,6 +189,11 @@ config SND_SOC_ARIZONA
 	default m if SND_SOC_WM8997=m
 	default m if SND_SOC_VEGAS=m
 	default m if SND_SOC_CS47L24=m
+=======
+	default y if SND_SOC_WM5110=y
+	default m if SND_SOC_WM5102=m
+	default m if SND_SOC_WM5110=m
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 config SND_SOC_WM_HUBS
 	tristate
@@ -171,6 +203,7 @@ config SND_SOC_WM_HUBS
 config SND_SOC_WM_ADSP
 	tristate
 	default y if SND_SOC_WM5102=y
+<<<<<<< HEAD
 	default y if SND_SOC_FLORIDA=y
 	default y if SND_SOC_CLEARWATER=y
 	default y if SND_SOC_WM2200=y
@@ -185,6 +218,11 @@ config SND_SOC_RT_HUBS
 	tristate
 	default y if SND_SOC_RT5511=y || SND_SOC_RT5511=y
 	default m if SND_SOC_RT5511=m || SND_SOC_RT5511=m
+=======
+	default y if SND_SOC_WM2200=y
+	default m if SND_SOC_WM5102=m
+	default m if SND_SOC_WM2200=m
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 config SND_SOC_AB8500_CODEC
 	tristate
@@ -268,9 +306,12 @@ config SND_SOC_CS4270_VD33_ERRATA
 config SND_SOC_CS4271
 	tristate
 
+<<<<<<< HEAD
 config SND_SOC_CS47L24
 	tristate
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 config SND_SOC_CX20442
 	tristate
 	depends on TTY
@@ -315,6 +356,7 @@ config SND_SOC_MAX98090
 config SND_SOC_MAX98095
        tristate
 
+<<<<<<< HEAD
 config SND_SOC_MAX98504
 	tristate "Support MAX98504"
 	depends on I2C
@@ -334,6 +376,8 @@ config SND_SOC_MAXIM_DSM_A
 	help
 	MAX98504A Logging driver
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 config SND_SOC_MAX9850
 	tristate
 
@@ -346,9 +390,12 @@ config SND_SOC_PCM3008
 config SND_SOC_RT5631
 	tristate
 
+<<<<<<< HEAD
 config SND_SOC_RT5659
      tristate
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #Freescale sgtl5000 codec
 config SND_SOC_SGTL5000
 	tristate
@@ -410,6 +457,38 @@ config SND_SOC_UDA134X
 config SND_SOC_UDA1380
         tristate
 
+<<<<<<< HEAD
+=======
+config SND_SOC_WCD9310
+	tristate
+
+config SND_SOC_WCD9320
+        tristate
+
+config SND_SOC_WCD9306
+        tristate
+
+config SND_SOC_WCD9330
+        tristate
+
+config SND_SOC_WCD9XXX
+	tristate
+	default y if SND_SOC_WCD9320=y || SND_SOC_WCD9306=y || SND_SOC_WCD9330=y
+
+config SND_SOC_MSM8X10_WCD
+	tristate
+
+config SND_SOC_MSM8X16_WCD
+	tristate
+
+config SND_SOC_WCD_CPE
+	tristate
+	default y if SND_SOC_WCD9330=y
+
+config SND_SOC_MSM8909_WCD
+	tristate
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 config SND_SOC_WL1273
 	tristate
 
@@ -431,10 +510,14 @@ config SND_SOC_WM5100
 config SND_SOC_WM5102
 	tristate
 
+<<<<<<< HEAD
 config SND_SOC_FLORIDA
 	tristate
 
 config SND_SOC_CLEARWATER
+=======
+config SND_SOC_WM5110
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	tristate
 
 config SND_SOC_WM8350
@@ -542,21 +625,27 @@ config SND_SOC_WM8993
 config SND_SOC_WM8994
 	tristate
 
+<<<<<<< HEAD
 config SND_SOC_RT5511
 	tristate
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 config SND_SOC_WM8995
 	tristate
 
 config SND_SOC_WM8996
 	tristate
 
+<<<<<<< HEAD
 config SND_SOC_WM8997
 	tristate
 
 config SND_SOC_VEGAS
 	tristate
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 config SND_SOC_WM9081
 	tristate
 
@@ -572,19 +661,25 @@ config SND_SOC_WM9712
 config SND_SOC_WM9713
 	tristate
 
+<<<<<<< HEAD
 config SND_SOC_ES515
 	tristate
 
 config SND_SOC_DUMMY_CODEC
 	tristate
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 # Amp
 config SND_SOC_LM4857
 	tristate
 
+<<<<<<< HEAD
 config SND_SOC_MAX9768
 	tristate
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 config SND_SOC_MAX9877
 	tristate
 
@@ -597,7 +692,19 @@ config SND_SOC_ML26124
 config SND_SOC_TPA6130A2
 	tristate
 
+<<<<<<< HEAD
 config SND_SOC_NXP_TFA9897
 	tristate
 
 source "sound/soc/codecs/audience/Kconfig"	
+=======
+config SND_SOC_MSM_STUB
+	tristate
+
+config SND_SOC_MSM_HDMI_CODEC_RX
+	bool "HDMI Audio Playback"
+	depends on FB_MSM_MDSS_HDMI_PANEL && (SND_SOC_MSM8974 || SND_SOC_APQ8084 || SND_SOC_MSM8994)
+	help
+	HDMI audio drivers should be built only if the platform
+        supports hdmi panel.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

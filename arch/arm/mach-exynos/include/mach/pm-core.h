@@ -22,9 +22,15 @@
 #include <mach/regs-pmu.h>
 
 #ifdef CONFIG_PINCTRL_EXYNOS
+<<<<<<< HEAD
 extern u64 exynos_get_eint_wake_mask(void);
 #else
 static inline u64 exynos_get_eint_wake_mask(void) { return 0xffffffffffffffff; }
+=======
+extern u32 exynos_get_eint_wake_mask(void);
+#else
+static inline u32 exynos_get_eint_wake_mask(void) { return 0xffffffff; }
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif
 
 static inline void s3c_pm_debug_init_uart(void)
@@ -34,6 +40,7 @@ static inline void s3c_pm_debug_init_uart(void)
 
 static inline void s3c_pm_arch_prepare_irqs(void)
 {
+<<<<<<< HEAD
 	u32 intmask;
 	u64 eintmask;
 
@@ -60,6 +67,15 @@ static inline void s3c_pm_arch_prepare_irqs(void)
 		__raw_writel((u32)eintmask, EXYNOS_EINT_WAKEUP_MASK);
 		__raw_writel(intmask, EXYNOS_WAKEUP_MASK);
 	}
+=======
+	u32 eintmask = s3c_irqwake_eintmask;
+
+	if (of_have_populated_dt())
+		eintmask = exynos_get_eint_wake_mask();
+
+	__raw_writel(eintmask, S5P_EINT_WAKEUP_MASK);
+	__raw_writel(s3c_irqwake_intmask & ~(1 << 31), S5P_WAKEUP_MASK);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static inline void s3c_pm_arch_stop_clocks(void)

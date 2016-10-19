@@ -429,6 +429,13 @@ bytes respectively. Such letter suffixes can also be entirely omitted.
 			Format: <io>,<irq>,<mode>
 			See header of drivers/net/hamradio/baycom_ser_hdx.c.
 
+<<<<<<< HEAD
+=======
+	boot_cpus=	[SMP]
+			Rather than attempting to online all possible CPUs at
+			boot time, only online the specified set of CPUs.
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	boot_delay=	Milliseconds to delay each printk during boot.
 			Values larger than 10 seconds (10000) are changed to
 			no delay (0).
@@ -1240,6 +1247,7 @@ bytes respectively. Such letter suffixes can also be entirely omitted.
 			See comment before ip2_setup() in
 			drivers/char/ip2/ip2base.c.
 
+<<<<<<< HEAD
 	irqaffinity=	[SMP] Set the default irq affinity mask
 			Format:
 			<cpu number>,...,<cpu number>
@@ -1249,6 +1257,8 @@ bytes respectively. Such letter suffixes can also be entirely omitted.
 			or a mixture
 			<cpu number>,...,<cpu number>-<cpu number>
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	irqfixup	[HW]
 			When an interrupt is not handled search all handlers
 			for it. Intended to get systems with badly broken
@@ -1465,6 +1475,13 @@ bytes respectively. Such letter suffixes can also be entirely omitted.
 
 			* dump_id: dump IDENTIFY data.
 
+<<<<<<< HEAD
+=======
+			* atapi_dmadir: Enable ATAPI DMADIR bridge support
+
+			* disable: Disable this device.
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			If there are multiple matching configurations changing
 			the same attribute, the last one is used.
 
@@ -2874,6 +2891,13 @@ bytes respectively. Such letter suffixes can also be entirely omitted.
 				1: Fast pin select (default)
 				2: ATC IRMode
 
+<<<<<<< HEAD
+=======
+	snddev_icodec.msm_codec_i2s_slave_mode= [ARM-MSM]
+			1, codec is I2S master
+			0, MSM is I2S master (default)
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	softlockup_panic=
 			[KNL] Should the soft-lockup detector generate panics.
 			Format: <integer>

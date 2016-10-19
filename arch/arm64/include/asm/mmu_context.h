@@ -151,12 +151,15 @@ switch_mm(struct mm_struct *prev, struct mm_struct *next,
 {
 	unsigned int cpu = smp_processor_id();
 
+<<<<<<< HEAD
 #ifdef CONFIG_SMP
 	/* check for possible thread migration */
 	if (!cpumask_empty(mm_cpumask(next)) &&
 	    !cpumask_test_cpu(cpu, mm_cpumask(next)))
 		__flush_icache_all();
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (!cpumask_test_and_set_cpu(cpu, mm_cpumask(next)) || prev != next)
 		check_and_switch_context(next, tsk);
 }

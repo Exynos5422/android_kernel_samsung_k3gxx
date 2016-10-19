@@ -628,6 +628,7 @@ out:
 static inline int __get_file_write_access(struct inode *inode,
 					  struct vfsmount *mnt)
 {
+<<<<<<< HEAD
 	int error;
 	error = get_write_access(inode);
 	if (error)
@@ -645,6 +646,14 @@ static inline int __get_file_write_access(struct inode *inode,
 		if (error)
 			put_write_access(inode);
 	}
+=======
+	int error = get_write_access(inode);
+	if (error)
+		return error;
+	error = __mnt_want_write(mnt);
+	if (error)
+		put_write_access(inode);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return error;
 }
 
@@ -677,12 +686,20 @@ static int do_dentry_open(struct file *f,
 
 	path_get(&f->f_path);
 	inode = f->f_inode = f->f_path.dentry->d_inode;
+<<<<<<< HEAD
 	if (f->f_mode & FMODE_WRITE) {
 		error = __get_file_write_access(inode, f->f_path.mnt);
 		if (error)
 			goto cleanup_file;
 		if (!special_file(inode->i_mode))
 			file_take_write(f);
+=======
+	if (f->f_mode & FMODE_WRITE && !special_file(inode->i_mode)) {
+		error = __get_file_write_access(inode, f->f_path.mnt);
+		if (error)
+			goto cleanup_file;
+		file_take_write(f);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	f->f_mapping = inode->i_mapping;
@@ -723,7 +740,10 @@ cleanup_all:
 	fops_put(f->f_op);
 	file_sb_list_del(f);
 	if (f->f_mode & FMODE_WRITE) {
+<<<<<<< HEAD
 		put_write_access(inode);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (!special_file(inode->i_mode)) {
 			/*
 			 * We don't consider this a real
@@ -731,6 +751,10 @@ cleanup_all:
 			 * because it all happenend right
 			 * here, so just reset the state.
 			 */
+<<<<<<< HEAD
+=======
+			put_write_access(inode);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			file_reset_write(f);
 			__mnt_drop_write(f->f_path.mnt);
 		}
@@ -1003,6 +1027,10 @@ int filp_close(struct file *filp, fl_owner_t id)
 		dnotify_flush(filp, id);
 		locks_remove_posix(filp, id);
 	}
+<<<<<<< HEAD
+=======
+	security_file_close(filp);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	fput(filp);
 	return retval;
 }

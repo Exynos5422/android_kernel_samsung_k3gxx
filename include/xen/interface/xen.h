@@ -275,9 +275,15 @@ DEFINE_GUEST_HANDLE_STRUCT(mmu_update);
  * NB. The fields are natural register size for this architecture.
  */
 struct multicall_entry {
+<<<<<<< HEAD
     unsigned long op;
     long result;
     unsigned long args[6];
+=======
+    xen_ulong_t op;
+    xen_long_t result;
+    xen_ulong_t args[6];
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 DEFINE_GUEST_HANDLE_STRUCT(multicall_entry);
 

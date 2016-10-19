@@ -20,7 +20,10 @@
 #include <linux/uio.h>
 #include <linux/audit.h>
 #include <linux/pid_namespace.h>
+<<<<<<< HEAD
 #include <linux/user_namespace.h>
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <linux/syscalls.h>
 #include <linux/uaccess.h>
 #include <linux/regset.h>
@@ -214,6 +217,7 @@ static int ptrace_check_attach(struct task_struct *child, bool ignore_state)
 	return ret;
 }
 
+<<<<<<< HEAD
 static bool ptrace_has_cap(const struct cred *tcred, unsigned int mode)
 {
 	struct user_namespace *tns = tcred->user_ns;
@@ -240,6 +244,14 @@ static bool ptrace_has_cap(const struct cred *tcred, unsigned int mode)
 		return has_ns_capability_noaudit(current, tns, CAP_SYS_PTRACE);
 	else
 		return has_ns_capability(current, tns, CAP_SYS_PTRACE);
+=======
+static int ptrace_has_cap(struct user_namespace *ns, unsigned int mode)
+{
+	if (mode & PTRACE_MODE_NOAUDIT)
+		return has_ns_capability_noaudit(current, ns, CAP_SYS_PTRACE);
+	else
+		return has_ns_capability(current, ns, CAP_SYS_PTRACE);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 /* Returns 0 on success, -errno on denial. */
@@ -268,7 +280,11 @@ static int __ptrace_may_access(struct task_struct *task, unsigned int mode)
 	    gid_eq(cred->gid, tcred->sgid) &&
 	    gid_eq(cred->gid, tcred->gid))
 		goto ok;
+<<<<<<< HEAD
 	if (ptrace_has_cap(tcred, mode))
+=======
+	if (ptrace_has_cap(tcred->user_ns, mode))
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		goto ok;
 	rcu_read_unlock();
 	return -EPERM;
@@ -278,7 +294,12 @@ ok:
 	if (task->mm)
 		dumpable = get_dumpable(task->mm);
 	rcu_read_lock();
+<<<<<<< HEAD
 	if (!dumpable && !ptrace_has_cap(__task_cred(task), mode)) {
+=======
+	if (dumpable != SUID_DUMP_USER &&
+	    !ptrace_has_cap(__task_cred(task)->user_ns, mode)) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		rcu_read_unlock();
 		return -EPERM;
 	}

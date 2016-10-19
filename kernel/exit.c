@@ -455,6 +455,12 @@ static void exit_mm(struct task_struct * tsk)
 {
 	struct mm_struct *mm = tsk->mm;
 	struct core_state *core_state;
+<<<<<<< HEAD
+=======
+#ifndef CONFIG_UML
+	int mm_released;
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	mm_release(tsk, mm);
 	if (!mm)
@@ -500,7 +506,16 @@ static void exit_mm(struct task_struct * tsk)
 	enter_lazy_tlb(mm, current);
 	task_unlock(tsk);
 	mm_update_next_owner(mm);
+<<<<<<< HEAD
 	mmput(mm);
+=======
+
+#ifndef CONFIG_UML
+	mm_released = mmput(mm);
+	if (mm_released)
+		set_tsk_thread_flag(tsk, TIF_MM_RELEASED);
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 /*
@@ -571,9 +586,12 @@ static void reparent_leader(struct task_struct *father, struct task_struct *p,
 				struct list_head *dead)
 {
 	list_move_tail(&p->sibling, &p->real_parent->children);
+<<<<<<< HEAD
 
 	if (p->exit_state == EXIT_DEAD)
 		return;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/*
 	 * If this is a threaded reparent there is no need to
 	 * notify anyone anything has happened.
@@ -581,9 +599,25 @@ static void reparent_leader(struct task_struct *father, struct task_struct *p,
 	if (same_thread_group(p->real_parent, father))
 		return;
 
+<<<<<<< HEAD
 	/* We don't want people slaying init.  */
 	p->exit_signal = SIGCHLD;
 
+=======
+	/*
+	 * We don't want people slaying init.
+	 *
+	 * Note: we do this even if it is EXIT_DEAD, wait_task_zombie()
+	 * can change ->exit_state to EXIT_ZOMBIE. If this is the final
+	 * state, do_notify_parent() was already called and ->exit_signal
+	 * doesn't matter.
+	 */
+	p->exit_signal = SIGCHLD;
+
+	if (p->exit_state == EXIT_DEAD)
+		return;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* If it has exited notify the new parent about this child's death. */
 	if (!p->ptrace &&
 	    p->exit_state == EXIT_ZOMBIE && thread_group_empty(p)) {
@@ -686,6 +720,10 @@ static void check_stack_usage(void)
 	static DEFINE_SPINLOCK(low_water_lock);
 	static int lowest_to_date = THREAD_SIZE;
 	unsigned long free;
+<<<<<<< HEAD
+=======
+	int islower = false;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	free = stack_not_used(current);
 
@@ -694,12 +732,25 @@ static void check_stack_usage(void)
 
 	spin_lock(&low_water_lock);
 	if (free < lowest_to_date) {
+<<<<<<< HEAD
 		printk(KERN_WARNING "%s (%d) used greatest stack depth: "
 				"%lu bytes left\n",
 				current->comm, task_pid_nr(current), free);
 		lowest_to_date = free;
 	}
 	spin_unlock(&low_water_lock);
+=======
+		lowest_to_date = free;
+		islower = true;
+	}
+	spin_unlock(&low_water_lock);
+
+	if (islower) {
+		printk(KERN_WARNING "%s (%d) used greatest stack depth: "
+				"%lu bytes left\n",
+				current->comm, task_pid_nr(current), free);
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 #else
 static inline void check_stack_usage(void) {}
@@ -754,6 +805,12 @@ void do_exit(long code)
 	}
 
 	exit_signals(tsk);  /* sets PF_EXITING */
+<<<<<<< HEAD
+=======
+
+	sched_exit(tsk);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/*
 	 * tsk->flags are checked in the futex code to protect against
 	 * an exiting task cleaning up the robust pi futexes.
@@ -795,6 +852,11 @@ void do_exit(long code)
 	exit_shm(tsk);
 	exit_files(tsk);
 	exit_fs(tsk);
+<<<<<<< HEAD
+=======
+	if (group_dead)
+		disassociate_ctty(1);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	exit_task_namespaces(tsk);
 	exit_task_work(tsk);
 	check_stack_usage();
@@ -810,6 +872,7 @@ void do_exit(long code)
 
 	cgroup_exit(tsk, 1);
 
+<<<<<<< HEAD
 	if (group_dead)
 		disassociate_ctty(1);
 
@@ -817,6 +880,11 @@ void do_exit(long code)
 
 	proc_exit_connector(tsk);
 
+=======
+	module_put(task_thread_info(tsk)->exec_domain->module);
+
+	proc_exit_connector(tsk);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/*
 	 * FIXME: do that only when needed, using sched_exit tracepoint
 	 */

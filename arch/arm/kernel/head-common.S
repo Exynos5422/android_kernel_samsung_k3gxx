@@ -80,6 +80,7 @@ ENDPROC(__vet_atags)
 __mmap_switched:
 	adr	r3, __mmap_switched_data
 
+<<<<<<< HEAD
 #ifdef CONFIG_RKP_DBLMAP_PROT
 	ldr	r6, =rkp_double_bitmap		@Use r6, r7 to Clear bitmap
 	add	r7, r6, #0x18000
@@ -89,6 +90,8 @@ __mmap_switched:
 	bcc	1b
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ldmia	r3!, {r4, r5, r6, r7}
 	cmp	r4, r5				@ Copy data segment if needed
 1:	cmpne	r5, r6

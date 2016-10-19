@@ -1449,7 +1449,11 @@ static int wm8904_set_fmt(struct snd_soc_dai *dai, unsigned int fmt)
 
 	switch (fmt & SND_SOC_DAIFMT_FORMAT_MASK) {
 	case SND_SOC_DAIFMT_DSP_B:
+<<<<<<< HEAD
 		aif1 |= WM8904_AIF_LRCLK_INV;
+=======
+		aif1 |= 0x3 | WM8904_AIF_LRCLK_INV;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	case SND_SOC_DAIFMT_DSP_A:
 		aif1 |= 0x3;
 		break;

@@ -68,10 +68,13 @@
  * until either the TLB entry is evicted under pressure, or a context
  * switch which changes the user space mapping occurs.
  */
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP
 #include <asm/tlbflush.h>
 #include <asm/cp15.h>
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define PTRS_PER_PTE		512
 #define PTRS_PER_PMD		1
 #define PTRS_PER_PGD		2048
@@ -144,6 +147,10 @@
 #define L_PTE_MT_DEV_NONSHARED	(_AT(pteval_t, 0x0c) << 2)	/* 1100 */
 #define L_PTE_MT_DEV_WC		(_AT(pteval_t, 0x09) << 2)	/* 1001 */
 #define L_PTE_MT_DEV_CACHED	(_AT(pteval_t, 0x0b) << 2)	/* 1011 */
+<<<<<<< HEAD
+=======
+#define L_PTE_MT_VECTORS	(_AT(pteval_t, 0x0f) << 2)	/* 1111 */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define L_PTE_MT_MASK		(_AT(pteval_t, 0x0f) << 2)
 
 #ifndef __ASSEMBLY__
@@ -164,6 +171,7 @@ static inline pmd_t *pmd_offset(pud_t *pud, unsigned long addr)
 	return (pmd_t *)pud;
 }
 
+<<<<<<< HEAD
 #define pmd_bad(pmd)		(pmd_val(pmd) & 2)
 
 #ifdef  CONFIG_TIMA_RKP_L1_TABLES
@@ -220,12 +228,18 @@ static inline void copy_pmd(pmd_t *pmdpd, pmd_t *pmdps)
 	}
 }
 #else
+=======
+#define pmd_large(pmd)		(pmd_val(pmd) & 2)
+#define pmd_bad(pmd)		(pmd_val(pmd) & 2)
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define copy_pmd(pmdpd,pmdps)		\
 	do {				\
 		pmdpd[0] = pmdps[0];	\
 		pmdpd[1] = pmdps[1];	\
 		flush_pmd_entry(pmdpd);	\
 	} while (0)
+<<<<<<< HEAD
 #endif
 
 #ifdef  CONFIG_TIMA_RKP_L1_TABLES
@@ -278,12 +292,16 @@ static inline void pmd_clear(pmd_t *pmdp)
 	}
 }
 #else
+=======
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define pmd_clear(pmdp)			\
 	do {				\
 		pmdp[0] = __pmd(0);	\
 		pmdp[1] = __pmd(0);	\
 		clean_pmd_entry(pmdp);	\
 	} while (0)
+<<<<<<< HEAD
 #endif
 
 #ifdef CONFIG_TIMA_RKP_L2_GROUP 
@@ -357,6 +375,13 @@ static inline void set_pte_ext(pte_t *ptep,pte_t pte,unsigned int ext)
 #define TIMA_LAZY_MMU_START  0
 #define TIMA_LAZY_MMU_STOP   1
 #endif
+=======
+
+/* we don't need complex calculations here as the pmd is folded into the pgd */
+#define pmd_addr_end(addr,end) (end)
+
+#define set_pte_ext(ptep,pte,ext) cpu_set_pte_ext(ptep,pte,ext)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #endif /* __ASSEMBLY__ */
 

@@ -16,6 +16,11 @@
 #ifndef __ASM_PGTABLE_3LEVEL_TYPES_H
 #define __ASM_PGTABLE_3LEVEL_TYPES_H
 
+<<<<<<< HEAD
+=======
+#include <asm/types.h>
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 typedef u64 pteval_t;
 typedef u64 pmdval_t;
 typedef u64 pgdval_t;

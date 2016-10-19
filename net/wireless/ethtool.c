@@ -4,8 +4,12 @@
 #include "ethtool.h"
 #include "rdev-ops.h"
 
+<<<<<<< HEAD
 static void cfg80211_get_drvinfo(struct net_device *dev,
 					struct ethtool_drvinfo *info)
+=======
+void cfg80211_get_drvinfo(struct net_device *dev, struct ethtool_drvinfo *info)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	struct wireless_dev *wdev = dev->ieee80211_ptr;
 
@@ -23,6 +27,10 @@ static void cfg80211_get_drvinfo(struct net_device *dev,
 	strlcpy(info->bus_info, dev_name(wiphy_dev(wdev->wiphy)),
 		sizeof(info->bus_info));
 }
+<<<<<<< HEAD
+=======
+EXPORT_SYMBOL(cfg80211_get_drvinfo);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 static int cfg80211_get_regs_len(struct net_device *dev)
 {

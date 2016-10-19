@@ -173,6 +173,7 @@
 		V4L2_DV_FL_CAN_REDUCE_FPS) \
 }
 
+<<<<<<< HEAD
 #define V4L2_DV_BT_CEA_3840X2160P24 { \
 	.type = V4L2_DV_BT_656_1120, \
 	V4L2_INIT_BT_TIMINGS(3840, 2160, 0, \
@@ -208,6 +209,8 @@
 		V4L2_DV_BT_STD_DMT | V4L2_DV_BT_STD_CEA861, \
 		V4L2_DV_FL_CAN_REDUCE_FPS) \
 }
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /* VESA Discrete Monitor Timings as per version 1.0, revision 12 */
 
@@ -866,6 +869,7 @@
 		V4L2_DV_BT_STD_DMT, 0) \
 }
 
+<<<<<<< HEAD
 /* S3D resolutions */
 #define V4L2_DV_BT_CEA_1280X720P60_SB_HALF { \
 	.type = V4L2_DV_BT_SB_HALF, \
@@ -990,4 +994,6 @@
 		V4L2_DV_FL_CAN_REDUCE_FPS) \
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif

@@ -19,6 +19,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+<<<<<<< HEAD
+=======
+#include <linux/compat.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <linux/kernel.h>
 #include <linux/sched.h>
 #include <linux/mm.h>
@@ -41,6 +45,12 @@
 #include <asm/traps.h>
 #include <asm/system_misc.h>
 
+<<<<<<< HEAD
+=======
+#define CREATE_TRACE_POINTS
+#include <trace/events/syscalls.h>
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * TODO: does not yet catch signals sent when the child dies.
  * in exit.c or in signal.c.
@@ -53,6 +63,7 @@ void ptrace_disable(struct task_struct *child)
 {
 }
 
+<<<<<<< HEAD
 /*
  * Handle hitting a breakpoint.
  */
@@ -75,6 +86,8 @@ static int arm64_break_trap(unsigned long addr, unsigned int esr,
 	return ptrace_break(regs);
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifdef CONFIG_HAVE_HW_BREAKPOINT
 /*
  * Handle hitting a HW-breakpoint.
@@ -236,6 +249,7 @@ static int ptrace_hbp_fill_attr_ctrl(unsigned int note_type,
 {
 	int err, len, type, disabled = !ctrl.enabled;
 
+<<<<<<< HEAD
 	if (disabled) {
 		len = 0;
 		type = HW_BREAKPOINT_EMPTY;
@@ -256,11 +270,35 @@ static int ptrace_hbp_fill_attr_ctrl(unsigned int note_type,
 		default:
 			return -EINVAL;
 		}
+=======
+	attr->disabled = disabled;
+	if (disabled)
+		return 0;
+
+	err = arch_bp_generic_fields(ctrl, &len, &type);
+	if (err)
+		return err;
+
+	switch (note_type) {
+	case NT_ARM_HW_BREAK:
+		if ((type & HW_BREAKPOINT_X) != type)
+			return -EINVAL;
+		break;
+	case NT_ARM_HW_WATCH:
+		if ((type & HW_BREAKPOINT_RW) != type)
+			return -EINVAL;
+		break;
+	default:
+		return -EINVAL;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	attr->bp_len	= len;
 	attr->bp_type	= type;
+<<<<<<< HEAD
 	attr->disabled	= disabled;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return 0;
 }
@@ -658,6 +696,7 @@ static int compat_gpr_get(struct task_struct *target,
 
 	for (i = 0; i < num_regs; ++i) {
 		unsigned int idx = start + i;
+<<<<<<< HEAD
 		void *reg;
 
 		switch (idx) {
@@ -680,6 +719,34 @@ static int compat_gpr_get(struct task_struct *target,
 			break;
 		else
 			ubuf += sizeof(compat_ulong_t);
+=======
+		compat_ulong_t reg;
+
+		switch (idx) {
+		case 15:
+			reg = task_pt_regs(target)->pc;
+			break;
+		case 16:
+			reg = task_pt_regs(target)->pstate;
+			break;
+		case 17:
+			reg = task_pt_regs(target)->orig_x0;
+			break;
+		default:
+			reg = task_pt_regs(target)->regs[idx];
+		}
+
+		if (kbuf) {
+			memcpy(kbuf, &reg, sizeof(reg));
+			kbuf += sizeof(reg);
+		} else {
+			ret = copy_to_user(ubuf, &reg, sizeof(reg));
+			if (ret)
+				break;
+
+			ubuf += sizeof(reg);
+		}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	return ret;
@@ -707,6 +774,7 @@ static int compat_gpr_set(struct task_struct *target,
 
 	for (i = 0; i < num_regs; ++i) {
 		unsigned int idx = start + i;
+<<<<<<< HEAD
 		void *reg;
 
 		switch (idx) {
@@ -729,6 +797,35 @@ static int compat_gpr_set(struct task_struct *target,
 			goto out;
 		else
 			ubuf += sizeof(compat_ulong_t);
+=======
+		compat_ulong_t reg;
+
+		if (kbuf) {
+			memcpy(&reg, kbuf, sizeof(reg));
+			kbuf += sizeof(reg);
+		} else {
+			ret = copy_from_user(&reg, ubuf, sizeof(reg));
+			if (ret)
+				return ret;
+
+			ubuf += sizeof(reg);
+		}
+
+		switch (idx) {
+		case 15:
+			newregs.pc = reg;
+			break;
+		case 16:
+			newregs.pstate = reg;
+			break;
+		case 17:
+			newregs.orig_x0 = reg;
+			break;
+		default:
+			newregs.regs[idx] = reg;
+		}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	if (valid_user_regs(&newregs.user_regs))
@@ -736,7 +833,10 @@ static int compat_gpr_set(struct task_struct *target,
 	else
 		ret = -EINVAL;
 
+<<<<<<< HEAD
 out:
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return ret;
 }
 
@@ -817,6 +917,7 @@ static const struct user_regset_view user_aarch32_view = {
 	.regsets = aarch32_regsets, .n = ARRAY_SIZE(aarch32_regsets)
 };
 
+<<<<<<< HEAD
 int aarch32_break_trap(struct pt_regs *regs)
 {
 	unsigned int instr;
@@ -844,6 +945,8 @@ int aarch32_break_trap(struct pt_regs *regs)
 	return 1;
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int compat_ptrace_read_user(struct task_struct *tsk, compat_ulong_t off,
 				   compat_ulong_t __user *ret)
 {
@@ -874,6 +977,10 @@ static int compat_ptrace_write_user(struct task_struct *tsk, compat_ulong_t off,
 				    compat_ulong_t val)
 {
 	int ret;
+<<<<<<< HEAD
+=======
+	mm_segment_t old_fs = get_fs();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (off & 3 || off >= COMPAT_USER_SZ)
 		return -EIO;
@@ -881,10 +988,19 @@ static int compat_ptrace_write_user(struct task_struct *tsk, compat_ulong_t off,
 	if (off >= sizeof(compat_elf_gregset_t))
 		return 0;
 
+<<<<<<< HEAD
+=======
+	set_fs(KERNEL_DS);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ret = copy_regset_from_user(tsk, &user_aarch32_view,
 				    REGSET_COMPAT_GPR, off,
 				    sizeof(compat_ulong_t),
 				    &val);
+<<<<<<< HEAD
+=======
+	set_fs(old_fs);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return ret;
 }
 
@@ -1111,6 +1227,7 @@ long arch_ptrace(struct task_struct *child, long request,
 	return ptrace_request(child, request, addr, data);
 }
 
+<<<<<<< HEAD
 
 static int __init ptrace_break_init(void)
 {
@@ -1142,10 +1259,33 @@ asmlinkage int syscall_trace(int dir, struct pt_regs *regs)
 	}
 
 	if (dir)
+=======
+enum ptrace_syscall_dir {
+	PTRACE_SYSCALL_ENTER = 0,
+	PTRACE_SYSCALL_EXIT,
+};
+
+static void tracehook_report_syscall(struct pt_regs *regs,
+				     enum ptrace_syscall_dir dir)
+{
+	int regno;
+	unsigned long saved_reg;
+
+	/*
+	 * A scratch register (ip(r12) on AArch32, x7 on AArch64) is
+	 * used to denote syscall entry/exit:
+	 */
+	regno = (is_compat_task() ? 12 : 7);
+	saved_reg = regs->regs[regno];
+	regs->regs[regno] = dir;
+
+	if (dir == PTRACE_SYSCALL_EXIT)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		tracehook_report_syscall_exit(regs, 0);
 	else if (tracehook_report_syscall_entry(regs))
 		regs->syscallno = ~0UL;
 
+<<<<<<< HEAD
 	if (is_compat_task())
 		regs->regs[12] = saved_reg;
 	else
@@ -1153,3 +1293,27 @@ asmlinkage int syscall_trace(int dir, struct pt_regs *regs)
 
 	return regs->syscallno;
 }
+=======
+	regs->regs[regno] = saved_reg;
+}
+
+asmlinkage int syscall_trace_enter(struct pt_regs *regs)
+{
+	if (test_thread_flag(TIF_SYSCALL_TRACE))
+		tracehook_report_syscall(regs, PTRACE_SYSCALL_ENTER);
+
+	if (test_thread_flag(TIF_SYSCALL_TRACEPOINT))
+		trace_sys_enter(regs, regs->syscallno);
+
+	return regs->syscallno;
+}
+
+asmlinkage void syscall_trace_exit(struct pt_regs *regs)
+{
+	if (test_thread_flag(TIF_SYSCALL_TRACEPOINT))
+		trace_sys_exit(regs, regs_return_value(regs));
+
+	if (test_thread_flag(TIF_SYSCALL_TRACE))
+		tracehook_report_syscall(regs, PTRACE_SYSCALL_EXIT);
+}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

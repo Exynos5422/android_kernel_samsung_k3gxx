@@ -136,6 +136,15 @@ void device_pm_move_before(struct device *deva, struct device *devb)
 	pr_debug("PM: Moving %s:%s before %s:%s\n",
 		 deva->bus ? deva->bus->name : "No Bus", dev_name(deva),
 		 devb->bus ? devb->bus->name : "No Bus", dev_name(devb));
+<<<<<<< HEAD
+=======
+	if (!((devb->pm_domain) || (devb->type && devb->type->pm)
+		|| (devb->class && (devb->class->pm || devb->class->resume))
+		|| (devb->bus && (devb->bus->pm || devb->bus->resume)) ||
+		(devb->driver && devb->driver->pm))) {
+		device_pm_add(devb);
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* Delete deva from dpm_list and reinsert before devb. */
 	list_move_tail(&deva->power.entry, &devb->power.entry);
 }
@@ -150,6 +159,15 @@ void device_pm_move_after(struct device *deva, struct device *devb)
 	pr_debug("PM: Moving %s:%s after %s:%s\n",
 		 deva->bus ? deva->bus->name : "No Bus", dev_name(deva),
 		 devb->bus ? devb->bus->name : "No Bus", dev_name(devb));
+<<<<<<< HEAD
+=======
+	if (!((devb->pm_domain) || (devb->type && devb->type->pm)
+		|| (devb->class && (devb->class->pm || devb->class->resume))
+		|| (devb->bus && (devb->bus->pm || devb->bus->resume)) ||
+		(devb->driver && devb->driver->pm))) {
+		device_pm_add(devb);
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* Delete deva from dpm_list and reinsert after devb. */
 	list_move(&deva->power.entry, &devb->power.entry);
 }
@@ -1334,9 +1352,12 @@ static int device_prepare(struct device *dev, pm_message_t state)
 
 	device_unlock(dev);
 
+<<<<<<< HEAD
 	if (error)
 		pm_runtime_put(dev);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return error;
 }
 

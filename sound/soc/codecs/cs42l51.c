@@ -124,9 +124,14 @@ static int cs42l51_set_chan_mix(struct snd_kcontrol *kcontrol,
 
 static const DECLARE_TLV_DB_SCALE(adc_pcm_tlv, -5150, 50, 0);
 static const DECLARE_TLV_DB_SCALE(tone_tlv, -1050, 150, 0);
+<<<<<<< HEAD
 /* This is a lie. after -102 db, it stays at -102 */
 /* maybe a range would be better */
 static const DECLARE_TLV_DB_SCALE(aout_tlv, -11550, 50, 0);
+=======
+
+static const DECLARE_TLV_DB_SCALE(aout_tlv, -10200, 50, 0);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 static const DECLARE_TLV_DB_SCALE(boost_tlv, 1600, 1600, 0);
 static const char *chan_mix[] = {
@@ -141,7 +146,11 @@ static const struct soc_enum cs42l51_chan_mix =
 static const struct snd_kcontrol_new cs42l51_snd_controls[] = {
 	SOC_DOUBLE_R_SX_TLV("PCM Playback Volume",
 			CS42L51_PCMA_VOL, CS42L51_PCMB_VOL,
+<<<<<<< HEAD
 			6, 0x19, 0x7F, adc_pcm_tlv),
+=======
+			0, 0x19, 0x7F, adc_pcm_tlv),
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	SOC_DOUBLE_R("PCM Playback Switch",
 			CS42L51_PCMA_VOL, CS42L51_PCMB_VOL, 7, 1, 1),
 	SOC_DOUBLE_R_SX_TLV("Analog Playback Volume",
@@ -149,7 +158,11 @@ static const struct snd_kcontrol_new cs42l51_snd_controls[] = {
 			0, 0x34, 0xE4, aout_tlv),
 	SOC_DOUBLE_R_SX_TLV("ADC Mixer Volume",
 			CS42L51_ADCA_VOL, CS42L51_ADCB_VOL,
+<<<<<<< HEAD
 			6, 0x19, 0x7F, adc_pcm_tlv),
+=======
+			0, 0x19, 0x7F, adc_pcm_tlv),
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	SOC_DOUBLE_R("ADC Mixer Switch",
 			CS42L51_ADCA_VOL, CS42L51_ADCB_VOL, 7, 1, 1),
 	SOC_SINGLE("Playback Deemphasis Switch", CS42L51_DAC_CTL, 3, 1, 0),

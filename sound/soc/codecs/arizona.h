@@ -23,20 +23,29 @@
 #define ARIZONA_CLK_ASYNCCLK       2
 #define ARIZONA_CLK_OPCLK          3
 #define ARIZONA_CLK_ASYNC_OPCLK    4
+<<<<<<< HEAD
 #define ARIZONA_CLK_SYSCLK_2       5
 #define ARIZONA_CLK_SYSCLK_3       6
 #define ARIZONA_CLK_ASYNCCLK_2     7
 #define ARIZONA_CLK_DSPCLK         8
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define ARIZONA_CLK_SRC_MCLK1    0x0
 #define ARIZONA_CLK_SRC_MCLK2    0x1
 #define ARIZONA_CLK_SRC_FLL1     0x4
 #define ARIZONA_CLK_SRC_FLL2     0x5
+<<<<<<< HEAD
 #define ARIZONA_CLK_SRC_FLL3     0x6
 #define ARIZONA_CLK_SRC_AIF1BCLK 0x8
 #define ARIZONA_CLK_SRC_AIF2BCLK 0x9
 #define ARIZONA_CLK_SRC_AIF3BCLK 0xa
 #define ARIZONA_CLK_SRC_AIF4BCLK 0xb
+=======
+#define ARIZONA_CLK_SRC_AIF1BCLK 0x8
+#define ARIZONA_CLK_SRC_AIF2BCLK 0x9
+#define ARIZONA_CLK_SRC_AIF3BCLK 0xa
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define ARIZONA_FLL_SRC_NONE      -1
 #define ARIZONA_FLL_SRC_MCLK1      0
@@ -47,11 +56,17 @@
 #define ARIZONA_FLL_SRC_AIF1BCLK   8
 #define ARIZONA_FLL_SRC_AIF2BCLK   9
 #define ARIZONA_FLL_SRC_AIF3BCLK  10
+<<<<<<< HEAD
 #define ARIZONA_FLL_SRC_AIF4BCLK  11
 #define ARIZONA_FLL_SRC_AIF1LRCLK 12
 #define ARIZONA_FLL_SRC_AIF2LRCLK 13
 #define ARIZONA_FLL_SRC_AIF3LRCLK 14
 #define ARIZONA_FLL_SRC_AIF4LRCLK 15
+=======
+#define ARIZONA_FLL_SRC_AIF1LRCLK 12
+#define ARIZONA_FLL_SRC_AIF2LRCLK 13
+#define ARIZONA_FLL_SRC_AIF3LRCLK 14
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define ARIZONA_MIXER_VOL_MASK             0x00FE
 #define ARIZONA_MIXER_VOL_SHIFT                 1
@@ -62,6 +77,7 @@
 #define ARIZONA_CLK_24MHZ  2
 #define ARIZONA_CLK_49MHZ  3
 #define ARIZONA_CLK_73MHZ  4
+<<<<<<< HEAD
 #define CLEARWATER_CLK_98MHZ   4
 #define ARIZONA_CLK_98MHZ  5
 #define ARIZONA_CLK_147MHZ 6
@@ -78,6 +94,16 @@
 struct arizona;
 struct wm_adsp;
 struct arizona_jd_state;
+=======
+#define ARIZONA_CLK_98MHZ  5
+#define ARIZONA_CLK_147MHZ 6
+
+#define ARIZONA_MAX_DAI  4
+#define ARIZONA_MAX_ADSP 4
+
+struct arizona;
+struct wm_adsp;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 struct arizona_dai_priv {
 	int clk;
@@ -88,12 +114,16 @@ struct arizona_priv {
 	struct arizona *arizona;
 	int sysclk;
 	int asyncclk;
+<<<<<<< HEAD
 	int dspclk;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct arizona_dai_priv dai[ARIZONA_MAX_DAI];
 
 	int num_inputs;
 	unsigned int in_pending;
 
+<<<<<<< HEAD
 	unsigned int spk_mute_cache;
 	unsigned int spk_thr2_cache;
 };
@@ -111,6 +141,17 @@ extern unsigned int arizona_v2_mixer_values[ARIZONA_V2_NUM_MIXER_INPUTS];
 	SOC_SINGLE_RANGE_TLV(name " Input Volume", base + 1,		\
 			     ARIZONA_MIXER_VOL_SHIFT, 0x20, 0x50, 0,	\
 			     arizona_mixer_tlv)
+=======
+	unsigned int spk_ena:2;
+	unsigned int spk_ena_pending:1;
+};
+
+#define ARIZONA_NUM_MIXER_INPUTS 99
+
+extern const unsigned int arizona_mixer_tlv[];
+extern const char *arizona_mixer_texts[ARIZONA_NUM_MIXER_INPUTS];
+extern int arizona_mixer_values[ARIZONA_NUM_MIXER_INPUTS];
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define ARIZONA_MIXER_CONTROLS(name, base) \
 	SOC_SINGLE_RANGE_TLV(name " Input 1 Volume", base + 1,		\
@@ -130,6 +171,7 @@ extern unsigned int arizona_v2_mixer_values[ARIZONA_V2_NUM_MIXER_INPUTS];
 	SOC_VALUE_ENUM_SINGLE_DECL(name, reg, 0, 0xff,			\
 				   arizona_mixer_texts, arizona_mixer_values)
 
+<<<<<<< HEAD
 #define ARIZONA_MUX_CTL_DECL(xname) \
 	const struct snd_kcontrol_new xname##_mux = { \
 		.iface = SNDRV_CTL_ELEM_IFACE_MIXER, .name = "Route", \
@@ -137,6 +179,11 @@ extern unsigned int arizona_v2_mixer_values[ARIZONA_V2_NUM_MIXER_INPUTS];
 		.get = snd_soc_dapm_get_enum_virt, \
 		.put = arizona_mux_put, \
 		.private_value = (unsigned long)&xname##_enum }
+=======
+#define ARIZONA_MUX_CTL_DECL(name) \
+	const struct snd_kcontrol_new name##_mux =	\
+		SOC_DAPM_VALUE_ENUM("Route", name##_enum)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define ARIZONA_MUX_ENUMS(name, base_reg) \
 	static ARIZONA_MUX_ENUM_DECL(name##_enum, base_reg);      \
@@ -156,6 +203,7 @@ extern unsigned int arizona_v2_mixer_values[ARIZONA_V2_NUM_MIXER_INPUTS];
 	ARIZONA_MUX_ENUMS(name##_aux5, base_reg + 32);	\
 	ARIZONA_MUX_ENUMS(name##_aux6, base_reg + 40)
 
+<<<<<<< HEAD
 #define CLEARWATER_MUX_ENUM_DECL(name, reg) \
 	SOC_VALUE_ENUM_SINGLE_DECL(name, reg, 0, 0xff,			\
 				   arizona_v2_mixer_texts, arizona_v2_mixer_values)
@@ -183,6 +231,10 @@ extern unsigned int arizona_v2_mixer_values[ARIZONA_V2_NUM_MIXER_INPUTS];
 	.shift = 0, .invert = 0, .kcontrol_news = wctrl, \
 	.num_kcontrols = 1, .event = arizona_mux_event, \
 	.event_flags = SND_SOC_DAPM_POST_PMU | SND_SOC_DAPM_PRE_PMD }
+=======
+#define ARIZONA_MUX(name, ctrl) \
+	SND_SOC_DAPM_VALUE_MUX(name, SND_SOC_NOPM, 0, 0, ctrl)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define ARIZONA_MUX_WIDGETS(name, name_str) \
 	ARIZONA_MUX(name_str " Input", &name##_mux)
@@ -204,8 +256,12 @@ extern unsigned int arizona_v2_mixer_values[ARIZONA_V2_NUM_MIXER_INPUTS];
 	ARIZONA_MUX(name_str " Aux 5", &name##_aux5_mux), \
 	ARIZONA_MUX(name_str " Aux 6", &name##_aux6_mux)
 
+<<<<<<< HEAD
 #define ARIZONA_MUX_ROUTES(widget, name) \
 	{ widget, NULL, name " Input" }, \
+=======
+#define ARIZONA_MUX_ROUTES(name) \
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ARIZONA_MIXER_INPUT_ROUTES(name " Input")
 
 #define ARIZONA_MIXER_ROUTES(widget, name) \
@@ -220,6 +276,7 @@ extern unsigned int arizona_v2_mixer_values[ARIZONA_V2_NUM_MIXER_INPUTS];
 	ARIZONA_MIXER_INPUT_ROUTES(name " Input 4")
 
 #define ARIZONA_DSP_ROUTES(name) \
+<<<<<<< HEAD
 	{ name, NULL, name " Preloader"}, \
 	{ name " Preloader", NULL, name " Aux 1" }, \
 	{ name " Preloader", NULL, name " Aux 2" }, \
@@ -227,12 +284,21 @@ extern unsigned int arizona_v2_mixer_values[ARIZONA_V2_NUM_MIXER_INPUTS];
 	{ name " Preloader", NULL, name " Aux 4" }, \
 	{ name " Preloader", NULL, name " Aux 5" }, \
 	{ name " Preloader", NULL, name " Aux 6" }, \
+=======
+	{ name, NULL, name " Aux 1" }, \
+	{ name, NULL, name " Aux 2" }, \
+	{ name, NULL, name " Aux 3" }, \
+	{ name, NULL, name " Aux 4" }, \
+	{ name, NULL, name " Aux 5" }, \
+	{ name, NULL, name " Aux 6" }, \
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ARIZONA_MIXER_INPUT_ROUTES(name " Aux 1"), \
 	ARIZONA_MIXER_INPUT_ROUTES(name " Aux 2"), \
 	ARIZONA_MIXER_INPUT_ROUTES(name " Aux 3"), \
 	ARIZONA_MIXER_INPUT_ROUTES(name " Aux 4"), \
 	ARIZONA_MIXER_INPUT_ROUTES(name " Aux 5"), \
 	ARIZONA_MIXER_INPUT_ROUTES(name " Aux 6"), \
+<<<<<<< HEAD
 	ARIZONA_MIXER_ROUTES(name " Preloader", name "L"), \
 	ARIZONA_MIXER_ROUTES(name " Preloader", name "R")
 
@@ -277,6 +343,16 @@ extern const struct soc_enum arizona_input_rate;
 extern const struct soc_enum arizona_output_rate;
 extern const struct soc_enum arizona_fx_rate;
 extern const struct soc_enum arizona_spdif_rate;
+=======
+	ARIZONA_MIXER_ROUTES(name, name "L"), \
+	ARIZONA_MIXER_ROUTES(name, name "R")
+
+#define ARIZONA_RATE_ENUM_SIZE 4
+extern const char *arizona_rate_text[ARIZONA_RATE_ENUM_SIZE];
+extern const int arizona_rate_val[ARIZONA_RATE_ENUM_SIZE];
+
+extern const struct soc_enum arizona_isrc_fsl[];
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 extern const struct soc_enum arizona_in_vi_ramp;
 extern const struct soc_enum arizona_in_vd_ramp;
@@ -290,6 +366,7 @@ extern const struct soc_enum arizona_lhpf3_mode;
 extern const struct soc_enum arizona_lhpf4_mode;
 
 extern const struct soc_enum arizona_ng_hold;
+<<<<<<< HEAD
 extern const struct soc_enum arizona_in_hpf_cut_enum;
 extern const struct soc_enum arizona_in_dmic_osr[];
 extern const struct soc_enum clearwater_in_dmic_osr[];
@@ -305,6 +382,8 @@ extern int arizona_ip_mode_put(struct snd_kcontrol *kcontrol,
 
 extern int arizona_put_anc_input(struct snd_kcontrol *kcontrol,
 			  struct snd_ctl_elem_value *ucontrol);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 extern int arizona_in_ev(struct snd_soc_dapm_widget *w,
 			 struct snd_kcontrol *kcontrol,
@@ -315,6 +394,7 @@ extern int arizona_out_ev(struct snd_soc_dapm_widget *w,
 extern int arizona_hp_ev(struct snd_soc_dapm_widget *w,
 			 struct snd_kcontrol *kcontrol,
 			 int event);
+<<<<<<< HEAD
 extern int arizona_anc_ev(struct snd_soc_dapm_widget *w,
 			  struct snd_kcontrol *kcontrol,
 			  int event);
@@ -329,10 +409,13 @@ extern int arizona_put_sample_rate_enum(struct snd_kcontrol *kcontrol,
 
 extern int arizona_eq_coeff_put(struct snd_kcontrol *kcontrol,
 				struct snd_ctl_elem_value *ucontrol);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 extern int arizona_set_sysclk(struct snd_soc_codec *codec, int clk_id,
 			      int source, unsigned int freq, int dir);
 
+<<<<<<< HEAD
 extern int arizona_cache_and_clear_sources(struct arizona *arizona,
 					   const int *sources,
 					   int *cache,
@@ -345,6 +428,9 @@ extern int arizona_restore_sources(struct arizona *arizona,
 
 extern const struct snd_soc_dai_ops arizona_dai_ops;
 extern const struct snd_soc_dai_ops arizona_simple_dai_ops;
+=======
+extern const struct snd_soc_dai_ops arizona_dai_ops;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define ARIZONA_FLL_NAME_LEN 20
 
@@ -355,10 +441,13 @@ struct arizona_fll {
 	unsigned int vco_mult;
 	struct completion ok;
 
+<<<<<<< HEAD
 	unsigned int fvco;
 	int min_outdiv;
 	int max_outdiv;
 	int outdiv;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	unsigned int fout;
 	int sync_src;
 	unsigned int sync_freq;
@@ -377,6 +466,7 @@ extern int arizona_set_fll(struct arizona_fll *fll, int source,
 			   unsigned int Fref, unsigned int Fout);
 
 extern int arizona_init_spk(struct snd_soc_codec *codec);
+<<<<<<< HEAD
 extern int arizona_init_gpio(struct snd_soc_codec *codec);
 extern int arizona_init_mono(struct snd_soc_codec *codec);
 extern int arizona_init_input(struct snd_soc_codec *codec);
@@ -384,12 +474,15 @@ extern int arizona_init_input(struct snd_soc_codec *codec);
 extern int arizona_adsp_power_ev(struct snd_soc_dapm_widget *w,
 				 struct snd_kcontrol *kcontrol,
 				 int event);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 extern int arizona_init_dai(struct arizona_priv *priv, int dai);
 
 int arizona_set_output_mode(struct snd_soc_codec *codec, int output,
 			    bool diff);
 
+<<<<<<< HEAD
 extern int arizona_set_hpdet_cb(struct snd_soc_codec *codec,
 				void (*hpdet_cb)(unsigned int measurement));
 extern int arizona_set_micd_cb(struct snd_soc_codec *codec,
@@ -412,4 +505,6 @@ arizona_get_extcon_info(struct snd_soc_codec *codec);
 extern int arizona_enable_force_bypass(struct snd_soc_codec *codec);
 extern int arizona_disable_force_bypass(struct snd_soc_codec *codec);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif

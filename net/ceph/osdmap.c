@@ -1129,7 +1129,11 @@ static int *calc_pg_raw(struct ceph_osdmap *osdmap, struct ceph_pg pgid,
 
 	/* pg_temp? */
 	pgid.seed = ceph_stable_mod(pgid.seed, pool->pg_num,
+<<<<<<< HEAD
 				    pool->pgp_num_mask);
+=======
+				    pool->pg_num_mask);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	pg = __lookup_pg_mapping(&osdmap->pg_temp, pgid);
 	if (pg) {
 		*num = pg->len;

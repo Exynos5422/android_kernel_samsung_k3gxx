@@ -296,8 +296,14 @@ static int fat_bmap_cluster(struct inode *inode, int cluster)
 	if (ret < 0)
 		return ret;
 	else if (ret == FAT_ENT_EOF) {
+<<<<<<< HEAD
 		fat_fs_error(sb, "%s: request beyond EOF (i_pos %lld)",
 			     __func__, MSDOS_I(inode)->i_pos);
+=======
+		fat_fs_error_ratelimit(sb,
+				       "%s: request beyond EOF (i_pos %lld)",
+				       __func__, MSDOS_I(inode)->i_pos);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return -EIO;
 	}
 	return dclus;

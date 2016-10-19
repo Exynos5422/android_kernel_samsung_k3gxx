@@ -17,8 +17,11 @@
 #include <asm/pgtable-hwdef.h>
 #include <asm/pgtable.h>
 
+<<<<<<< HEAD
 #include <mach/smc.h>
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include "proc-macros.S"
 
 #ifdef CONFIG_ARM_LPAE
@@ -94,20 +97,38 @@ ENDPROC(cpu_v7_dcache_clean_area)
 
 /* Suspend/resume support: derived from arch/arm/mach-s5pv210/sleep.S */
 .globl	cpu_v7_suspend_size
+<<<<<<< HEAD
 .equ	cpu_v7_suspend_size, 4 * 8
+=======
+.equ	cpu_v7_suspend_size, 4 * 9
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifdef CONFIG_ARM_CPU_SUSPEND
 ENTRY(cpu_v7_do_suspend)
 	stmfd	sp!, {r4 - r10, lr}
 	mrc	p15, 0, r4, c13, c0, 0	@ FCSE/PID
 	mrc	p15, 0, r5, c13, c0, 3	@ User r/o thread ID
+<<<<<<< HEAD
 	stmia	r0!, {r4 - r5}
 	mrc	p15, 0, r6, c3, c0, 0	@ Domain ID
 	mrc	p15, 0, r7, c2, c0, 1	@ TTB 1
+=======
+#ifdef CONFIG_ARM_LPAE
+	mrrc	p15, 1, r6, r7, c2	@ TTB 1
+#else
+	mrc	p15, 0, r7, c2, c0, 1	@ TTB 1
+#endif
+	stmia	r0!,  {r4-r7}
+	mrc	p15, 0, r7, c3, c0, 0	@ Domain ID
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	mrc	p15, 0, r11, c2, c0, 2	@ TTB control register
 	mrc	p15, 0, r8, c1, c0, 0	@ Control register
 	mrc	p15, 0, r9, c1, c0, 1	@ Auxiliary control register
 	mrc	p15, 0, r10, c1, c0, 2	@ Co-processor access control
+<<<<<<< HEAD
 	stmia	r0, {r6 - r11}
+=======
+	stmia	r0, {r7 - r11}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ldmfd	sp!, {r4 - r10, pc}
 ENDPROC(cpu_v7_do_suspend)
 
@@ -116,6 +137,7 @@ ENTRY(cpu_v7_do_resume)
 	mcr	p15, 0, ip, c8, c7, 0	@ invalidate TLBs
 	mcr	p15, 0, ip, c7, c5, 0	@ invalidate I cache
 	mcr	p15, 0, ip, c13, c0, 1	@ set reserved context ID
+<<<<<<< HEAD
 	ldmia	r0!, {r4 - r5}
 	mcr	p15, 0, r4, c13, c0, 0	@ FCSE/PID
 	mcr	p15, 0, r5, c13, c0, 3	@ User r/o thread ID
@@ -136,6 +158,26 @@ ENTRY(cpu_v7_do_resume)
 	mov	r2, r9
 	smc	0
 1:
+=======
+	ldmia	r0!, {r4 - r7}
+	mcr	p15, 0, r4, c13, c0, 0	@ FCSE/PID
+	mcr	p15, 0, r5, c13, c0, 3	@ User r/o thread ID
+#ifdef CONFIG_ARM_LPAE
+	mcrr	p15, 0, r1, ip, c2	@ TTB 0
+	mcrr	p15, 1, r6, r7, c2	@ TTB 1
+#else
+	ALT_SMP(orr	r1, r1, #TTB_FLAGS_SMP)
+	ALT_UP(orr	r1, r1, #TTB_FLAGS_UP)
+	mcr	p15, 0, r1, c2, c0, 0	@ TTB 0
+	mcr	p15, 0, r7, c2, c0, 1	@ TTB 1
+#endif
+	ldmia	r0!, {r7 - r11}
+	mcr	p15, 0, r7, c3, c0, 0	@ Domain ID
+	mcr	p15, 0, r11, c2, c0, 2	@ TTB control register
+	mrc	p15, 0, r4, c1, c0, 1	@ Read Auxiliary control register
+	teq	r4, r9			@ Is it already set?
+	mcrne	p15, 0, r9, c1, c0, 1	@ No, so write it
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	mcr	p15, 0, r10, c1, c0, 2	@ Co-processor access control
 	ldr	r4, =PRRR		@ PRRR
 	ldr	r5, =NMRR		@ NMRR
@@ -190,6 +232,10 @@ __v7_ca9mp_setup:
 	b	1f
 __v7_ca7mp_setup:
 __v7_ca15mp_setup:
+<<<<<<< HEAD
+=======
+__v7_ca53mp_setup:
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	mov	r10, #0
 1:
 #ifdef CONFIG_SMP
@@ -298,13 +344,20 @@ __v7_setup:
 	orreq	r10, r10, #(1 << 22)		@ set the Write Allocate disable bit
 	mcreq	p15, 1, r10, c9, c0, 2		@ write the L2 cache aux ctrl register
 #endif
+<<<<<<< HEAD
 	b	4f
+=======
+	b	3f
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/* Cortex-A9 Errata */
 2:	ldr	r10, =0x00000c09		@ Cortex-A9 primary part number
 	teq	r0, r10
 	bne	3f
+<<<<<<< HEAD
 #ifndef CONFIG_ARM_TRUSTZONE
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifdef CONFIG_ARM_ERRATA_742230
 	cmp	r6, #0x22			@ only present up to r2p2
 	mrcle	p15, 0, r10, c15, c0, 1		@ read diagnostic register
@@ -320,11 +373,14 @@ __v7_setup:
 	orreq	r10, r10, #1 << 22		@ set bit #22
 	mcreq	p15, 0, r10, c15, c0, 1		@ write diagnostic register
 #endif
+<<<<<<< HEAD
 #ifdef CONFIG_ARM_ERRATA_761320
 	mrc	p15, 0, r10, c15, c0, 1		@ read diagnostic register
 	orr	r10, r10, #1 << 21		@ set bit #21
 	mcr	p15, 0, r10, c15, c0, 1		@ write diagnostic register
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifdef CONFIG_ARM_ERRATA_743622
 	teq	r5, #0x00200000			@ only present in r2p*
 	mrceq	p15, 0, r10, c15, c0, 1		@ read diagnostic register
@@ -339,6 +395,7 @@ __v7_setup:
 	mcrlt	p15, 0, r10, c15, c0, 1		@ write diagnostic register
 1:
 #endif
+<<<<<<< HEAD
 #endif
 	b	4f
 
@@ -377,6 +434,10 @@ __v7_setup:
 	ldmia	r12, {r0-r3}
 
 4:	mov	r10, #0
+=======
+
+3:	mov	r10, #0
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	mcr	p15, 0, r10, c7, c5, 0		@ I+BTB cache invalidate
 #ifdef CONFIG_MMU
 	mcr	p15, 0, r10, c8, c7, 0		@ invalidate I + D TLBs
@@ -386,6 +447,34 @@ __v7_setup:
 	mcr	p15, 0, r5, c10, c2, 0		@ write PRRR
 	mcr	p15, 0, r6, c10, c2, 1		@ write NMRR
 #endif
+<<<<<<< HEAD
+=======
+
+#if defined(CONFIG_ARCH_MSM_SCORPION) && !defined(CONFIG_MSM_SMP)
+	mov     r0, #0x33
+	mcr     p15, 3, r0, c15, c0, 3          @ set L2CR1
+#endif
+#if defined (CONFIG_ARCH_MSM_SCORPION)
+	mrc     p15, 0, r0, c1, c0, 1           @ read ACTLR
+#ifdef CONFIG_CPU_CACHE_ERR_REPORT
+	orr     r0, r0, #0x37                   @ turn on L1/L2 error reporting
+#else
+	bic     r0, r0, #0x37
+#endif
+#if defined (CONFIG_ARCH_MSM_SCORPIONMP)
+	orr    r0, r0, #0x1 << 24     @ optimal setting for Scorpion MP
+#endif
+#ifndef CONFIG_ARCH_MSM_KRAIT
+	mcr     p15, 0, r0, c1, c0, 1           @ write ACTLR
+#endif
+#endif
+#if defined (CONFIG_ARCH_MSM_SCORPIONMP)
+	mrc     p15, 3, r0, c15, c0, 2  @ optimal setting for Scorpion MP
+	orr         r0, r0, #0x1 << 21
+	mcr     p15, 3, r0, c15, c0, 2
+#endif
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	dsb					@ Complete invalidations
 #ifndef CONFIG_ARM_THUMBEE
 	mrc	p15, 0, r0, c0, c1, 0		@ read ID_PFR0 for ThumbEE
@@ -416,7 +505,10 @@ __v7_setup:
 ENDPROC(__v7_setup)
 
 	.align	2
+<<<<<<< HEAD
 .global __v7_setup_stack
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 __v7_setup_stack:
 	.space	4 * 11				@ 11 registers
 
@@ -529,6 +621,19 @@ __krait_proc_info:
 	.size	__krait_proc_info, . - __krait_proc_info
 
 	/*
+<<<<<<< HEAD
+=======
+	 * ARM Ltd. Cortex A53 processor.
+	 */
+	.type	__v7_ca53mp_proc_info, #object
+__v7_ca53mp_proc_info:
+	.long	0x410fd030
+	.long	0xff0ffff0
+	__v7_proc __v7_ca53mp_setup
+	.size	__v7_ca53mp_proc_info, . - __v7_ca53mp_proc_info
+
+	/*
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	 * Match any ARMv7 processor core.
 	 */
 	.type	__v7_proc_info, #object

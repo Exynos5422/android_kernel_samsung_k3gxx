@@ -35,6 +35,10 @@
 #include <linux/mtd/mtd.h>
 #include <linux/mtd/partitions.h>
 #include <linux/mtd/map.h>
+<<<<<<< HEAD
+=======
+#include <linux/mtd/partitions.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #include <asm/uaccess.h>
 
@@ -966,6 +970,12 @@ static int mtdchar_ioctl(struct file *file, u_int cmd, u_long arg)
 
 	case ECCGETSTATS:
 	{
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_MTD_LAZYECCSTATS
+		part_fill_badblockstats(mtd);
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (copy_to_user(argp, &mtd->ecc_stats,
 				 sizeof(struct mtd_ecc_stats)))
 			return -EFAULT;

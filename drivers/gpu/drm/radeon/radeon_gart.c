@@ -1157,6 +1157,11 @@ int radeon_vm_bo_update_pte(struct radeon_device *rdev,
 		return -ENOMEM;
 
 	r = radeon_ib_get(rdev, ridx, &ib, NULL, ndw * 4);
+<<<<<<< HEAD
+=======
+	if (r)
+		return r;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ib.length_dw = 0;
 
 	r = radeon_vm_update_pdes(rdev, vm, &ib, bo_va->soffset, bo_va->eoffset);

@@ -158,6 +158,15 @@ posix_acl_equiv_mode(const struct posix_acl *acl, umode_t *mode_p)
 	umode_t mode = 0;
 	int not_equiv = 0;
 
+<<<<<<< HEAD
+=======
+	/*
+	 * A null ACL can always be presented as mode bits.
+	 */
+	if (!acl)
+		return 0;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	FOREACH_ACL_ENTRY(pa, acl, pe) {
 		switch (pa->e_tag) {
 			case ACL_USER_OBJ:

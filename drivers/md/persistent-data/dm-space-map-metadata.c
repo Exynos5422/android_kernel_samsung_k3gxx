@@ -384,12 +384,25 @@ static int sm_metadata_new_block(struct dm_space_map *sm, dm_block_t *b)
 	struct sm_metadata *smm = container_of(sm, struct sm_metadata, sm);
 
 	int r = sm_metadata_new_block_(sm, b);
+<<<<<<< HEAD
 	if (r)
 		DMERR("unable to allocate new metadata block");
 
 	r = sm_metadata_get_nr_free(sm, &count);
 	if (r)
 		DMERR("couldn't get free block count");
+=======
+	if (r) {
+		DMERR("unable to allocate new metadata block");
+		return r;
+	}
+
+	r = sm_metadata_get_nr_free(sm, &count);
+	if (r) {
+		DMERR("couldn't get free block count");
+		return r;
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	check_threshold(&smm->threshold, count);
 
@@ -604,12 +617,17 @@ static int sm_metadata_extend(struct dm_space_map *sm, dm_block_t extra_blocks)
 	 * Flick into a mode where all blocks get allocated in the new area.
 	 */
 	smm->begin = old_len;
+<<<<<<< HEAD
 	memcpy(&smm->sm, &bootstrap_ops, sizeof(smm->sm));
+=======
+	memcpy(sm, &bootstrap_ops, sizeof(*sm));
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/*
 	 * Extend.
 	 */
 	r = sm_ll_extend(&smm->ll, extra_blocks);
+<<<<<<< HEAD
 
 	/*
 	 * Switch back to normal behaviour.
@@ -618,6 +636,34 @@ static int sm_metadata_extend(struct dm_space_map *sm, dm_block_t extra_blocks)
 	for (i = old_len; !r && i < smm->begin; i++)
 		r = sm_ll_inc(&smm->ll, i, &ev);
 
+=======
+	if (r)
+		goto out;
+
+	/*
+	 * We repeatedly increment then commit until the commit doesn't
+	 * allocate any new blocks.
+	 */
+	do {
+		for (i = old_len; !r && i < smm->begin; i++) {
+			r = sm_ll_inc(&smm->ll, i, &ev);
+			if (r)
+				goto out;
+		}
+		old_len = smm->begin;
+
+		r = sm_ll_commit(&smm->ll);
+		if (r)
+			goto out;
+
+	} while (old_len != smm->begin);
+
+out:
+	/*
+	 * Switch back to normal behaviour.
+	 */
+	memcpy(sm, &ops, sizeof(*sm));
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return r;
 }
 

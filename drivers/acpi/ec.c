@@ -175,9 +175,16 @@ static void start_transaction(struct acpi_ec *ec)
 static void advance_transaction(struct acpi_ec *ec, u8 status)
 {
 	unsigned long flags;
+<<<<<<< HEAD
 	struct transaction *t = ec->curr;
 
 	spin_lock_irqsave(&ec->lock, flags);
+=======
+	struct transaction *t;
+
+	spin_lock_irqsave(&ec->lock, flags);
+	t = ec->curr;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (!t)
 		goto unlock;
 	if (t->wlen > t->wi) {
@@ -987,6 +994,13 @@ static struct dmi_system_id __initdata ec_dmi_table[] = {
 	ec_skip_dsdt_scan, "HP Folio 13", {
 	DMI_MATCH(DMI_SYS_VENDOR, "Hewlett-Packard"),
 	DMI_MATCH(DMI_PRODUCT_NAME, "HP Folio 13"),}, NULL},
+<<<<<<< HEAD
+=======
+	{
+	ec_validate_ecdt, "ASUS hardware", {
+	DMI_MATCH(DMI_SYS_VENDOR, "ASUSTek Computer Inc."),
+	DMI_MATCH(DMI_PRODUCT_NAME, "L4R"),}, NULL},
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	{},
 };
 

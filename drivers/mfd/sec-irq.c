@@ -18,11 +18,15 @@
 
 #include <linux/mfd/samsung/core.h>
 #include <linux/mfd/samsung/irq.h>
+<<<<<<< HEAD
 #include <linux/mfd/samsung/s2mps13.h>
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <linux/mfd/samsung/s2mps11.h>
 #include <linux/mfd/samsung/s5m8763.h>
 #include <linux/mfd/samsung/s5m8767.h>
 
+<<<<<<< HEAD
 static struct regmap_irq s2mps13_irqs[] = {
 	[S2MPS13_IRQ_PWRONF] = {
 		.reg_offset = 0,
@@ -93,6 +97,8 @@ static struct regmap_irq s2mps13_irqs[] = {
 	},
 };
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static struct regmap_irq s2mps11_irqs[] = {
 	[S2MPS11_IRQ_PWRONF] = {
 		.reg_offset = 0,
@@ -134,9 +140,15 @@ static struct regmap_irq s2mps11_irqs[] = {
 		.reg_offset = 1,
 		.mask = S2MPS11_IRQ_RTCA1_MASK,
 	},
+<<<<<<< HEAD
 	[S2MPS11_IRQ_RTCA0] = {
 		.reg_offset = 1,
 		.mask = S2MPS11_IRQ_RTCA0_MASK,
+=======
+	[S2MPS11_IRQ_RTCA2] = {
+		.reg_offset = 1,
+		.mask = S2MPS11_IRQ_RTCA2_MASK,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	},
 	[S2MPS11_IRQ_SMPL] = {
 		.reg_offset = 1,
@@ -160,6 +172,10 @@ static struct regmap_irq s2mps11_irqs[] = {
 	},
 };
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static struct regmap_irq s5m8767_irqs[] = {
 	[S5M8767_IRQ_PWRR] = {
 		.reg_offset = 0,
@@ -306,6 +322,7 @@ static struct regmap_irq s5m8763_irqs[] = {
 	},
 };
 
+<<<<<<< HEAD
 static struct regmap_irq_chip s2mps13_irq_chip = {
 	.name = "s2mps13",
 	.irqs = s2mps13_irqs,
@@ -316,6 +333,8 @@ static struct regmap_irq_chip s2mps13_irq_chip = {
 	.ack_base = S2MPS13_REG_INT1,
 };
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static struct regmap_irq_chip s2mps11_irq_chip = {
 	.name = "s2mps11",
 	.irqs = s2mps11_irqs,
@@ -361,18 +380,27 @@ int sec_irq_init(struct sec_pmic_dev *sec_pmic)
 	switch (type) {
 	case S5M8763X:
 		ret = regmap_add_irq_chip(sec_pmic->regmap, sec_pmic->irq,
+<<<<<<< HEAD
 				  IRQF_TRIGGER_LOW | IRQF_ONESHOT,
+=======
+				  IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				  sec_pmic->irq_base, &s5m8763_irq_chip,
 				  &sec_pmic->irq_data);
 		break;
 	case S5M8767X:
 		ret = regmap_add_irq_chip(sec_pmic->regmap, sec_pmic->irq,
+<<<<<<< HEAD
 				  IRQF_TRIGGER_LOW | IRQF_ONESHOT,
+=======
+				  IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				  sec_pmic->irq_base, &s5m8767_irq_chip,
 				  &sec_pmic->irq_data);
 		break;
 	case S2MPS11X:
 		ret = regmap_add_irq_chip(sec_pmic->regmap, sec_pmic->irq,
+<<<<<<< HEAD
 				  IRQF_TRIGGER_LOW | IRQF_ONESHOT,
 				  sec_pmic->irq_base, &s2mps11_irq_chip,
 				  &sec_pmic->irq_data);
@@ -383,6 +411,12 @@ int sec_irq_init(struct sec_pmic_dev *sec_pmic)
 				  sec_pmic->irq_base, &s2mps13_irq_chip,
 				  &sec_pmic->irq_data);
 		break;
+=======
+				  IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
+				  sec_pmic->irq_base, &s2mps11_irq_chip,
+				  &sec_pmic->irq_data);
+		break;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	default:
 		dev_err(sec_pmic->dev, "Unknown device type %d\n",
 			sec_pmic->device_type);

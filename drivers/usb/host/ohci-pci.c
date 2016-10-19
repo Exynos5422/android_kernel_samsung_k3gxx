@@ -172,6 +172,10 @@ static int ohci_quirk_amd700(struct usb_hcd *hcd)
 	pci_dev_put(amd_smbus_dev);
 	amd_smbus_dev = NULL;
 
+<<<<<<< HEAD
+=======
+	ohci->flags |= OHCI_QUIRK_GLOBAL_SUSPEND;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 
@@ -371,7 +375,11 @@ static struct pci_driver ohci_pci_driver = {
 	.remove =	usb_hcd_pci_remove,
 	.shutdown =	usb_hcd_pci_shutdown,
 
+<<<<<<< HEAD
 #ifdef CONFIG_PM_SLEEP
+=======
+#ifdef CONFIG_PM
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	.driver =	{
 		.pm =	&usb_hcd_pci_pm_ops
 	},

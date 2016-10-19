@@ -32,10 +32,19 @@
 
 #include <asm/exception.h>
 #include <asm/debug-monitors.h>
+<<<<<<< HEAD
+=======
+#include <asm/esr.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <asm/system_misc.h>
 #include <asm/pgtable.h>
 #include <asm/tlbflush.h>
 
+<<<<<<< HEAD
+=======
+#include <trace/events/exception.h>
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static const char *fault_name(unsigned int esr);
 
 /*
@@ -113,6 +122,11 @@ static void __do_user_fault(struct task_struct *tsk, unsigned long addr,
 {
 	struct siginfo si;
 
+<<<<<<< HEAD
+=======
+	trace_user_fault(tsk, addr, esr);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (show_unhandled_signals && unhandled_signal(tsk, sig) &&
 	    printk_ratelimit()) {
 		pr_info("%s[%d]: unhandled %s (%d) at 0x%08lx, esr 0x%03x\n",
@@ -123,6 +137,10 @@ static void __do_user_fault(struct task_struct *tsk, unsigned long addr,
 	}
 
 	tsk->thread.fault_address = addr;
+<<<<<<< HEAD
+=======
+	tsk->thread.fault_code = esr;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	si.si_signo = sig;
 	si.si_errno = 0;
 	si.si_code = code;
@@ -130,7 +148,11 @@ static void __do_user_fault(struct task_struct *tsk, unsigned long addr,
 	force_sig_info(sig, &si, tsk);
 }
 
+<<<<<<< HEAD
 void do_bad_area(unsigned long addr, unsigned int esr, struct pt_regs *regs)
+=======
+static void do_bad_area(unsigned long addr, unsigned int esr, struct pt_regs *regs)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	struct task_struct *tsk = current;
 	struct mm_struct *mm = tsk->active_mm;
@@ -148,8 +170,11 @@ void do_bad_area(unsigned long addr, unsigned int esr, struct pt_regs *regs)
 #define VM_FAULT_BADMAP		0x010000
 #define VM_FAULT_BADACCESS	0x020000
 
+<<<<<<< HEAD
 #define ESR_WRITE		(1 << 6)
 #define ESR_CM			(1 << 8)
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define ESR_LNX_EXEC		(1 << 24)
 
 static int __do_page_fault(struct mm_struct *mm, unsigned long addr,
@@ -199,6 +224,7 @@ static int __kprobes do_page_fault(unsigned long addr, unsigned int esr,
 	unsigned long vm_flags = VM_READ | VM_WRITE | VM_EXEC;
 	unsigned int mm_flags = FAULT_FLAG_ALLOW_RETRY | FAULT_FLAG_KILLABLE;
 
+<<<<<<< HEAD
 	if (esr & ESR_LNX_EXEC) {
 		vm_flags = VM_EXEC;
 	} else if ((esr & ESR_WRITE) && !(esr & ESR_CM)) {
@@ -206,6 +232,8 @@ static int __kprobes do_page_fault(unsigned long addr, unsigned int esr,
 		mm_flags |= FAULT_FLAG_WRITE;
 	}
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	tsk = current;
 	mm  = tsk->mm;
 
@@ -220,6 +248,19 @@ static int __kprobes do_page_fault(unsigned long addr, unsigned int esr,
 	if (in_atomic() || !mm)
 		goto no_context;
 
+<<<<<<< HEAD
+=======
+	if (user_mode(regs))
+		mm_flags |= FAULT_FLAG_USER;
+
+	if (esr & ESR_LNX_EXEC) {
+		vm_flags = VM_EXEC;
+	} else if (esr & ESR_EL1_WRITE) {
+		vm_flags = VM_WRITE;
+		mm_flags |= FAULT_FLAG_WRITE;
+	}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/*
 	 * As per x86, we may deadlock here. However, since the kernel only
 	 * validly references user space from well defined areas of the code,
@@ -288,6 +329,16 @@ retry:
 			      VM_FAULT_BADACCESS))))
 		return 0;
 
+<<<<<<< HEAD
+=======
+	/*
+	 * If we are in kernel mode at this point, we have no context to
+	 * handle this fault with.
+	 */
+	if (!user_mode(regs))
+		goto no_context;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (fault & VM_FAULT_OOM) {
 		/*
 		 * We ran out of memory, call the OOM killer, and return to
@@ -298,6 +349,7 @@ retry:
 		return 0;
 	}
 
+<<<<<<< HEAD
 	/*
 	 * If we are in kernel mode at this point, we have no context to
 	 * handle this fault with.
@@ -305,6 +357,8 @@ retry:
 	if (!user_mode(regs))
 		goto no_context;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (fault & VM_FAULT_SIGBUS) {
 		/*
 		 * We had some memory, but were unable to successfully fix up
@@ -359,6 +413,7 @@ static int __kprobes do_translation_fault(unsigned long addr,
 }
 
 /*
+<<<<<<< HEAD
  * Some section permission faults need to be handled gracefully.  They can
  * happen due to a __{get,put}_user during an oops.
  */
@@ -370,6 +425,8 @@ static int do_sect_fault(unsigned long addr, unsigned int esr,
 }
 
 /*
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  * This abort handler always returns "fault".
  */
 static int do_bad(unsigned long addr, unsigned int esr, struct pt_regs *regs)
@@ -392,12 +449,21 @@ static struct fault_info {
 	{ do_translation_fault,	SIGSEGV, SEGV_MAPERR,	"level 2 translation fault"	},
 	{ do_page_fault,	SIGSEGV, SEGV_MAPERR,	"level 3 translation fault"	},
 	{ do_bad,		SIGBUS,  0,		"reserved access flag fault"	},
+<<<<<<< HEAD
 	{ do_bad,		SIGSEGV, SEGV_ACCERR,	"level 1 access flag fault"	},
 	{ do_bad,		SIGSEGV, SEGV_ACCERR,	"level 2 access flag fault"	},
 	{ do_page_fault,	SIGSEGV, SEGV_ACCERR,	"level 3 access flag fault"	},
 	{ do_bad,		SIGBUS,  0,		"reserved permission fault"	},
 	{ do_bad,		SIGSEGV, SEGV_ACCERR,	"level 1 permission fault"	},
 	{ do_sect_fault,	SIGSEGV, SEGV_ACCERR,	"level 2 permission fault"	},
+=======
+	{ do_page_fault,	SIGSEGV, SEGV_ACCERR,	"level 1 access flag fault"	},
+	{ do_page_fault,	SIGSEGV, SEGV_ACCERR,	"level 2 access flag fault"	},
+	{ do_page_fault,	SIGSEGV, SEGV_ACCERR,	"level 3 access flag fault"	},
+	{ do_bad,		SIGBUS,  0,		"reserved permission fault"	},
+	{ do_page_fault,	SIGSEGV, SEGV_ACCERR,	"level 1 permission fault"	},
+	{ do_page_fault,	SIGSEGV, SEGV_ACCERR,	"level 2 permission fault"	},
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	{ do_page_fault,	SIGSEGV, SEGV_ACCERR,	"level 3 permission fault"	},
 	{ do_bad,		SIGBUS,  0,		"synchronous external abort"	},
 	{ do_bad,		SIGBUS,  0,		"asynchronous external abort"	},
@@ -533,7 +599,11 @@ asmlinkage int __exception do_debug_exception(unsigned long addr,
 	info.si_errno = 0;
 	info.si_code  = inf->code;
 	info.si_addr  = (void __user *)addr;
+<<<<<<< HEAD
 	arm64_notify_die("", regs, &info, esr);
+=======
+	arm64_notify_die("", regs, &info, 0);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return 0;
 }

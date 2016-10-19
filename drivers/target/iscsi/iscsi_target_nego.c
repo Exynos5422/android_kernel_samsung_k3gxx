@@ -90,7 +90,11 @@ int extract_param(
 	if (len < 0)
 		return -1;
 
+<<<<<<< HEAD
 	if (len > max_length) {
+=======
+	if (len >= max_length) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		pr_err("Length of input: %d exceeds max_length:"
 			" %d\n", len, max_length);
 		return -1;

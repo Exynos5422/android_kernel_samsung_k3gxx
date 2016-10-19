@@ -201,7 +201,12 @@ void fuse_change_attributes(struct inode *inode, struct fuse_attr *attr,
 	struct timespec old_mtime;
 
 	spin_lock(&fc->lock);
+<<<<<<< HEAD
 	if (attr_version != 0 && fi->attr_version > attr_version) {
+=======
+	if ((attr_version != 0 && fi->attr_version > attr_version) ||
+	    test_bit(FUSE_I_SIZE_UNSTABLE, &fi->state)) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		spin_unlock(&fc->lock);
 		return;
 	}
@@ -785,7 +790,11 @@ static const struct super_operations fuse_super_operations = {
 static void sanitize_global_limit(unsigned *limit)
 {
 	if (*limit == 0)
+<<<<<<< HEAD
 		*limit = ((num_physpages << PAGE_SHIFT) >> 13) /
+=======
+		*limit = ((totalram_pages << PAGE_SHIFT) >> 13) /
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			 sizeof(struct fuse_req);
 
 	if (*limit >= 1 << 16)

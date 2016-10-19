@@ -332,7 +332,11 @@ static ssize_t block_store(struct gfs2_sbd *sdp, const char *buf, size_t len)
 		set_bit(DFL_BLOCK_LOCKS, &ls->ls_recover_flags);
 	else if (val == 0) {
 		clear_bit(DFL_BLOCK_LOCKS, &ls->ls_recover_flags);
+<<<<<<< HEAD
 		smp_mb__after_clear_bit();
+=======
+		smp_mb__after_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		gfs2_glock_thaw(sdp);
 	} else {
 		ret = -EINVAL;
@@ -481,7 +485,11 @@ static ssize_t jid_store(struct gfs2_sbd *sdp, const char *buf, size_t len)
 		rv = jid = -EINVAL;
 	sdp->sd_lockstruct.ls_jid = jid;
 	clear_bit(SDF_NOJOURNALID, &sdp->sd_flags);
+<<<<<<< HEAD
 	smp_mb__after_clear_bit();
+=======
+	smp_mb__after_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	wake_up_bit(&sdp->sd_flags, SDF_NOJOURNALID);
 out:
 	spin_unlock(&sdp->sd_jindex_spin);

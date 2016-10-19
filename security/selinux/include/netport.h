@@ -26,6 +26,11 @@
 #ifndef _SELINUX_NETPORT_H
 #define _SELINUX_NETPORT_H
 
+<<<<<<< HEAD
+=======
+void sel_netport_flush(void);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 int sel_netport_sid(u8 protocol, u16 pnum, u32 *sid);
 
 #endif

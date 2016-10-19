@@ -1,7 +1,10 @@
 # generic pinmux support
 
 ccflags-$(CONFIG_DEBUG_PINCTRL)	+= -DDEBUG
+<<<<<<< HEAD
 ccflags-y += $(KBUILD_FP_SENSOR_CFLAGS)
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 obj-$(CONFIG_PINCTRL)		+= core.o
 obj-$(CONFIG_PINMUX)		+= pinmux.o
@@ -24,6 +27,10 @@ obj-$(CONFIG_PINCTRL_IMX53)	+= pinctrl-imx53.o
 obj-$(CONFIG_PINCTRL_IMX6Q)	+= pinctrl-imx6q.o
 obj-$(CONFIG_PINCTRL_IMX6Q)	+= pinctrl-imx6dl.o
 obj-$(CONFIG_PINCTRL_FALCON)	+= pinctrl-falcon.o
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_PINCTRL_MSM_TLMM)	+= pinctrl-msm.o pinctrl-msm-tlmm.o
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 obj-$(CONFIG_PINCTRL_MXS)	+= pinctrl-mxs.o
 obj-$(CONFIG_PINCTRL_IMX23)	+= pinctrl-imx23.o
 obj-$(CONFIG_PINCTRL_IMX28)	+= pinctrl-imx28.o
@@ -46,7 +53,10 @@ obj-$(CONFIG_PINCTRL_EXYNOS5440)	+= pinctrl-exynos5440.o
 obj-$(CONFIG_PINCTRL_S3C64XX)	+= pinctrl-s3c64xx.o
 obj-$(CONFIG_PINCTRL_XWAY)	+= pinctrl-xway.o
 obj-$(CONFIG_PINCTRL_LANTIQ)	+= pinctrl-lantiq.o
+<<<<<<< HEAD
 obj-$(CONFIG_SEC_GPIO_DVS)	+= secgpio_dvs.o
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 obj-$(CONFIG_PLAT_ORION)        += mvebu/
 obj-$(CONFIG_ARCH_SHMOBILE)	+= sh-pfc/

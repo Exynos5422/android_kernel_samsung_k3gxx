@@ -121,6 +121,7 @@ static struct dmi_system_id __cpuinitdata processor_power_dmi_table[] = {
  */
 static void acpi_safe_halt(void)
 {
+<<<<<<< HEAD
 	current_thread_info()->status &= ~TS_POLLING;
 	/*
 	 * TS_POLLING-cleared state must be visible before we
@@ -132,6 +133,12 @@ static void acpi_safe_halt(void)
 		local_irq_disable();
 	}
 	current_thread_info()->status |= TS_POLLING;
+=======
+	if (!tif_need_resched()) {
+		safe_halt();
+		local_irq_disable();
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 #ifdef ARCH_APICTIMER_STOPS_ON_C3
@@ -739,6 +746,14 @@ static int acpi_idle_enter_c1(struct cpuidle_device *dev,
 	if (unlikely(!pr))
 		return -EINVAL;
 
+<<<<<<< HEAD
+=======
+	if (cx->entry_method == ACPI_CSTATE_FFH) {
+		if (current_set_polling_and_test())
+			return -EINVAL;
+	}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	lapic_timer_state_broadcast(pr, cx, 1);
 	acpi_idle_do_entry(cx);
 
@@ -792,6 +807,7 @@ static int acpi_idle_enter_simple(struct cpuidle_device *dev,
 	if (unlikely(!pr))
 		return -EINVAL;
 
+<<<<<<< HEAD
 	if (cx->entry_method != ACPI_CSTATE_FFH) {
 		current_thread_info()->status &= ~TS_POLLING;
 		/*
@@ -804,6 +820,11 @@ static int acpi_idle_enter_simple(struct cpuidle_device *dev,
 			current_thread_info()->status |= TS_POLLING;
 			return -EINVAL;
 		}
+=======
+	if (cx->entry_method == ACPI_CSTATE_FFH) {
+		if (current_set_polling_and_test())
+			return -EINVAL;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	/*
@@ -821,9 +842,12 @@ static int acpi_idle_enter_simple(struct cpuidle_device *dev,
 
 	sched_clock_idle_wakeup_event(0);
 
+<<<<<<< HEAD
 	if (cx->entry_method != ACPI_CSTATE_FFH)
 		current_thread_info()->status |= TS_POLLING;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	lapic_timer_state_broadcast(pr, cx, 0);
 	return index;
 }
@@ -860,6 +884,7 @@ static int acpi_idle_enter_bm(struct cpuidle_device *dev,
 		}
 	}
 
+<<<<<<< HEAD
 	if (cx->entry_method != ACPI_CSTATE_FFH) {
 		current_thread_info()->status &= ~TS_POLLING;
 		/*
@@ -872,6 +897,11 @@ static int acpi_idle_enter_bm(struct cpuidle_device *dev,
 			current_thread_info()->status |= TS_POLLING;
 			return -EINVAL;
 		}
+=======
+	if (cx->entry_method == ACPI_CSTATE_FFH) {
+		if (current_set_polling_and_test())
+			return -EINVAL;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	acpi_unlazy_tlb(smp_processor_id());
@@ -917,9 +947,12 @@ static int acpi_idle_enter_bm(struct cpuidle_device *dev,
 
 	sched_clock_idle_wakeup_event(0);
 
+<<<<<<< HEAD
 	if (cx->entry_method != ACPI_CSTATE_FFH)
 		current_thread_info()->status |= TS_POLLING;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	lapic_timer_state_broadcast(pr, cx, 0);
 	return index;
 }

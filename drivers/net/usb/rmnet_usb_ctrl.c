@@ -81,7 +81,11 @@ enum {
 do { \
 	if (ctl_msg_dbg_mask & MSM_USB_CTL_DUMP_BUFFER) \
 			print_hex_dump(KERN_INFO, prestr, DUMP_PREFIX_NONE, \
+<<<<<<< HEAD
 					16, 1, buf, (cnt < 16 ? cnt : 16), false); \
+=======
+					16, 1, buf, cnt, false); \
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 } while (0)
 
 #define DBG(x...) \
@@ -727,12 +731,23 @@ static ssize_t rmnet_ctl_write(struct file *file, const char __user * buf,
 	status = rmnet_usb_ctrl_write_cmd(dev->cudev,
 			USB_CDC_SEND_ENCAPSULATED_COMMAND, 0, cpkt->data,
 			cpkt->data_size);
+<<<<<<< HEAD
 	if (status > 0)
 		dev->cudev->snd_encap_cmd_cnt++;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	kfree(cpkt->data);
 	kfree(cpkt);
 
+<<<<<<< HEAD
+=======
+	if (status > 0) {
+		dev->cudev->snd_encap_cmd_cnt++;
+		return size;
+	}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return status;
 }
 
@@ -915,8 +930,11 @@ int rmnet_usb_ctrl_probe(struct usb_interface *intf,
 		dev->claimed = true;
 	}
 
+<<<<<<< HEAD
 	ctl_msg_dbg_mask = MSM_USB_CTL_DUMP_BUFFER;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 
@@ -925,7 +943,10 @@ void rmnet_usb_ctrl_disconnect(struct rmnet_ctrl_udev *dev)
 	struct rmnet_ctrl_dev *cdev;
 	int n;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	clear_bit(RMNET_CTRL_DEV_READY, &dev->status);
 
 	if (test_bit(RMNET_CTRL_DEV_MUX_EN, &dev->status)) {
@@ -1095,7 +1116,11 @@ int rmnet_usb_ctrl_init(int no_rmnet_devs, int no_rmnet_insts_per_dev,
 		unsigned long mux_info)
 {
 	struct rmnet_ctrl_dev	*dev;
+<<<<<<< HEAD
 	struct rmnet_ctrl_udev	*cudev = NULL;
+=======
+	struct rmnet_ctrl_udev	*cudev;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	int			i, n;
 	int			status;
 	int			cmux_enabled;

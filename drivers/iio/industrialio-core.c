@@ -66,12 +66,15 @@ static const char * const iio_chan_type_name_spec[] = {
 	[IIO_ALTVOLTAGE] = "altvoltage",
 	[IIO_CCT] = "cct",
 	[IIO_PRESSURE] = "pressure",
+<<<<<<< HEAD
 	[IIO_SIGN_MOTION] = "sign_motion",
 	[IIO_STEP_COUNTER] = "step_counter",
 	[IIO_TILT] = "tilt",
 	[IIO_STEP_DETECTOR] = "step_detector",
 	[IIO_GRIP] = "grip",
 	[IIO_GRIP_WIFI] = "grip_wifi",
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 static const char * const iio_modifier_names[] = {
@@ -86,8 +89,11 @@ static const char * const iio_modifier_names[] = {
 	[IIO_MOD_LIGHT_RED] = "red",
 	[IIO_MOD_LIGHT_GREEN] = "green",
 	[IIO_MOD_LIGHT_BLUE] = "blue",
+<<<<<<< HEAD
 	[IIO_MOD_LIGHT_LUX] = "lux",
 	[IIO_MOD_R] = "r",
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 /* relies on pairs of these shared then separate */

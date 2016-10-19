@@ -1097,6 +1097,20 @@ bfa_fcs_lport_init(struct bfa_fcs_lport_s *lport,
 	bfa_sm_send_event(lport, BFA_FCS_PORT_SM_CREATE);
 }
 
+<<<<<<< HEAD
+=======
+void
+bfa_fcs_lport_set_symname(struct bfa_fcs_lport_s *port,
+				char *symname)
+{
+	strcpy(port->port_cfg.sym_name.symname, symname);
+
+	if (bfa_sm_cmp_state(port, bfa_fcs_lport_sm_online))
+		bfa_fcs_lport_ns_util_send_rspn_id(
+			BFA_FCS_GET_NS_FROM_PORT(port), NULL);
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  *  fcs_lport_api
  */
@@ -4950,9 +4964,12 @@ bfa_fcs_lport_ns_util_send_rspn_id(void *cbarg, struct bfa_fcxp_s *fcxp_alloced)
 	u8 *psymbl = &symbl[0];
 	int len;
 
+<<<<<<< HEAD
 	if (!bfa_sm_cmp_state(port, bfa_fcs_lport_sm_online))
 		return;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* Avoid sending RSPN in the following states. */
 	if (bfa_sm_cmp_state(ns, bfa_fcs_lport_ns_sm_offline) ||
 	    bfa_sm_cmp_state(ns, bfa_fcs_lport_ns_sm_plogi_sending) ||

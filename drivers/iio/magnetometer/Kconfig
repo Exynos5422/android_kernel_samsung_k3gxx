@@ -55,6 +55,7 @@ config IIO_ST_MAGN_SPI_3AXIS
 	depends on IIO_ST_MAGN_3AXIS
 	depends on IIO_ST_SENSORS_SPI
 
+<<<<<<< HEAD
 config SENSORS_YAS_MAGNETOMETER
 	tristate "Yamaha 3-Axis Magnetometer"
 	depends on I2C
@@ -63,4 +64,6 @@ config SENSORS_YAS_MAGNETOMETER
 
 source "drivers/iio/magnetometer/yas537/Kconfig"
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 endmenu

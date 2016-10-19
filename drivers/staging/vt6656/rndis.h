@@ -66,6 +66,11 @@
 
 #define VIAUSB20_PACKET_HEADER          0x04
 
+<<<<<<< HEAD
+=======
+#define USB_REG4	0x604
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 typedef struct _CMD_MESSAGE
 {
     u8        byData[256];

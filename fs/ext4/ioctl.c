@@ -145,7 +145,11 @@ static long swap_inode_boot_loader(struct super_block *sb,
 	handle = ext4_journal_start(inode_bl, EXT4_HT_MOVE_EXTENTS, 2);
 	if (IS_ERR(handle)) {
 		err = -EINVAL;
+<<<<<<< HEAD
 		goto swap_boot_out;
+=======
+		goto journal_err_out;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	/* Protect extent tree against block allocations via delalloc */
@@ -203,6 +207,10 @@ static long swap_inode_boot_loader(struct super_block *sb,
 
 	ext4_double_up_write_data_sem(inode, inode_bl);
 
+<<<<<<< HEAD
+=======
+journal_err_out:
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ext4_inode_resume_unlocked_dio(inode);
 	ext4_inode_resume_unlocked_dio(inode_bl);
 
@@ -625,11 +633,14 @@ resizefs_out:
 		return 0;
 	}
 
+<<<<<<< HEAD
 	case FS_IOC_INVAL_MAPPING:
 	{
 		return invalidate_mapping_pages(inode->i_mapping, 0, -1);
 	}
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	default:
 		return -ENOTTY;
 	}

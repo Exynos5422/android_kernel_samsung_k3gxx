@@ -55,7 +55,11 @@
  * also linked into the probe response struct.
  */
 
+<<<<<<< HEAD
 #define IEEE80211_SCAN_RESULT_EXPIRE	(6 * HZ)
+=======
+#define IEEE80211_SCAN_RESULT_EXPIRE	(3 * HZ)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 static void bss_free(struct cfg80211_internal_bss *bss)
 {
@@ -253,10 +257,17 @@ void __cfg80211_sched_scan_results(struct work_struct *wk)
 	rdev = container_of(wk, struct cfg80211_registered_device,
 			    sched_scan_results_wk);
 
+<<<<<<< HEAD
 	request = rdev->sched_scan_req;
 
 	mutex_lock(&rdev->sched_scan_mtx);
 
+=======
+	mutex_lock(&rdev->sched_scan_mtx);
+
+	request = rdev->sched_scan_req;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* we don't have sched_scan_req anymore if the scan is stopping */
 	if (request) {
 		if (request->flags & NL80211_SCAN_FLAG_FLUSH) {
@@ -427,6 +438,7 @@ static int cmp_bss(struct cfg80211_bss *a,
 	const u8 *ie2 = NULL;
 	int i, r;
 
+<<<<<<< HEAD
 #if !(defined(CONFIG_BCM4335) || defined(CONFIG_BCM4335_MODULE) \
         || defined(CONFIG_BCM4339) || defined(CONFIG_BCM4339_MODULE) \
         || defined(CONFIG_BCM43454) || defined(CONFIG_BCM43454_MODULE) \
@@ -437,6 +449,10 @@ static int cmp_bss(struct cfg80211_bss *a,
 	if (a->channel != b->channel)
 		return b->channel->center_freq - a->channel->center_freq;
 #endif /* CONFIG_BCM43xx */
+=======
+	if (a->channel != b->channel)
+		return b->channel->center_freq - a->channel->center_freq;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	a_ies = rcu_access_pointer(a->ies);
 	if (!a_ies)
@@ -479,6 +495,7 @@ static int cmp_bss(struct cfg80211_bss *a,
 	r = memcmp(a->bssid, b->bssid, sizeof(a->bssid));
 	if (r)
 		return r;
+<<<<<<< HEAD
 #if (defined(CONFIG_BCM4339) || defined(CONFIG_BCM4339_MODULE) \
         || defined(CONFIG_BCM4339) || defined(CONFIG_BCM4339_MODULE) \
         || defined(CONFIG_BCM43454) || defined(CONFIG_BCM43454_MODULE) \
@@ -489,6 +506,8 @@ static int cmp_bss(struct cfg80211_bss *a,
 	if (a->channel != b->channel)
 		return b->channel->center_freq - a->channel->center_freq;
 #endif /* CONFIG_BCM43xx */
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	ie1 = cfg80211_find_ie(WLAN_EID_SSID, a_ies->data, a_ies->len);
 	ie2 = cfg80211_find_ie(WLAN_EID_SSID, b_ies->data, b_ies->len);
@@ -917,11 +936,19 @@ cfg80211_inform_bss(struct wiphy *wiphy,
 	 * override the IEs pointer should we have received an earlier
 	 * indication of Probe Response data.
 	 */
+<<<<<<< HEAD
 	ies = kmalloc(sizeof(*ies) + ielen, gfp);
+=======
+	ies = kzalloc(sizeof(*ies) + ielen, gfp);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (!ies)
 		return NULL;
 	ies->len = ielen;
 	ies->tsf = tsf;
+<<<<<<< HEAD
+=======
+	ies->from_beacon = false;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	memcpy(ies->data, ie, ielen);
 
 	rcu_assign_pointer(tmp.pub.beacon_ies, ies);
@@ -974,11 +1001,19 @@ cfg80211_inform_bss_frame(struct wiphy *wiphy,
 	if (!channel)
 		return NULL;
 
+<<<<<<< HEAD
 	ies = kmalloc(sizeof(*ies) + ielen, gfp);
+=======
+	ies = kzalloc(sizeof(*ies) + ielen, gfp);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (!ies)
 		return NULL;
 	ies->len = ielen;
 	ies->tsf = le64_to_cpu(mgmt->u.probe_resp.timestamp);
+<<<<<<< HEAD
+=======
+	ies->from_beacon = ieee80211_is_beacon(mgmt->frame_control);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	memcpy(ies->data, mgmt->u.probe_resp.variable, ielen);
 
 	if (ieee80211_is_probe_resp(mgmt->frame_control))

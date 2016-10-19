@@ -10,10 +10,13 @@
 #define ESOC_WAIT_FOR_CRASH	_IOR(ESOC_CODE, 6, u32)
 #define ESOC_REG_REQ_ENG	_IO(ESOC_CODE, 7)
 #define ESOC_REG_CMD_ENG	_IO(ESOC_CODE, 8)
+<<<<<<< HEAD
 #define ESOC_SET_CRASH		_IOW(ESOC_CODE, 9, u32)
 #define ESOC_GET_CRASH		_IOR(ESOC_CODE, 10, u32)
 #define ESOC_SECURE_FAIL	_IO(ESOC_CODE, 11)
 #define ESOC_SET_HSIC_READY	_IO(ESOC_CODE, 12)
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /*Link types for communication with external SOCs*/
 #define HSIC		"HSIC"
@@ -35,12 +38,19 @@ enum esoc_evt {
 enum esoc_cmd {
 	ESOC_PWR_ON = 1,
 	ESOC_PWR_OFF,
+<<<<<<< HEAD
+=======
+	ESOC_FORCE_PWR_OFF,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ESOC_RESET,
 	ESOC_PREPARE_DEBUG,
 	ESOC_EXE_DEBUG,
 	ESOC_EXIT_DEBUG,
+<<<<<<< HEAD
 	ESOC_SET_CRASH_OCCURRENCE,
 	ESOC_GET_CRASH_OCCURRENCE,
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 enum esoc_notify {
@@ -76,4 +86,7 @@ struct esoc_handle {
 };
 #endif
 #endif
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

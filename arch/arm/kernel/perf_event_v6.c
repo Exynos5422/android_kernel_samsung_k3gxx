@@ -76,7 +76,11 @@ static const unsigned armv6_perf_map[PERF_COUNT_HW_MAX] = {
 	[PERF_COUNT_HW_STALLED_CYCLES_BACKEND]	= ARMV6_PERFCTR_LSU_FULL_STALL,
 };
 
+<<<<<<< HEAD
 static const unsigned armv6_perf_cache_map[PERF_COUNT_HW_CACHE_MAX]
+=======
+static unsigned armv6_perf_cache_map[PERF_COUNT_HW_CACHE_MAX]
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 					  [PERF_COUNT_HW_CACHE_OP_MAX]
 					  [PERF_COUNT_HW_CACHE_RESULT_MAX] = {
 	[C(L1D)] = {
@@ -231,7 +235,11 @@ static const unsigned armv6mpcore_perf_map[PERF_COUNT_HW_MAX] = {
 	[PERF_COUNT_HW_STALLED_CYCLES_BACKEND]	= ARMV6MPCORE_PERFCTR_LSU_FULL_STALL,
 };
 
+<<<<<<< HEAD
 static const unsigned armv6mpcore_perf_cache_map[PERF_COUNT_HW_CACHE_MAX]
+=======
+static unsigned armv6mpcore_perf_cache_map[PERF_COUNT_HW_CACHE_MAX]
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 					[PERF_COUNT_HW_CACHE_OP_MAX]
 					[PERF_COUNT_HW_CACHE_RESULT_MAX] = {
 	[C(L1D)] = {

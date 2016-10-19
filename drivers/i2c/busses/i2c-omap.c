@@ -941,6 +941,12 @@ omap_i2c_isr_thread(int this_irq, void *dev_id)
 		/*
 		 * ProDB0017052: Clear ARDY bit twice
 		 */
+<<<<<<< HEAD
+=======
+		if (stat & OMAP_I2C_STAT_ARDY)
+			omap_i2c_ack_stat(dev, OMAP_I2C_STAT_ARDY);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (stat & (OMAP_I2C_STAT_ARDY | OMAP_I2C_STAT_NACK |
 					OMAP_I2C_STAT_AL)) {
 			omap_i2c_ack_stat(dev, (OMAP_I2C_STAT_RRDY |

@@ -20,11 +20,21 @@
 
 #include "tda18218_priv.h"
 
+<<<<<<< HEAD
+=======
+/* Max transfer size done by I2C transfer functions */
+#define MAX_XFER_SIZE  64
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /* write multiple registers */
 static int tda18218_wr_regs(struct tda18218_priv *priv, u8 reg, u8 *val, u8 len)
 {
 	int ret = 0, len2, remaining;
+<<<<<<< HEAD
 	u8 buf[1 + len];
+=======
+	u8 buf[MAX_XFER_SIZE];
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct i2c_msg msg[1] = {
 		{
 			.addr = priv->cfg->i2c_address,
@@ -33,6 +43,16 @@ static int tda18218_wr_regs(struct tda18218_priv *priv, u8 reg, u8 *val, u8 len)
 		}
 	};
 
+<<<<<<< HEAD
+=======
+	if (1 + len > sizeof(buf)) {
+		dev_warn(&priv->i2c->dev,
+			 "%s: i2c wr reg=%04x: len=%d is too big!\n",
+			 KBUILD_MODNAME, reg, len);
+		return -EINVAL;
+	}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	for (remaining = len; remaining > 0;
 			remaining -= (priv->cfg->i2c_wr_max - 1)) {
 		len2 = remaining;
@@ -63,7 +83,11 @@ static int tda18218_wr_regs(struct tda18218_priv *priv, u8 reg, u8 *val, u8 len)
 static int tda18218_rd_regs(struct tda18218_priv *priv, u8 reg, u8 *val, u8 len)
 {
 	int ret;
+<<<<<<< HEAD
 	u8 buf[reg+len]; /* we must start read always from reg 0x00 */
+=======
+	u8 buf[MAX_XFER_SIZE]; /* we must start read always from reg 0x00 */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct i2c_msg msg[2] = {
 		{
 			.addr = priv->cfg->i2c_address,
@@ -73,11 +97,25 @@ static int tda18218_rd_regs(struct tda18218_priv *priv, u8 reg, u8 *val, u8 len)
 		}, {
 			.addr = priv->cfg->i2c_address,
 			.flags = I2C_M_RD,
+<<<<<<< HEAD
 			.len = sizeof(buf),
+=======
+			.len = reg + len,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			.buf = buf,
 		}
 	};
 
+<<<<<<< HEAD
+=======
+	if (reg + len > sizeof(buf)) {
+		dev_warn(&priv->i2c->dev,
+			 "%s: i2c wr reg=%04x: len=%d is too big!\n",
+			 KBUILD_MODNAME, reg, len);
+		return -EINVAL;
+	}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ret = i2c_transfer(priv->i2c, msg, 2);
 	if (ret == 2) {
 		memcpy(val, &buf[reg], len);

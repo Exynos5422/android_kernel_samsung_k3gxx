@@ -641,7 +641,11 @@
 			utmi-mode = <2>;
 			ranges;
 			dwc3@4a030000 {
+<<<<<<< HEAD
 				compatible = "snps,dwc3";
+=======
+				compatible = "synopsys,dwc3";
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				reg = <0x4a030000 0x1000>;
 				interrupts = <0 92 4>;
 				usb-phy = <&usb2_phy>, <&usb3_phy>;

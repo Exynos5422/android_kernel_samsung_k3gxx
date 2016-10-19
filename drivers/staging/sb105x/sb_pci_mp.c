@@ -1063,7 +1063,11 @@ static int mp_wait_modem_status(struct sb_uart_state *state, unsigned long arg)
 
 static int mp_get_count(struct sb_uart_state *state, struct serial_icounter_struct *icnt)
 {
+<<<<<<< HEAD
 	struct serial_icounter_struct icount;
+=======
+	struct serial_icounter_struct icount = {};
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct sb_uart_icount cnow;
 	struct sb_uart_port *port = state->port;
 

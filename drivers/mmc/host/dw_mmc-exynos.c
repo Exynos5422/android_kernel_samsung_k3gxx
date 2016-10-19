@@ -2,7 +2,10 @@
  * Exynos Specific Extensions for Synopsys DW Multimedia Card Interface driver
  *
  * Copyright (C) 2012, Samsung Electronics Co., Ltd.
+<<<<<<< HEAD
  * Copyright (C) 2013, The Chromium OS Authors
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,6 +17,7 @@
 #include <linux/platform_device.h>
 #include <linux/clk.h>
 #include <linux/mmc/host.h>
+<<<<<<< HEAD
 #include <linux/mmc/mmc.h>
 #include <linux/mmc/dw_mmc.h>
 #include <linux/dma-mapping.h>
@@ -42,10 +46,69 @@ unsigned int dw_mci_save_sfr[3][30];
 
 extern void dw_mci_ciu_reset(struct device *dev, struct dw_mci *host);
 extern bool dw_mci_fifo_reset(struct device *dev, struct dw_mci *host);
+=======
+#include <linux/mmc/dw_mmc.h>
+#include <linux/of.h>
+#include <linux/of_gpio.h>
+
+#include "dw_mmc.h"
+#include "dw_mmc-pltfm.h"
+
+#define NUM_PINS(x)			(x + 2)
+
+#define SDMMC_CLKSEL			0x09C
+#define SDMMC_CLKSEL_CCLK_SAMPLE(x)	(((x) & 7) << 0)
+#define SDMMC_CLKSEL_CCLK_DRIVE(x)	(((x) & 7) << 16)
+#define SDMMC_CLKSEL_CCLK_DIVIDER(x)	(((x) & 7) << 24)
+#define SDMMC_CLKSEL_GET_DRV_WD3(x)	(((x) >> 16) & 0x7)
+#define SDMMC_CLKSEL_TIMING(x, y, z)	(SDMMC_CLKSEL_CCLK_SAMPLE(x) |	\
+					SDMMC_CLKSEL_CCLK_DRIVE(y) |	\
+					SDMMC_CLKSEL_CCLK_DIVIDER(z))
+
+#define SDMMC_CMD_USE_HOLD_REG		BIT(29)
+
+#define EXYNOS4210_FIXED_CIU_CLK_DIV	2
+#define EXYNOS4412_FIXED_CIU_CLK_DIV	4
+
+/* Variations in Exynos specific dw-mshc controller */
+enum dw_mci_exynos_type {
+	DW_MCI_TYPE_EXYNOS4210,
+	DW_MCI_TYPE_EXYNOS4412,
+	DW_MCI_TYPE_EXYNOS5250,
+};
+
+/* Exynos implementation specific driver private data */
+struct dw_mci_exynos_priv_data {
+	enum dw_mci_exynos_type		ctrl_type;
+	u8				ciu_div;
+	u32				sdr_timing;
+	u32				ddr_timing;
+};
+
+static struct dw_mci_exynos_compatible {
+	char				*compatible;
+	enum dw_mci_exynos_type		ctrl_type;
+} exynos_compat[] = {
+	{
+		.compatible	= "samsung,exynos4210-dw-mshc",
+		.ctrl_type	= DW_MCI_TYPE_EXYNOS4210,
+	}, {
+		.compatible	= "samsung,exynos4412-dw-mshc",
+		.ctrl_type	= DW_MCI_TYPE_EXYNOS4412,
+	}, {
+		.compatible	= "samsung,exynos5250-dw-mshc",
+		.ctrl_type	= DW_MCI_TYPE_EXYNOS5250,
+	},
+};
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 static int dw_mci_exynos_priv_init(struct dw_mci *host)
 {
 	struct dw_mci_exynos_priv_data *priv;
+<<<<<<< HEAD
+=======
+	int idx;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	priv = devm_kzalloc(host->dev, sizeof(*priv), GFP_KERNEL);
 	if (!priv) {
@@ -53,6 +116,7 @@ static int dw_mci_exynos_priv_init(struct dw_mci *host)
 		return -ENOMEM;
 	}
 
+<<<<<<< HEAD
 	host->priv = priv;
 
 	return 0;
@@ -447,10 +511,23 @@ void dw_mci_exynos_cfg_smu(struct dw_mci *host)
 #endif
 }
 
+=======
+	for (idx = 0; idx < ARRAY_SIZE(exynos_compat); idx++) {
+		if (of_device_is_compatible(host->dev->of_node,
+					exynos_compat[idx].compatible))
+			priv->ctrl_type = exynos_compat[idx].ctrl_type;
+	}
+
+	host->priv = priv;
+	return 0;
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int dw_mci_exynos_setup_clock(struct dw_mci *host)
 {
 	struct dw_mci_exynos_priv_data *priv = host->priv;
 
+<<<<<<< HEAD
 #if defined(CONFIG_SOC_EXYNOS4412)
 	host->bus_hz /= EXYNOS4412_FIXED_CIU_CLK_DIV;
 #elif defined(CONFIG_SOC_EXYNOS4210)
@@ -458,10 +535,19 @@ static int dw_mci_exynos_setup_clock(struct dw_mci *host)
 #else
 	host->bus_hz /= (priv->ciu_div + 1);
 #endif
+=======
+	if (priv->ctrl_type == DW_MCI_TYPE_EXYNOS5250)
+		host->bus_hz /= (priv->ciu_div + 1);
+	else if (priv->ctrl_type == DW_MCI_TYPE_EXYNOS4412)
+		host->bus_hz /= EXYNOS4412_FIXED_CIU_CLK_DIV;
+	else if (priv->ctrl_type == DW_MCI_TYPE_EXYNOS4210)
+		host->bus_hz /= EXYNOS4210_FIXED_CIU_CLK_DIV;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return 0;
 }
 
+<<<<<<< HEAD
 static void dw_mci_exynos_register_dump(struct dw_mci *host)
 {
 	u32 i;
@@ -498,6 +584,8 @@ static void dw_mci_exynos_register_dump(struct dw_mci *host)
 		mci_readl(host, DDR200_DLINE_CTRL));
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static void dw_mci_exynos_prepare_command(struct dw_mci *host, u32 *cmdr)
 {
 	/*
@@ -511,6 +599,7 @@ static void dw_mci_exynos_prepare_command(struct dw_mci *host, u32 *cmdr)
 		*cmdr |= SDMMC_CMD_USE_HOLD_REG;
 }
 
+<<<<<<< HEAD
 /**
  * dw_mci_exynos_set_bus_hz - try to set the ciu clock; update host->bus_hz.
  *
@@ -719,10 +808,30 @@ static int dw_mci_exynos_parse_dt(struct dw_mci *host)
 	ref_clk -= ref_clk_size;
 	ciu_clkin_values -= ref_clk_size;
 	priv->ref_clk = ref_clk;
+=======
+static void dw_mci_exynos_set_ios(struct dw_mci *host, struct mmc_ios *ios)
+{
+	struct dw_mci_exynos_priv_data *priv = host->priv;
+
+	if (ios->timing == MMC_TIMING_UHS_DDR50)
+		mci_writel(host, CLKSEL, priv->ddr_timing);
+	else
+		mci_writel(host, CLKSEL, priv->sdr_timing);
+}
+
+static int dw_mci_exynos_parse_dt(struct dw_mci *host)
+{
+	struct dw_mci_exynos_priv_data *priv = host->priv;
+	struct device_node *np = host->dev->of_node;
+	u32 timing[2];
+	u32 div = 0;
+	int ret;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	of_property_read_u32(np, "samsung,dw-mshc-ciu-div", &div);
 	priv->ciu_div = div;
 
+<<<<<<< HEAD
 	if (of_get_property(np, "cd-gpio", NULL))
 		priv->cd_gpio = of_get_named_gpio(np, "cd-gpio", 0);
 	else
@@ -1675,6 +1784,40 @@ static const struct dw_mci_drv_data exynos_drv_data = {
 	.register_notifier	= dw_mci_exynos_register_notifier,
 	.unregister_notifier	= dw_mci_exynos_unregister_notifier,
 #endif
+=======
+	ret = of_property_read_u32_array(np,
+			"samsung,dw-mshc-sdr-timing", timing, 2);
+	if (ret)
+		return ret;
+
+	priv->sdr_timing = SDMMC_CLKSEL_TIMING(timing[0], timing[1], div);
+
+	ret = of_property_read_u32_array(np,
+			"samsung,dw-mshc-ddr-timing", timing, 2);
+	if (ret)
+		return ret;
+
+	priv->ddr_timing = SDMMC_CLKSEL_TIMING(timing[0], timing[1], div);
+	return 0;
+}
+
+/* Common capabilities of Exynos4/Exynos5 SoC */
+static unsigned long exynos_dwmmc_caps[4] = {
+	MMC_CAP_UHS_DDR50 | MMC_CAP_1_8V_DDR |
+		MMC_CAP_8_BIT_DATA | MMC_CAP_CMD23,
+	MMC_CAP_CMD23,
+	MMC_CAP_CMD23,
+	MMC_CAP_CMD23,
+};
+
+static const struct dw_mci_drv_data exynos_drv_data = {
+	.caps			= exynos_dwmmc_caps,
+	.init			= dw_mci_exynos_priv_init,
+	.setup_clock		= dw_mci_exynos_setup_clock,
+	.prepare_command	= dw_mci_exynos_prepare_command,
+	.set_ios		= dw_mci_exynos_set_ios,
+	.parse_dt		= dw_mci_exynos_parse_dt,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 static const struct of_device_id dw_mci_exynos_match[] = {
@@ -1682,25 +1825,34 @@ static const struct of_device_id dw_mci_exynos_match[] = {
 			.data = &exynos_drv_data, },
 	{ .compatible = "samsung,exynos5250-dw-mshc",
 			.data = &exynos_drv_data, },
+<<<<<<< HEAD
 	{ .compatible = "samsung,exynos5422-dw-mshc",
 			.data = &exynos_drv_data, },
 	{ .compatible = "samsung,exynos5430-dw-mshc",
 			.data = &exynos_drv_data, },
 	{ .compatible = "samsung,exynos5433-dw-mshc",
 			.data = &exynos_drv_data, },
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	{},
 };
 MODULE_DEVICE_TABLE(of, dw_mci_exynos_match);
 
+<<<<<<< HEAD
 static u64 exynos_dwmci_dmamask = DMA_BIT_MASK(32);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int dw_mci_exynos_probe(struct platform_device *pdev)
 {
 	const struct dw_mci_drv_data *drv_data;
 	const struct of_device_id *match;
 
 	match = of_match_node(dw_mci_exynos_match, pdev->dev.of_node);
+<<<<<<< HEAD
 	pdev->dev.dma_mask = &exynos_dwmci_dmamask;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	drv_data = match->data;
 	return dw_mci_pltfm_register(pdev, drv_data);
 }
@@ -1712,7 +1864,10 @@ static struct platform_driver dw_mci_exynos_pltfm_driver = {
 		.name		= "dwmmc_exynos",
 		.of_match_table	= dw_mci_exynos_match,
 		.pm		= &dw_mci_pltfm_pmops,
+<<<<<<< HEAD
 		.shutdown       = dw_mci_exynos_shutdown,
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	},
 };
 

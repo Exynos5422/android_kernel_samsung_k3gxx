@@ -1217,6 +1217,11 @@ static int team_user_linkup_option_get(struct team *team,
 	return 0;
 }
 
+<<<<<<< HEAD
+=======
+static void __team_carrier_check(struct team *team);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int team_user_linkup_option_set(struct team *team,
 				       struct team_gsetter_ctx *ctx)
 {
@@ -1224,6 +1229,10 @@ static int team_user_linkup_option_set(struct team *team,
 
 	port->user.linkup = ctx->data.bool_val;
 	team_refresh_port_linkup(port);
+<<<<<<< HEAD
+=======
+	__team_carrier_check(port->team);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 
@@ -1243,6 +1252,10 @@ static int team_user_linkup_en_option_set(struct team *team,
 
 	port->user.linkup_enabled = ctx->data.bool_val;
 	team_refresh_port_linkup(port);
+<<<<<<< HEAD
+=======
+	__team_carrier_check(port->team);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 
@@ -1538,6 +1551,10 @@ static int team_change_mtu(struct net_device *dev, int new_mtu)
 	 * to traverse list in reverse under rcu_read_lock
 	 */
 	mutex_lock(&team->lock);
+<<<<<<< HEAD
+=======
+	team->port_mtu_change_allowed = true;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	list_for_each_entry(port, &team->port_list, list) {
 		err = dev_set_mtu(port->dev, new_mtu);
 		if (err) {
@@ -1546,6 +1563,10 @@ static int team_change_mtu(struct net_device *dev, int new_mtu)
 			goto unwind;
 		}
 	}
+<<<<<<< HEAD
+=======
+	team->port_mtu_change_allowed = false;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	mutex_unlock(&team->lock);
 
 	dev->mtu = new_mtu;
@@ -1555,6 +1576,10 @@ static int team_change_mtu(struct net_device *dev, int new_mtu)
 unwind:
 	list_for_each_entry_continue_reverse(port, &team->port_list, list)
 		dev_set_mtu(port->dev, dev->mtu);
+<<<<<<< HEAD
+=======
+	team->port_mtu_change_allowed = false;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	mutex_unlock(&team->lock);
 
 	return err;
@@ -2674,7 +2699,13 @@ static int team_device_event(struct notifier_block *unused,
 		break;
 	case NETDEV_CHANGEMTU:
 		/* Forbid to change mtu of underlaying device */
+<<<<<<< HEAD
 		return NOTIFY_BAD;
+=======
+		if (!port->team->port_mtu_change_allowed)
+			return NOTIFY_BAD;
+		break;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	case NETDEV_PRE_TYPE_CHANGE:
 		/* Forbid to change type of underlaying device */
 		return NOTIFY_BAD;

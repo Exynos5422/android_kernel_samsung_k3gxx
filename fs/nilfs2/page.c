@@ -94,6 +94,10 @@ void nilfs_forget_buffer(struct buffer_head *bh)
 	clear_buffer_nilfs_volatile(bh);
 	clear_buffer_nilfs_checked(bh);
 	clear_buffer_nilfs_redirected(bh);
+<<<<<<< HEAD
+=======
+	clear_buffer_async_write(bh);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	clear_buffer_dirty(bh);
 	if (nilfs_page_buffers_clean(page))
 		__nilfs_clear_page_dirty(page);
@@ -429,6 +433,10 @@ void nilfs_clear_dirty_page(struct page *page, bool silent)
 					"discard block %llu, size %zu",
 					(u64)bh->b_blocknr, bh->b_size);
 			}
+<<<<<<< HEAD
+=======
+			clear_buffer_async_write(bh);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			clear_buffer_dirty(bh);
 			clear_buffer_nilfs_volatile(bh);
 			clear_buffer_nilfs_checked(bh);

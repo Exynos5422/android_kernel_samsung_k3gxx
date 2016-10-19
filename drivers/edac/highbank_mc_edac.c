@@ -189,6 +189,7 @@ static int highbank_mc_probe(struct platform_device *pdev)
 		goto err;
 	}
 
+<<<<<<< HEAD
 	irq = platform_get_irq(pdev, 0);
 	res = devm_request_irq(&pdev->dev, irq, highbank_mc_err_handler,
 			       0, dev_name(&pdev->dev), mci);
@@ -197,6 +198,8 @@ static int highbank_mc_probe(struct platform_device *pdev)
 		goto err;
 	}
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	mci->mtype_cap = MEM_FLAG_DDR3;
 	mci->edac_ctl_cap = EDAC_FLAG_NONE | EDAC_FLAG_SECDED;
 	mci->edac_cap = EDAC_FLAG_SECDED;
@@ -217,10 +220,26 @@ static int highbank_mc_probe(struct platform_device *pdev)
 	if (res < 0)
 		goto err;
 
+<<<<<<< HEAD
+=======
+	irq = platform_get_irq(pdev, 0);
+	res = devm_request_irq(&pdev->dev, irq, highbank_mc_err_handler,
+			       0, dev_name(&pdev->dev), mci);
+	if (res < 0) {
+		dev_err(&pdev->dev, "Unable to request irq %d\n", irq);
+		goto err2;
+	}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	highbank_mc_create_debugfs_nodes(mci);
 
 	devres_close_group(&pdev->dev, NULL);
 	return 0;
+<<<<<<< HEAD
+=======
+err2:
+	edac_mc_del_mc(&pdev->dev);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 err:
 	devres_release_group(&pdev->dev, NULL);
 	edac_mc_free(mci);

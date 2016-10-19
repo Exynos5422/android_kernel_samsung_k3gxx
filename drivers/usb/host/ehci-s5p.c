@@ -17,7 +17,10 @@
 #include <linux/io.h>
 #include <linux/kernel.h>
 #include <linux/module.h>
+<<<<<<< HEAD
 #include <linux/notifier.h>
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <linux/of.h>
 #include <linux/of_gpio.h>
 #include <linux/platform_device.h>
@@ -27,6 +30,7 @@
 #include <linux/usb.h>
 #include <linux/usb/hcd.h>
 #include <linux/usb/otg.h>
+<<<<<<< HEAD
 #include <linux/pm_qos.h>
 
 #if defined(CONFIG_MDM_HSIC_PM)
@@ -37,19 +41,27 @@ static const char hsic_pm_dev[] = "15510000.mdmpm_pdata";
 #include <linux/reboot.h>
 #include <linux/platform_data/modem.h>
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #include "ehci.h"
 
 #define DRIVER_DESC "EHCI s5p driver"
 
 #define EHCI_INSNREG00(base)			(base + 0x90)
+<<<<<<< HEAD
 #define EHCI_INSNREG00_ENA_DMA_INCR		(0xF << 22)
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define EHCI_INSNREG00_ENA_INCR16		(0x1 << 25)
 #define EHCI_INSNREG00_ENA_INCR8		(0x1 << 24)
 #define EHCI_INSNREG00_ENA_INCR4		(0x1 << 23)
 #define EHCI_INSNREG00_ENA_INCRX_ALIGN		(0x1 << 22)
+<<<<<<< HEAD
 #define EHCI_INSNREG00_APP_START_CLK		(0x1 << 21)
 #define EHCI_INSNREG00_OHCI_SUSP_LGCY		(0x1 << 20)
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define EHCI_INSNREG00_ENABLE_DMA_BURST	\
 	(EHCI_INSNREG00_ENA_INCR16 | EHCI_INSNREG00_ENA_INCR8 |	\
 	 EHCI_INSNREG00_ENA_INCR4 | EHCI_INSNREG00_ENA_INCRX_ALIGN)
@@ -57,14 +69,18 @@ static const char hsic_pm_dev[] = "15510000.mdmpm_pdata";
 static const char hcd_name[] = "ehci-s5p";
 static struct hc_driver __read_mostly s5p_ehci_hc_driver;
 
+<<<<<<< HEAD
 static struct pm_qos_request s5p_ehci_mif_qos;
 static int (*bus_resume)(struct usb_hcd *) = NULL;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 struct s5p_ehci_hcd {
 	struct clk *clk;
 	struct usb_phy *phy;
 	struct usb_otg *otg;
 	struct s5p_ehci_platdata *pdata;
+<<<<<<< HEAD
 	struct notifier_block lpa_nb;
 	int power_on;
 	int retention;
@@ -74,10 +90,13 @@ struct s5p_ehci_hcd {
 	struct usb_hcd *hcd;
 	struct mutex mutex_ehci_power;
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 #define to_s5p_ehci(hcd)      (struct s5p_ehci_hcd *)(hcd_to_ehci(hcd)->priv)
 
+<<<<<<< HEAD
 #if defined(CONFIG_LINK_DEVICE_HSIC) || defined(CONFIG_MDM_HSIC_PM)
 static struct raw_notifier_head hsic_notifier;
 int phy_register_notifier(struct notifier_block *nb)
@@ -122,16 +141,22 @@ static int usb_phy_prepare_wakeup(void)
  * this code is not necessary in case of KQLTE. */
 static inline void s5p_setup_vbus_gpio(struct platform_device *pdev) { return; }
 #else
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static void s5p_setup_vbus_gpio(struct platform_device *pdev)
 {
 	struct device *dev = &pdev->dev;
 	int err;
 	int gpio;
+<<<<<<< HEAD
 	int is_gpio = 0;	/* default : gpios not use */
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (!dev->of_node)
 		return;
 
+<<<<<<< HEAD
 	err = of_property_read_u32_index(dev->of_node, "is_gpio", 0, &is_gpio);
 	if (err)
 		dev_dbg(dev, "can not find is_gpio value\n");
@@ -142,6 +167,8 @@ static void s5p_setup_vbus_gpio(struct platform_device *pdev)
 	}
 
 #if !defined(CONFIG_USB_EXYNOS_SWITCH)
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	gpio = of_get_named_gpio(dev->of_node, "samsung,vbus-gpio", 0);
 	if (!gpio_is_valid(gpio))
 		return;
@@ -150,6 +177,7 @@ static void s5p_setup_vbus_gpio(struct platform_device *pdev)
 				    "ehci_vbus_gpio");
 	if (err)
 		dev_err(dev, "can't request ehci vbus gpio %d", gpio);
+<<<<<<< HEAD
 	else
 		gpio_set_value(gpio, 1);
 #endif
@@ -426,6 +454,10 @@ static int s5p_ehci_reboot_notifier_call(struct notifier_block *nb,
 	return NOTIFY_DONE;
 };
 #endif
+=======
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int s5p_ehci_probe(struct platform_device *pdev)
 {
 	struct s5p_ehci_platdata *pdata = pdev->dev.platform_data;
@@ -456,7 +488,11 @@ static int s5p_ehci_probe(struct platform_device *pdev)
 		return -ENOMEM;
 	}
 	s5p_ehci = to_s5p_ehci(hcd);
+<<<<<<< HEAD
 	phy = devm_usb_get_phy_by_phandle(&pdev->dev, "usb-phy", 0);
+=======
+	phy = devm_usb_get_phy(&pdev->dev, USB_PHY_TYPE_USB2);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (IS_ERR(phy)) {
 		/* Fallback to pdata */
 		if (!pdata) {
@@ -471,10 +507,13 @@ static int s5p_ehci_probe(struct platform_device *pdev)
 		s5p_ehci->otg = phy->otg;
 	}
 
+<<<<<<< HEAD
 	err = of_property_read_u32_index((&pdev->dev)->of_node, "l2-retention", 0, &s5p_ehci->retention);
 	if (err)
 		dev_err(&pdev->dev, " can not find l2-retention value\n");
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	s5p_ehci->clk = devm_clk_get(&pdev->dev, "usbhost");
 
 	if (IS_ERR(s5p_ehci->clk)) {
@@ -513,6 +552,7 @@ static int s5p_ehci_probe(struct platform_device *pdev)
 	if (s5p_ehci->otg)
 		s5p_ehci->otg->set_host(s5p_ehci->otg, &hcd->self);
 
+<<<<<<< HEAD
 	if (s5p_ehci->phy) {
 		/* Make sure PHY is initialized */
 		usb_phy_init(s5p_ehci->phy);
@@ -524,6 +564,12 @@ static int s5p_ehci_probe(struct platform_device *pdev)
 	} else if (s5p_ehci->pdata->phy_init) {
 		s5p_ehci->pdata->phy_init(pdev, USB_PHY_TYPE_HOST);
 	}
+=======
+	if (s5p_ehci->phy)
+		usb_phy_init(s5p_ehci->phy);
+	else if (s5p_ehci->pdata->phy_init)
+		s5p_ehci->pdata->phy_init(pdev, USB_PHY_TYPE_HOST);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	ehci = hcd_to_ehci(hcd);
 	ehci->caps = hcd->regs;
@@ -539,6 +585,7 @@ static int s5p_ehci_probe(struct platform_device *pdev)
 
 	platform_set_drvdata(pdev, hcd);
 
+<<<<<<< HEAD
 	/*
 	 * EHCI root hubs are expected to handle remote wakeup.
 	 * So, wakeup flag init defaults for root hubs.
@@ -587,6 +634,15 @@ fail_add_hcd:
 	} else if (s5p_ehci->pdata->phy_exit) {
 		s5p_ehci->pdata->phy_exit(pdev, USB_PHY_TYPE_HOST);
 	}
+=======
+	return 0;
+
+fail_add_hcd:
+	if (s5p_ehci->phy)
+		usb_phy_shutdown(s5p_ehci->phy);
+	else if (s5p_ehci->pdata->phy_exit)
+		s5p_ehci->pdata->phy_exit(pdev, USB_PHY_TYPE_HOST);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 fail_io:
 	clk_disable_unprepare(s5p_ehci->clk);
 fail_clk:
@@ -599,17 +655,21 @@ static int s5p_ehci_remove(struct platform_device *pdev)
 	struct usb_hcd *hcd = platform_get_drvdata(pdev);
 	struct s5p_ehci_hcd *s5p_ehci = to_s5p_ehci(hcd);
 
+<<<<<<< HEAD
 	pm_runtime_disable(&pdev->dev);
 
 	s5p_ehci->power_on = 0;
 	if (!s5p_ehci->retention)
 		unregister_samsung_usb_lpa_notifier(&s5p_ehci->lpa_nb);
 	remove_ehci_sys_file(hcd_to_ehci(hcd));
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	usb_remove_hcd(hcd);
 
 	if (s5p_ehci->otg)
 		s5p_ehci->otg->set_host(s5p_ehci->otg, &hcd->self);
 
+<<<<<<< HEAD
 	if (s5p_ehci->phy) {
 		/* Shutdown PHY only if it wasn't shutdown before */
 		if (!s5p_ehci->post_lpa_resume)
@@ -624,6 +684,15 @@ static int s5p_ehci_remove(struct platform_device *pdev)
 #if defined(CONFIG_LINK_DEVICE_HSIC)
 	unregister_reboot_notifier(&s5p_ehci->reboot_nb);
 #endif
+=======
+	if (s5p_ehci->phy)
+		usb_phy_shutdown(s5p_ehci->phy);
+	else if (s5p_ehci->pdata->phy_exit)
+		s5p_ehci->pdata->phy_exit(pdev, USB_PHY_TYPE_HOST);
+
+	clk_disable_unprepare(s5p_ehci->clk);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	usb_put_hcd(hcd);
 
 	return 0;
@@ -633,13 +702,17 @@ static void s5p_ehci_shutdown(struct platform_device *pdev)
 {
 	struct usb_hcd *hcd = platform_get_drvdata(pdev);
 
+<<<<<<< HEAD
 	if (!hcd->rh_registered)
 		return;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (hcd->driver->shutdown)
 		hcd->driver->shutdown(hcd);
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_PM_RUNTIME
 static int s5p_ehci_runtime_suspend(struct device *dev)
 {
@@ -748,6 +821,8 @@ static int s5p_ehci_runtime_resume(struct device *dev)
 #define s5p_ehci_runtime_resume		NULL
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifdef CONFIG_PM
 static int s5p_ehci_suspend(struct device *dev)
 {
@@ -758,6 +833,7 @@ static int s5p_ehci_suspend(struct device *dev)
 	bool do_wakeup = device_may_wakeup(dev);
 	int rc;
 
+<<<<<<< HEAD
 #ifdef CONFIG_MIPI_LLI
 	/* HSIC interface is only used for IMC LLI interface */
 	if (s5p_ehci->power_on == 0)
@@ -769,11 +845,14 @@ static int s5p_ehci_suspend(struct device *dev)
 	if (rc)
 		return rc;
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	rc = ehci_suspend(hcd, do_wakeup);
 
 	if (s5p_ehci->otg)
 		s5p_ehci->otg->set_host(s5p_ehci->otg, &hcd->self);
 
+<<<<<<< HEAD
 	if (s5p_ehci->phy) {
 		/* Shutdown PHY only if it wasn't shutdown before */
 		if (!s5p_ehci->post_lpa_resume)
@@ -785,6 +864,13 @@ static int s5p_ehci_suspend(struct device *dev)
 	raw_notifier_call_chain(&hsic_notifier,
 				STATE_HSIC_PHY_SHUTDOWN, NULL);
 #endif
+=======
+	if (s5p_ehci->phy)
+		usb_phy_shutdown(s5p_ehci->phy);
+	else if (s5p_ehci->pdata->phy_exit)
+		s5p_ehci->pdata->phy_exit(pdev, USB_PHY_TYPE_HOST);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	clk_disable_unprepare(s5p_ehci->clk);
 
 	return rc;
@@ -796,16 +882,20 @@ static int s5p_ehci_resume(struct device *dev)
 	struct  s5p_ehci_hcd *s5p_ehci = to_s5p_ehci(hcd);
 	struct platform_device *pdev = to_platform_device(dev);
 
+<<<<<<< HEAD
 #ifdef CONFIG_MIPI_LLI
 	if (s5p_ehci->power_on == 0)
 		return 0;
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	clk_prepare_enable(s5p_ehci->clk);
 
 	if (s5p_ehci->otg)
 		s5p_ehci->otg->set_host(s5p_ehci->otg, &hcd->self);
 
+<<<<<<< HEAD
 	if (s5p_ehci->phy) {
 		usb_phy_init(s5p_ehci->phy);
 		s5p_ehci->post_lpa_resume = 0;
@@ -819,11 +909,18 @@ static int s5p_ehci_resume(struct device *dev)
 	} else if (s5p_ehci->pdata->phy_init) {
 		s5p_ehci->pdata->phy_init(pdev, USB_PHY_TYPE_HOST);
 	}
+=======
+	if (s5p_ehci->phy)
+		usb_phy_init(s5p_ehci->phy);
+	else if (s5p_ehci->pdata->phy_init)
+		s5p_ehci->pdata->phy_init(pdev, USB_PHY_TYPE_HOST);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/* DMA burst Enable */
 	writel(EHCI_INSNREG00_ENABLE_DMA_BURST, EHCI_INSNREG00(hcd->regs));
 
 	ehci_resume(hcd, false);
+<<<<<<< HEAD
 
 	/* Update runtime PM status and clear runtime_error */
 	pm_runtime_disable(dev);
@@ -857,19 +954,32 @@ int s5p_ehci_bus_resume(struct usb_hcd *hcd)
 #define s5p_ehci_suspend	NULL
 #define s5p_ehci_resume		NULL
 #define s5p_ehci_bus_resume	NULL
+=======
+	return 0;
+}
+#else
+#define s5p_ehci_suspend	NULL
+#define s5p_ehci_resume		NULL
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif
 
 static const struct dev_pm_ops s5p_ehci_pm_ops = {
 	.suspend	= s5p_ehci_suspend,
 	.resume		= s5p_ehci_resume,
+<<<<<<< HEAD
 	.runtime_suspend	= s5p_ehci_runtime_suspend,
 	.runtime_resume		= s5p_ehci_runtime_resume,
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 #ifdef CONFIG_OF
 static const struct of_device_id exynos_ehci_match[] = {
 	{ .compatible = "samsung,exynos4210-ehci" },
+<<<<<<< HEAD
 	{ .compatible = "samsung,exynos5-ehci" },
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	{},
 };
 MODULE_DEVICE_TABLE(of, exynos_ehci_match);
@@ -897,10 +1007,13 @@ static int __init ehci_s5p_init(void)
 
 	pr_info("%s: " DRIVER_DESC "\n", hcd_name);
 	ehci_init_driver(&s5p_ehci_hc_driver, &s5p_overrides);
+<<<<<<< HEAD
 
 	bus_resume = s5p_ehci_hc_driver.bus_resume;
 	s5p_ehci_hc_driver.bus_resume = s5p_ehci_bus_resume;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return platform_driver_register(&s5p_ehci_driver);
 }
 module_init(ehci_s5p_init);

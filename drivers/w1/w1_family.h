@@ -30,7 +30,10 @@
 #define W1_FAMILY_SMEM_01	0x01
 #define W1_FAMILY_SMEM_81	0x81
 #define W1_THERM_DS18S20 	0x10
+<<<<<<< HEAD
 #define W1_FAMILY_DS28EL15	0x97
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define W1_FAMILY_DS28E04	0x1C
 #define W1_COUNTER_DS2423	0x1D
 #define W1_THERM_DS1822  	0x22
@@ -43,7 +46,10 @@
 #define W1_FAMILY_DS2413	0x3A
 #define W1_THERM_DS1825		0x3B
 #define W1_FAMILY_DS2781	0x3D
+<<<<<<< HEAD
 #define W1_FAMILY_DS28EL35	0xC0
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define W1_THERM_DS28EA00	0x42
 
 #define MAXNAMELEN		32

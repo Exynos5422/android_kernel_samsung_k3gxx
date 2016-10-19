@@ -61,6 +61,12 @@
 #include <media/lirc_dev.h>
 #include <media/lirc.h>
 
+<<<<<<< HEAD
+=======
+/* Max transfer size done by I2C transfer functions */
+#define MAX_XFER_SIZE  64
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 struct IR;
 
 struct IR_rx {
@@ -941,7 +947,18 @@ static ssize_t read(struct file *filep, char *outbuf, size_t n, loff_t *ppos)
 			schedule();
 			set_current_state(TASK_INTERRUPTIBLE);
 		} else {
+<<<<<<< HEAD
 			unsigned char buf[rbuf->chunk_size];
+=======
+			unsigned char buf[MAX_XFER_SIZE];
+
+			if (rbuf->chunk_size > sizeof(buf)) {
+				zilog_error("chunk_size is too big (%d)!\n",
+					    rbuf->chunk_size);
+				ret = -EINVAL;
+				break;
+			}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			m = lirc_buffer_read(rbuf, buf);
 			if (m == rbuf->chunk_size) {
 				ret = copy_to_user((void *)outbuf+written, buf,

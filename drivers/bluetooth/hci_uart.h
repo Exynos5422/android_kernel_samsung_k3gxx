@@ -2,9 +2,15 @@
  *
  *  Bluetooth HCI UART driver
  *
+<<<<<<< HEAD
  *  Copyright (C) 2000-2001  Qualcomm Incorporated
  *  Copyright (C) 2002-2003  Maxim Krasnyansky <maxk@qualcomm.com>
  *  Copyright (C) 2004-2005  Marcel Holtmann <marcel@holtmann.org>
+=======
+ *  Copyright (C) 2002-2003  Maxim Krasnyansky <maxk@qualcomm.com>
+ *  Copyright (C) 2004-2005  Marcel Holtmann <marcel@holtmann.org>
+ *  Copyright (c) 2000-2001, 2010, Code Aurora Forum. All rights reserved.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  *
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -35,7 +41,11 @@
 #define HCIUARTGETFLAGS		_IOR('U', 204, int)
 
 /* UART protocols */
+<<<<<<< HEAD
 #define HCI_UART_MAX_PROTO	6
+=======
+#define HCI_UART_MAX_PROTO	7
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define HCI_UART_H4	0
 #define HCI_UART_BCSP	1
@@ -43,12 +53,21 @@
 #define HCI_UART_H4DS	3
 #define HCI_UART_LL	4
 #define HCI_UART_ATH3K	5
+<<<<<<< HEAD
+=======
+#define HCI_UART_IBS	6
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define HCI_UART_RAW_DEVICE	0
 #define HCI_UART_RESET_ON_INIT	1
 #define HCI_UART_CREATE_AMP	2
 #define HCI_UART_INIT_PENDING	3
 
+<<<<<<< HEAD
+=======
+#include <linux/interrupt.h>
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 struct hci_uart;
 
 struct hci_uart_proto {
@@ -68,6 +87,10 @@ struct hci_uart {
 	unsigned long		hdev_flags;
 
 	struct work_struct	init_ready;
+<<<<<<< HEAD
+=======
+	struct work_struct	write_work;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	struct hci_uart_proto	*proto;
 	void			*priv;
@@ -110,7 +133,23 @@ int ath_init(void);
 int ath_deinit(void);
 #endif
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_BT_HCIUART_IBS
+int ibs_init(void);
+int ibs_deinit(void);
+#endif
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifdef CONFIG_BT_HCIUART_3WIRE
 int h5_init(void);
 int h5_deinit(void);
 #endif
+<<<<<<< HEAD
+=======
+
+#ifdef CONFIG_BT_HCIUART_IBS
+int ibs_init(void);
+int ibs_deinit(void);
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

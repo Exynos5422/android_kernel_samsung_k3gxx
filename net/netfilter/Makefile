@@ -96,6 +96,10 @@ obj-$(CONFIG_NETFILTER_XT_TARGET_TCPOPTSTRIP) += xt_TCPOPTSTRIP.o
 obj-$(CONFIG_NETFILTER_XT_TARGET_TEE) += xt_TEE.o
 obj-$(CONFIG_NETFILTER_XT_TARGET_TRACE) += xt_TRACE.o
 obj-$(CONFIG_NETFILTER_XT_TARGET_IDLETIMER) += xt_IDLETIMER.o
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_NETFILTER_XT_TARGET_HARDIDLETIMER) += xt_HARDIDLETIMER.o
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 # matches
 obj-$(CONFIG_NETFILTER_XT_MATCH_ADDRTYPE) += xt_addrtype.o
@@ -147,5 +151,8 @@ obj-$(CONFIG_IP_SET) += ipset/
 
 # IPVS
 obj-$(CONFIG_IP_VS) += ipvs/
+<<<<<<< HEAD
 obj-$(CONFIG_VPNCLIENT_SECURITY) += interceptor/
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

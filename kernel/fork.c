@@ -390,8 +390,11 @@ static int dup_mmap(struct mm_struct *mm, struct mm_struct *oldmm)
 	mm->locked_vm = 0;
 	mm->mmap = NULL;
 	mm->mmap_cache = NULL;
+<<<<<<< HEAD
 	mm->free_area_cache = oldmm->mmap_base;
 	mm->cached_hole_size = ~0UL;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	mm->map_count = 0;
 	cpumask_clear(mm_cpumask(mm));
 	mm->mm_rb = RB_ROOT;
@@ -565,10 +568,16 @@ static struct mm_struct *mm_init(struct mm_struct *mm, struct task_struct *p)
 	mm->nr_ptes = 0;
 	memset(&mm->rss_stat, 0, sizeof(mm->rss_stat));
 	spin_lock_init(&mm->page_table_lock);
+<<<<<<< HEAD
 	mm->free_area_cache = TASK_UNMAPPED_BASE;
 	mm->cached_hole_size = ~0UL;
 	mm_init_aio(mm);
 	mm_init_owner(mm, p);
+=======
+	mm_init_aio(mm);
+	mm_init_owner(mm, p);
+	clear_tlb_flush_pending(mm);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (likely(!mm_alloc_pgd(mm))) {
 		mm->def_flags = 0;
@@ -632,8 +641,14 @@ EXPORT_SYMBOL_GPL(__mmdrop);
 /*
  * Decrement the use count and release all resources for an mm.
  */
+<<<<<<< HEAD
 void mmput(struct mm_struct *mm)
 {
+=======
+int mmput(struct mm_struct *mm)
+{
+	int mm_freed = 0;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	might_sleep();
 
 	if (atomic_dec_and_test(&mm->mm_users)) {
@@ -651,7 +666,13 @@ void mmput(struct mm_struct *mm)
 		if (mm->binfmt)
 			module_put(mm->binfmt->module);
 		mmdrop(mm);
+<<<<<<< HEAD
 	}
+=======
+		mm_freed = 1;
+	}
+	return mm_freed;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 EXPORT_SYMBOL_GPL(mmput);
 
@@ -1185,6 +1206,7 @@ static void posix_cpu_timers_init(struct task_struct *tsk)
 	INIT_LIST_HEAD(&tsk->cpu_timers[2]);
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_RO_CRED
 void rkp_assign_pgd(struct task_struct *p)
 {
@@ -1193,6 +1215,8 @@ void rkp_assign_pgd(struct task_struct *p)
 	tima_send_cmd2((unsigned int)p->cred, (unsigned int)pgd, 0x43);
 }
 #endif /*CONFIG_TIMA_RKP_RO_CRED*/
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * This creates a new process as a copy of the old one,
  * but does not actually start it yet.
@@ -1243,10 +1267,18 @@ static struct task_struct *copy_process(unsigned long clone_flags,
 		return ERR_PTR(-EINVAL);
 
 	/*
+<<<<<<< HEAD
 	 * If the new process will be in a different pid namespace
 	 * don't allow the creation of threads.
 	 */
 	if ((clone_flags & (CLONE_VM|CLONE_NEWPID)) &&
+=======
+	 * If the new process will be in a different pid namespace don't
+	 * allow it to share a thread group or signal handlers with the
+	 * forking task.
+	 */
+	if ((clone_flags & (CLONE_SIGHAND | CLONE_NEWPID)) &&
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	    (task_active_pid_ns(current) != current->nsproxy->pid_ns))
 		return ERR_PTR(-EINVAL);
 
@@ -1305,6 +1337,10 @@ static struct task_struct *copy_process(unsigned long clone_flags,
 
 	p->utime = p->stime = p->gtime = 0;
 	p->utimescaled = p->stimescaled = 0;
+<<<<<<< HEAD
+=======
+	p->cpu_power = 0;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifndef CONFIG_VIRT_CPU_ACCOUNTING_NATIVE
 	p->prev_cputime.utime = p->prev_cputime.stime = 0;
 #endif
@@ -1523,6 +1559,17 @@ static struct task_struct *copy_process(unsigned long clone_flags,
 		goto bad_fork_free_pid;
 	}
 
+<<<<<<< HEAD
+=======
+	if (clone_flags & CLONE_THREAD) {
+		current->signal->nr_threads++;
+		atomic_inc(&current->signal->live);
+		atomic_inc(&current->signal->sigcnt);
+		p->group_leader = current->group_leader;
+		list_add_tail_rcu(&p->thread_group, &p->group_leader->thread_group);
+	}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (likely(p->pid)) {
 		ptrace_init_task(p, (clone_flags & CLONE_PTRACE) || trace);
 
@@ -1540,12 +1587,15 @@ static struct task_struct *copy_process(unsigned long clone_flags,
 			list_add_tail_rcu(&p->tasks, &init_task.tasks);
 			__this_cpu_inc(process_counts);
 		} else {
+<<<<<<< HEAD
 			current->signal->nr_threads++;
 			atomic_inc(&current->signal->live);
 			atomic_inc(&current->signal->sigcnt);
 			p->group_leader = current->group_leader;
 			list_add_tail_rcu(&p->thread_group,
 					  &p->group_leader->thread_group);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			list_add_tail_rcu(&p->thread_node,
 					  &p->signal->thread_head);
 		}
@@ -1555,7 +1605,13 @@ static struct task_struct *copy_process(unsigned long clone_flags,
 
 	total_forks++;
 	spin_unlock(&current->sighand->siglock);
+<<<<<<< HEAD
 	write_unlock_irq(&tasklist_lock);
+=======
+	syscall_tracepoint_update(p);
+	write_unlock_irq(&tasklist_lock);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	proc_fork_connector(p);
 	cgroup_post_fork(p);
 	if (clone_flags & CLONE_THREAD)
@@ -1563,10 +1619,13 @@ static struct task_struct *copy_process(unsigned long clone_flags,
 	perf_event_fork(p);
 
 	trace_task_newtask(p, clone_flags);
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_RO_CRED
 	if(rkp_cred_enable)
 		rkp_assign_pgd(p);
 #endif/*CONFIG_TIMA_RKP_RO_CRED*/
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return p;
 
@@ -1687,10 +1746,19 @@ long do_fork(unsigned long clone_flags,
 	 */
 	if (!IS_ERR(p)) {
 		struct completion vfork;
+<<<<<<< HEAD
 
 		trace_sched_process_fork(current, p);
 
 		nr = task_pid_vnr(p);
+=======
+		struct pid *pid;
+
+		trace_sched_process_fork(current, p);
+
+		pid = get_task_pid(p, PIDTYPE_PID);
+		nr = pid_vnr(pid);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 		if (clone_flags & CLONE_PARENT_SETTID)
 			put_user(nr, parent_tidptr);
@@ -1705,12 +1773,23 @@ long do_fork(unsigned long clone_flags,
 
 		/* forking complete and child started to run, tell ptracer */
 		if (unlikely(trace))
+<<<<<<< HEAD
 			ptrace_event(trace, nr);
 
 		if (clone_flags & CLONE_VFORK) {
 			if (!wait_for_vfork_done(p, &vfork))
 				ptrace_event(PTRACE_EVENT_VFORK_DONE, nr);
 		}
+=======
+			ptrace_event_pid(trace, pid);
+
+		if (clone_flags & CLONE_VFORK) {
+			if (!wait_for_vfork_done(p, &vfork))
+				ptrace_event_pid(PTRACE_EVENT_VFORK_DONE, pid);
+		}
+
+		put_pid(pid);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	} else {
 		nr = PTR_ERR(p);
 	}

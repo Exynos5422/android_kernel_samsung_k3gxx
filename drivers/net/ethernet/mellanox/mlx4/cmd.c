@@ -1544,7 +1544,11 @@ static void mlx4_master_deactivate_admin_state(struct mlx4_priv *priv, int slave
 			vp_oper->vlan_idx = NO_INDX;
 		}
 		if (NO_INDX != vp_oper->mac_idx) {
+<<<<<<< HEAD
 			__mlx4_unregister_mac(&priv->dev, port, vp_oper->mac_idx);
+=======
+			__mlx4_unregister_mac(&priv->dev, port, vp_oper->state.mac);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			vp_oper->mac_idx = NO_INDX;
 		}
 	}

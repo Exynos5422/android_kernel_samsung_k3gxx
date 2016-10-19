@@ -177,12 +177,24 @@ static int uvc_queue_buffer(struct uvc_video_queue *queue,
 
 	mutex_lock(&queue->mutex);
 	ret = vb2_qbuf(&queue->queue, buf);
+<<<<<<< HEAD
+=======
+	if (ret < 0)
+		goto done;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	spin_lock_irqsave(&queue->irqlock, flags);
 	ret = (queue->flags & UVC_QUEUE_PAUSED) != 0;
 	queue->flags &= ~UVC_QUEUE_PAUSED;
 	spin_unlock_irqrestore(&queue->irqlock, flags);
+<<<<<<< HEAD
 	mutex_unlock(&queue->mutex);
 
+=======
+
+done:
+	mutex_unlock(&queue->mutex);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return ret;
 }
 

@@ -160,6 +160,7 @@
 #define OFF false
 
 /*
+<<<<<<< HEAD
  * Create a contiguous bitmask starting at bit position @lo and ending at
  * position @hi. For example
  *
@@ -168,6 +169,8 @@
 #define GENMASK(lo, hi)			(((1ULL << ((hi) - (lo) + 1)) - 1) << (lo))
 
 /*
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  * PCI-defined configuration space registers
  */
 #define PCI_DEVICE_ID_AMD_15H_NB_F1	0x1601

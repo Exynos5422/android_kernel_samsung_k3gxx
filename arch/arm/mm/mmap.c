@@ -181,11 +181,17 @@ void arch_pick_mmap_layout(struct mm_struct *mm)
 	if (mmap_is_legacy()) {
 		mm->mmap_base = TASK_UNMAPPED_BASE + random_factor;
 		mm->get_unmapped_area = arch_get_unmapped_area;
+<<<<<<< HEAD
 		mm->unmap_area = arch_unmap_area;
 	} else {
 		mm->mmap_base = mmap_base(random_factor);
 		mm->get_unmapped_area = arch_get_unmapped_area_topdown;
 		mm->unmap_area = arch_unmap_area_topdown;
+=======
+	} else {
+		mm->mmap_base = mmap_base(random_factor);
+		mm->get_unmapped_area = arch_get_unmapped_area_topdown;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 }
 
@@ -204,6 +210,7 @@ int valid_phys_addr_range(phys_addr_t addr, size_t size)
 }
 
 /*
+<<<<<<< HEAD
  * We don't use supersection mappings for mmap() on /dev/mem, which
  * means that we can't map the memory area above the 4G barrier into
  * userspace.
@@ -211,6 +218,13 @@ int valid_phys_addr_range(phys_addr_t addr, size_t size)
 int valid_mmap_phys_addr_range(unsigned long pfn, size_t size)
 {
 	return !(pfn + (size >> PAGE_SHIFT) > 0x00100000);
+=======
+ * Do not allow /dev/mem mappings beyond the supported physical range.
+ */
+int valid_mmap_phys_addr_range(unsigned long pfn, size_t size)
+{
+	return (pfn + (size >> PAGE_SHIFT)) <= (1 + (PHYS_MASK >> PAGE_SHIFT));
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 #ifdef CONFIG_STRICT_DEVMEM

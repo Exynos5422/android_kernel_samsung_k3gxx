@@ -532,7 +532,11 @@ return_normal:
 			kgdb_info[cpu].exception_state &=
 				~(DCPU_WANT_MASTER | DCPU_IS_SLAVE);
 			kgdb_info[cpu].enter_kgdb--;
+<<<<<<< HEAD
 			smp_mb__before_atomic_dec();
+=======
+			smp_mb__before_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			atomic_dec(&slaves_in_kgdb);
 			dbg_touch_watchdogs();
 			local_irq_restore(flags);
@@ -656,7 +660,11 @@ kgdb_restore:
 	kgdb_info[cpu].exception_state &=
 		~(DCPU_WANT_MASTER | DCPU_IS_SLAVE);
 	kgdb_info[cpu].enter_kgdb--;
+<<<<<<< HEAD
 	smp_mb__before_atomic_dec();
+=======
+	smp_mb__before_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	atomic_dec(&masters_in_kgdb);
 	/* Free kgdb_active */
 	atomic_set(&kgdb_active, -1);

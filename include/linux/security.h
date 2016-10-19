@@ -26,6 +26,10 @@
 #include <linux/capability.h>
 #include <linux/slab.h>
 #include <linux/err.h>
+<<<<<<< HEAD
+=======
+#include <linux/bio.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 struct linux_binprm;
 struct cred;
@@ -53,11 +57,14 @@ struct xattr;
 struct xfrm_sec_ctx;
 struct mm_struct;
 
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_RO_CRED
 /* For understand size of struct cred*/
 #include <linux/cred.h>
 #endif /*CONFIG_TIMA_RKP_RO_CRED*/
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /* Maximum number of letters for an LSM name string */
 #define SECURITY_NAME_MAX	10
 
@@ -70,6 +77,7 @@ struct audit_krule;
 struct user_namespace;
 struct timezone;
 
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_RO_CRED
 #define cred_usage_length ((1 << (RO_PAGES_ORDER + PAGE_SHIFT)) / (sizeof(struct cred) + 4) ) + 1
 #define cred_usage_offset(addr) ((unsigned long) addr - (unsigned long) __rkp_ro_start) / (cred_align_size)
@@ -102,6 +110,8 @@ extern int security_integrity_current(void);
 #define security_integrity_current()  0
 #endif /*CONFIG_TIMA_RKP_RO_CRED*/
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * These functions are in security/capability.c and are used
  * as the default capabilities functions
@@ -1511,6 +1521,11 @@ struct security_operations {
 				    void **value, size_t *len);
 	int (*inode_create) (struct inode *dir,
 			     struct dentry *dentry, umode_t mode);
+<<<<<<< HEAD
+=======
+	int (*inode_post_create) (struct inode *dir,
+			     struct dentry *dentry, umode_t mode);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	int (*inode_link) (struct dentry *old_dentry,
 			   struct inode *dir, struct dentry *new_dentry);
 	int (*inode_unlink) (struct inode *dir, struct dentry *dentry);
@@ -1561,6 +1576,11 @@ struct security_operations {
 				    struct fown_struct *fown, int sig);
 	int (*file_receive) (struct file *file);
 	int (*file_open) (struct file *file, const struct cred *cred);
+<<<<<<< HEAD
+=======
+	int (*file_close) (struct file *file);
+	bool (*allow_merge_bio)(struct bio *bio1, struct bio *bio2);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	int (*task_create) (unsigned long clone_flags);
 	void (*task_free) (struct task_struct *task);
@@ -1785,6 +1805,11 @@ int security_old_inode_init_security(struct inode *inode, struct inode *dir,
 				     const struct qstr *qstr, char **name,
 				     void **value, size_t *len);
 int security_inode_create(struct inode *dir, struct dentry *dentry, umode_t mode);
+<<<<<<< HEAD
+=======
+int security_inode_post_create(struct inode *dir, struct dentry *dentry,
+			       umode_t mode);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 int security_inode_link(struct dentry *old_dentry, struct inode *dir,
 			 struct dentry *new_dentry);
 int security_inode_unlink(struct inode *dir, struct dentry *dentry);
@@ -1829,6 +1854,12 @@ int security_file_send_sigiotask(struct task_struct *tsk,
 				 struct fown_struct *fown, int sig);
 int security_file_receive(struct file *file);
 int security_file_open(struct file *file, const struct cred *cred);
+<<<<<<< HEAD
+=======
+int security_file_close(struct file *file);
+bool security_allow_merge_bio(struct bio *bio1, struct bio *bio2);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 int security_task_create(unsigned long clone_flags);
 void security_task_free(struct task_struct *task);
 int security_cred_alloc_blank(struct cred *cred, gfp_t gfp);
@@ -2126,6 +2157,16 @@ static inline int security_inode_create(struct inode *dir,
 	return 0;
 }
 
+<<<<<<< HEAD
+=======
+static inline int security_inode_post_create(struct inode *dir,
+					     struct dentry *dentry,
+					     umode_t mode)
+{
+	return 0;
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static inline int security_inode_link(struct dentry *old_dentry,
 				       struct inode *dir,
 				       struct dentry *new_dentry)
@@ -2330,6 +2371,19 @@ static inline int security_file_open(struct file *file,
 	return 0;
 }
 
+<<<<<<< HEAD
+=======
+static inline int security_file_close(struct file *file)
+{
+	return 0;
+}
+
+static inline bool security_allow_merge_bio(struct bio *bio1, struct bio *bio2)
+{
+	return true;
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static inline int security_task_create(unsigned long clone_flags)
 {
 	return 0;

@@ -15,7 +15,10 @@
 
 #include "smpboot.h"
 
+<<<<<<< HEAD
 #ifdef CONFIG_USE_GENERIC_SMP_HELPERS
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 enum {
 	CSD_FLAG_LOCK		= 0x01,
 };
@@ -33,6 +36,13 @@ struct call_single_queue {
 	raw_spinlock_t		lock;
 };
 
+<<<<<<< HEAD
+=======
+/* CPU mask indicating which CPUs to bring online during smp_init() */
+static bool have_boot_cpu_mask;
+static cpumask_var_t boot_cpu_mask;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static DEFINE_PER_CPU_SHARED_ALIGNED(struct call_single_queue, call_single_queue);
 
 static int
@@ -470,7 +480,10 @@ int smp_call_function(smp_call_func_t func, void *info, int wait)
 	return 0;
 }
 EXPORT_SYMBOL(smp_call_function);
+<<<<<<< HEAD
 #endif /* USE_GENERIC_SMP_HELPERS */
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /* Setup configured maximum number of CPUs to activate */
 unsigned int setup_max_cpus = NR_CPUS;
@@ -525,6 +538,22 @@ static int __init maxcpus(char *str)
 
 early_param("maxcpus", maxcpus);
 
+<<<<<<< HEAD
+=======
+static int __init boot_cpus(char *str)
+{
+	alloc_bootmem_cpumask_var(&boot_cpu_mask);
+	if (cpulist_parse(str, boot_cpu_mask) < 0) {
+		pr_warn("SMP: Incorrect boot_cpus cpumask\n");
+		return -EINVAL;
+	}
+	have_boot_cpu_mask = true;
+	return 0;
+}
+
+early_param("boot_cpus", boot_cpus);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /* Setup number of possible processor ids */
 int nr_cpu_ids __read_mostly = NR_CPUS;
 EXPORT_SYMBOL(nr_cpu_ids);
@@ -535,6 +564,24 @@ void __init setup_nr_cpu_ids(void)
 	nr_cpu_ids = find_last_bit(cpumask_bits(cpu_possible_mask),NR_CPUS) + 1;
 }
 
+<<<<<<< HEAD
+=======
+/* Should the given CPU be booted during smp_init() ? */
+static inline bool boot_cpu(int cpu)
+{
+	if (!have_boot_cpu_mask)
+		return true;
+
+	return cpumask_test_cpu(cpu, boot_cpu_mask);
+}
+
+static inline void free_boot_cpu_mask(void)
+{
+	if (have_boot_cpu_mask)	/* Allocated from boot_cpus() */
+		free_bootmem_cpumask_var(boot_cpu_mask);
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /* Called by boot processor to activate the rest. */
 void __init smp_init(void)
 {
@@ -546,10 +593,19 @@ void __init smp_init(void)
 	for_each_present_cpu(cpu) {
 		if (num_online_cpus() >= setup_max_cpus)
 			break;
+<<<<<<< HEAD
 		if (!cpu_online(cpu))
 			cpu_up(cpu);
 	}
 
+=======
+		if (!cpu_online(cpu) && boot_cpu(cpu))
+			cpu_up(cpu);
+	}
+
+	free_boot_cpu_mask();
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* Any cleanup work */
 	printk(KERN_INFO "Brought up %ld CPUs\n", (long)num_online_cpus());
 	smp_cpus_done(setup_max_cpus);

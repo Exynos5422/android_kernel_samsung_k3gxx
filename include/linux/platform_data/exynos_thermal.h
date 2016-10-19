@@ -32,7 +32,10 @@ enum calibration_type {
 enum soc_type {
 	SOC_ARCH_EXYNOS4210 = 1,
 	SOC_ARCH_EXYNOS,
+<<<<<<< HEAD
 	SOC_ARCH_EXYNOS543X,
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 /**
  * struct freq_clip_table
@@ -46,6 +49,7 @@ enum soc_type {
  */
 struct freq_clip_table {
 	unsigned int freq_clip_max;
+<<<<<<< HEAD
 #ifdef CONFIG_ARM_EXYNOS_MP_CPUFREQ
 	unsigned int freq_clip_max_kfc;
 #endif
@@ -54,6 +58,10 @@ struct freq_clip_table {
 #ifdef CONFIG_ARM_EXYNOS_MP_CPUFREQ
 	const struct cpumask *mask_val_kfc;
 #endif
+=======
+	unsigned int temp_level;
+	const struct cpumask *mask_val;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 /**
@@ -107,15 +115,22 @@ struct freq_clip_table {
 struct exynos_tmu_platform_data {
 	u8 threshold;
 	u8 threshold_falling;
+<<<<<<< HEAD
 	u8 trigger_levels[8];
+=======
+	u8 trigger_levels[4];
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	bool trigger_level0_en;
 	bool trigger_level1_en;
 	bool trigger_level2_en;
 	bool trigger_level3_en;
+<<<<<<< HEAD
 	bool trigger_level4_en;
 	bool trigger_level5_en;
 	bool trigger_level6_en;
 	bool trigger_level7_en;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	u8 gain;
 	u8 reference_voltage;
@@ -124,11 +139,16 @@ struct exynos_tmu_platform_data {
 
 	enum calibration_type cal_type;
 	enum soc_type type;
+<<<<<<< HEAD
 	struct freq_clip_table freq_tab[8];
 	int size[THERMAL_TRIP_CRITICAL + 1];
 	unsigned int freq_tab_count;
 
 	int hotplug_out_threshold;
 	int hotplug_in_threshold;
+=======
+	struct freq_clip_table freq_tab[4];
+	unsigned int freq_tab_count;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 #endif /* _LINUX_EXYNOS_THERMAL_H */

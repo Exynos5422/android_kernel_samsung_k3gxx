@@ -29,6 +29,7 @@
 
 static struct kmem_cache *cred_jar;
 
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_RO_CRED
 atomic_t cred_usage[cred_usage_length]={{4}};
 static struct kmem_cache *cred_jar_ro;
@@ -71,6 +72,12 @@ void put_cred(const struct cred *_cred)
  * The initial credentials for the initial task
  */
 CRED_RO_AREA struct cred init_cred = {
+=======
+/*
+ * The initial credentials for the initial task
+ */
+struct cred init_cred = {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	.usage			= ATOMIC_INIT(4),
 #ifdef CONFIG_DEBUG_CREDENTIALS
 	.subscribers		= ATOMIC_INIT(2),
@@ -92,6 +99,7 @@ CRED_RO_AREA struct cred init_cred = {
 	.user			= INIT_USER,
 	.user_ns		= &init_user_ns,
 	.group_info		= &init_groups,
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_RO_CRED
 	.bp_task		= &init_task,
 	.bp_pgd			= (void *) 0,
@@ -110,6 +118,10 @@ void rkp_get_init_cred(void)
 EXPORT_SYMBOL(rkp_get_init_cred);
 #endif /*CONFIG_TIMA_RKP_RO_CRED*/
 
+=======
+};
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static inline void set_cred_subscribers(struct cred *cred, int n)
 {
 #ifdef CONFIG_DEBUG_CREDENTIALS
@@ -154,6 +166,7 @@ static void put_cred_rcu(struct rcu_head *rcu)
 		      atomic_read(&cred->usage),
 		      read_cred_subscribers(cred));
 #else
+<<<<<<< HEAD
 	if (atomic_read(&cred->usage) != 0) {
 #ifdef CONFIG_TIMA_RKP_RO_CRED
 		printk("put_cred_rcu() sees %p with usage %d\n",
@@ -165,6 +178,12 @@ static void put_cred_rcu(struct rcu_head *rcu)
 #endif
 	}
 #endif
+=======
+	if (atomic_read(&cred->usage) != 0)
+		panic("CRED: put_cred_rcu() sees %p with usage %d\n",
+		      cred, atomic_read(&cred->usage));
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	security_cred_free(cred);
 	key_put(cred->session_keyring);
@@ -178,6 +197,7 @@ static void put_cred_rcu(struct rcu_head *rcu)
 	kmem_cache_free(cred_jar, cred);
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_RO_CRED
 /* We use another function to free protected creds. */
 static void put_ro_cred(struct cred *cred)
@@ -199,6 +219,8 @@ static void put_ro_cred(struct cred *cred)
 }
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /**
  * __put_cred - Destroy a set of credentials
  * @cred: The record to release
@@ -210,11 +232,15 @@ void __put_cred(struct cred *cred)
 	kdebug("__put_cred(%p{%d,%d})", cred,
 	       atomic_read(&cred->usage),
 	       read_cred_subscribers(cred));
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_RO_CRED
 	if (tima_ro_page((unsigned long)cred))
 		BUG_ON((rocred_uc_read(cred)) != 0);
 	else
 #endif /*CONFIG_TIMA_RKP_RO_CRED*/
+=======
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	BUG_ON(atomic_read(&cred->usage) != 0);
 #ifdef CONFIG_DEBUG_CREDENTIALS
 	BUG_ON(read_cred_subscribers(cred) != 0);
@@ -223,6 +249,7 @@ void __put_cred(struct cred *cred)
 #endif
 	BUG_ON(cred == current->cred);
 	BUG_ON(cred == current->real_cred);
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_RO_CRED
 	if (tima_ro_page((unsigned long)cred)) {
 		/*
@@ -233,6 +260,9 @@ void __put_cred(struct cred *cred)
 		put_ro_cred(cred);
 	} else
 #endif /*CONFIG_TIMA_RKP_RO_CRED*/
+=======
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	call_rcu(&cred->rcu, put_cred_rcu);
 }
 EXPORT_SYMBOL(__put_cred);
@@ -274,6 +304,7 @@ void exit_creds(struct task_struct *tsk)
 const struct cred *get_task_cred(struct task_struct *task)
 {
 	const struct cred *cred;
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_RO_CRED
 	int inc_test;
 #endif /*CONFIG_TIMA_RKP_RO_CRED*/
@@ -289,11 +320,20 @@ const struct cred *get_task_cred(struct task_struct *task)
 			inc_test = atomic_inc_not_zero(&((struct cred *)cred)->usage);
 	} while (!inc_test);
 #else
+=======
+
+	rcu_read_lock();
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	do {
 		cred = __task_cred((task));
 		BUG_ON(!cred);
 	} while (!atomic_inc_not_zero(&((struct cred *)cred)->usage));
+<<<<<<< HEAD
 #endif /*CONFIG_TIMA_RKP_RO_CRED*/
+=======
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	rcu_read_unlock();
 	return cred;
 }
@@ -355,10 +395,14 @@ struct cred *prepare_creds(void)
 
 	old = task->cred;
 	memcpy(new, old, sizeof(struct cred));
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_RO_CRED
 	/* Reset the back pointer. */
 	new->bp_task = NULL;
 #endif /*CONFIG_TIMA_RKP_RO_CRED*/
+=======
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	atomic_set(&new->usage, 1);
 	set_cred_subscribers(new, 0);
 	get_group_info(new->group_info);
@@ -424,6 +468,7 @@ struct cred *prepare_exec_creds(void)
 int copy_creds(struct task_struct *p, unsigned long clone_flags)
 {
 	struct cred *new;
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_RO_CRED
 	struct cred *new_ro;
 	int rkp_use_cnt = 0;
@@ -442,6 +487,10 @@ int copy_creds(struct task_struct *p, unsigned long clone_flags)
 #ifdef CONFIG_TIMA_RKP_RO_CRED
 	if(!rkp_cred_enable){
 #endif /*CONFIG_TIMA_RKP_RO_CRED*/
+=======
+	int ret;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (
 #ifdef CONFIG_KEYS
 		!p->cred->thread_keyring &&
@@ -457,9 +506,12 @@ int copy_creds(struct task_struct *p, unsigned long clone_flags)
 		atomic_inc(&p->cred->user->processes);
 		return 0;
 	}
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_RO_CRED
 	}
 #endif /*CONFIG_TIMA_RKP_RO_CRED*/
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	new = prepare_creds();
 	if (!new)
@@ -491,6 +543,7 @@ int copy_creds(struct task_struct *p, unsigned long clone_flags)
 #endif
 
 	atomic_inc(&new->user->processes);
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_RO_CRED
 	if(rkp_cred_enable){
 		new_ro = kmem_cache_alloc(cred_jar_ro, GFP_KERNEL);
@@ -525,6 +578,11 @@ int copy_creds(struct task_struct *p, unsigned long clone_flags)
 	validate_creds(new);
 #endif  /* CONFIG_TIMA_RKP_RO_CRED */
 
+=======
+	p->cred = p->real_cred = get_cred(new);
+	alter_cred_subscribers(new, 2);
+	validate_creds(new);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 
 error_put:
@@ -575,10 +633,13 @@ int commit_creds(struct cred *new)
 {
 	struct task_struct *task = current;
 	const struct cred *old = task->real_cred;
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_RO_CRED
 	struct cred *new_ro;
 	unsigned int rkp_use_cnt = 0;
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	kdebug("commit_creds(%p{%d,%d})", new,
 	       atomic_read(&new->usage),
@@ -590,6 +651,7 @@ int commit_creds(struct cred *new)
 	validate_creds(old);
 	validate_creds(new);
 #endif
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_RO_CRED
 	if (tima_ro_page((unsigned long)new))
 		BUG_ON((rocred_uc_read(new)) < 1);
@@ -604,6 +666,11 @@ int commit_creds(struct cred *new)
 #ifdef CONFIG_TIMA_RKP_RO_CRED
 	}
 #endif  /* CONFIG_TIMA_RKP_RO_CRED */
+=======
+	BUG_ON(atomic_read(&new->usage) < 1);
+
+	get_cred(new); /* we will require a ref for the subj creds too */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/* dumpability changes */
 	if (!uid_eq(old->euid, new->euid) ||
@@ -630,6 +697,7 @@ int commit_creds(struct cred *new)
 	alter_cred_subscribers(new, 2);
 	if (new->user != old->user)
 		atomic_inc(&new->user->processes);
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_RO_CRED
 	if(rkp_cred_enable) {
 	new_ro = kmem_cache_alloc(cred_jar_ro, GFP_KERNEL);
@@ -656,6 +724,10 @@ int commit_creds(struct cred *new)
 	rcu_assign_pointer(task->real_cred, new);
 	rcu_assign_pointer(task->cred, new);
 #endif  /* CONFIG_TIMA_RKP_RO_CRED */
+=======
+	rcu_assign_pointer(task->real_cred, new);
+	rcu_assign_pointer(task->cred, new);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (new->user != old->user)
 		atomic_dec(&old->user->processes);
 	alter_cred_subscribers(old, -2);
@@ -672,6 +744,7 @@ int commit_creds(struct cred *new)
 	    !gid_eq(new->sgid,  old->sgid) ||
 	    !gid_eq(new->fsgid, old->fsgid))
 		proc_id_connector(task, PROC_EVENT_GID);
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_RO_CRED
 	if (rkp_cred_enable && 
 		!tima_ro_page((unsigned long)new)) {
@@ -682,6 +755,9 @@ int commit_creds(struct cred *new)
 		}
 	}
 #endif  /* CONFIG_TIMA_RKP_RO_CRED */
+=======
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* release the old obj and subj refs both */
 	put_cred(old);
 	put_cred(old);
@@ -705,11 +781,14 @@ void abort_creds(struct cred *new)
 #ifdef CONFIG_DEBUG_CREDENTIALS
 	BUG_ON(read_cred_subscribers(new) != 0);
 #endif
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_RO_CRED
 	if (tima_ro_page((unsigned long)new))
 		BUG_ON((rocred_uc_read(new)) < 1);
 	else
 #endif  /* CONFIG_TIMA_RKP_RO_CRED */
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	BUG_ON(atomic_read(&new->usage) < 1);
 	put_cred(new);
 }
@@ -722,6 +801,7 @@ EXPORT_SYMBOL(abort_creds);
  * Install a set of temporary override subjective credentials on the current
  * process, returning the old set for later reversion.
  */
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_RO_CRED
 const struct cred *rkp_override_creds(struct cred **cnew)
 #else
@@ -734,6 +814,11 @@ const struct cred *override_creds(const struct cred *new)
 	struct cred *new_ro;
 	volatile unsigned int rkp_use_count = rkp_get_usecount(new);
 #endif  /* CONFIG_TIMA_RKP_RO_CRED */
+=======
+const struct cred *override_creds(const struct cred *new)
+{
+	const struct cred *old = current->cred;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	kdebug("override_creds(%p{%d,%d})", new,
 	       atomic_read(&new->usage),
@@ -741,6 +826,7 @@ const struct cred *override_creds(const struct cred *new)
 
 	validate_creds(old);
 	validate_creds(new);
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_RO_CRED
 	if(rkp_cred_enable) {
 		new_ro = kmem_cache_alloc(cred_jar_ro, GFP_KERNEL);
@@ -772,6 +858,11 @@ const struct cred *override_creds(const struct cred *new)
 	alter_cred_subscribers(new, 1);
 	rcu_assign_pointer(current->cred, new);
 #endif  /* CONFIG_TIMA_RKP_RO_CRED */
+=======
+	get_cred(new);
+	alter_cred_subscribers(new, 1);
+	rcu_assign_pointer(current->cred, new);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	alter_cred_subscribers(old, -1);
 
 	kdebug("override_creds() = %p{%d,%d}", old,
@@ -779,11 +870,16 @@ const struct cred *override_creds(const struct cred *new)
 	       read_cred_subscribers(old));
 	return old;
 }
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_RO_CRED
 EXPORT_SYMBOL(rkp_override_creds);
 #else
 EXPORT_SYMBOL(override_creds);
 #endif  /* CONFIG_TIMA_RKP_RO_CRED */
+=======
+EXPORT_SYMBOL(override_creds);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /**
  * revert_creds - Revert a temporary subjective credentials override
  * @old: The credentials to be restored
@@ -793,9 +889,12 @@ EXPORT_SYMBOL(override_creds);
  */
 void revert_creds(const struct cred *old)
 {
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_RO_CRED
 	int rkp_use_cnt = 0;
 #endif  /* CONFIG_TIMA_RKP_RO_CRED */
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	const struct cred *override = current->cred;
 
 	kdebug("revert_creds(%p{%d,%d})", old,
@@ -807,6 +906,7 @@ void revert_creds(const struct cred *old)
 	alter_cred_subscribers(old, 1);
 	rcu_assign_pointer(current->cred, old);
 	alter_cred_subscribers(override, -1);
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_RO_CRED
 	if(rkp_cred_enable) {
 		rkp_use_cnt = rkp_get_usecount((struct cred*)override);
@@ -821,10 +921,13 @@ void revert_creds(const struct cred *old)
 		}
 	}
 #endif  /* CONFIG_TIMA_RKP_RO_CRED */
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	put_cred(override);
 }
 EXPORT_SYMBOL(revert_creds);
 
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_RO_CRED
 void cred_ctor(void *data)
 {
@@ -832,6 +935,8 @@ void cred_ctor(void *data)
 }
 #endif  /* CONFIG_TIMA_RKP_RO_CRED */
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * initialise the credentials stuff
  */
@@ -840,6 +945,7 @@ void __init cred_init(void)
 	/* allocate a slab in which we can store credentials */
 	cred_jar = kmem_cache_create("cred_jar", sizeof(struct cred),
 				     0, SLAB_HWCACHE_ALIGN|SLAB_PANIC, NULL);
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_RO_CRED
 	if(rkp_cred_enable)
 	{
@@ -862,6 +968,8 @@ void __init cred_init(void)
 	}
 
 #endif  /* CONFIG_TIMA_RKP_RO_CRED */
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 /**
@@ -1022,6 +1130,7 @@ static void dump_invalid_creds(const struct cred *cred, const char *label,
 	       cred == tsk->cred ? "[eff]" : "");
 	printk(KERN_ERR "CRED: ->magic=%x, put_addr=%p\n",
 	       cred->magic, cred->put_addr);
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_RO_CRED
 	if (tima_ro_page((unsigned long)cred)) {
 		printk(KERN_ERR "CRED: ->usage(FROM ARRAY)=%d, subscr=%d\n",
@@ -1030,6 +1139,8 @@ static void dump_invalid_creds(const struct cred *cred, const char *label,
 	}
 	else
 #endif  /* CONFIG_TIMA_RKP_RO_CRED */
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	printk(KERN_ERR "CRED: ->usage=%d, subscr=%d\n",
 	       atomic_read(&cred->usage),
 	       read_cred_subscribers(cred));

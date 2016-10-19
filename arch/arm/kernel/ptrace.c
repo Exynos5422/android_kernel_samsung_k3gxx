@@ -849,7 +849,11 @@ long arch_ptrace(struct task_struct *child, long request,
 #endif
 
 		case PTRACE_GET_THREAD_AREA:
+<<<<<<< HEAD
 			ret = put_user(task_thread_info(child)->tp_value,
+=======
+			ret = put_user(task_thread_info(child)->tp_value[0],
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				       datap);
 			break;
 
@@ -916,7 +920,11 @@ enum ptrace_syscall_dir {
 	PTRACE_SYSCALL_EXIT,
 };
 
+<<<<<<< HEAD
 static int tracehook_report_syscall(struct pt_regs *regs,
+=======
+static void tracehook_report_syscall(struct pt_regs *regs,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				    enum ptrace_syscall_dir dir)
 {
 	unsigned long ip;
@@ -934,7 +942,10 @@ static int tracehook_report_syscall(struct pt_regs *regs,
 		current_thread_info()->syscall = -1;
 
 	regs->ARM_ip = ip;
+<<<<<<< HEAD
 	return current_thread_info()->syscall;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 asmlinkage int syscall_trace_enter(struct pt_regs *regs, int scno)
@@ -946,7 +957,13 @@ asmlinkage int syscall_trace_enter(struct pt_regs *regs, int scno)
 		return -1;
 
 	if (test_thread_flag(TIF_SYSCALL_TRACE))
+<<<<<<< HEAD
 		scno = tracehook_report_syscall(regs, PTRACE_SYSCALL_ENTER);
+=======
+		tracehook_report_syscall(regs, PTRACE_SYSCALL_ENTER);
+
+	scno = current_thread_info()->syscall;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (test_thread_flag(TIF_SYSCALL_TRACEPOINT))
 		trace_sys_enter(regs, scno);

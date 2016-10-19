@@ -16,6 +16,7 @@
 #ifndef _LINUX_ANDROID_ALARM_H
 #define _LINUX_ANDROID_ALARM_H
 
+<<<<<<< HEAD
 #include <linux/ioctl.h>
 #include <linux/time.h>
 #include <linux/compat.h>
@@ -60,6 +61,12 @@ enum android_alarm_return_flags {
 #define ANDROID_ALARM_BASE_CMD(cmd)         (cmd & ~(_IOC(0, 0, 0xf0, 0)))
 #define ANDROID_ALARM_IOCTL_TO_TYPE(cmd)    (_IOC_NR(cmd) >> 4)
 
+=======
+#include <linux/compat.h>
+#include <linux/ioctl.h>
+
+#include "uapi/android_alarm.h"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #ifdef CONFIG_COMPAT
 #define ANDROID_ALARM_SET_COMPAT(type)		ALARM_IOW(2, type, \

@@ -74,6 +74,11 @@
 #include <linux/ptrace.h>
 #include <linux/blkdev.h>
 #include <linux/elevator.h>
+<<<<<<< HEAD
+=======
+#include <linux/sched_clock.h>
+#include <linux/random.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #include <asm/io.h>
 #include <asm/bugs.h>
@@ -85,7 +90,10 @@
 #include <asm/smp.h>
 #endif
 
+<<<<<<< HEAD
 #include <asm/cp15.h> 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int kernel_init(void *);
 
 extern void init_IRQ(void);
@@ -101,6 +109,7 @@ static inline void mark_rodata_ro(void) { }
 extern void tc_init(void);
 #endif
 
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_30
 #define PGT_BIT_ARRAY_LENGTH 0x40000
 unsigned long pgt_bit_array[PGT_BIT_ARRAY_LENGTH];
@@ -113,6 +122,8 @@ EXPORT_SYMBOL(boot_mode_security);
 int rkp_cred_enable = 0;
 EXPORT_SYMBOL(rkp_cred_enable);
 #endif /*CONFIG_RKP_RO_CRED*/
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * Debug helper: via this flag we know that we are in 'early bootup code'
  * where only the boot processor is running with IRQ disabled.  This means
@@ -136,10 +147,13 @@ extern void time_init(void);
 void (*__initdata late_time_init)(void);
 extern void softirq_init(void);
 
+<<<<<<< HEAD
 #ifdef CONFIG_PTRACK_DEBUG
 extern void ptrack_init(void);
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /* Untouched command line saved by arch-specific code. */
 char __initdata boot_command_line[COMMAND_LINE_SIZE];
 /* Untouched saved command line (eg. for /proc) */
@@ -367,6 +381,7 @@ static void __init setup_command_line(char *command_line)
 	strcpy (static_command_line, command_line);
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP
 /* Block of Code for RKP initialization */
 extern unsigned long __v7_setup_stack;
@@ -394,6 +409,8 @@ static noinline void rkp_init(void)
 }
 #endif /*CONFIG_TIMA_RKP*/
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * We need to finalize in a non-__init function or else race conditions
  * between the root thread and the init thread may cause start_kernel to
@@ -408,10 +425,15 @@ static __initdata DECLARE_COMPLETION(kthreadd_done);
 static noinline void __init_refok rest_init(void)
 {
 	int pid;
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP
 	if (boot_mode_security)
 		rkp_init();
 #endif
+=======
+	const struct sched_param param = { .sched_priority = 1 };
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	rcu_scheduler_starting();
 	/*
 	 * We need to spawn init first so that it obtains pid 1, however
@@ -424,6 +446,10 @@ static noinline void __init_refok rest_init(void)
 	rcu_read_lock();
 	kthreadd_task = find_task_by_pid_ns(pid, &init_pid_ns);
 	rcu_read_unlock();
+<<<<<<< HEAD
+=======
+	sched_setscheduler_nocheck(kthreadd_task, SCHED_FIFO, &param);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	complete(&kthreadd_done);
 
 	/*
@@ -451,6 +477,7 @@ static int __init do_early_param(char *param, char *val, const char *unused)
 		}
 	}
 	/* We accept everything at this stage. */
+<<<<<<< HEAD
 #ifdef CONFIG_SOC_EXYNOS5433
 	if ((strncmp(param, "androidboot.security_mode", 26) == 0)) {
 	        if ((strncmp(val, "1526595585", 10) == 0)) {
@@ -465,6 +492,8 @@ static int __init do_early_param(char *param, char *val, const char *unused)
 	boot_mode_security = 1;
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 
@@ -527,9 +556,12 @@ static void __init mm_init(void)
 	percpu_init_late();
 	pgtable_cache_init();
 	vmalloc_init();
+<<<<<<< HEAD
 #ifdef CONFIG_PTRACK_DEBUG
 	ptrack_init();
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 asmlinkage void __init start_kernel(void)
@@ -545,11 +577,14 @@ asmlinkage void __init start_kernel(void)
 	smp_setup_processor_id();
 	debug_objects_early_init();
 
+<<<<<<< HEAD
 	/*
 	 * Set up the the initial canary ASAP:
 	 */
 	boot_init_stack_canary();
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	cgroup_init_early();
 
 	local_irq_disable();
@@ -563,6 +598,13 @@ asmlinkage void __init start_kernel(void)
 	page_address_init();
 	pr_notice("%s", linux_banner);
 	setup_arch(&command_line);
+<<<<<<< HEAD
+=======
+	/*
+	 * Set up the the initial canary ASAP:
+	 */
+	boot_init_stack_canary();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	mm_init_owner(&init_mm, &init_task);
 	mm_init_cpumask(&init_mm);
 	setup_command_line(command_line);
@@ -619,6 +661,10 @@ asmlinkage void __init start_kernel(void)
 	softirq_init();
 	timekeeping_init();
 	time_init();
+<<<<<<< HEAD
+=======
+	sched_clock_postinit();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	profile_init();
 	call_function_init();
 	WARN(!irqs_disabled(), "Interrupts were enabled early\n");
@@ -841,6 +887,10 @@ static void __init do_basic_setup(void)
 	do_ctors();
 	usermodehelper_enable();
 	do_initcalls();
+<<<<<<< HEAD
+=======
+	random_int_secret_init();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static void __init do_pre_smp_initcalls(void)
@@ -870,6 +920,7 @@ static int run_init_process(const char *init_filename)
 		(const char __user *const __user *)envp_init);
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_DEFERRED_INITCALLS
 extern initcall_t __deferred_initcall_start[], __deferred_initcall_end[];
 
@@ -902,11 +953,14 @@ void __ref do_deferred_initcalls(void)
 extern void gpio_dvs_check_initgpio(void);
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static noinline void __init kernel_init_freeable(void);
 
 static int __ref kernel_init(void *unused)
 {
 	kernel_init_freeable();
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_GPIO_DVS
 	/************************ Caution !!! ****************************/
 	/* This function must be located in appropriate INIT position
@@ -921,6 +975,11 @@ static int __ref kernel_init(void *unused)
 #ifndef CONFIG_DEFERRED_INITCALLS
 	free_initmem();
 #endif
+=======
+	/* need to finish all async __init code before freeing the memory */
+	async_synchronize_full();
+	free_initmem();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	mark_rodata_ro();
 	system_state = SYSTEM_RUNNING;
 	numa_default_policy();

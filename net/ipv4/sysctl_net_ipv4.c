@@ -29,6 +29,10 @@
 static int zero;
 static int one = 1;
 static int four = 4;
+<<<<<<< HEAD
+=======
+static int gso_max_segs = GSO_MAX_SEGS;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int tcp_retr1_max = 255;
 static int ip_local_port_range_min[] = { 1, 1 };
 static int ip_local_port_range_max[] = { 65535, 65535 };
@@ -772,6 +776,18 @@ static struct ctl_table ipv4_table[] = {
 		.extra2		= &four,
 	},
 	{
+<<<<<<< HEAD
+=======
+		.procname	= "tcp_min_tso_segs",
+		.data		= &sysctl_tcp_min_tso_segs,
+		.maxlen		= sizeof(int),
+		.mode		= 0644,
+		.proc_handler	= proc_dointvec_minmax,
+		.extra1		= &zero,
+		.extra2		= &gso_max_segs,
+	},
+	{
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		.procname       = "tcp_default_init_rwnd",
 		.data           = &sysctl_tcp_default_init_rwnd,
 		.maxlen         = sizeof(int),

@@ -363,12 +363,20 @@ again:
 		 * This should not happen unless the journal size limitations
 		 * are too tough.
 		 */
+<<<<<<< HEAD
 		ubifs_err("stuck in space allocation");
+=======
+		ubifs_err("stuck in space allocation", c->vi.ubi_num);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		err = -ENOSPC;
 		goto out;
 	} else if (cmt_retries > 32)
 		ubifs_warn("too many space allocation re-tries (%d)",
+<<<<<<< HEAD
 			   cmt_retries);
+=======
+			   c->vi.ubi_num, cmt_retries);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	dbg_jnl("-EAGAIN, commit and retry (retried %d times)",
 		cmt_retries);
@@ -381,7 +389,11 @@ again:
 
 out:
 	ubifs_err("cannot reserve %d bytes in jhead %d, error %d",
+<<<<<<< HEAD
 		  len, jhead, err);
+=======
+		  c->vi.ubi_num, len, jhead, err);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (err == -ENOSPC) {
 		/* This are some budgeting problems, print useful information */
 		down_write(&c->commit_sem);
@@ -727,7 +739,11 @@ int ubifs_jnl_write_data(struct ubifs_info *c, const struct inode *inode,
 		compr_type = ui->compr_type;
 
 	out_len = dlen - UBIFS_DATA_NODE_SZ;
+<<<<<<< HEAD
 	ubifs_compress(buf, len, &data->data, &out_len, &compr_type);
+=======
+	ubifs_compress(c, buf, len, &data->data, &out_len, &compr_type);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ubifs_assert(out_len <= UBIFS_BLOCK_SIZE);
 
 	dlen = UBIFS_DATA_NODE_SZ + out_len;
@@ -1092,13 +1108,22 @@ out_free:
 
 /**
  * recomp_data_node - re-compress a truncated data node.
+<<<<<<< HEAD
+=======
+ * @c: UBIFS file-system description object
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  * @dn: data node to re-compress
  * @new_len: new length
  *
  * This function is used when an inode is truncated and the last data node of
  * the inode has to be re-compressed and re-written.
  */
+<<<<<<< HEAD
 static int recomp_data_node(struct ubifs_data_node *dn, int *new_len)
+=======
+static int recomp_data_node(struct ubifs_info *c, struct ubifs_data_node *dn,
+			    int *new_len)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	void *buf;
 	int err, len, compr_type, out_len;
@@ -1110,11 +1135,19 @@ static int recomp_data_node(struct ubifs_data_node *dn, int *new_len)
 
 	len = le32_to_cpu(dn->ch.len) - UBIFS_DATA_NODE_SZ;
 	compr_type = le16_to_cpu(dn->compr_type);
+<<<<<<< HEAD
 	err = ubifs_decompress(&dn->data, len, buf, &out_len, compr_type);
 	if (err)
 		goto out;
 
 	ubifs_compress(buf, *new_len, &dn->data, &out_len, &compr_type);
+=======
+	err = ubifs_decompress(c, &dn->data, len, buf, &out_len, compr_type);
+	if (err)
+		goto out;
+
+	ubifs_compress(c, buf, *new_len, &dn->data, &out_len, &compr_type);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ubifs_assert(out_len <= UBIFS_BLOCK_SIZE);
 	dn->compr_type = cpu_to_le16(compr_type);
 	dn->size = cpu_to_le32(*new_len);
@@ -1189,7 +1222,11 @@ int ubifs_jnl_truncate(struct ubifs_info *c, const struct inode *inode,
 				int compr_type = le16_to_cpu(dn->compr_type);
 
 				if (compr_type != UBIFS_COMPR_NONE) {
+<<<<<<< HEAD
 					err = recomp_data_node(dn, &dlen);
+=======
+					err = recomp_data_node(c, dn, &dlen);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 					if (err)
 						goto out_free;
 				} else {

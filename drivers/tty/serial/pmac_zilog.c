@@ -2051,6 +2051,12 @@ static int __init pmz_console_init(void)
 	/* Probe ports */
 	pmz_probe();
 
+<<<<<<< HEAD
+=======
+	if (pmz_ports_count == 0)
+		return -ENODEV;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* TODO: Autoprobe console based on OF */
 	/* pmz_console.index = i; */
 	register_console(&pmz_console);

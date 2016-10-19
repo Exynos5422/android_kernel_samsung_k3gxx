@@ -13,6 +13,10 @@
 #include <linux/if_pppox.h>
 #include <linux/ppp_defs.h>
 #include <net/flow_keys.h>
+<<<<<<< HEAD
+=======
+#include <linux/net_map.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /* copy saddr & daddr, possibly using 64bit load/store
  * Equivalent to :	flow->src = iph->saddr;
@@ -96,6 +100,43 @@ ipv6:
 			return false;
 		}
 	}
+<<<<<<< HEAD
+=======
+	case __constant_htons(ETH_P_MAP): {
+		struct {
+			struct rmnet_map_header_s map;
+			uint8_t proto;
+		} *map, _map;
+		unsigned int maplen;
+
+		map = skb_header_pointer(skb, nhoff, sizeof(_map), &_map);
+		if (!map)
+			return false;
+
+		/* Is MAP command? */
+		if (map->map.cd_bit)
+			return false;
+
+		/* Is aggregated frame? */
+		maplen = ntohs(map->map.pkt_len);
+		maplen += map->map.pad_len;
+		maplen += sizeof(struct rmnet_map_header_s);
+		if (maplen < skb->len)
+			return false;
+
+		nhoff += sizeof(struct rmnet_map_header_s);
+		switch (map->proto & RMNET_IP_VER_MASK) {
+		case RMNET_IPV4:
+			proto = htons(ETH_P_IP);
+			goto ip;
+		case RMNET_IPV6:
+			proto = htons(ETH_P_IPV6);
+			goto ipv6;
+		default:
+			return false;
+		}
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	default:
 		return false;
 	}
@@ -149,8 +190,13 @@ ipv6:
 	if (poff >= 0) {
 		__be32 *ports, _ports;
 
+<<<<<<< HEAD
 		nhoff += poff;
 		ports = skb_header_pointer(skb, nhoff, sizeof(_ports), &_ports);
+=======
+		ports = skb_header_pointer(skb, nhoff + poff,
+					   sizeof(_ports), &_ports);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (ports)
 			flow->ports = *ports;
 	}
@@ -345,6 +391,7 @@ u16 __netdev_pick_tx(struct net_device *dev, struct sk_buff *skb)
 		if (new_index < 0)
 			new_index = skb_tx_hash(dev, skb);
 
+<<<<<<< HEAD
 		if (queue_index != new_index && sk) {
 			struct dst_entry *dst =
 				    rcu_dereference_check(sk->sk_dst_cache, 1);
@@ -353,6 +400,11 @@ u16 __netdev_pick_tx(struct net_device *dev, struct sk_buff *skb)
 				sk_tx_queue_set(sk, queue_index);
 
 		}
+=======
+		if (queue_index != new_index && sk &&
+		    rcu_access_pointer(sk->sk_dst_cache))
+			sk_tx_queue_set(sk, new_index);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 		queue_index = new_index;
 	}

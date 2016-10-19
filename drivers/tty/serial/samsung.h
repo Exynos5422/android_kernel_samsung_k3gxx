@@ -9,6 +9,7 @@
  * published by the Free Software Foundation.
 */
 
+<<<<<<< HEAD
 #include <linux/pm_qos.h>
 
 #define S3C24XX_UART_PORT_RESUME		0x0
@@ -18,6 +19,8 @@
 #define S3C24XX_SERIAL_CTRL_NUM			0x4
 #define S3C24XX_SERIAL_BUAD_NUM			0x2
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 struct s3c24xx_uart_info {
 	char			*name;
 	unsigned int		type;
@@ -41,6 +44,7 @@ struct s3c24xx_uart_info {
 	int (*reset_port)(struct uart_port *, struct s3c2410_uartcfg *);
 };
 
+<<<<<<< HEAD
 #ifdef CONFIG_SERIAL_SAMSUNG_DMA
 struct uart_dma_data {
 	unsigned ch;
@@ -67,6 +71,8 @@ struct exynos_uart_dma {
 };
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 struct s3c24xx_serial_drv_data {
 	struct s3c24xx_uart_info	*info;
 	struct s3c2410_uartcfg		*def_cfg;
@@ -76,19 +82,27 @@ struct s3c24xx_serial_drv_data {
 struct s3c24xx_uart_port {
 	unsigned char			rx_claimed;
 	unsigned char			tx_claimed;
+<<<<<<< HEAD
+=======
+	unsigned int			pm_level;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	unsigned long			baudclk_rate;
 
 	unsigned int			rx_irq;
 	unsigned int			tx_irq;
 
+<<<<<<< HEAD
 #ifdef CONFIG_SERIAL_SAMSUNG_DMA
 	unsigned int                    err_irq;
 	unsigned int                    err_occurred;
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct s3c24xx_uart_info	*info;
 	struct clk			*clk;
 	struct clk			*baudclk;
 	struct uart_port		port;
+<<<<<<< HEAD
 #ifdef CONFIG_SERIAL_SAMSUNG_DMA
 	struct exynos_uart_dma          uart_dma;
 #endif
@@ -111,6 +125,16 @@ struct s3c24xx_uart_port {
 	struct pm_qos_request		s3c24xx_uart_mif_qos;
 	struct pm_qos_request		s3c24xx_uart_cpu_qos;
 	struct delayed_work		qos_work;
+=======
+	struct s3c24xx_serial_drv_data	*drv_data;
+
+	/* reference to platform data */
+	struct s3c2410_uartcfg		*cfg;
+
+#ifdef CONFIG_CPU_FREQ
+	struct notifier_block		freq_transition;
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 /* conversion functions */

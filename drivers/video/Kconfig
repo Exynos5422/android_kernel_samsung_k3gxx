@@ -23,9 +23,13 @@ source "drivers/gpu/drm/Kconfig"
 
 source "drivers/gpu/host1x/Kconfig"
 
+<<<<<<< HEAD
 source "drivers/gpu/ion/Kconfig"
 
 source "drivers/gpu/arm/Kconfig"
+=======
+source "drivers/gpu/msm/Kconfig"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 config VGASTATE
        tristate
@@ -222,6 +226,7 @@ config FB_MACMODES
        depends on FB
        default n
 
+<<<<<<< HEAD
 config FB_BACKLIGHT
 	bool
 	depends on FB
@@ -229,6 +234,8 @@ config FB_BACKLIGHT
 	select BACKLIGHT_CLASS_DEVICE
 	default n
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 config FB_MODE_HELPERS
         bool "Enable Video Mode Handling Helpers"
         depends on FB
@@ -1021,7 +1028,10 @@ config FB_ATMEL_STN
 config FB_NVIDIA
 	tristate "nVidia Framebuffer Support"
 	depends on FB && PCI
+<<<<<<< HEAD
 	select FB_BACKLIGHT if FB_NVIDIA_BACKLIGHT
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	select FB_MODE_HELPERS
 	select FB_CFB_FILLRECT
 	select FB_CFB_COPYAREA
@@ -1069,7 +1079,10 @@ config FB_NVIDIA_BACKLIGHT
 config FB_RIVA
 	tristate "nVidia Riva support"
 	depends on FB && PCI
+<<<<<<< HEAD
 	select FB_BACKLIGHT if FB_RIVA_BACKLIGHT
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	select FB_MODE_HELPERS
 	select FB_CFB_FILLRECT
 	select FB_CFB_COPYAREA
@@ -1347,7 +1360,10 @@ config FB_MATROX_MAVEN
 config FB_RADEON
 	tristate "ATI Radeon display support"
 	depends on FB && PCI
+<<<<<<< HEAD
 	select FB_BACKLIGHT if FB_RADEON_BACKLIGHT
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	select FB_MODE_HELPERS
 	select FB_CFB_FILLRECT
 	select FB_CFB_COPYAREA
@@ -1391,7 +1407,10 @@ config FB_ATY128
 	select FB_CFB_FILLRECT
 	select FB_CFB_COPYAREA
 	select FB_CFB_IMAGEBLIT
+<<<<<<< HEAD
 	select FB_BACKLIGHT if FB_ATY128_BACKLIGHT
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	select FB_MACMODES if PPC_PMAC
 	help
 	  This driver supports graphics boards with the ATI Rage128 chips.
@@ -1414,7 +1433,10 @@ config FB_ATY
 	select FB_CFB_FILLRECT
 	select FB_CFB_COPYAREA
 	select FB_CFB_IMAGEBLIT
+<<<<<<< HEAD
 	select FB_BACKLIGHT if FB_ATY_BACKLIGHT
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	select FB_MACMODES if PPC
 	help
 	  This driver supports graphics boards with the ATI Mach64 chips.
@@ -2003,7 +2025,10 @@ config FB_SH_MOBILE_LCDC
 	select FB_SYS_IMAGEBLIT
 	select FB_SYS_FOPS
 	select FB_DEFERRED_IO
+<<<<<<< HEAD
 	select FB_BACKLIGHT
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	select SH_MIPI_DSI if SH_LCD_MIPI_DSI
 	---help---
 	  Frame buffer driver for the on-chip SH-Mobile LCD controller.
@@ -2040,9 +2065,12 @@ config FB_TMIO_ACCELL
 	depends on FB_TMIO
 	default y
 
+<<<<<<< HEAD
 source "drivers/video/decon_display/Kconfig"
 source "drivers/video/mhl/Kconfig"
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 config FB_S3C
 	tristate "Samsung S3C framebuffer support"
 	depends on FB && (CPU_S3C2416 || ARCH_S3C64XX || ARCH_S5P64X0 || \
@@ -2306,6 +2334,7 @@ config FB_MB862XX
 	---help---
 	  Frame buffer driver for Fujitsu Carmine/Coral-P(A)/Lime controllers.
 
+<<<<<<< HEAD
 config S5P_LCD_INIT
 	bool "LCD init in kernel"
 	depends on EXYNOS_DECON || DECON
@@ -2316,6 +2345,8 @@ config S5P_LCD_EXT_INIT
 	depends on EXYNOS_DECON_DUAL_DISPLAY && (EXYNOS_DECON || DECON)
 	default n
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 choice
 	prompt "GDC variant"
 	depends on FB_MB862XX
@@ -2364,6 +2395,7 @@ config FB_PRE_INIT_FB
 	  Select this option if display contents should be inherited as set by
 	  the bootloader.
 
+<<<<<<< HEAD
 config FB_MSM
 	tristate "MSM Framebuffer support"
 	depends on FB && ARCH_MSM
@@ -2371,6 +2403,8 @@ config FB_MSM
 	select FB_CFB_COPYAREA
 	select FB_CFB_IMAGEBLIT
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 config FB_MX3
 	tristate "MX3 Framebuffer support"
 	depends on FB && MX3_IPU
@@ -2487,11 +2521,19 @@ config FB_SIMPLE
 	  through device tree, or potentially plain old platform data in the
 	  future.
 
+<<<<<<< HEAD
+=======
+source "drivers/video/msm/Kconfig"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 source "drivers/video/omap/Kconfig"
 source "drivers/video/omap2/Kconfig"
 source "drivers/video/exynos/Kconfig"
 source "drivers/video/mmp/Kconfig"
 source "drivers/video/backlight/Kconfig"
+<<<<<<< HEAD
+=======
+source "drivers/video/adf/Kconfig"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 if VT
 	source "drivers/video/console/Kconfig"

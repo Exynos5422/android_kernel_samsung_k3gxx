@@ -236,7 +236,11 @@
 #define PMT_CTRL_PME_EN_		0x00000002
 #define PMT_CTRL_READY_			0x00000001
 
+<<<<<<< HEAD
 #define GPIO_CFG			0x88
+=======
+#define SMSC_GPIO_CFG			0x88
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define GPIO_CFG_LED3_EN_		0x40000000
 #define GPIO_CFG_LED2_EN_		0x20000000
 #define GPIO_CFG_LED1_EN_		0x10000000

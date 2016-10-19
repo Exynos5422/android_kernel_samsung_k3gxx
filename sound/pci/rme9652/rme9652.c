@@ -285,7 +285,11 @@ static char channel_map_9636_ds[26] = {
 	/* ADAT channels are remapped */
 	1, 3, 5, 7, 9, 11, 13, 15,
 	/* channels 8 and 9 are S/PDIF */
+<<<<<<< HEAD
 	24, 25
+=======
+	24, 25,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* others don't exist */
 	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
 };

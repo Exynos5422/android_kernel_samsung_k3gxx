@@ -47,6 +47,11 @@
 #include <linux/in.h>
 #include <linux/inet.h>
 #include <linux/slab.h>
+<<<<<<< HEAD
+=======
+#include <linux/tcp.h>
+#include <linux/udp.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <linux/netdevice.h>
 #ifdef CONFIG_NET_CLS_ACT
 #include <net/pkt_sched.h>
@@ -74,6 +79,7 @@
 struct kmem_cache *skbuff_head_cache __read_mostly;
 static struct kmem_cache *skbuff_fclone_cache __read_mostly;
 
+<<<<<<< HEAD
 static void sock_pipe_buf_release(struct pipe_inode_info *pipe,
 				  struct pipe_buffer *buf)
 {
@@ -104,6 +110,8 @@ static const struct pipe_buf_operations sock_pipe_buf_ops = {
 	.get = sock_pipe_buf_get,
 };
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /**
  *	skb_panic - private function for out-of-line support
  *	@skb:	buffer
@@ -240,12 +248,17 @@ struct sk_buff *__alloc_skb(unsigned int size, gfp_t gfp_mask,
 
 	/* Get the HEAD */
 	skb = kmem_cache_alloc_node(cache, gfp_mask & ~__GFP_DMA, node);
+<<<<<<< HEAD
 	if (!skb) {
 #ifdef CONFIG_SEC_DEBUG_MIF_OOM
 		pr_err("kmem_cache_alloc_node failed(%d, %d)\n", cache->object_size, cache->size);
 #endif
 		goto out;
 	}
+=======
+	if (!skb)
+		goto out;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	prefetchw(skb);
 
 	/* We do our best to align skb_shared_info on a separate cache
@@ -256,12 +269,17 @@ struct sk_buff *__alloc_skb(unsigned int size, gfp_t gfp_mask,
 	size = SKB_DATA_ALIGN(size);
 	size += SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
 	data = kmalloc_reserve(size, gfp_mask, node, &pfmemalloc);
+<<<<<<< HEAD
 	if (!data) {
 #ifdef CONFIG_SEC_DEBUG_MIF_OOM
 		pr_err("kmalloc_reserve failed(%d, %x)\n", size, gfp_mask);
 #endif
 		goto nodata;
 	}
+=======
+	if (unlikely(ZERO_OR_NULL_PTR(data)))
+		goto nodata;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* kmalloc(size) might give us more room than requested.
 	 * Put skb_shared_info exactly at the end of allocated zone,
 	 * to allow max possible filling before reallocation.
@@ -593,9 +611,12 @@ static void skb_release_head_state(struct sk_buff *skb)
 #if IS_ENABLED(CONFIG_NF_CONNTRACK)
 	nf_conntrack_put(skb->nfct);
 #endif
+<<<<<<< HEAD
 #ifdef NET_SKBUFF_NF_DEFRAG_NEEDED
 	nf_conntrack_put_reasm(skb->nfct_reasm);
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifdef CONFIG_BRIDGE_NETFILTER
 	nf_bridge_put(skb->nf_bridge);
 #endif
@@ -1822,7 +1843,11 @@ int skb_splice_bits(struct sk_buff *skb, unsigned int offset,
 		.partial = partial,
 		.nr_pages_max = MAX_SKB_FRAGS,
 		.flags = flags,
+<<<<<<< HEAD
 		.ops = &sock_pipe_buf_ops,
+=======
+		.ops = &nosteal_pipe_buf_ops,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		.spd_release = sock_spd_release,
 	};
 	struct sk_buff *frag_iter;
@@ -2865,7 +2890,11 @@ struct sk_buff *skb_segment(struct sk_buff *skb, netdev_features_t features)
 						 doffset + tnl_hlen);
 
 		if (fskb != skb_shinfo(skb)->frag_list)
+<<<<<<< HEAD
 			continue;
+=======
+			goto perform_csum_check;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 		if (!sg) {
 			nskb->ip_summed = CHECKSUM_NONE;
@@ -2883,6 +2912,11 @@ struct sk_buff *skb_segment(struct sk_buff *skb, netdev_features_t features)
 		skb_shinfo(nskb)->tx_flags = skb_shinfo(skb)->tx_flags & SKBTX_SHARED_FRAG;
 
 		while (pos < offset + len && i < nfrags) {
+<<<<<<< HEAD
+=======
+			if (unlikely(skb_orphan_frags(skb, GFP_ATOMIC)))
+				goto err;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			*frag = skb_shinfo(skb)->frags[i];
 			__skb_frag_ref(frag);
 			size = skb_frag_size(frag);
@@ -2929,6 +2963,10 @@ skip_fraglist:
 		nskb->len += nskb->data_len;
 		nskb->truesize += nskb->data_len;
 
+<<<<<<< HEAD
+=======
+perform_csum_check:
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (!csum) {
 			nskb->csum = skb_checksum(nskb, doffset,
 						  nskb->len - doffset, 0);
@@ -3511,3 +3549,31 @@ bool skb_try_coalesce(struct sk_buff *to, struct sk_buff *from,
 	return true;
 }
 EXPORT_SYMBOL(skb_try_coalesce);
+<<<<<<< HEAD
+=======
+
+/**
+ * skb_gso_transport_seglen - Return length of individual segments of a gso packet
+ *
+ * @skb: GSO skb
+ *
+ * skb_gso_transport_seglen is used to determine the real size of the
+ * individual segments, including Layer4 headers (TCP/UDP).
+ *
+ * The MAC/L2 or network (IP, IPv6) headers are not accounted for.
+ */
+unsigned int skb_gso_transport_seglen(const struct sk_buff *skb)
+{
+	const struct skb_shared_info *shinfo = skb_shinfo(skb);
+
+	if (likely(shinfo->gso_type & (SKB_GSO_TCPV4 | SKB_GSO_TCPV6)))
+		return tcp_hdrlen(skb) + shinfo->gso_size;
+
+	/* UFO sets gso_size to the size of the fragmentation
+	 * payload, i.e. the size of the L4 (UDP) header is already
+	 * accounted for.
+	 */
+	return shinfo->gso_size;
+}
+EXPORT_SYMBOL_GPL(skb_gso_transport_seglen);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

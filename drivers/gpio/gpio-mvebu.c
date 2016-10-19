@@ -79,7 +79,11 @@ struct mvebu_gpio_chip {
 	spinlock_t	   lock;
 	void __iomem	  *membase;
 	void __iomem	  *percpu_membase;
+<<<<<<< HEAD
 	unsigned int       irqbase;
+=======
+	int		   irqbase;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct irq_domain *domain;
 	int                soc_variant;
 };

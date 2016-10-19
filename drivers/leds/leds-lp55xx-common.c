@@ -19,9 +19,12 @@
 #include <linux/leds.h>
 #include <linux/module.h>
 #include <linux/platform_data/leds-lp55xx.h>
+<<<<<<< HEAD
 #include <linux/slab.h>
 #include <linux/gpio.h>
 #include <linux/of_gpio.h>
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #include "leds-lp55xx-common.h"
 
@@ -167,7 +170,10 @@ static int lp55xx_init_led(struct lp55xx_led *led,
 	led->led_current = pdata->led_config[chan].led_current;
 	led->max_current = pdata->led_config[chan].max_current;
 	led->chan_nr = pdata->led_config[chan].chan_nr;
+<<<<<<< HEAD
 	led->cdev.default_trigger = pdata->led_config[chan].default_trigger;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (led->chan_nr >= max_channel) {
 		dev_err(dev, "Use channel numbers between 0 and %d\n",
@@ -365,7 +371,10 @@ int lp55xx_update_bits(struct lp55xx_chip *chip, u8 reg, u8 mask, u8 val)
 }
 EXPORT_SYMBOL_GPL(lp55xx_update_bits);
 
+<<<<<<< HEAD
 #ifdef MAINLINE_BUT_NOT_USE
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 bool lp55xx_is_extclk_used(struct lp55xx_chip *chip)
 {
 	struct clk *clk;
@@ -394,7 +403,10 @@ use_internal_clk:
 	return false;
 }
 EXPORT_SYMBOL_GPL(lp55xx_is_extclk_used);
+<<<<<<< HEAD
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 int lp55xx_init_device(struct lp55xx_chip *chip)
 {
@@ -411,6 +423,7 @@ int lp55xx_init_device(struct lp55xx_chip *chip)
 	if (!pdata || !cfg)
 		return -EINVAL;
 
+<<<<<<< HEAD
 #ifdef MAINLINE_BUT_NOT_USE
 	if (gpio_is_valid(pdata->enable_gpio)) {
 		ret = devm_gpio_request_one(dev, pdata->enable_gpio,
@@ -427,6 +440,22 @@ int lp55xx_init_device(struct lp55xx_chip *chip)
 		usleep_range(1000, 2000); /* 500us abs min. */
 	}
 #endif
+=======
+	if (pdata->setup_resources) {
+		ret = pdata->setup_resources();
+		if (ret < 0) {
+			dev_err(dev, "setup resoure err: %d\n", ret);
+			goto err;
+		}
+	}
+
+	if (pdata->enable) {
+		pdata->enable(0);
+		usleep_range(1000, 2000); /* Keep enable down at least 1ms */
+		pdata->enable(1);
+		usleep_range(1000, 2000); /* 500us abs min. */
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	lp55xx_reset_device(chip);
 
@@ -448,7 +477,10 @@ int lp55xx_init_device(struct lp55xx_chip *chip)
 		dev_err(dev, "post init device err: %d\n", ret);
 		goto err_post_init;
 	}
+<<<<<<< HEAD
 	pr_info("%s: done\n", __func__);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return 0;
 
@@ -461,15 +493,26 @@ EXPORT_SYMBOL_GPL(lp55xx_init_device);
 
 void lp55xx_deinit_device(struct lp55xx_chip *chip)
 {
+<<<<<<< HEAD
 #ifdef MAINLINE_BUT_NOT_USE
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct lp55xx_platform_data *pdata = chip->pdata;
 
 	if (chip->clk)
 		clk_disable_unprepare(chip->clk);
 
+<<<<<<< HEAD
 	if (gpio_is_valid(pdata->enable_gpio))
 		gpio_set_value(pdata->enable_gpio, 0);
 #endif
+=======
+	if (pdata->enable)
+		pdata->enable(0);
+
+	if (pdata->release_resources)
+		pdata->release_resources();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 EXPORT_SYMBOL_GPL(lp55xx_deinit_device);
 
@@ -562,6 +605,7 @@ void lp55xx_unregister_sysfs(struct lp55xx_chip *chip)
 }
 EXPORT_SYMBOL_GPL(lp55xx_unregister_sysfs);
 
+<<<<<<< HEAD
 int lp55xx_of_populate_pdata(struct device *dev, struct device_node *np)
 {
 	struct device_node *child;
@@ -615,6 +659,8 @@ int lp55xx_of_populate_pdata(struct device *dev, struct device_node *np)
 }
 EXPORT_SYMBOL_GPL(lp55xx_of_populate_pdata);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 MODULE_AUTHOR("Milo Kim <milo.kim@ti.com>");
 MODULE_DESCRIPTION("LP55xx Common Driver");
 MODULE_LICENSE("GPL");

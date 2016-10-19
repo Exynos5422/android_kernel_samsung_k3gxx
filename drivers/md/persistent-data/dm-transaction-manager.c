@@ -154,7 +154,11 @@ int dm_tm_pre_commit(struct dm_transaction_manager *tm)
 	if (r < 0)
 		return r;
 
+<<<<<<< HEAD
 	return 0;
+=======
+	return dm_bm_flush(tm->bm);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 EXPORT_SYMBOL_GPL(dm_tm_pre_commit);
 
@@ -164,8 +168,14 @@ int dm_tm_commit(struct dm_transaction_manager *tm, struct dm_block *root)
 		return -EWOULDBLOCK;
 
 	wipe_shadow_table(tm);
+<<<<<<< HEAD
 
 	return dm_bm_flush_and_unlock(tm->bm, root);
+=======
+	dm_bm_unlock(root);
+
+	return dm_bm_flush(tm->bm);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 EXPORT_SYMBOL_GPL(dm_tm_commit);
 

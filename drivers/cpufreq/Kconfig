@@ -17,6 +17,7 @@ config CPU_FREQ
 
 if CPU_FREQ
 
+<<<<<<< HEAD
 config CPU_FREQ_TABLE
 	tristate
 
@@ -26,6 +27,23 @@ config CPU_FREQ_GOV_COMMON
 config CPU_FREQ_STAT
 	tristate "CPU frequency translation statistics"
 	select CPU_FREQ_TABLE
+=======
+config CPU_FREQ_GOV_COMMON
+	bool
+
+config SCHED_FREQ_INPUT
+	bool "Scheduler inputs to cpufreq governor"
+	depends on SCHED_HMP
+	help
+	  This option enables support for scheduler based CPU utilization
+	  calculations which may then be used by any cpufreq governor. The
+	  scheduler keeps track of "recent" cpu demand of tasks, which can
+	  help determine need for changing frequency well in advance of what
+	  a governor would have been able to detect on its own.
+
+config CPU_FREQ_STAT
+	tristate "CPU frequency translation statistics"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	default y
 	help
 	  This driver exports CPU frequency statistics information through sysfs
@@ -153,7 +171,10 @@ config CPU_FREQ_GOV_USERSPACE
 
 config CPU_FREQ_GOV_ONDEMAND
 	tristate "'ondemand' cpufreq policy governor"
+<<<<<<< HEAD
 	select CPU_FREQ_TABLE
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	select CPU_FREQ_GOV_COMMON
 	help
 	  'ondemand' - This driver adds a dynamic cpufreq policy governor.
@@ -187,6 +208,7 @@ config CPU_FREQ_GOV_INTERACTIVE
 
 	  If in doubt, say N.
 
+<<<<<<< HEAD
 config MODE_AUTO_CHANGE
 	bool "automatic governor parameter change"
 	depends on CPU_FREQ_GOV_INTERACTIVE
@@ -194,6 +216,8 @@ config MODE_AUTO_CHANGE
 	help
 		automatic governor parameter change by MODE
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 config CPU_FREQ_GOV_CONSERVATIVE
 	tristate "'conservative' cpufreq governor"
 	depends on CPU_FREQ
@@ -218,10 +242,27 @@ config CPU_FREQ_GOV_CONSERVATIVE
 
 	  If in doubt, say N.
 
+<<<<<<< HEAD
 config GENERIC_CPUFREQ_CPU0
 	tristate "Generic CPU0 cpufreq driver"
 	depends on HAVE_CLK && REGULATOR && PM_OPP && OF
 	select CPU_FREQ_TABLE
+=======
+config CPU_BOOST
+	tristate "Event base short term CPU freq boost"
+	depends on CPU_FREQ
+	help
+	  This driver boosts the frequency of one or more CPUs based on
+	  various events that might occur in the system. As of now, the
+	  events it reacts to are:
+	  - Migration of important threads from one CPU to another.
+
+	  If in doubt, say N.
+
+config GENERIC_CPUFREQ_CPU0
+	tristate "Generic CPU0 cpufreq driver"
+	depends on HAVE_CLK && REGULATOR && PM_OPP && OF
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	help
 	  This adds a generic cpufreq driver for CPU0 frequency management.
 	  It supports both uniprocessor (UP) and symmetric multiprocessor (SMP)
@@ -229,6 +270,7 @@ config GENERIC_CPUFREQ_CPU0
 
 	  If in doubt, say N.
 
+<<<<<<< HEAD
 config AP_CLOCK_LIMIT_ON_JIG_BOOT
 	bool "AP clock limitation when JIG boot while specified time"
 	default n
@@ -236,13 +278,19 @@ config AP_CLOCK_LIMIT_ON_JIG_BOOT
 	  This option is for newly added Exynos54xx project after NOTE4 to limit
 	  AP clock when JIG boot while specified time(500sec).
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 menu "x86 CPU frequency scaling drivers"
 depends on X86
 source "drivers/cpufreq/Kconfig.x86"
 endmenu
 
 menu "ARM CPU frequency scaling drivers"
+<<<<<<< HEAD
 depends on ARM
+=======
+depends on ARM || ARM64
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 source "drivers/cpufreq/Kconfig.arm"
 endmenu
 
@@ -264,7 +312,10 @@ depends on IA64
 
 config IA64_ACPI_CPUFREQ
 	tristate "ACPI Processor P-States driver"
+<<<<<<< HEAD
 	select CPU_FREQ_TABLE
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	depends on ACPI_PROCESSOR
 	help
 	This driver adds a CPUFreq driver which utilizes the ACPI
@@ -281,7 +332,10 @@ depends on MIPS
 
 config LOONGSON2_CPUFREQ
 	tristate "Loongson2 CPUFreq Driver"
+<<<<<<< HEAD
 	select CPU_FREQ_TABLE
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	help
 	  This option adds a CPUFreq driver for loongson processors which
 	  support software configurable cpu frequency.
@@ -303,7 +357,10 @@ menu "SPARC CPU frequency scaling drivers"
 depends on SPARC64
 config SPARC_US3_CPUFREQ
 	tristate "UltraSPARC-III CPU Frequency driver"
+<<<<<<< HEAD
 	select CPU_FREQ_TABLE
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	help
 	  This adds the CPUFreq driver for UltraSPARC-III processors.
 
@@ -313,7 +370,10 @@ config SPARC_US3_CPUFREQ
 
 config SPARC_US2E_CPUFREQ
 	tristate "UltraSPARC-IIe CPU Frequency driver"
+<<<<<<< HEAD
 	select CPU_FREQ_TABLE
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	help
 	  This adds the CPUFreq driver for UltraSPARC-IIe processors.
 
@@ -326,7 +386,10 @@ menu "SH CPU Frequency scaling"
 depends on SUPERH
 config SH_CPU_FREQ
 	tristate "SuperH CPU Frequency driver"
+<<<<<<< HEAD
 	select CPU_FREQ_TABLE
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	help
 	  This adds the cpufreq driver for SuperH. Any CPU that supports
 	  clock rate rounding through the clock framework can use this

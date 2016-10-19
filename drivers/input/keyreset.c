@@ -1,6 +1,10 @@
 /* drivers/input/keyreset.c
  *
+<<<<<<< HEAD
  * Copyright (C) 2008 Google, Inc.
+=======
+ * Copyright (C) 2014 Google, Inc.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  *
  * This software is licensed under the terms of the GNU General Public
  * License version 2, as published by the Free Software Foundation, and
@@ -21,6 +25,7 @@
 #include <linux/sched.h>
 #include <linux/slab.h>
 #include <linux/syscalls.h>
+<<<<<<< HEAD
 
 
 struct keyreset_state {
@@ -176,18 +181,74 @@ static int keyreset_probe(struct platform_device *pdev)
 		return -ENOMEM;
 
 	spin_lock_init(&state->lock);
+=======
+#include <linux/keycombo.h>
+
+struct keyreset_state {
+	int restart_requested;
+	int (*reset_fn)(void);
+	struct platform_device *pdev_child;
+};
+
+static void do_restart(void)
+{
+	sys_sync();
+	kernel_restart(NULL);
+}
+
+static void do_reset_fn(void *priv)
+{
+	struct keyreset_state *state = priv;
+	if (state->restart_requested)
+		panic("keyboard reset failed, %d", state->restart_requested);
+	if (state->reset_fn) {
+		state->restart_requested = state->reset_fn();
+	} else {
+		pr_info("keyboard reset\n");
+		do_restart();
+		state->restart_requested = 1;
+	}
+}
+
+static int keyreset_probe(struct platform_device *pdev)
+{
+	int ret = -ENOMEM;
+	struct keycombo_platform_data *pdata_child;
+	struct keyreset_platform_data *pdata = pdev->dev.platform_data;
+	int up_size = 0, down_size = 0, size;
+	int key, *keyp;
+	struct keyreset_state *state;
+
+	if (!pdata)
+		return -EINVAL;
+	state = devm_kzalloc(&pdev->dev, sizeof(*state), GFP_KERNEL);
+	if (!state)
+		return -ENOMEM;
+
+	state->pdev_child = platform_device_alloc(KEYCOMBO_NAME,
+							PLATFORM_DEVID_AUTO);
+	if (!state->pdev_child)
+		return -ENOMEM;
+	state->pdev_child->dev.parent = &pdev->dev;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	keyp = pdata->keys_down;
 	while ((key = *keyp++)) {
 		if (key >= KEY_MAX)
 			continue;
+<<<<<<< HEAD
 		state->key_down_target++;
 		__set_bit(key, state->keybit);
+=======
+		down_size++;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 	if (pdata->keys_up) {
 		keyp = pdata->keys_up;
 		while ((key = *keyp++)) {
 			if (key >= KEY_MAX)
 				continue;
+<<<<<<< HEAD
 			__set_bit(key, state->keybit);
 			__set_bit(key, state->upbit);
 		}
@@ -208,13 +269,51 @@ static int keyreset_probe(struct platform_device *pdev)
 	}
 	platform_set_drvdata(pdev, state);
 	return 0;
+=======
+			up_size++;
+		}
+	}
+	size = sizeof(struct keycombo_platform_data)
+			+ sizeof(int) * (down_size + 1);
+	pdata_child = devm_kzalloc(&pdev->dev, size, GFP_KERNEL);
+	if (!pdata_child)
+		goto error;
+	memcpy(pdata_child->keys_down, pdata->keys_down,
+						sizeof(int) * down_size);
+	if (up_size > 0) {
+		pdata_child->keys_up = devm_kzalloc(&pdev->dev, up_size + 1,
+								GFP_KERNEL);
+		if (!pdata_child->keys_up)
+			goto error;
+		memcpy(pdata_child->keys_up, pdata->keys_up,
+							sizeof(int) * up_size);
+		if (!pdata_child->keys_up)
+			goto error;
+	}
+	state->reset_fn = pdata->reset_fn;
+	pdata_child->key_down_fn = do_reset_fn;
+	pdata_child->priv = state;
+	pdata_child->key_down_delay = pdata->key_down_delay;
+	ret = platform_device_add_data(state->pdev_child, pdata_child, size);
+	if (ret)
+		goto error;
+	platform_set_drvdata(pdev, state);
+	return platform_device_add(state->pdev_child);
+error:
+	platform_device_put(state->pdev_child);
+	return ret;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 int keyreset_remove(struct platform_device *pdev)
 {
 	struct keyreset_state *state = platform_get_drvdata(pdev);
+<<<<<<< HEAD
 	input_unregister_handler(&state->input_handler);
 	kfree(state);
+=======
+	platform_device_put(state->pdev_child);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 

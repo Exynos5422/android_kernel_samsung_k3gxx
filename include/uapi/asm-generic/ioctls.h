@@ -77,6 +77,12 @@
 #define TIOCGPKT	_IOR('T', 0x38, int) /* Get packet mode state */
 #define TIOCGPTLCK	_IOR('T', 0x39, int) /* Get Pty lock state */
 #define TIOCGEXCL	_IOR('T', 0x40, int) /* Get exclusive mode state */
+<<<<<<< HEAD
+=======
+#define TIOCPMGET	0x5441	/* PM get */
+#define TIOCPMPUT	0x5442	/* PM put */
+#define TIOCPMACT	0x5443	/* PM is active */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define FIONCLEX	0x5450
 #define FIOCLEX		0x5451

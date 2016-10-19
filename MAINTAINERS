@@ -1029,8 +1029,11 @@ M:	Bryan Huntsman <bryanh@codeaurora.org>
 L:	linux-arm-msm@vger.kernel.org
 F:	arch/arm/mach-msm/
 F:	drivers/video/msm/
+<<<<<<< HEAD
 F:	drivers/mmc/host/msm_sdcc.c
 F:	drivers/mmc/host/msm_sdcc.h
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 F:	drivers/tty/serial/msm_serial.h
 F:	drivers/tty/serial/msm_serial.c
 F:	drivers/*/pm8???-*
@@ -3536,6 +3539,17 @@ S:	Maintained
 F:	include/asm-generic
 F:	include/uapi/asm-generic
 
+<<<<<<< HEAD
+=======
+GENERIC PHY FRAMEWORK
+M:	Kishon Vijay Abraham I <kishon@ti.com>
+L:	linux-kernel@vger.kernel.org
+T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kishon/linux-phy.git
+S:	Supported
+F:	drivers/phy/
+F:	include/linux/phy/
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 GENERIC UIO DRIVER FOR PCI DEVICES
 M:	"Michael S. Tsirkin" <mst@redhat.com>
 L:	kvm@vger.kernel.org
@@ -9188,6 +9202,16 @@ F:	Documentation/networking/z8530drv.txt
 F:	drivers/net/hamradio/*scc.c
 F:	drivers/net/hamradio/z8530.h
 
+<<<<<<< HEAD
+=======
+ZBUD COMPRESSED PAGE ALLOCATOR
+M:	Seth Jennings <sjenning@linux.vnet.ibm.com>
+L:	linux-mm@kvack.org
+S:	Maintained
+F:	mm/zbud.c
+F:	include/linux/zbud.h
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 ZD1211RW WIRELESS DRIVER
 M:	Daniel Drake <dsd@gentoo.org>
 M:	Ulrich Kunitz <kune@deine-taler.de>
@@ -9210,6 +9234,15 @@ M:	"Maciej W. Rozycki" <macro@linux-mips.org>
 S:	Maintained
 F:	drivers/tty/serial/zs.*
 
+<<<<<<< HEAD
+=======
+ZSWAP COMPRESSED SWAP CACHING
+M:	Seth Jennings <sjenning@linux.vnet.ibm.com>
+L:	linux-mm@kvack.org
+S:	Maintained
+F:	mm/zswap.c
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 THE REST
 M:	Linus Torvalds <torvalds@linux-foundation.org>
 L:	linux-kernel@vger.kernel.org

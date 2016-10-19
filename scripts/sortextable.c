@@ -31,6 +31,13 @@
 #include <tools/be_byteshift.h>
 #include <tools/le_byteshift.h>
 
+<<<<<<< HEAD
+=======
+#ifndef EM_AARCH64
+#define EM_AARCH64	183
+#endif
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int fd_map;	/* File descriptor for file being modified. */
 static int mmap_failed; /* Boolean flag. */
 static void *ehdr_curr; /* current ElfXX_Ehdr *  for resource cleanup */
@@ -249,6 +256,10 @@ do_file(char const *const fname)
 		custom_sort = sort_relative_table;
 		break;
 	case EM_ARM:
+<<<<<<< HEAD
+=======
+	case EM_AARCH64:
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	case EM_MIPS:
 		break;
 	}  /* end switch */

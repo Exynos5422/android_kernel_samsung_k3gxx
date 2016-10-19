@@ -85,6 +85,10 @@ struct audit_names {
 
 	struct filename		*name;
 	int			name_len;	/* number of chars to log */
+<<<<<<< HEAD
+=======
+	bool			hidden;		/* don't log this record */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	bool			name_put;	/* call __putname()? */
 
 	unsigned long		ino;
@@ -105,11 +109,14 @@ struct audit_names {
 	bool			should_free;
 };
 
+<<<<<<< HEAD
 struct audit_proctitle {
 	int	len;	/* length of the cmdline field. */
 	char	*value;	/* the cmdline field */
 };
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /* The per-task audit context. */
 struct audit_context {
 	int		    dummy;	/* must be the first element */
@@ -203,7 +210,10 @@ struct audit_context {
 		} mmap;
 	};
 	int fds[2];
+<<<<<<< HEAD
 	struct audit_proctitle proctitle;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #if AUDIT_DEBUG
 	int		    put_count;

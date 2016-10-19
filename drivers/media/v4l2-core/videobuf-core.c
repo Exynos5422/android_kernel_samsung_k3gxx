@@ -330,6 +330,10 @@ static void videobuf_status(struct videobuf_queue *q, struct v4l2_buffer *b,
 		break;
 	case V4L2_MEMORY_USERPTR:
 		b->m.userptr = vb->baddr;
+<<<<<<< HEAD
+=======
+		b->reserved = vb->boff;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		b->length    = vb->bsize;
 		break;
 	case V4L2_MEMORY_OVERLAY:
@@ -588,6 +592,10 @@ int videobuf_qbuf(struct videobuf_queue *q, struct v4l2_buffer *b)
 		    buf->baddr != b->m.userptr)
 			q->ops->buf_release(q, buf);
 		buf->baddr = b->m.userptr;
+<<<<<<< HEAD
+=======
+		buf->boff = b->reserved;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		break;
 	case V4L2_MEMORY_OVERLAY:
 		buf->boff = b->m.offset;
@@ -1127,8 +1135,11 @@ unsigned int videobuf_poll_stream(struct file *file,
 			buf = list_entry(q->stream.next,
 					 struct videobuf_buffer, stream);
 	} else if (req_events & (POLLIN | POLLRDNORM)) {
+<<<<<<< HEAD
 		if (!q->reading)
 			__videobuf_read_start(q);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (!q->reading) {
 			rc = POLLERR;
 		} else if (NULL == q->read_buf) {

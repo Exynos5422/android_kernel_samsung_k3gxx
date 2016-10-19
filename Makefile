@@ -1,6 +1,10 @@
 VERSION = 3
 PATCHLEVEL = 10
+<<<<<<< HEAD
 SUBLEVEL = 9
+=======
+SUBLEVEL = 49
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 EXTRAVERSION =
 NAME = TOSSUG Baby Fish
 
@@ -192,10 +196,15 @@ SUBARCH := $(shell uname -m | sed -e s/i.86/x86/ -e s/x86_64/x86/ \
 # "make" in the configured kernel build directory always uses that.
 # Default value for CROSS_COMPILE is not to prefix executables
 # Note: Some architectures assign CROSS_COMPILE in their arch/*/Makefile
+<<<<<<< HEAD
 
 export KBUILD_BUILDHOST := $(SUBARCH)
 ARCH		?=arm
 CROSS_COMPILE	?=/opt/arm-linux-androideabi-4.9/bin/arm-linux-androideabi-
+=======
+ARCH		?= $(SUBARCH)
+CROSS_COMPILE	?= $(CONFIG_CROSS_COMPILE:"%"=%)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 # Architecture as present in compile.h
 UTS_MACHINE 	:= $(ARCH)
@@ -328,7 +337,11 @@ include $(srctree)/scripts/Kbuild.include
 
 AS		= $(CROSS_COMPILE)as
 LD		= $(CROSS_COMPILE)ld
+<<<<<<< HEAD
 CC		= $(CROSS_COMPILE)gcc
+=======
+REAL_CC		= $(CROSS_COMPILE)gcc
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 CPP		= $(CC) -E
 AR		= $(CROSS_COMPILE)ar
 NM		= $(CROSS_COMPILE)nm
@@ -342,10 +355,16 @@ DEPMOD		= /sbin/depmod
 PERL		= perl
 CHECK		= sparse
 
+<<<<<<< HEAD
 ifeq ($(CONFIG_CRYPTO_FIPS),)
 READELF	= $(CROSS_COMPILE)readelf
 export READELF
 endif
+=======
+# Use the wrapper for the compiler.  This wrapper scans for new
+# warnings and causes the build to stop upon encountering them.
+CC		= $(srctree)/scripts/gcc-wrapper.py $(REAL_CC)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 CHECKFLAGS     := -D__linux__ -Dlinux -D__STDC__ -Dunix -D__unix__ \
 		  -Wbitwise -Wno-return-void $(CF)
@@ -376,6 +395,7 @@ LINUXINCLUDE    := \
 
 KBUILD_CPPFLAGS := -D__KERNEL__
 
+<<<<<<< HEAD
 KBUILD_CFLAGS := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
 				-fno-strict-aliasing -fno-common \
 				-Wno-format-security -Wno-unused \
@@ -387,6 +407,13 @@ KBUILD_CFLAGS := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
 				-fno-delete-null-pointer-checks \
 				-fno-aggressive-loop-optimizations \
 				-std=gnu89
+=======
+KBUILD_CFLAGS   := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
+		   -fno-strict-aliasing -fno-common \
+		   -Werror-implicit-function-declaration \
+		   -Wno-format-security \
+		   -fno-delete-null-pointer-checks
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 KBUILD_AFLAGS_KERNEL :=
 KBUILD_CFLAGS_KERNEL :=
 KBUILD_AFLAGS   := -D__ASSEMBLY__
@@ -605,18 +632,44 @@ ifneq ($(CONFIG_FRAME_WARN),0)
 KBUILD_CFLAGS += $(call cc-option,-Wframe-larger-than=${CONFIG_FRAME_WARN})
 endif
 
+<<<<<<< HEAD
 # Force gcc to behave correct even for buggy distributions
 ifndef CONFIG_CC_STACKPROTECTOR
 KBUILD_CFLAGS += $(call cc-option, -fno-stack-protector)
 endif
+=======
+# Handle stack protector mode.
+ifdef CONFIG_CC_STACKPROTECTOR_REGULAR
+  stackp-flag := -fstack-protector
+  ifeq ($(call cc-option, $(stackp-flag)),)
+    $(warning Cannot use CONFIG_CC_STACKPROTECTOR_REGULAR: \
+             -fstack-protector not supported by compiler)
+  endif
+else
+ifdef CONFIG_CC_STACKPROTECTOR_STRONG
+  stackp-flag := -fstack-protector-strong
+  ifeq ($(call cc-option, $(stackp-flag)),)
+    $(warning Cannot use CONFIG_CC_STACKPROTECTOR_STRONG: \
+	      -fstack-protector-strong not supported by compiler)
+  endif
+else
+  # Force off for distro compilers that enable stack protector by default.
+  stackp-flag := $(call cc-option, -fno-stack-protector)
+endif
+endif
+KBUILD_CFLAGS += $(stackp-flag)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 # This warning generated too much noise in a regular build.
 # Use make W=1 to enable this warning (see scripts/Makefile.build)
 KBUILD_CFLAGS += $(call cc-disable-warning, unused-but-set-variable)
 
+<<<<<<< HEAD
 ## Fix GCC 4.9 Scheduler bug
 KBUILD_CFLAGS += $(call cc-option, -fno-var-tracking-assignments)
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 ifdef CONFIG_FRAME_POINTER
 KBUILD_CFLAGS	+= -fno-omit-frame-pointer -fno-optimize-sibling-calls
 else
@@ -683,6 +736,7 @@ ifeq ($(shell $(CONFIG_SHELL) $(srctree)/scripts/gcc-goto.sh $(CC)), y)
 	KBUILD_CFLAGS += -DCC_HAVE_ASM_GOTO
 endif
 
+<<<<<<< HEAD
 #Disable the whole of the following block to disable LKM AUTH
 ifeq ($(CONFIG_TIMA_LKMAUTH),y)
 ifeq ($(CONFIG_TIMA),y)
@@ -696,11 +750,14 @@ ifeq ($(CONFIG_TZ_ICCC),y)
     KBUILD_CFLAGS += -Idrivers/gud/gud-exynos5422/MobiCoreKernelApi/include/
 endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 # Add user supplied CPPFLAGS, AFLAGS and CFLAGS as the last assignments
 KBUILD_CPPFLAGS += $(KCPPFLAGS)
 KBUILD_AFLAGS += $(KAFLAGS)
 KBUILD_CFLAGS += $(KCFLAGS)
 
+<<<<<<< HEAD
 ifeq ($(CONFIG_SENSORS_FINGERPRINT), y)
 ifneq ($(CONFIG_SEC_FACTORY), true)
 ifneq ($(SEC_BUILD_CONF_USE_FINGERPRINT_TZ), false)
@@ -709,6 +766,8 @@ endif
 endif
 endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 # Use --build-id when available.
 LDFLAGS_BUILD_ID = $(patsubst -Wl$(comma)%,%,\
 			      $(call cc-ldoption, -Wl$(comma)--build-id,))
@@ -816,10 +875,13 @@ ifdef CONFIG_BUILD_DOCSRC
 	$(Q)$(MAKE) $(build)=Documentation
 endif
 	+$(call if_changed,link-vmlinux)
+<<<<<<< HEAD
 ifdef CONFIG_CRYPTO_FIPS
 	@$(kecho) '  FIPS : Generating hmac of crypto and updating vmlinux... ';
 	$(call cmd,fips_gen_hmac)
 endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 # The actual objects are generated when descending, 
 # make sure no implicit rule kicks in

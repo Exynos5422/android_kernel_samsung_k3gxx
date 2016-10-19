@@ -60,6 +60,7 @@ struct secondary_data {
 	void *stack;
 };
 extern struct secondary_data secondary_data;
+<<<<<<< HEAD
 extern void secondary_holding_pen(void);
 extern volatile unsigned long secondary_holding_pen_release;
 
@@ -76,5 +77,17 @@ struct smp_enable_ops {
 
 extern const struct smp_enable_ops smp_spin_table_ops;
 extern const struct smp_enable_ops smp_psci_ops;
+=======
+extern void secondary_entry(void);
+
+extern void arch_send_call_function_single_ipi(int cpu);
+extern void arch_send_call_function_ipi_mask(const struct cpumask *mask);
+extern void arch_send_wakeup_ipi_mask(const struct cpumask *mask);
+
+extern int __cpu_disable(void);
+
+extern void __cpu_die(unsigned int cpu);
+extern void cpu_die(void);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #endif /* ifndef __ASM_SMP_H */

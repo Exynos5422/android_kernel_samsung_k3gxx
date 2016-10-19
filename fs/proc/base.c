@@ -87,6 +87,10 @@
 #include <linux/slab.h>
 #include <linux/flex_array.h>
 #include <linux/posix-timers.h>
+<<<<<<< HEAD
+=======
+#include <linux/qmp_sphinx_instrumentation.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifdef CONFIG_HARDWALL
 #include <asm/hardwall.h>
 #endif
@@ -139,12 +143,15 @@ struct pid_entry {
 		NULL, &proc_single_file_operations,	\
 		{ .proc_show = show } )
 
+<<<<<<< HEAD
 /* ANDROID is for special files in /proc. */
 #define ANDROID(NAME, MODE, OTYPE)			\
 	NOD(NAME, (S_IFREG|(MODE)),			\
 		&proc_##OTYPE##_inode_operations,	\
 		&proc_##OTYPE##_operations, {})
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * Count the number of hardlinks for the pid_entry table, excluding the .
  * and .. links.
@@ -206,9 +213,47 @@ static int proc_root_link(struct dentry *dentry, struct path *path)
 	return result;
 }
 
+<<<<<<< HEAD
 static int proc_pid_cmdline(struct task_struct *task, char *buffer)
 {
 	return get_cmdline(task, buffer, PAGE_SIZE);
+=======
+static int proc_pid_cmdline(struct task_struct *task, char * buffer)
+{
+	int res = 0;
+	unsigned int len;
+	struct mm_struct *mm = get_task_mm(task);
+	if (!mm)
+		goto out;
+	if (!mm->arg_end)
+		goto out_mm;	/* Shh! No looking before we're done */
+
+ 	len = mm->arg_end - mm->arg_start;
+ 
+	if (len > PAGE_SIZE)
+		len = PAGE_SIZE;
+ 
+	res = access_process_vm(task, mm->arg_start, buffer, len, 0);
+
+	// If the nul at the end of args has been overwritten, then
+	// assume application is using setproctitle(3).
+	if (res > 0 && buffer[res-1] != '\0' && len < PAGE_SIZE) {
+		len = strnlen(buffer, res);
+		if (len < res) {
+		    res = len;
+		} else {
+			len = mm->env_end - mm->env_start;
+			if (len > PAGE_SIZE - res)
+				len = PAGE_SIZE - res;
+			res += access_process_vm(task, mm->env_start, buffer+res, len, 0);
+			res = strnlen(buffer, res);
+		}
+	}
+out_mm:
+	mmput(mm);
+out:
+	return res;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static int proc_pid_auxv(struct task_struct *task, char *buffer)
@@ -881,15 +926,31 @@ static ssize_t oom_adj_read(struct file *file, char __user *buf, size_t count,
 	int oom_adj = OOM_ADJUST_MIN;
 	size_t len;
 	unsigned long flags;
+<<<<<<< HEAD
+=======
+	int mult = 1;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (!task)
 		return -ESRCH;
 	if (lock_task_sighand(task, &flags)) {
+<<<<<<< HEAD
 		if (task->signal->oom_score_adj == OOM_SCORE_ADJ_MAX)
 			oom_adj = OOM_ADJUST_MAX;
 		else
 			oom_adj = (task->signal->oom_score_adj * -OOM_DISABLE) /
 				  OOM_SCORE_ADJ_MAX;
+=======
+		if (task->signal->oom_score_adj == OOM_SCORE_ADJ_MAX) {
+			oom_adj = OOM_ADJUST_MAX;
+		} else {
+			if (task->signal->oom_score_adj < 0)
+				mult = -1;
+			oom_adj = roundup(mult * task->signal->oom_score_adj *
+				-OOM_DISABLE, OOM_SCORE_ADJ_MAX) /
+				OOM_SCORE_ADJ_MAX * mult;
+		}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		unlock_task_sighand(task, &flags);
 	}
 	put_task_struct(task);
@@ -929,6 +990,12 @@ static ssize_t oom_adj_write(struct file *file, const char __user *buf,
 		goto out;
 	}
 
+<<<<<<< HEAD
+=======
+	qmp_sphinx_logk_oom_adjust_write(task->pid,
+			task->cred->uid, oom_adj);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	task_lock(task);
 	if (!task->mm) {
 		err = -EINVAL;
@@ -974,6 +1041,7 @@ out:
 	return err < 0 ? err : count;
 }
 
+<<<<<<< HEAD
 static int oom_adjust_permission(struct inode *inode, int mask)
 {
 	uid_t uid;
@@ -1003,6 +1071,8 @@ static const struct inode_operations proc_oom_adj_inode_operations = {
 	.permission	= oom_adjust_permission,
 };
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static const struct file_operations proc_oom_adj_operations = {
 	.read		= oom_adj_read,
 	.write		= oom_adj_write,
@@ -1061,6 +1131,12 @@ static ssize_t oom_score_adj_write(struct file *file, const char __user *buf,
 		goto out;
 	}
 
+<<<<<<< HEAD
+=======
+	qmp_sphinx_logk_oom_adjust_write(task->pid,
+			task->cred->uid, oom_score_adj);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	task_lock(task);
 	if (!task->mm) {
 		err = -EINVAL;
@@ -1828,6 +1904,10 @@ static int proc_map_files_get_link(struct dentry *dentry, struct path *path)
 	if (rc)
 		goto out_mmput;
 
+<<<<<<< HEAD
+=======
+	rc = -ENOENT;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	down_read(&mm->mmap_sem);
 	vma = find_exact_vma(mm, vm_start, vm_end);
 	if (vma && vma->vm_file) {
@@ -2673,10 +2753,19 @@ static const struct pid_entry tgid_base_stuff[] = {
 	REG("mounts",     S_IRUGO, proc_mounts_operations),
 	REG("mountinfo",  S_IRUGO, proc_mountinfo_operations),
 	REG("mountstats", S_IRUSR, proc_mountstats_operations),
+<<<<<<< HEAD
 #ifdef CONFIG_PROC_PAGE_MONITOR
 	REG("clear_refs", S_IWUSR, proc_clear_refs_operations),
 	REG("smaps",      S_IRUGO, proc_pid_smaps_operations),
 	REG("smaps_simple", S_IRUGO, proc_pid_smaps_simple_operations),
+=======
+#ifdef CONFIG_PROCESS_RECLAIM
+	REG("reclaim", S_IWUSR, proc_reclaim_operations),
+#endif
+#ifdef CONFIG_PROC_PAGE_MONITOR
+	REG("clear_refs", S_IWUSR, proc_clear_refs_operations),
+	REG("smaps",      S_IRUGO, proc_pid_smaps_operations),
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	REG("pagemap",    S_IRUGO, proc_pagemap_operations),
 #endif
 #ifdef CONFIG_SECURITY
@@ -2701,7 +2790,11 @@ static const struct pid_entry tgid_base_stuff[] = {
 	REG("cgroup",  S_IRUGO, proc_cgroup_operations),
 #endif
 	INF("oom_score",  S_IRUGO, proc_oom_score),
+<<<<<<< HEAD
 	ANDROID("oom_adj", S_IRUGO|S_IWUSR, oom_adj),
+=======
+	REG("oom_adj",    S_IRUGO|S_IWUSR, proc_oom_adj_operations),
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	REG("oom_score_adj", S_IRUGO|S_IWUSR, proc_oom_score_adj_operations),
 #ifdef CONFIG_AUDITSYSCALL
 	REG("loginuid",   S_IWUSR|S_IRUGO, proc_loginuid_operations),

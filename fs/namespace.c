@@ -135,9 +135,12 @@ void mnt_release_group_id(struct mount *mnt)
 static inline void mnt_add_count(struct mount *mnt, int n)
 {
 #ifdef CONFIG_SMP
+<<<<<<< HEAD
 	if (!mnt->mnt_pcp)
 		return;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	this_cpu_add(mnt->mnt_pcp->mnt_count, n);
 #else
 	preempt_disable();
@@ -1432,7 +1435,11 @@ struct vfsmount *collect_mounts(struct path *path)
 			 CL_COPY_ALL | CL_PRIVATE);
 	namespace_unlock();
 	if (IS_ERR(tree))
+<<<<<<< HEAD
 		return NULL;
+=======
+		return ERR_CAST(tree);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return &tree->mnt;
 }
 
@@ -2652,9 +2659,12 @@ SYSCALL_DEFINE2(pivot_root, const char __user *, new_root,
 	/* make sure we can reach put_old from new_root */
 	if (!is_path_reachable(old_mnt, old.dentry, &new))
 		goto out4;
+<<<<<<< HEAD
 	/* make certain new is below the root */
 	if (!is_path_reachable(new_mnt, new.dentry, &root))
 		goto out4;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	root_mp->m_count++; /* pin it so it won't go away */
 	br_write_lock(&vfsmount_lock);
 	detach_mnt(new_mnt, &parent_path);

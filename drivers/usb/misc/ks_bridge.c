@@ -44,7 +44,11 @@ enum bus_id {
 
 static enum bus_id str_to_busid(const char *name)
 {
+<<<<<<< HEAD
 	if (!strncasecmp("15510000.usb", name, BUSNAME_LEN))
+=======
+	if (!strncasecmp("msm_hsic_host", name, BUSNAME_LEN))
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return BUS_HSIC;
 	if (!strncasecmp("msm_ehci_host.0", name, BUSNAME_LEN))
 		return BUS_USB;
@@ -247,6 +251,7 @@ read_start:
 
 	dbg_log_event(ksb, "KS_READ", copied, 0);
 
+<<<<<<< HEAD
 	if (!strcmp(ksb->id_info.name, "efs_hsic_bridge") &&
 		test_bit(USB_DEV_CONNECTED, &ksb->flags))
 		dev_err(ksb->device, "%s, count:%d space:%d copied:%d",
@@ -256,6 +261,10 @@ read_start:
 		dev_dbg(ksb->device, "count:%d space:%d copied:%d",
 				count, space, copied);
 #endif
+=======
+	dev_dbg(ksb->device, "count:%d space:%d copied:%d", count,
+			space, copied);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return copied;
 }
@@ -266,7 +275,11 @@ static void ksb_tx_cb(struct urb *urb)
 	struct ks_bridge *ksb = pkt->ctxt;
 
 	dbg_log_event(ksb, "C TX_URB", urb->status, 0);
+<<<<<<< HEAD
 	/* dev_dbg(&ksb->udev->dev, "status:%d", urb->status); */
+=======
+	dev_dbg(&ksb->udev->dev, "status:%d", urb->status);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (test_bit(USB_DEV_CONNECTED, &ksb->flags))
 		usb_autopm_put_interface_async(ksb->ifc);
@@ -299,6 +312,10 @@ static void ksb_tomdm_work(struct work_struct *w)
 
 		urb = usb_alloc_urb(0, GFP_KERNEL);
 		if (!urb) {
+<<<<<<< HEAD
+=======
+			dbg_log_event(ksb, "TX_URB_MEM_FAIL", -ENOMEM, 0);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			pr_err_ratelimited("%s: unable to allocate urb",
 					ksb->id_info.name);
 			ksb_free_data_pkt(pkt);
@@ -307,6 +324,10 @@ static void ksb_tomdm_work(struct work_struct *w)
 
 		ret = usb_autopm_get_interface(ksb->ifc);
 		if (ret < 0 && ret != -EAGAIN && ret != -EACCES) {
+<<<<<<< HEAD
+=======
+			dbg_log_event(ksb, "TX_URB_AUTOPM_FAIL", ret, 0);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			pr_err_ratelimited("%s: autopm_get failed:%d",
 					ksb->id_info.name, ret);
 			usb_free_urb(urb);
@@ -350,11 +371,14 @@ static ssize_t ksb_fs_write(struct file *fp, const char __user *buf,
 	if (!test_bit(USB_DEV_CONNECTED, &ksb->flags))
 		return -ENODEV;
 
+<<<<<<< HEAD
 
 	if (!strcmp(ksb->id_info.name, "efs_hsic_bridge"))
 		dev_err(ksb->device, "%s ,count:%d cmd:%d\n",
 				__func__, count, *buf);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (count > MAX_DATA_PKT_SIZE)
 		count = MAX_DATA_PKT_SIZE;
 
@@ -379,6 +403,11 @@ static ssize_t ksb_fs_write(struct file *fp, const char __user *buf,
 
 	queue_work(ksb->wq, &ksb->to_mdm_work);
 
+<<<<<<< HEAD
+=======
+	dbg_log_event(ksb, "KS_WRITE", count, 0);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return count;
 }
 
@@ -552,10 +581,15 @@ static void ksb_rx_cb(struct urb *urb)
 
 	dbg_log_event(ksb, "C RX_URB", urb->status, urb->actual_length);
 
+<<<<<<< HEAD
 #if 0
 	dev_dbg(&ksb->udev->dev, "status:%d actual:%d", urb->status,
 			urb->actual_length);
 #endif
+=======
+	dev_dbg(&ksb->udev->dev, "status:%d actual:%d", urb->status,
+			urb->actual_length);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/*non zero len of data received while unlinking urb*/
 	if (urb->status == -ENOENT && (urb->actual_length > 0)) {
@@ -819,7 +853,11 @@ ksb_usb_probe(struct usb_interface *ifc, const struct usb_device_id *id)
 		usb_enable_autosuspend(ksb->udev);
 	}
 
+<<<<<<< HEAD
 	dev_info(&udev->dev, "usb dev connected");
+=======
+	dev_dbg(&udev->dev, "usb dev connected");
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return 0;
 

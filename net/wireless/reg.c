@@ -338,6 +338,14 @@ static bool is_user_regdom_saved(void)
 	return true;
 }
 
+<<<<<<< HEAD
+=======
+static bool is_cfg80211_regdom_intersected(void)
+{
+	return is_intersected_alpha2(get_cfg80211_regdom()->alpha2);
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static const struct ieee80211_regdomain *
 reg_copy_regd(const struct ieee80211_regdomain *src_regd)
 {
@@ -856,6 +864,21 @@ static void handle_channel(struct wiphy *wiphy,
 
 		REG_DBG_PRINT("Disabling freq %d MHz\n", chan->center_freq);
 		chan->flags |= IEEE80211_CHAN_DISABLED;
+<<<<<<< HEAD
+=======
+		if (lr->initiator == NL80211_REGDOM_SET_BY_DRIVER &&
+		    request_wiphy && request_wiphy == wiphy &&
+		    request_wiphy->flags & WIPHY_FLAG_STRICT_REGULATORY) {
+			REG_DBG_PRINT("Disabling freq %d MHz for good\n",
+				      chan->center_freq);
+			chan->orig_flags |= IEEE80211_CHAN_DISABLED;
+			chan->flags = chan->orig_flags;
+		} else {
+			REG_DBG_PRINT("Disabling freq %d MHz\n",
+				      chan->center_freq);
+			chan->flags |= IEEE80211_CHAN_DISABLED;
+			}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return;
 	}
 
@@ -899,6 +922,7 @@ static void handle_channel(struct wiphy *wiphy,
 	chan->max_reg_power = (int) MBM_TO_DBM(power_rule->max_eirp);
 	if (chan->orig_mpwr) {
 		/*
+<<<<<<< HEAD
 		 * Devices that have their own custom regulatory domain
 		 * but also use WIPHY_FLAG_STRICT_REGULATORY will follow the
 		 * passed country IE power settings.
@@ -906,6 +930,13 @@ static void handle_channel(struct wiphy *wiphy,
 		if (initiator == NL80211_REGDOM_SET_BY_COUNTRY_IE &&
 		    wiphy->flags & WIPHY_FLAG_CUSTOM_REGULATORY &&
 		    wiphy->flags & WIPHY_FLAG_STRICT_REGULATORY)
+=======
+		 * Devices that use NL80211_COUNTRY_IE_FOLLOW_POWER will always
+		 * follow the passed country IE power settings.
+		 */
+		if (initiator == NL80211_REGDOM_SET_BY_COUNTRY_IE &&
+		    wiphy->country_ie_pref & NL80211_COUNTRY_IE_FOLLOW_POWER)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			chan->max_power = chan->max_reg_power;
 		else
 			chan->max_power = min(chan->orig_mpwr,
@@ -1257,7 +1288,13 @@ static void handle_channel_custom(struct wiphy *wiphy,
 	if (IS_ERR(reg_rule)) {
 		REG_DBG_PRINT("Disabling freq %d MHz as custom regd has no rule that fits it\n",
 			      chan->center_freq);
+<<<<<<< HEAD
 		chan->flags = IEEE80211_CHAN_DISABLED;
+=======
+		chan->orig_flags |= IEEE80211_CHAN_DISABLED;
+		chan->flags = chan->orig_flags;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return;
 	}
 
@@ -1331,6 +1368,12 @@ get_reg_request_treatment(struct wiphy *wiphy,
 	case NL80211_REGDOM_SET_BY_CORE:
 		return REG_REQ_OK;
 	case NL80211_REGDOM_SET_BY_COUNTRY_IE:
+<<<<<<< HEAD
+=======
+		if (wiphy->country_ie_pref & NL80211_COUNTRY_IE_IGNORE_CORE)
+			return REG_REQ_IGNORE;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (reg_request_cell_base(lr)) {
 			/* Trust a Cell base station over the AP's country IE */
 			if (regdom_changes(pending_request->alpha2))
@@ -1364,6 +1407,7 @@ get_reg_request_treatment(struct wiphy *wiphy,
 		}
 		return 0;
 	case NL80211_REGDOM_SET_BY_DRIVER:
+<<<<<<< HEAD
 		if (lr->initiator == NL80211_REGDOM_SET_BY_CORE) {
 			if (regdom_changes(pending_request->alpha2))
 				return REG_REQ_OK;
@@ -1380,6 +1424,15 @@ get_reg_request_treatment(struct wiphy *wiphy,
 			return REG_REQ_ALREADY_SET;
 
 		return REG_REQ_INTERSECT;
+=======
+
+		if (!regdom_changes(pending_request->alpha2))
+			return REG_REQ_ALREADY_SET;
+		if (lr->initiator == NL80211_REGDOM_SET_BY_USER)
+			return REG_REQ_INTERSECT;
+		else
+			return REG_REQ_OK;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	case NL80211_REGDOM_SET_BY_USER:
 		if (reg_request_cell_base(pending_request))
 			return reg_ignore_cell_hint(pending_request);
@@ -1402,9 +1455,20 @@ get_reg_request_treatment(struct wiphy *wiphy,
 		 */
 		if ((lr->initiator == NL80211_REGDOM_SET_BY_CORE ||
 		     lr->initiator == NL80211_REGDOM_SET_BY_DRIVER ||
+<<<<<<< HEAD
 		     lr->initiator == NL80211_REGDOM_SET_BY_USER) &&
 		    regdom_changes(lr->alpha2))
 			return REG_REQ_IGNORE;
+=======
+		     lr->initiator == NL80211_REGDOM_SET_BY_USER)) {
+			if (lr->intersect) {
+				if (!is_cfg80211_regdom_intersected())
+					return REG_REQ_IGNORE;
+			} else if (regdom_changes(lr->alpha2)) {
+				return REG_REQ_IGNORE;
+			}
+		}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 		if (!regdom_changes(pending_request->alpha2))
 			return REG_REQ_ALREADY_SET;
@@ -1420,6 +1484,7 @@ static void reg_set_request_processed(void)
 	bool need_more_processing = false;
 	struct regulatory_request *lr = get_last_request();
 
+<<<<<<< HEAD
 #ifdef CONFIG_CFG80211_REG_NOT_UPDATED
 	/*
 	* SAMSUNG FIX : Regulatory Configuration was update
@@ -1432,6 +1497,8 @@ static void reg_set_request_processed(void)
 	return;
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	lr->processed = true;
 
 	spin_lock(&reg_requests_lock);
@@ -1554,7 +1621,12 @@ static void reg_process_hint(struct regulatory_request *reg_request,
 	if (reg_request->wiphy_idx != WIPHY_IDX_INVALID)
 		wiphy = wiphy_idx_to_wiphy(reg_request->wiphy_idx);
 
+<<<<<<< HEAD
 	if (reg_initiator == NL80211_REGDOM_SET_BY_DRIVER && !wiphy) {
+=======
+	if ((reg_initiator == NL80211_REGDOM_SET_BY_DRIVER ||
+	     reg_initiator == NL80211_REGDOM_SET_BY_COUNTRY_IE) && !wiphy) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		kfree(reg_request);
 		return;
 	}
@@ -1650,6 +1722,7 @@ static void reg_todo(struct work_struct *work)
 
 static void queue_regulatory_request(struct regulatory_request *request)
 {
+<<<<<<< HEAD
 #ifdef CONFIG_CFG80211_REG_NOT_UPDATED
 	/*
 	* SAMSUNG FIX : Regulatory Configuration was update
@@ -1664,6 +1737,8 @@ static void queue_regulatory_request(struct regulatory_request *request)
 	return;
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	request->alpha2[0] = toupper(request->alpha2[0]);
 	request->alpha2[1] = toupper(request->alpha2[1]);
 
@@ -1718,6 +1793,10 @@ int regulatory_hint_user(const char *alpha2,
 
 	return 0;
 }
+<<<<<<< HEAD
+=======
+EXPORT_SYMBOL(regulatory_hint_user);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /* Driver hints */
 int regulatory_hint(struct wiphy *wiphy, const char *alpha2)
@@ -1884,6 +1963,7 @@ static void restore_regulatory_settings(bool reset_user)
 	LIST_HEAD(tmp_reg_req_list);
 	struct cfg80211_registered_device *rdev;
 
+<<<<<<< HEAD
 #ifdef CONFIG_CFG80211_REG_NOT_UPDATED
 	/*
 	* SAMSUNG FIX : Regulatory Configuration was update
@@ -1896,6 +1976,8 @@ static void restore_regulatory_settings(bool reset_user)
 	return;
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	mutex_lock(&cfg80211_mutex);
 	mutex_lock(&reg_mutex);
 
@@ -1993,6 +2075,7 @@ int regulatory_hint_found_beacon(struct wiphy *wiphy,
 	struct reg_beacon *reg_beacon;
 	bool processing;
 
+<<<<<<< HEAD
 #ifdef CONFIG_CFG80211_REG_NOT_UPDATED
 	/*
 	* SAMSUNG FIX : Regulatory Configuration was update
@@ -2004,6 +2087,8 @@ int regulatory_hint_found_beacon(struct wiphy *wiphy,
 	return 0;
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (beacon_chan->beacon_found ||
 	    beacon_chan->flags & IEEE80211_CHAN_RADAR ||
 	    (beacon_chan->band == IEEE80211_BAND_2GHZ &&
@@ -2336,12 +2421,22 @@ int reg_device_uevent(struct device *dev, struct kobj_uevent_env *env)
 
 void wiphy_regulatory_register(struct wiphy *wiphy)
 {
+<<<<<<< HEAD
+=======
+	struct regulatory_request *lr;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	mutex_lock(&reg_mutex);
 
 	if (!reg_dev_ignore_cell_hint(wiphy))
 		reg_num_devs_support_basehint++;
 
+<<<<<<< HEAD
 	wiphy_update_regulatory(wiphy, NL80211_REGDOM_SET_BY_CORE);
+=======
+	lr = get_last_request();
+	wiphy_update_regulatory(wiphy, lr->initiator);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	mutex_unlock(&reg_mutex);
 }

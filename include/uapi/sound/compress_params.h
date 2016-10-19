@@ -57,7 +57,19 @@
 #define MAX_NUM_CODECS 32
 #define MAX_NUM_CODEC_DESCRIPTORS 32
 #define MAX_NUM_BITRATES 32
+<<<<<<< HEAD
 #define MAX_NUM_SAMPLE_RATES 32
+=======
+
+/* compressed TX */
+#define MAX_NUM_FRAMES_PER_BUFFER 1
+#define COMPRESSED_META_DATA_MODE 0x10
+#define META_DATA_LEN_BYTES 36
+#define Q6_AC3_DECODER	0x00010BF6
+#define Q6_EAC3_DECODER 0x00010C3C
+#define Q6_DTS		0x00010D88
+#define Q6_DTS_LBR	0x00010DBB
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /* Codecs are listed linearly to allow for extensibility */
 #define SND_AUDIOCODEC_PCM                   ((__u32) 0x00000001)
@@ -73,8 +85,23 @@
 #define SND_AUDIOCODEC_IEC61937              ((__u32) 0x0000000B)
 #define SND_AUDIOCODEC_G723_1                ((__u32) 0x0000000C)
 #define SND_AUDIOCODEC_G729                  ((__u32) 0x0000000D)
+<<<<<<< HEAD
 #define SND_AUDIOCODEC_MAX                   SND_AUDIOCODEC_G729
 
+=======
+#define SND_AUDIOCODEC_DTS_PASS_THROUGH      ((__u32) 0x0000000E)
+#define SND_AUDIOCODEC_DTS_LBR               ((__u32) 0x0000000F)
+#define SND_AUDIOCODEC_DTS_TRANSCODE_LOOPBACK ((__u32) 0x00000010)
+#define SND_AUDIOCODEC_PASS_THROUGH          ((__u32) 0x00000011)
+#define SND_AUDIOCODEC_MP2                   ((__u32) 0x00000012)
+#define SND_AUDIOCODEC_DTS_LBR_PASS_THROUGH  ((__u32) 0x00000013)
+#define SND_AUDIOCODEC_AC3                   ((__u32) 0x00000014)
+#define SND_AUDIOCODEC_AC3_PASS_THROUGH      ((__u32) 0x00000015)
+#define SND_AUDIOCODEC_WMA_PRO               ((__u32) 0x00000016)
+#define SND_AUDIOCODEC_DTS             	     ((__u32) 0x00000017)
+#define SND_AUDIOCODEC_EAC3                  ((__u32) 0x00000018)
+#define SND_AUDIOCODEC_MAX                   SND_AUDIOCODEC_EAC3
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * Profile and modes are listed with bit masks. This allows for a
  * more compact representation of fields that will not evolve
@@ -239,6 +266,14 @@
 
 struct snd_enc_wma {
 	__u32 super_block_align; /* WMA Type-specific data */
+<<<<<<< HEAD
+=======
+	__u32 bits_per_sample;
+	__u32 channelmask;
+	__u32 encodeopt;
+	__u32 encodeopt1;
+	__u32 encodeopt2;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 
@@ -268,7 +303,11 @@ struct snd_enc_vorbis {
 	__u32 max_bit_rate;
 	__u32 min_bit_rate;
 	__u32 downmix;
+<<<<<<< HEAD
 } __attribute__((packed, aligned(4)));
+=======
+};
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 
 /**
@@ -284,7 +323,11 @@ struct snd_enc_real {
 	__u32 quant_bits;
 	__u32 start_region;
 	__u32 num_regions;
+<<<<<<< HEAD
 } __attribute__((packed, aligned(4)));
+=======
+};
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /**
  * struct snd_enc_flac
@@ -308,25 +351,55 @@ struct snd_enc_real {
 struct snd_enc_flac {
 	__u32 num;
 	__u32 gain;
+<<<<<<< HEAD
 } __attribute__((packed, aligned(4)));
+=======
+};
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 struct snd_enc_generic {
 	__u32 bw;	/* encoder bandwidth */
 	__s32 reserved[15];
+<<<<<<< HEAD
 } __attribute__((packed, aligned(4)));
 
+=======
+};
+struct snd_dec_ddp {
+	__u32 params_length;
+	__u32 params_id[18];
+	__u32 params_value[18];
+};
+struct snd_dec_flac {
+	__u16 sample_size;
+	__u16 min_blk_size;
+	__u16 max_blk_size;
+	__u16 min_frame_size;
+	__u16 max_frame_size;
+};
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 union snd_codec_options {
 	struct snd_enc_wma wma;
 	struct snd_enc_vorbis vorbis;
 	struct snd_enc_real real;
 	struct snd_enc_flac flac;
 	struct snd_enc_generic generic;
+<<<<<<< HEAD
 } __attribute__((packed, aligned(4)));
 
 /** struct snd_codec_desc - description of codec capabilities
  * @max_ch: Maximum number of audio channels
  * @sample_rates: Sampling rates in Hz, use values like 48000 for this
  * @num_sample_rates: Number of valid values in sample_rates array
+=======
+	struct snd_dec_ddp ddp;
+	struct snd_dec_flac flac_dec;
+};
+
+/** struct snd_codec_desc - description of codec capabilities
+ * @max_ch: Maximum number of audio channels
+ * @sample_rates: Sampling rates in Hz, use SNDRV_PCM_RATE_xxx for this
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  * @bit_rate: Indexed array containing supported bit rates
  * @num_bitrates: Number of valid values in bit_rate array
  * @rate_control: value is specified by SND_RATECONTROLMODE defines.
@@ -348,8 +421,12 @@ union snd_codec_options {
 
 struct snd_codec_desc {
 	__u32 max_ch;
+<<<<<<< HEAD
 	__u32 sample_rates[MAX_NUM_SAMPLE_RATES];
 	__u32 num_sample_rates;
+=======
+	__u32 sample_rates;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	__u32 bit_rate[MAX_NUM_BITRATES];
 	__u32 num_bitrates;
 	__u32 rate_control;
@@ -358,7 +435,11 @@ struct snd_codec_desc {
 	__u32 formats;
 	__u32 min_buffer;
 	__u32 reserved[15];
+<<<<<<< HEAD
 } __attribute__((packed, aligned(4)));
+=======
+};
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /** struct snd_codec
  * @id: Identifies the supported audio encoder/decoder.
@@ -367,8 +448,12 @@ struct snd_codec_desc {
  * @ch_out: Number of output channels. In case of contradiction between
  *		this field and the channelMode field, the channelMode field
  *		overrides.
+<<<<<<< HEAD
  * @sample_rate: Audio sample rate of input data in Hz, use values like 48000
  *		for this.
+=======
+ * @sample_rate: Audio sample rate of input data
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  * @bit_rate: Bitrate of encoded data. May be ignored by decoders
  * @rate_control: Encoding rate control. See SND_RATECONTROLMODE defines.
  *               Encoders may rely on profiles for quality levels.
@@ -397,8 +482,15 @@ struct snd_codec {
 	__u32 ch_mode;
 	__u32 format;
 	__u32 align;
+<<<<<<< HEAD
 	union snd_codec_options options;
 	__u32 reserved[3];
 } __attribute__((packed, aligned(4)));
+=======
+	__u32 compr_passthr;
+	union snd_codec_options options;
+	__u32 reserved[3];
+};
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #endif

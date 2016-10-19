@@ -152,6 +152,13 @@ static inline u16 ieee80211_sn_sub(u16 sn1, u16 sn2)
    802.11e clarifies the figure in section 7.1.2. The frame body is
    up to 2304 octets long (maximum MSDU size) plus any crypt overhead. */
 #define IEEE80211_MAX_DATA_LEN		2304
+<<<<<<< HEAD
+=======
+/* 802.11ad extends maximum MSDU size for DMG (freq > 40Ghz) networks
+ * to 7920 bytes, see 8.2.3 General frame format
+ */
+#define IEEE80211_MAX_DATA_LEN_DMG	7920
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /* 30 byte 4 addr hdr, 2 byte QoS, 2304 byte MSDU, 12 byte crypt, 4 byte FCS */
 #define IEEE80211_MAX_FRAME_LEN		2352
 
@@ -2027,27 +2034,42 @@ enum ieee80211_sa_query_action {
 #define WLAN_CIPHER_SUITE_USE_GROUP	0x000FAC00
 #define WLAN_CIPHER_SUITE_WEP40		0x000FAC01
 #define WLAN_CIPHER_SUITE_TKIP		0x000FAC02
+<<<<<<< HEAD
 /* reserved:				0x000FAC03 */
+=======
+/* reserved: 				0x000FAC03 */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define WLAN_CIPHER_SUITE_CCMP		0x000FAC04
 #define WLAN_CIPHER_SUITE_WEP104	0x000FAC05
 #define WLAN_CIPHER_SUITE_AES_CMAC	0x000FAC06
 #define WLAN_CIPHER_SUITE_GCMP		0x000FAC08
 #define WLAN_CIPHER_SUITE_SMS4		0x00147201
+<<<<<<< HEAD
 #define WLAN_CIPHER_SUITE_PMK		0x00904C00 /* 802.11r */
+=======
+
+#define WLAN_CIPHER_SUITE_SMS4		0x00147201
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /* AKM suite selectors */
 #define WLAN_AKM_SUITE_8021X		0x000FAC01
 #define WLAN_AKM_SUITE_PSK		0x000FAC02
+<<<<<<< HEAD
 #define WLAN_AKM_SUITE_FT_8021X		0x000FAC03 /* 802.11r */
 #define WLAN_AKM_SUITE_FT_PSK		0x000FAC04 /* 802.11r */
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define WLAN_AKM_SUITE_8021X_SHA256	0x000FAC05
 #define WLAN_AKM_SUITE_PSK_SHA256	0x000FAC06
 #define WLAN_AKM_SUITE_TDLS		0x000FAC07
 #define WLAN_AKM_SUITE_SAE		0x000FAC08
 #define WLAN_AKM_SUITE_FT_OVER_SAE	0x000FAC09
+<<<<<<< HEAD
 #define WLAN_AKM_SUITE_WAPI_PSK		0x000FAC11  /* WAPI */
 #define WLAN_AKM_SUITE_WAPI_CERT	0x000FAC12  /* WAPI */
 #define WLAN_AKM_SUITE_CCKM		0x00409600  /* CCKM */
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define WLAN_MAX_KEY_LEN		32
 

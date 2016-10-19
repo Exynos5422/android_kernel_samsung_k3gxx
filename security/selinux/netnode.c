@@ -42,6 +42,10 @@
 
 #include "netnode.h"
 #include "objsec.h"
+<<<<<<< HEAD
+=======
+#include "avc.h"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define SEL_NETNODE_HASH_SIZE       256
 #define SEL_NETNODE_HASH_BKT_LIMIT   16
@@ -281,7 +285,11 @@ int sel_netnode_sid(void *addr, u16 family, u32 *sid)
  * Remove all entries from the network address table.
  *
  */
+<<<<<<< HEAD
 static void sel_netnode_flush(void)
+=======
+void sel_netnode_flush(void)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	unsigned int idx;
 	struct sel_netnode *node, *node_tmp;
@@ -298,6 +306,7 @@ static void sel_netnode_flush(void)
 	spin_unlock_bh(&sel_netnode_lock);
 }
 
+<<<<<<< HEAD
 static int sel_netnode_avc_callback(u32 event)
 {
 	if (event == AVC_CALLBACK_RESET) {
@@ -307,12 +316,17 @@ static int sel_netnode_avc_callback(u32 event)
 	return 0;
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static __init int sel_netnode_init(void)
 {
 	int iter;
 	int ret;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (!selinux_enabled)
 		return 0;
 
@@ -321,10 +335,13 @@ static __init int sel_netnode_init(void)
 		sel_netnode_hash[iter].size = 0;
 	}
 
+<<<<<<< HEAD
 	ret = avc_add_callback(sel_netnode_avc_callback, AVC_CALLBACK_RESET);
 	if (ret != 0)
 		panic("avc_add_callback() failed, error %d\n", ret);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return ret;
 }
 

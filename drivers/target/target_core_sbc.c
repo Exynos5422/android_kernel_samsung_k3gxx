@@ -63,7 +63,11 @@ sbc_emulate_readcapacity(struct se_cmd *cmd)
 		transport_kunmap_data_sg(cmd);
 	}
 
+<<<<<<< HEAD
 	target_complete_cmd(cmd, GOOD);
+=======
+	target_complete_cmd_with_length(cmd, GOOD, 8);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 
@@ -101,7 +105,11 @@ sbc_emulate_readcapacity_16(struct se_cmd *cmd)
 		transport_kunmap_data_sg(cmd);
 	}
 
+<<<<<<< HEAD
 	target_complete_cmd(cmd, GOOD);
+=======
+	target_complete_cmd_with_length(cmd, GOOD, 32);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 

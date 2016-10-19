@@ -37,18 +37,28 @@
 #include <linux/clk.h>
 #include <linux/uaccess.h>
 #include <linux/io.h>
+<<<<<<< HEAD
+=======
+#include <linux/cpufreq.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <linux/slab.h>
 #include <linux/err.h>
 #include <linux/of.h>
 
 #include <mach/map.h>
+<<<<<<< HEAD
 #include <mach/pmu.h>
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #undef S3C_VA_WATCHDOG
 #define S3C_VA_WATCHDOG (0)
 
 #include <plat/regs-watchdog.h>
+<<<<<<< HEAD
 #include <plat/watchdog.h>
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define CONFIG_S3C2410_WATCHDOG_ATBOOT		(0)
 #define CONFIG_S3C2410_WATCHDOG_DEFAULT_TIME	(15)
@@ -79,7 +89,10 @@ MODULE_PARM_DESC(debug, "Watchdog debug, set to >1 for debug (default 0)");
 static struct device    *wdt_dev;	/* platform device attached to */
 static struct resource	*wdt_mem;
 static struct resource	*wdt_irq;
+<<<<<<< HEAD
 static struct clk	*rate_wdt_clock;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static struct clk	*wdt_clock;
 static void __iomem	*wdt_base;
 static unsigned int	 wdt_count;
@@ -122,6 +135,7 @@ static int s3c2410wdt_stop(struct watchdog_device *wdd)
 	return 0;
 }
 
+<<<<<<< HEAD
 static int s3c2410wdt_stop_intclear(struct watchdog_device *wdd)
 {
 	spin_lock(&wdt_lock);
@@ -132,6 +146,8 @@ static int s3c2410wdt_stop_intclear(struct watchdog_device *wdd)
 	return 0;
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int s3c2410wdt_start(struct watchdog_device *wdd)
 {
 	unsigned long wtcon;
@@ -167,6 +183,7 @@ static inline int s3c2410wdt_is_running(void)
 	return readl(wdt_base + S3C2410_WTCON) & S3C2410_WTCON_ENABLE;
 }
 
+<<<<<<< HEAD
 static int s3c2410wdt_set_min_max_timeout(struct watchdog_device *wdd)
 {
 	unsigned long freq = clk_get_rate(rate_wdt_clock);
@@ -186,6 +203,11 @@ static int s3c2410wdt_set_min_max_timeout(struct watchdog_device *wdd)
 static int s3c2410wdt_set_heartbeat(struct watchdog_device *wdd, unsigned timeout)
 {
 	unsigned long freq = clk_get_rate(rate_wdt_clock);
+=======
+static int s3c2410wdt_set_heartbeat(struct watchdog_device *wdd, unsigned timeout)
+{
+	unsigned long freq = clk_get_rate(wdt_clock);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	unsigned int count;
 	unsigned int divisor = 1;
 	unsigned long wtcon;
@@ -268,6 +290,7 @@ static irqreturn_t s3c2410wdt_irq(int irqno, void *param)
 }
 
 
+<<<<<<< HEAD
 static const struct of_device_id s3c2410_wdt_match[];
 
 static int s3c2410wdt_get_platdata(struct platform_device *pdev)
@@ -293,25 +316,97 @@ static int s3c2410wdt_get_platdata(struct platform_device *pdev)
 	return 0;
 }
 
+=======
+#ifdef CONFIG_CPU_FREQ
+
+static int s3c2410wdt_cpufreq_transition(struct notifier_block *nb,
+					  unsigned long val, void *data)
+{
+	int ret;
+
+	if (!s3c2410wdt_is_running())
+		goto done;
+
+	if (val == CPUFREQ_PRECHANGE) {
+		/* To ensure that over the change we don't cause the
+		 * watchdog to trigger, we perform an keep-alive if
+		 * the watchdog is running.
+		 */
+
+		s3c2410wdt_keepalive(&s3c2410_wdd);
+	} else if (val == CPUFREQ_POSTCHANGE) {
+		s3c2410wdt_stop(&s3c2410_wdd);
+
+		ret = s3c2410wdt_set_heartbeat(&s3c2410_wdd, s3c2410_wdd.timeout);
+
+		if (ret >= 0)
+			s3c2410wdt_start(&s3c2410_wdd);
+		else
+			goto err;
+	}
+
+done:
+	return 0;
+
+ err:
+	dev_err(wdt_dev, "cannot set new value for timeout %d\n",
+				s3c2410_wdd.timeout);
+	return ret;
+}
+
+static struct notifier_block s3c2410wdt_cpufreq_transition_nb = {
+	.notifier_call	= s3c2410wdt_cpufreq_transition,
+};
+
+static inline int s3c2410wdt_cpufreq_register(void)
+{
+	return cpufreq_register_notifier(&s3c2410wdt_cpufreq_transition_nb,
+					 CPUFREQ_TRANSITION_NOTIFIER);
+}
+
+static inline void s3c2410wdt_cpufreq_deregister(void)
+{
+	cpufreq_unregister_notifier(&s3c2410wdt_cpufreq_transition_nb,
+				    CPUFREQ_TRANSITION_NOTIFIER);
+}
+
+#else
+static inline int s3c2410wdt_cpufreq_register(void)
+{
+	return 0;
+}
+
+static inline void s3c2410wdt_cpufreq_deregister(void)
+{
+}
+#endif
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int s3c2410wdt_probe(struct platform_device *pdev)
 {
 	struct device *dev;
 	unsigned int wtcon;
 	int started = 0;
 	int ret;
+<<<<<<< HEAD
 	struct s3c_watchdog_platdata *pdata;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	DBG("%s: probe=%p\n", __func__, pdev);
 
 	dev = &pdev->dev;
 	wdt_dev = &pdev->dev;
 
+<<<<<<< HEAD
 	if (s3c2410wdt_get_platdata(pdev)) {
 		dev_err(dev, "failed to get platdata\n");
 		return -EINVAL;
 	}
 	pdata = dev_get_platdata(&pdev->dev);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	wdt_mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
 	if (wdt_mem == NULL) {
 		dev_err(dev, "no memory resource specified\n");
@@ -334,6 +429,7 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
 
 	DBG("probe: mapped wdt_base=%p\n", wdt_base);
 
+<<<<<<< HEAD
 	rate_wdt_clock = devm_clk_get(dev, "rate_watchdog");
 	if (IS_ERR(rate_wdt_clock)) {
 		dev_err(dev, "failed to find watchdog rate clock source\n");
@@ -342,6 +438,9 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
 	}
 
 	wdt_clock = devm_clk_get(dev, "gate_watchdog");
+=======
+	wdt_clock = devm_clk_get(dev, "watchdog");
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (IS_ERR(wdt_clock)) {
 		dev_err(dev, "failed to find watchdog clock source\n");
 		ret = PTR_ERR(wdt_clock);
@@ -350,22 +449,32 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
 
 	clk_prepare_enable(wdt_clock);
 
+<<<<<<< HEAD
 	/* Enable pmu watchdog reset control */
 	if (pdata != NULL && pdata->pmu_wdt_control != NULL) {
 		/* Prevent watchdog reset while setting */
 		s3c2410wdt_stop_intclear(&s3c2410_wdd);
 		pdata->pmu_wdt_control(1, pdata->pmu_wdt_reset_type);
+=======
+	ret = s3c2410wdt_cpufreq_register();
+	if (ret < 0) {
+		pr_err("failed to register cpufreq\n");
+		goto err_clk;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	/* see if we can actually set the requested timer margin, and if
 	 * not, try the default value */
 
+<<<<<<< HEAD
 	ret = s3c2410wdt_set_min_max_timeout(&s3c2410_wdd);
 	if (ret != 0) {
 		dev_err(dev, "clock rate is 0\n");
 		goto err_clk;
 	}
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	watchdog_init_timeout(&s3c2410_wdd, tmr_margin,  &pdev->dev);
 	if (s3c2410wdt_set_heartbeat(&s3c2410_wdd, s3c2410_wdd.timeout)) {
 		started = s3c2410wdt_set_heartbeat(&s3c2410_wdd,
@@ -384,7 +493,11 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
 				pdev->name, pdev);
 	if (ret != 0) {
 		dev_err(dev, "failed to install irq (%d)\n", ret);
+<<<<<<< HEAD
 		goto err_clk;
+=======
+		goto err_cpufreq;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	watchdog_set_nowayout(&s3c2410_wdd, nowayout);
@@ -392,7 +505,11 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
 	ret = watchdog_register_device(&s3c2410_wdd);
 	if (ret) {
 		dev_err(dev, "cannot register watchdog (%d)\n", ret);
+<<<<<<< HEAD
 		goto err_clk;
+=======
+		goto err_cpufreq;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	if (tmr_atboot && started == 0) {
@@ -417,10 +534,19 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
 
 	return 0;
 
+<<<<<<< HEAD
  err_clk:
 	clk_disable_unprepare(wdt_clock);
 	wdt_clock = NULL;
 	rate_wdt_clock = NULL;
+=======
+ err_cpufreq:
+	s3c2410wdt_cpufreq_deregister();
+
+ err_clk:
+	clk_disable_unprepare(wdt_clock);
+	wdt_clock = NULL;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
  err:
 	wdt_irq = NULL;
@@ -432,9 +558,16 @@ static int s3c2410wdt_remove(struct platform_device *dev)
 {
 	watchdog_unregister_device(&s3c2410_wdd);
 
+<<<<<<< HEAD
 	clk_disable_unprepare(wdt_clock);
 	wdt_clock = NULL;
 	rate_wdt_clock = NULL;
+=======
+	s3c2410wdt_cpufreq_deregister();
+
+	clk_disable_unprepare(wdt_clock);
+	wdt_clock = NULL;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	wdt_irq = NULL;
 	wdt_mem = NULL;
@@ -453,9 +586,12 @@ static unsigned long wtdat_save;
 
 static int s3c2410wdt_suspend(struct platform_device *dev, pm_message_t state)
 {
+<<<<<<< HEAD
 	struct s3c_watchdog_platdata *pdata;
 
 	pdata = dev_get_platdata(&dev->dev);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* Save watchdog state, and turn it off. */
 	wtcon_save = readl(wdt_base + S3C2410_WTCON);
 	wtdat_save = readl(wdt_base + S3C2410_WTDAT);
@@ -463,15 +599,19 @@ static int s3c2410wdt_suspend(struct platform_device *dev, pm_message_t state)
 	/* Note that WTCNT doesn't need to be saved. */
 	s3c2410wdt_stop(&s3c2410_wdd);
 
+<<<<<<< HEAD
 	/* Disable pmu watchdog reset control */
 	if (pdata != NULL && pdata->pmu_wdt_control != NULL)
 		pdata->pmu_wdt_control(0, pdata->pmu_wdt_reset_type);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 
 static int s3c2410wdt_resume(struct platform_device *dev)
 {
+<<<<<<< HEAD
 	struct s3c_watchdog_platdata *pdata;
 
 	pdata = dev_get_platdata(&dev->dev);
@@ -482,6 +622,8 @@ static int s3c2410wdt_resume(struct platform_device *dev)
 	if (pdata != NULL && pdata->pmu_wdt_control != NULL)
 		pdata->pmu_wdt_control(1, pdata->pmu_wdt_reset_type);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* Restore watchdog state. */
 
 	writel(wtdat_save, wdt_base + S3C2410_WTDAT);
@@ -500,6 +642,7 @@ static int s3c2410wdt_resume(struct platform_device *dev)
 #endif /* CONFIG_PM */
 
 #ifdef CONFIG_OF
+<<<<<<< HEAD
 static struct s3c_watchdog_platdata watchdog_platform_data = {
 	.pmu_wdt_control = exynos_pmu_wdt_control,
 };
@@ -508,6 +651,10 @@ static const struct of_device_id s3c2410_wdt_match[] = {
 	{ .compatible = "samsung,s3c2410-wdt",
 	  .data = &watchdog_platform_data,
 	},
+=======
+static const struct of_device_id s3c2410_wdt_match[] = {
+	{ .compatible = "samsung,s3c2410-wdt" },
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	{},
 };
 MODULE_DEVICE_TABLE(of, s3c2410_wdt_match);

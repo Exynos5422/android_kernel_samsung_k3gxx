@@ -666,6 +666,10 @@ struct kvm_ppc_smmu_info {
 #define KVM_CAP_IRQ_MPIC 90
 #define KVM_CAP_PPC_RTAS 91
 #define KVM_CAP_IRQ_XICS 92
+<<<<<<< HEAD
+=======
+#define KVM_CAP_ARM_EL1_32BIT 93
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #ifdef KVM_CAP_IRQ_ROUTING
 
@@ -784,6 +788,10 @@ struct kvm_dirty_tlb {
 #define KVM_REG_ARM		0x4000000000000000ULL
 #define KVM_REG_S390		0x5000000000000000ULL
 #define KVM_REG_MIPS		0x7000000000000000ULL
+<<<<<<< HEAD
+=======
+#define KVM_REG_ARM64		0x6000000000000000ULL
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define KVM_REG_SIZE_SHIFT	52
 #define KVM_REG_SIZE_MASK	0x00f0000000000000ULL

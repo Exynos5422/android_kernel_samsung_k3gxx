@@ -280,7 +280,11 @@ static __u8 *kye_report_fixup(struct hid_device *hdev, __u8 *rdesc,
 		 *   - change the button usage range to 4-7 for the extra
 		 *     buttons
 		 */
+<<<<<<< HEAD
 		if (*rsize >= 75 &&
+=======
+		if (*rsize >= 74 &&
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			rdesc[61] == 0x05 && rdesc[62] == 0x08 &&
 			rdesc[63] == 0x19 && rdesc[64] == 0x08 &&
 			rdesc[65] == 0x29 && rdesc[66] == 0x0f &&

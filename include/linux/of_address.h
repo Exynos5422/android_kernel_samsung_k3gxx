@@ -4,6 +4,7 @@
 #include <linux/errno.h>
 #include <linux/of.h>
 
+<<<<<<< HEAD
 struct of_pci_range_parser {
 	struct device_node *node;
 	const __be32 *range;
@@ -34,6 +35,8 @@ static inline void of_pci_range_to_resource(struct of_pci_range *range,
 	res->name = np->full_name;
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifdef CONFIG_OF_ADDRESS
 extern u64 of_translate_address(struct device_node *np, const __be32 *addr);
 extern bool of_can_translate_address(struct device_node *dev);
@@ -44,6 +47,11 @@ extern struct device_node *of_find_matching_node_by_address(
 					const struct of_device_id *matches,
 					u64 base_address);
 extern void __iomem *of_iomap(struct device_node *device, int index);
+<<<<<<< HEAD
+=======
+extern void __iomem *of_iomap_by_name(struct device_node *device,
+					const char *name);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /* Extract an address from a device, returns the region size and
  * the address space flags too. The PCI version uses a BAR number
@@ -51,17 +59,25 @@ extern void __iomem *of_iomap(struct device_node *device, int index);
  */
 extern const __be32 *of_get_address(struct device_node *dev, int index,
 			   u64 *size, unsigned int *flags);
+<<<<<<< HEAD
+=======
+extern const __be32 *of_get_address_by_name(struct device_node *dev,
+			   const char *name, u64 *size, unsigned int *flags);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #ifndef pci_address_to_pio
 static inline unsigned long pci_address_to_pio(phys_addr_t addr) { return -1; }
 #define pci_address_to_pio pci_address_to_pio
 #endif
 
+<<<<<<< HEAD
 extern int of_pci_range_parser_init(struct of_pci_range_parser *parser,
 			struct device_node *node);
 extern struct of_pci_range *of_pci_range_parser_one(
 					struct of_pci_range_parser *parser,
 					struct of_pci_range *range);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #else /* CONFIG_OF_ADDRESS */
 #ifndef of_address_to_resource
 static inline int of_address_to_resource(struct device_node *dev, int index,
@@ -88,6 +104,7 @@ static inline const __be32 *of_get_address(struct device_node *dev, int index,
 {
 	return NULL;
 }
+<<<<<<< HEAD
 
 static inline int of_pci_range_parser_init(struct of_pci_range_parser *parser,
 			struct device_node *node)
@@ -101,6 +118,8 @@ static inline struct of_pci_range *of_pci_range_parser_one(
 {
 	return NULL;
 }
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif /* CONFIG_OF_ADDRESS */
 
 

@@ -15,7 +15,11 @@
 */
 
 /dts-v1/;
+<<<<<<< HEAD
 #include "exynos4210.dtsi"
+=======
+/include/ "exynos4210.dtsi"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 / {
 	model = "Insignal Origen evaluation board based on Exynos4210";
@@ -41,10 +45,13 @@
 		enable-active-high;
 	};
 
+<<<<<<< HEAD
 	tmu@100C0000 {
 		status = "okay";
 	};
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	sdhci@12530000 {
 		bus-width = <4>;
 		pinctrl-0 = <&sd2_clk &sd2_cmd &sd2_bus4 &sd2_cd>;
@@ -87,6 +94,7 @@
 		status = "okay";
 	};
 
+<<<<<<< HEAD
 	i2c@13860000 {
 		status = "okay";
 		samsung,i2c-sda-delay = <100>;
@@ -231,6 +239,8 @@
 		};
 	};
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	gpio_keys {
 		compatible = "gpio-keys";
 		#address-cells = <1>;
@@ -291,6 +301,7 @@
 			clock-frequency = <24000000>;
 		};
 	};
+<<<<<<< HEAD
 
 	fimd@11c00000 {
 		pinctrl-0 = <&lcd_en &lcd_clk &lcd_data24 &pwm0_out>;
@@ -312,4 +323,6 @@
 			vsync-len = <3>;
 		};
 	};
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };

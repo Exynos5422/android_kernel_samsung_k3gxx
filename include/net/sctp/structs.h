@@ -1252,6 +1252,10 @@ struct sctp_endpoint {
 	/* SCTP-AUTH: endpoint shared keys */
 	struct list_head endpoint_shared_keys;
 	__u16 active_key_id;
+<<<<<<< HEAD
+=======
+	__u8  auth_enable;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 /* Recover the outter endpoint structure. */
@@ -1280,7 +1284,12 @@ struct sctp_endpoint *sctp_endpoint_is_match(struct sctp_endpoint *,
 int sctp_has_association(struct net *net, const union sctp_addr *laddr,
 			 const union sctp_addr *paddr);
 
+<<<<<<< HEAD
 int sctp_verify_init(struct net *net, const struct sctp_association *asoc,
+=======
+int sctp_verify_init(struct net *net, const struct sctp_endpoint *ep,
+		     const struct sctp_association *asoc,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		     sctp_cid_t, sctp_init_chunk_t *peer_init,
 		     struct sctp_chunk *chunk, struct sctp_chunk **err_chunk);
 int sctp_process_init(struct sctp_association *, struct sctp_chunk *chunk,

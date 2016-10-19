@@ -30,7 +30,11 @@
 #include <sound/compress_params.h>
 
 
+<<<<<<< HEAD
 #define SNDRV_COMPRESS_VERSION SNDRV_PROTOCOL_VERSION(0, 1, 1)
+=======
+#define SNDRV_COMPRESS_VERSION SNDRV_PROTOCOL_VERSION(0, 1, 2)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /**
  * struct snd_compressed_buffer: compressed buffer
  * @fragment_size: size of buffer fragment in bytes
@@ -39,7 +43,11 @@
 struct snd_compressed_buffer {
 	__u32 fragment_size;
 	__u32 fragments;
+<<<<<<< HEAD
 } __attribute__((packed, aligned(4)));
+=======
+};
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /**
  * struct snd_compr_params: compressed stream params
@@ -51,7 +59,11 @@ struct snd_compr_params {
 	struct snd_compressed_buffer buffer;
 	struct snd_codec codec;
 	__u8 no_wake_mode;
+<<<<<<< HEAD
 } __attribute__((packed, aligned(4)));
+=======
+};
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /**
  * struct snd_compr_tstamp: timestamp descriptor
@@ -67,10 +79,18 @@ struct snd_compr_params {
 struct snd_compr_tstamp {
 	__u32 byte_offset;
 	__u32 copied_total;
+<<<<<<< HEAD
 	snd_pcm_uframes_t pcm_frames;
 	snd_pcm_uframes_t pcm_io_frames;
 	__u32 sampling_rate;
 } __attribute__((packed, aligned(4)));
+=======
+	__u32 pcm_frames;
+	__u32 pcm_io_frames;
+	__u32 sampling_rate;
+	uint64_t timestamp;
+};
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /**
  * struct snd_compr_avail: avail descriptor
@@ -80,7 +100,11 @@ struct snd_compr_tstamp {
 struct snd_compr_avail {
 	__u64 avail;
 	struct snd_compr_tstamp tstamp;
+<<<<<<< HEAD
 } __attribute__((packed, aligned(4)));
+=======
+} __attribute__((packed));
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 enum snd_compr_direction {
 	SND_COMPRESS_PLAYBACK = 0,
@@ -107,7 +131,11 @@ struct snd_compr_caps {
 	__u32 max_fragments;
 	__u32 codecs[MAX_NUM_CODECS];
 	__u32 reserved[11];
+<<<<<<< HEAD
 } __attribute__((packed, aligned(4)));
+=======
+};
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /**
  * struct snd_compr_codec_caps: query capability of codec
@@ -119,7 +147,21 @@ struct snd_compr_codec_caps {
 	__u32 codec;
 	__u32 num_descriptors;
 	struct snd_codec_desc descriptor[MAX_NUM_CODEC_DESCRIPTORS];
+<<<<<<< HEAD
 } __attribute__((packed, aligned(4)));
+=======
+};
+
+/**
+ * struct snd_compr_audio_info: compressed input audio information
+ * @frame_size: legth of the encoded frame with valid data
+ * @reserved: reserved for furture use
+ */
+struct snd_compr_audio_info {
+	uint32_t frame_size;
+	uint32_t reserved[15];
+};
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /**
  * @SNDRV_COMPRESS_ENCODER_PADDING: no of samples appended by the encoder at the
@@ -140,7 +182,11 @@ enum {
 struct snd_compr_metadata {
 	 __u32 key;
 	 __u32 value[8];
+<<<<<<< HEAD
 } __attribute__((packed, aligned(4)));
+=======
+};
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /**
  * compress path ioctl definitions
@@ -187,4 +233,9 @@ struct snd_compr_metadata {
 #define SND_COMPR_TRIGGER_DRAIN 7 /*FIXME move this to pcm.h */
 #define SND_COMPR_TRIGGER_NEXT_TRACK 8
 #define SND_COMPR_TRIGGER_PARTIAL_DRAIN 9
+<<<<<<< HEAD
+=======
+
+#define SNDRV_COMPRESS_METADATA_MODE          _IOW('C', 0x99, bool)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif

@@ -47,6 +47,12 @@ static void pci_acpi_wake_dev(acpi_handle handle, u32 event, void *context)
 	if (event != ACPI_NOTIFY_DEVICE_WAKE || !pci_dev)
 		return;
 
+<<<<<<< HEAD
+=======
+	if (pci_dev->pme_poll)
+		pci_dev->pme_poll = false;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (pci_dev->current_state == PCI_D3cold) {
 		pci_wakeup_event(pci_dev);
 		pm_runtime_resume(&pci_dev->dev);
@@ -57,9 +63,12 @@ static void pci_acpi_wake_dev(acpi_handle handle, u32 event, void *context)
 	if (pci_dev->pme_support)
 		pci_check_pme_status(pci_dev);
 
+<<<<<<< HEAD
 	if (pci_dev->pme_poll)
 		pci_dev->pme_poll = false;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	pci_wakeup_event(pci_dev);
 	pm_runtime_resume(&pci_dev->dev);
 
@@ -317,6 +326,7 @@ void acpi_pci_remove_bus(struct pci_bus *bus)
 /* ACPI bus type */
 static int acpi_pci_find_device(struct device *dev, acpi_handle *handle)
 {
+<<<<<<< HEAD
 	struct pci_dev * pci_dev;
 	u64	addr;
 
@@ -324,6 +334,22 @@ static int acpi_pci_find_device(struct device *dev, acpi_handle *handle)
 	/* Please ref to ACPI spec for the syntax of _ADR */
 	addr = (PCI_SLOT(pci_dev->devfn) << 16) | PCI_FUNC(pci_dev->devfn);
 	*handle = acpi_get_child(DEVICE_ACPI_HANDLE(dev->parent), addr);
+=======
+	struct pci_dev *pci_dev = to_pci_dev(dev);
+	bool is_bridge;
+	u64 addr;
+
+	/*
+	 * pci_is_bridge() is not suitable here, because pci_dev->subordinate
+	 * is set only after acpi_pci_find_device() has been called for the
+	 * given device.
+	 */
+	is_bridge = pci_dev->hdr_type == PCI_HEADER_TYPE_BRIDGE
+			|| pci_dev->hdr_type == PCI_HEADER_TYPE_CARDBUS;
+	/* Please ref to ACPI spec for the syntax of _ADR */
+	addr = (PCI_SLOT(pci_dev->devfn) << 16) | PCI_FUNC(pci_dev->devfn);
+	*handle = acpi_find_child(ACPI_HANDLE(dev->parent), addr, is_bridge);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (!*handle)
 		return -ENODEV;
 	return 0;

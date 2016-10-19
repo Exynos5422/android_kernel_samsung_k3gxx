@@ -41,10 +41,13 @@
 #include "objsec.h"
 #include "conditional.h"
 
+<<<<<<< HEAD
 #if defined(CONFIG_TZ_ICCC)
 #include <linux/security/Iccc_Interface.h>
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /* Policy capability filenames */
 static char *policycap_names[] = {
 	"network_peer_controls",
@@ -140,10 +143,71 @@ static ssize_t sel_read_enforce(struct file *filp, char __user *buf,
 	return simple_read_from_buffer(buf, count, ppos, tmpbuf, length);
 }
 
+<<<<<<< HEAD
 
 static const struct file_operations sel_enforce_ops = {
 	.read		= sel_read_enforce,
 	.write		= NULL,
+=======
+#ifdef CONFIG_SECURITY_SELINUX_DEVELOP
+static ssize_t sel_write_enforce(struct file *file, const char __user *buf,
+				 size_t count, loff_t *ppos)
+
+{
+	char *page = NULL;
+	ssize_t length;
+	int new_value;
+
+	length = -ENOMEM;
+	if (count >= PAGE_SIZE)
+		goto out;
+
+	/* No partial writes. */
+	length = EINVAL;
+	if (*ppos != 0)
+		goto out;
+
+	length = -ENOMEM;
+	page = (char *)get_zeroed_page(GFP_KERNEL);
+	if (!page)
+		goto out;
+
+	length = -EFAULT;
+	if (copy_from_user(page, buf, count))
+		goto out;
+
+	length = -EINVAL;
+	if (sscanf(page, "%d", &new_value) != 1)
+		goto out;
+
+	if (new_value != selinux_enforcing) {
+		length = task_has_security(current, SECURITY__SETENFORCE);
+		if (length)
+			goto out;
+		audit_log(current->audit_context, GFP_KERNEL, AUDIT_MAC_STATUS,
+			"enforcing=%d old_enforcing=%d auid=%u ses=%u",
+			new_value, selinux_enforcing,
+			from_kuid(&init_user_ns, audit_get_loginuid(current)),
+			audit_get_sessionid(current));
+		selinux_enforcing = new_value;
+		if (selinux_enforcing)
+			avc_ss_reset(0);
+		selnl_notify_setenforce(selinux_enforcing);
+		selinux_status_update_setenforce(selinux_enforcing);
+	}
+	length = count;
+out:
+	free_page((unsigned long) page);
+	return length;
+}
+#else
+#define sel_write_enforce NULL
+#endif
+
+static const struct file_operations sel_enforce_ops = {
+	.read		= sel_read_enforce,
+	.write		= sel_write_enforce,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	.llseek		= generic_file_llseek,
 };
 

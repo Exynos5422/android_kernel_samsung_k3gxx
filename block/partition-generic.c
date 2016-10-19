@@ -18,12 +18,15 @@
 #include <linux/genhd.h>
 #include <linux/blktrace_api.h>
 
+<<<<<<< HEAD
 #ifdef CONFIG_BLOCK_SUPPORT_STLOG
 #include <linux/stlog.h>
 #else
 #define ST_LOG(fmt,...)
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include "partitions/check.h"
 
 #ifdef CONFIG_BLK_DEV_MD
@@ -259,10 +262,13 @@ void delete_partition(struct gendisk *disk, int partno)
 	struct disk_part_tbl *ptbl = disk->part_tbl;
 	struct hd_struct *part;
 
+<<<<<<< HEAD
 #ifdef CONFIG_BLOCK_SUPPORT_STLOG
 	struct device *dev;
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (partno >= ptbl->len)
 		return;
 
@@ -273,11 +279,14 @@ void delete_partition(struct gendisk *disk, int partno)
 	rcu_assign_pointer(ptbl->part[partno], NULL);
 	rcu_assign_pointer(ptbl->last_lookup, NULL);
 	kobject_put(part->holder_dir);
+<<<<<<< HEAD
 #ifdef CONFIG_BLOCK_SUPPORT_STLOG
 	dev = part_to_dev(part);
 	ST_LOG("<%s> KOBJ_REMOVE %d:%d %s",
 		__func__, MAJOR(dev->devt), MINOR(dev->devt), dev->kobj.name);
 #endif	
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	device_del(part_to_dev(part));
 	blk_free_devt(part_devt(part));
 

@@ -48,7 +48,11 @@ STATIC int INIT gunzip(unsigned char *buf, int len,
 		out_len = 0x8000; /* 32 K */
 		out_buf = malloc(out_len);
 	} else {
+<<<<<<< HEAD
 		out_len = 0x7fffffff; /* no limit */
+=======
+		out_len = ((size_t)~0) - (size_t)out_buf; /* no limit */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 	if (!out_buf) {
 		error("Out of memory while allocating output buffer");

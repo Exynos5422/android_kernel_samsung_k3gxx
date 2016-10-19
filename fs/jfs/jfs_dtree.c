@@ -3047,6 +3047,17 @@ int jfs_readdir(struct file *filp, void *dirent, filldir_t filldir)
 
 		dir_index = (u32) filp->f_pos;
 
+<<<<<<< HEAD
+=======
+		/*
+		 * NFSv4 reserves cookies 1 and 2 for . and .. so we add
+		 * the value we return to the vfs is one greater than the
+		 * one we use internally.
+		 */
+		if (dir_index)
+			dir_index--;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (dir_index > 1) {
 			struct dir_table_slot dirtab_slot;
 
@@ -3086,7 +3097,11 @@ int jfs_readdir(struct file *filp, void *dirent, filldir_t filldir)
 			if (p->header.flag & BT_INTERNAL) {
 				jfs_err("jfs_readdir: bad index table");
 				DT_PUTPAGE(mp);
+<<<<<<< HEAD
 				filp->f_pos = -1;
+=======
+				filp->f_pos = DIREND;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				return 0;
 			}
 		} else {
@@ -3094,7 +3109,11 @@ int jfs_readdir(struct file *filp, void *dirent, filldir_t filldir)
 				/*
 				 * self "."
 				 */
+<<<<<<< HEAD
 				filp->f_pos = 0;
+=======
+				filp->f_pos = 1;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				if (filldir(dirent, ".", 1, 0, ip->i_ino,
 					    DT_DIR))
 					return 0;
@@ -3102,7 +3121,11 @@ int jfs_readdir(struct file *filp, void *dirent, filldir_t filldir)
 			/*
 			 * parent ".."
 			 */
+<<<<<<< HEAD
 			filp->f_pos = 1;
+=======
+			filp->f_pos = 2;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			if (filldir(dirent, "..", 2, 1, PARENT(ip), DT_DIR))
 				return 0;
 
@@ -3123,12 +3146,18 @@ int jfs_readdir(struct file *filp, void *dirent, filldir_t filldir)
 		/*
 		 * Legacy filesystem - OS/2 & Linux JFS < 0.3.6
 		 *
+<<<<<<< HEAD
 		 * pn = index = 0:	First entry "."
 		 * pn = 0; index = 1:	Second entry ".."
+=======
+		 * pn = 0; index = 1:	First entry "."
+		 * pn = 0; index = 2:	Second entry ".."
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		 * pn > 0:		Real entries, pn=1 -> leftmost page
 		 * pn = index = -1:	No more entries
 		 */
 		dtpos = filp->f_pos;
+<<<<<<< HEAD
 		if (dtpos == 0) {
 			/* build "." entry */
 
@@ -3136,11 +3165,25 @@ int jfs_readdir(struct file *filp, void *dirent, filldir_t filldir)
 				    DT_DIR))
 				return 0;
 			dtoffset->index = 1;
+=======
+		if (dtpos < 2) {
+			/* build "." entry */
+
+			filp->f_pos = 1;
+			if (filldir(dirent, ".", 1, filp->f_pos, ip->i_ino,
+				    DT_DIR))
+				return 0;
+			dtoffset->index = 2;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			filp->f_pos = dtpos;
 		}
 
 		if (dtoffset->pn == 0) {
+<<<<<<< HEAD
 			if (dtoffset->index == 1) {
+=======
+			if (dtoffset->index == 2) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				/* build ".." entry */
 
 				if (filldir(dirent, "..", 2, filp->f_pos,
@@ -3233,6 +3276,15 @@ int jfs_readdir(struct file *filp, void *dirent, filldir_t filldir)
 					}
 					jfs_dirent->position = unique_pos++;
 				}
+<<<<<<< HEAD
+=======
+				/*
+				 * We add 1 to the index because we may
+				 * use a value of 2 internally, and NFSv4
+				 * doesn't like that.
+				 */
+				jfs_dirent->position++;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			} else {
 				jfs_dirent->position = dtpos;
 				len = min(d_namleft, DTLHDRDATALEN_LEGACY);

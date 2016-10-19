@@ -149,6 +149,13 @@ static int ir_nec_decode(struct rc_dev *dev, struct ir_raw_event ev)
 			break;
 
 		data->state = STATE_TRAILER_SPACE;
+<<<<<<< HEAD
+=======
+
+		if (data->is_nec_x)
+			goto rc_data;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return 0;
 
 	case STATE_TRAILER_SPACE:
@@ -157,7 +164,11 @@ static int ir_nec_decode(struct rc_dev *dev, struct ir_raw_event ev)
 
 		if (!geq_margin(ev.duration, NEC_TRAILER_SPACE, NEC_UNIT / 2))
 			break;
+<<<<<<< HEAD
 
+=======
+rc_data:
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		address     = bitrev8((data->bits >> 24) & 0xff);
 		not_address = bitrev8((data->bits >> 16) & 0xff);
 		command	    = bitrev8((data->bits >>  8) & 0xff);

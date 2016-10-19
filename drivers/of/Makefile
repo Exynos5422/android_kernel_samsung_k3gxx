@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 obj-y = base.o
+=======
+obj-y = base.o util.o
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 obj-$(CONFIG_OF_FLATTREE) += fdt.o
 obj-$(CONFIG_OF_PROMTREE) += pdt.o
 obj-$(CONFIG_OF_ADDRESS)  += address.o
@@ -10,4 +14,17 @@ obj-$(CONFIG_OF_SELFTEST) += selftest.o
 obj-$(CONFIG_OF_MDIO)	+= of_mdio.o
 obj-$(CONFIG_OF_PCI)	+= of_pci.o
 obj-$(CONFIG_OF_PCI_IRQ)  += of_pci_irq.o
+<<<<<<< HEAD
 obj-$(CONFIG_OF_MTD)	+= of_mtd.o
+=======
+obj-$(CONFIG_OF_SPMI)	+= of_spmi.o
+obj-$(CONFIG_OF_MTD)	+= of_mtd.o
+obj-$(CONFIG_OF_SLIMBUS)	+= of_slimbus.o
+obj-$(CONFIG_OF_CORESIGHT) += of_coresight.o
+obj-$(CONFIG_OF_BATTERYDATA)	+= of_batterydata.o
+obj-$(CONFIG_OF_RESERVED_MEM) += of_reserved_mem.o
+
+CFLAGS_fdt.o = -I$(src)/../../scripts/dtc/libfdt
+obj-$(CONFIG_OF_RESOLVE)  += resolver.o
+obj-$(CONFIG_OF_OVERLAY) += overlay.o
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

@@ -15,6 +15,11 @@
 #ifndef RTL8187_H
 #define RTL8187_H
 
+<<<<<<< HEAD
+=======
+#include <linux/cache.h>
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include "rtl818x.h"
 #include "leds.h"
 
@@ -139,7 +144,14 @@ struct rtl8187_priv {
 	u8 aifsn[4];
 	u8 rfkill_mask;
 	struct {
+<<<<<<< HEAD
 		__le64 buf;
+=======
+		union {
+			__le64 buf;
+			u8 dummy1[L1_CACHE_BYTES];
+		} ____cacheline_aligned;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		struct sk_buff_head queue;
 	} b_tx_status; /* This queue is used by both -b and non-b devices */
 	struct mutex io_mutex;
@@ -147,7 +159,12 @@ struct rtl8187_priv {
 		u8 bits8;
 		__le16 bits16;
 		__le32 bits32;
+<<<<<<< HEAD
 	} *io_dmabuf;
+=======
+		u8 dummy2[L1_CACHE_BYTES];
+	} *io_dmabuf ____cacheline_aligned;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	bool rfkill_off;
 	u16 seqno;
 };

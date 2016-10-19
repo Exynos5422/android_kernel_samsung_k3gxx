@@ -6,9 +6,13 @@
 #include "sched.h"
 
 #include <linux/slab.h>
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_DEBUG_RT_THROTTLE_ACTIVE
 #include <linux/sec_debug.h>
 #endif
+=======
+#include <trace/events/sched.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 int sched_rr_timeslice = RR_TIMESLICE;
 
@@ -702,6 +706,7 @@ balanced:
 	}
 }
 
+<<<<<<< HEAD
 static void disable_runtime(struct rq *rq)
 {
 	unsigned long flags;
@@ -711,6 +716,8 @@ static void disable_runtime(struct rq *rq)
 	raw_spin_unlock_irqrestore(&rq->lock, flags);
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static void __enable_runtime(struct rq *rq)
 {
 	rt_rq_iter_t iter;
@@ -735,6 +742,7 @@ static void __enable_runtime(struct rq *rq)
 	}
 }
 
+<<<<<<< HEAD
 static void enable_runtime(struct rq *rq)
 {
 	unsigned long flags;
@@ -766,6 +774,8 @@ int update_runtime(struct notifier_block *nfb, unsigned long action, void *hcpu)
 	}
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int balance_runtime(struct rt_rq *rt_rq)
 {
 	int more = 0;
@@ -866,6 +876,54 @@ static inline int rt_se_prio(struct sched_rt_entity *rt_se)
 	return rt_task_of(rt_se)->prio;
 }
 
+<<<<<<< HEAD
+=======
+static void dump_throttled_rt_tasks(struct rt_rq *rt_rq)
+{
+	struct rt_prio_array *array = &rt_rq->active;
+	struct sched_rt_entity *rt_se;
+	char buf[500];
+	char *pos = buf;
+	char *end = buf + sizeof(buf);
+	int idx;
+
+	pos += snprintf(pos, sizeof(buf),
+		"sched: RT throttling activated for rt_rq %p (cpu %d)\n",
+		rt_rq, cpu_of(rq_of_rt_rq(rt_rq)));
+
+	if (bitmap_empty(array->bitmap, MAX_RT_PRIO))
+		goto out;
+
+	pos += snprintf(pos, end - pos, "potential CPU hogs:\n");
+	idx = sched_find_first_bit(array->bitmap);
+	while (idx < MAX_RT_PRIO) {
+		list_for_each_entry(rt_se, array->queue + idx, run_list) {
+			struct task_struct *p;
+
+			if (!rt_entity_is_task(rt_se))
+				continue;
+
+			p = rt_task_of(rt_se);
+			if (pos < end)
+				pos += snprintf(pos, end - pos, "\t%s (%d)\n",
+					p->comm, p->pid);
+		}
+		idx = find_next_bit(array->bitmap, MAX_RT_PRIO, idx + 1);
+	}
+out:
+#ifdef CONFIG_PANIC_ON_RT_THROTTLING
+	/*
+	 * Use pr_err() in the BUG() case since printk_sched() will
+	 * not get flushed and deadlock is not a concern.
+	 */
+	pr_err("%s", buf);
+	BUG();
+#else
+	printk_sched("%s", buf);
+#endif
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int sched_rt_runtime_exceeded(struct rt_rq *rt_rq)
 {
 	u64 runtime = sched_rt_runtime(rt_rq);
@@ -895,12 +953,16 @@ static int sched_rt_runtime_exceeded(struct rt_rq *rt_rq)
 
 			if (!once) {
 				once = true;
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_DEBUG_RT_THROTTLE_ACTIVE
 				sec_debug_aux_log(SEC_DEBUG_AUXLOG_IRQ, "TSK:%llu %s[%d]", rt_rq->rq->clock_task - rt_rq->rt_time, current->comm, current->pid);
 #endif
 
 				printk_sched("sched: RT throttling activated - [%d:%s]rq->clock_task: %llu rt_time:%llu\n",
 						current->pid, current->comm, rt_rq->rq->clock_task, rt_rq->rt_time);
+=======
+				dump_throttled_rt_tasks(rt_rq);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			}
 		} else {
 			/*
@@ -972,6 +1034,16 @@ inc_rt_prio_smp(struct rt_rq *rt_rq, int prio, int prev_prio)
 {
 	struct rq *rq = rq_of_rt_rq(rt_rq);
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_RT_GROUP_SCHED
+	/*
+	 * Change rq's cpupri only if rt_rq is the top queue.
+	 */
+	if (&rq->rt != rt_rq)
+		return;
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (rq->online && prio < prev_prio)
 		cpupri_set(&rq->rd->cpupri, rq->cpu, prio);
 }
@@ -981,6 +1053,16 @@ dec_rt_prio_smp(struct rt_rq *rt_rq, int prio, int prev_prio)
 {
 	struct rq *rq = rq_of_rt_rq(rt_rq);
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_RT_GROUP_SCHED
+	/*
+	 * Change rq's cpupri only if rt_rq is the top queue.
+	 */
+	if (&rq->rt != rt_rq)
+		return;
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (rq->online && rt_rq->highest_prio.curr != prev_prio)
 		cpupri_set(&rq->rd->cpupri, rq->cpu, rt_rq->highest_prio.curr);
 }
@@ -1247,6 +1329,25 @@ static void yield_task_rt(struct rq *rq)
 static int find_lowest_rq(struct task_struct *task);
 
 static int
+<<<<<<< HEAD
+=======
+select_task_rq_rt_hmp(struct task_struct *p, int sd_flag, int flags)
+{
+	int cpu, target;
+
+	cpu = task_cpu(p);
+
+	rcu_read_lock();
+	target = find_lowest_rq(p);
+	if (target != -1)
+		cpu = target;
+	rcu_read_unlock();
+
+	return cpu;
+}
+
+static int
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 select_task_rq_rt(struct task_struct *p, int sd_flag, int flags)
 {
 	struct task_struct *curr;
@@ -1258,6 +1359,12 @@ select_task_rq_rt(struct task_struct *p, int sd_flag, int flags)
 	if (p->nr_cpus_allowed == 1)
 		goto out;
 
+<<<<<<< HEAD
+=======
+	if (sched_enable_hmp)
+		return select_task_rq_rt_hmp(p, sd_flag, flags);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* For anything but wake ups, just return the task_cpu */
 	if (sd_flag != SD_BALANCE_WAKE && sd_flag != SD_BALANCE_FORK)
 		goto out;
@@ -1392,6 +1499,18 @@ static struct task_struct *_pick_next_task_rt(struct rq *rq)
 		rt_rq = group_rt_rq(rt_se);
 	} while (rt_rq);
 
+<<<<<<< HEAD
+=======
+	/*
+	 * Force update of rq->clock_task in case we failed to do so in
+	 * put_prev_task. A stale value can cause us to over-charge execution
+	 * time to real-time task, that could trigger throttling unnecessarily
+	 */
+	if (rq->skip_clock_update > 0) {
+		rq->skip_clock_update = 0;
+		update_rq_clock(rq);
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	p = rt_task_of(rt_se);
 	p->se.exec_start = rq->clock_task;
 
@@ -1482,6 +1601,57 @@ next_idx:
 
 static DEFINE_PER_CPU(cpumask_var_t, local_cpu_mask);
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_SCHED_HMP
+static int find_lowest_rq_hmp(struct task_struct *task)
+{
+	struct cpumask *lowest_mask = __get_cpu_var(local_cpu_mask);
+	int cpu_cost, min_cost = INT_MAX;
+	int best_cpu = -1;
+	int i;
+
+	/* Make sure the mask is initialized first */
+	if (unlikely(!lowest_mask))
+		return best_cpu;
+
+	if (task->nr_cpus_allowed == 1)
+		return best_cpu; /* No other targets possible */
+
+	if (!cpupri_find(&task_rq(task)->rd->cpupri, task, lowest_mask))
+		return best_cpu; /* No targets found */
+
+	/*
+	 * At this point we have built a mask of cpus representing the
+	 * lowest priority tasks in the system.  Now we want to elect
+	 * the best one based on our affinity and topology.
+	 */
+
+	/* Skip performance considerations and optimize for power.
+	 * Worst case we'll be iterating over all CPUs here. CPU
+	 * online mask should be taken care of when constructing
+	 * the lowest_mask.
+	 */
+	for_each_cpu(i, lowest_mask) {
+		struct rq *rq = cpu_rq(i);
+		cpu_cost = power_cost_at_freq(i, ACCESS_ONCE(rq->min_freq));
+		trace_sched_cpu_load(rq, idle_cpu(i),
+				     mostly_idle_cpu(i), cpu_cost);
+		if (cpu_cost < min_cost) {
+			min_cost = cpu_cost;
+			best_cpu = i;
+		}
+	}
+	return best_cpu;
+}
+#else
+static int find_lowest_rq_hmp(struct task_struct *task)
+{
+	return -1;
+}
+#endif
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int find_lowest_rq(struct task_struct *task)
 {
 	struct sched_domain *sd;
@@ -1489,6 +1659,12 @@ static int find_lowest_rq(struct task_struct *task)
 	int this_cpu = smp_processor_id();
 	int cpu      = task_cpu(task);
 
+<<<<<<< HEAD
+=======
+	if (sched_enable_hmp)
+		return find_lowest_rq_hmp(task);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* Make sure the mask is initialized first */
 	if (unlikely(!lowest_mask))
 		return -1;

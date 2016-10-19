@@ -15,6 +15,7 @@
 
 #include <plat/cpu.h>
 #include <mach/map.h>
+<<<<<<< HEAD
 #if defined(CONFIG_SOC_EXYNOS5422)
 #include <mach/regs-clock-exynos5422.h>
 #elif defined(CONFIG_SOC_EXYNOS5430)
@@ -22,6 +23,8 @@
 #elif defined(CONFIG_SOC_EXYNOS5433)
 #include <mach/regs-clock-exynos5433.h>
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define EXYNOS_CLKREG(x)			(S5P_VA_CMU + (x))
 
@@ -274,6 +277,7 @@
 #define EXYNOS5_CLKDIV_STATCPU0			EXYNOS_CLKREG(0x00600)
 #define EXYNOS5_CLKDIV_STATCPU1			EXYNOS_CLKREG(0x00604)
 
+<<<<<<< HEAD
 #define EXYNOS54XX_ARM_EMA_CTRL                 EXYNOS_CLKREG(0x01008)
 #define EXYNOS54XX_ARM_EMA_BASE_VOLT            (950000)
 #define EXYNOS54XX_ARM_WAS_ENABLE               (1 << 12)
@@ -284,6 +288,12 @@
 #define EXYNOS5_MPLL_CON0			(soc_is_exynos5422() ? \
 										EXYNOS_CLKREG(0x10180) : \
 										EXYNOS_CLKREG(0x04100))
+=======
+#define EXYNOS5_PWR_CTRL1			EXYNOS_CLKREG(0x01020)
+#define EXYNOS5_PWR_CTRL2			EXYNOS_CLKREG(0x01024)
+
+#define EXYNOS5_MPLL_CON0			EXYNOS_CLKREG(0x04100)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define EXYNOS5_CLKSRC_CORE1			EXYNOS_CLKREG(0x04204)
 
 #define EXYNOS5_CLKGATE_IP_CORE			EXYNOS_CLKREG(0x04900)
@@ -293,12 +303,17 @@
 #define EXYNOS5_EPLL_CON0			EXYNOS_CLKREG(0x10130)
 #define EXYNOS5_EPLL_CON1			EXYNOS_CLKREG(0x10134)
 #define EXYNOS5_EPLL_CON2			EXYNOS_CLKREG(0x10138)
+<<<<<<< HEAD
 #define EXYNOS5_VPLL_CON0			(soc_is_exynos5422() ? \
 										EXYNOS_CLKREG(0x10170) : \
 										EXYNOS_CLKREG(0x10140) )
 #define EXYNOS5_VPLL_CON1			(soc_is_exynos5422() ? \
 										EXYNOS_CLKREG(0x10174) : \
 										EXYNOS_CLKREG(0x10144) )
+=======
+#define EXYNOS5_VPLL_CON0			EXYNOS_CLKREG(0x10140)
+#define EXYNOS5_VPLL_CON1			EXYNOS_CLKREG(0x10144)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define EXYNOS5_VPLL_CON2			EXYNOS_CLKREG(0x10148)
 #define EXYNOS5_CPLL_CON0			EXYNOS_CLKREG(0x10120)
 
@@ -306,6 +321,7 @@
 #define EXYNOS5_CLKSRC_TOP1			EXYNOS_CLKREG(0x10214)
 #define EXYNOS5_CLKSRC_TOP2			EXYNOS_CLKREG(0x10218)
 #define EXYNOS5_CLKSRC_TOP3			EXYNOS_CLKREG(0x1021C)
+<<<<<<< HEAD
 #define EXYNOS5_CLKSRC_TOP4			EXYNOS_CLKREG(0x10210)
 #define EXYNOS5_CLKSRC_TOP5			EXYNOS_CLKREG(0x10214)
 #define EXYNOS5_CLKSRC_TOP6			EXYNOS_CLKREG(0x10218)
@@ -314,6 +330,8 @@
 #define EXYNOS5_CLKSRC_TOP11			EXYNOS_CLKREG(0x10284)
 #define EXYNOS5_CLKSRC_TOP12			EXYNOS_CLKREG(0x10288)
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define EXYNOS5_CLKSRC_GSCL			EXYNOS_CLKREG(0x10220)
 #define EXYNOS5_CLKSRC_DISP1_0			EXYNOS_CLKREG(0x1022C)
 #define EXYNOS5_CLKSRC_MAUDIO			EXYNOS_CLKREG(0x10240)
@@ -366,6 +384,7 @@
 #define EXYNOS5_CLKSRC_CDREX			EXYNOS_CLKREG(0x20200)
 #define EXYNOS5_CLKDIV_CDREX			EXYNOS_CLKREG(0x20500)
 
+<<<<<<< HEAD
 #define EXYNOS5_PLL_DIV2_SEL		(soc_is_exynos5422() ? \
 										EXYNOS_CLKREG(0x20A2C) : \
 										EXYNOS_CLKREG(0x20A24) )
@@ -373,6 +392,11 @@
 #define EXYNOS5_EPLL_LOCK			(soc_is_exynos5422() ? \
 										EXYNOS_CLKREG(0x10040) : \
 										EXYNOS_CLKREG(0x10030) )
+=======
+#define EXYNOS5_PLL_DIV2_SEL			EXYNOS_CLKREG(0x20A24)
+
+#define EXYNOS5_EPLL_LOCK			EXYNOS_CLKREG(0x10030)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define EXYNOS5_EPLLCON0_LOCKED_SHIFT		(29)
 
@@ -395,7 +419,10 @@
 /* Compatibility defines and inclusion */
 
 #include <mach/regs-pmu.h>
+<<<<<<< HEAD
 #include <mach/regs-audss.h>
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define S5P_EPLL_CON				EXYNOS4_EPLL_CON0
 

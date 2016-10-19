@@ -1,7 +1,10 @@
 /*
  * Arizona MFD internals
  *
+<<<<<<< HEAD
  * Copyright 2014 CirrusLogic, Inc.
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  * Copyright 2012 Wolfson Microelectronics plc
  *
  * Author: Mark Brown <broonie@opensource.wolfsonmicro.com>
@@ -19,11 +22,16 @@
 #include <linux/regulator/consumer.h>
 #include <linux/mfd/arizona/pdata.h>
 
+<<<<<<< HEAD
 #define ARIZONA_MAX_CORE_SUPPLIES 2
+=======
+#define ARIZONA_MAX_CORE_SUPPLIES 3
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 enum arizona_type {
 	WM5102 = 1,
 	WM5110 = 2,
+<<<<<<< HEAD
 	WM8997 = 3,
 	WM8280 = 4,
 	WM8998 = 5,
@@ -32,6 +40,8 @@ enum arizona_type {
 	WM1840 = 8,
 	WM1831 = 9,
 	CS47L24 = 10,
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 #define ARIZONA_IRQ_GP1                    0
@@ -54,8 +64,13 @@ enum arizona_type {
 #define ARIZONA_IRQ_DSP_IRQ6              17
 #define ARIZONA_IRQ_DSP_IRQ7              18
 #define ARIZONA_IRQ_DSP_IRQ8              19
+<<<<<<< HEAD
 #define ARIZONA_IRQ_SPK_OVERHEAT_WARN     20
 #define ARIZONA_IRQ_SPK_OVERHEAT          21
+=======
+#define ARIZONA_IRQ_SPK_SHUTDOWN_WARN     20
+#define ARIZONA_IRQ_SPK_SHUTDOWN          21
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define ARIZONA_IRQ_MICDET                22
 #define ARIZONA_IRQ_HPDET                 23
 #define ARIZONA_IRQ_WSEQ_DONE             24
@@ -86,6 +101,7 @@ enum arizona_type {
 #define ARIZONA_IRQ_FLL1_CLOCK_OK         49
 #define ARIZONA_IRQ_MICD_CLAMP_RISE	  50
 #define ARIZONA_IRQ_MICD_CLAMP_FALL	  51
+<<<<<<< HEAD
 #define ARIZONA_IRQ_HP3R_DONE             52
 #define ARIZONA_IRQ_HP3L_DONE             53
 #define ARIZONA_IRQ_HP2R_DONE             54
@@ -122,6 +138,15 @@ struct arizona {
 	struct regmap *regmap;
 	struct regmap *regmap_32bit;
 
+=======
+
+#define ARIZONA_NUM_IRQ                   52
+
+struct snd_soc_dapm_context;
+
+struct arizona {
+	struct regmap *regmap;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct device *dev;
 
 	enum arizona_type type;
@@ -130,6 +155,7 @@ struct arizona {
 	int num_core_supplies;
 	struct regulator_bulk_data core_supplies[ARIZONA_MAX_CORE_SUPPLIES];
 	struct regulator *dcvdd;
+<<<<<<< HEAD
 	struct notifier_block dcvdd_notifier;
 
 	struct arizona_pdata pdata;
@@ -137,11 +163,17 @@ struct arizona {
 	unsigned int external_dcvdd:1;
 
 	unsigned int irq_sem;
+=======
+
+	struct arizona_pdata pdata;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	int irq;
 	struct irq_domain *virq;
 	struct regmap_irq_chip_data *aod_irq_chip;
 	struct regmap_irq_chip_data *irq_chip;
 
+<<<<<<< HEAD
 	bool hpdet_clamp;
 	unsigned int hp_ena;
 
@@ -184,6 +216,19 @@ int arizona_clk32k_enable(struct arizona *arizona);
 int arizona_clk32k_disable(struct arizona *arizona);
 int arizona_dvfs_up(struct arizona *arizona, unsigned int mask);
 int arizona_dvfs_down(struct arizona *arizona, unsigned int mask);
+=======
+	bool hpdet_magic;
+	unsigned int hp_ena;
+
+	struct mutex clk_lock;
+	int clk32k_ref;
+
+	struct snd_soc_dapm_context *dapm;
+};
+
+int arizona_clk32k_enable(struct arizona *arizona);
+int arizona_clk32k_disable(struct arizona *arizona);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 int arizona_request_irq(struct arizona *arizona, int irq, char *name,
 			irq_handler_t handler, void *data);
@@ -191,6 +236,7 @@ void arizona_free_irq(struct arizona *arizona, int irq, void *data);
 int arizona_set_irq_wake(struct arizona *arizona, int irq, int on);
 
 int wm5102_patch(struct arizona *arizona);
+<<<<<<< HEAD
 int florida_patch(struct arizona *arizona);
 int wm8997_patch(struct arizona *arizona);
 int vegas_patch(struct arizona *arizona);
@@ -213,4 +259,8 @@ static inline int arizona_of_read_s32(struct arizona *arizona, const char *prop,
 {
 	return arizona_of_read_u32(arizona, prop, mandatory, (u32 *)data);
 }
+=======
+int wm5110_patch(struct arizona *arizona);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif

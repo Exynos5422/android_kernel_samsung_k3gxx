@@ -78,7 +78,10 @@ struct isert_device;
 
 struct isert_conn {
 	enum iser_conn_state	state;
+<<<<<<< HEAD
 	bool			logout_posted;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	int			post_recv_buf_count;
 	atomic_t		post_send_buf_count;
 	u32			responder_resources;
@@ -103,9 +106,16 @@ struct isert_conn {
 	struct isert_device	*conn_device;
 	struct work_struct	conn_logout_work;
 	struct mutex		conn_mutex;
+<<<<<<< HEAD
 	wait_queue_head_t	conn_wait;
 	wait_queue_head_t	conn_wait_comp_err;
 	struct kref		conn_kref;
+=======
+	struct completion	conn_wait;
+	struct completion	conn_wait_comp_err;
+	struct kref		conn_kref;
+	bool			disconnect;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 #define ISERT_MAX_CQ 64
@@ -131,7 +141,11 @@ struct isert_device {
 };
 
 struct isert_np {
+<<<<<<< HEAD
 	wait_queue_head_t	np_accept_wq;
+=======
+	struct semaphore	np_sem;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct rdma_cm_id	*np_cm_id;
 	struct mutex		np_accept_mutex;
 	struct list_head	np_accept_list;

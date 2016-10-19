@@ -346,7 +346,11 @@ static void init_evtchn_cpu_bindings(void)
 
 	for_each_possible_cpu(i)
 		memset(per_cpu(cpu_evtchn_mask, i),
+<<<<<<< HEAD
 		       (i == 0) ? ~0 : 0, sizeof(*per_cpu(cpu_evtchn_mask, i)));
+=======
+		       (i == 0) ? ~0 : 0, NR_EVENT_CHANNELS/8);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static inline void clear_evtchn(int port)
@@ -1492,8 +1496,15 @@ void rebind_evtchn_irq(int evtchn, int irq)
 /* Rebind an evtchn so that it gets delivered to a specific cpu */
 static int rebind_irq_to_cpu(unsigned irq, unsigned tcpu)
 {
+<<<<<<< HEAD
 	struct evtchn_bind_vcpu bind_vcpu;
 	int evtchn = evtchn_from_irq(irq);
+=======
+	struct shared_info *s = HYPERVISOR_shared_info;
+	struct evtchn_bind_vcpu bind_vcpu;
+	int evtchn = evtchn_from_irq(irq);
+	int masked;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (!VALID_EVTCHN(evtchn))
 		return -1;
@@ -1510,6 +1521,15 @@ static int rebind_irq_to_cpu(unsigned irq, unsigned tcpu)
 	bind_vcpu.vcpu = tcpu;
 
 	/*
+<<<<<<< HEAD
+=======
+	 * Mask the event while changing the VCPU binding to prevent
+	 * it being delivered on an unexpected VCPU.
+	 */
+	masked = sync_test_and_set_bit(evtchn, BM(s->evtchn_mask));
+
+	/*
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	 * If this fails, it usually just indicates that we're dealing with a
 	 * virq or IPI channel, which don't actually need to be rebound. Ignore
 	 * it, but don't do the xenlinux-level rebind in that case.
@@ -1517,6 +1537,12 @@ static int rebind_irq_to_cpu(unsigned irq, unsigned tcpu)
 	if (HYPERVISOR_event_channel_op(EVTCHNOP_bind_vcpu, &bind_vcpu) >= 0)
 		bind_evtchn_to_cpu(evtchn, tcpu);
 
+<<<<<<< HEAD
+=======
+	if (!masked)
+		unmask_evtchn(evtchn);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 

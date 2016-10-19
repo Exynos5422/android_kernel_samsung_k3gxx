@@ -28,10 +28,13 @@
 #define CLK_IS_BASIC		BIT(5) /* Basic clk, can't do a to_clk_foo() */
 #define CLK_GET_RATE_NOCACHE	BIT(6) /* do not use the cached clk rate */
 
+<<<<<<< HEAD
 #ifdef CONFIG_SOC_EXYNOS5422
 #define CLK_DO_NOT_UPDATE_CHILD BIT(19) /* do not recalculate child */
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 struct clk_hw;
 
 /**
@@ -312,9 +315,12 @@ struct clk_mux {
 	u8		shift;
 	u8		flags;
 	spinlock_t	*lock;
+<<<<<<< HEAD
 	void __iomem	*stat_reg;
 	u8		stat_shift;
 	u8		stat_width;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 #define CLK_MUX_INDEX_ONE		BIT(0)
@@ -325,14 +331,22 @@ extern const struct clk_ops clk_mux_ops;
 struct clk *clk_register_mux(struct device *dev, const char *name,
 		const char **parent_names, u8 num_parents, unsigned long flags,
 		void __iomem *reg, u8 shift, u8 width,
+<<<<<<< HEAD
 		u8 clk_mux_flags, spinlock_t *lock,
 		void __iomem *stat_reg, u8 stat_shift, u8 stat_width);
+=======
+		u8 clk_mux_flags, spinlock_t *lock);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 struct clk *clk_register_mux_table(struct device *dev, const char *name,
 		const char **parent_names, u8 num_parents, unsigned long flags,
 		void __iomem *reg, u8 shift, u32 mask,
+<<<<<<< HEAD
 		u8 clk_mux_flags, u32 *table, spinlock_t *lock,
 		void __iomem *stat_reg, u8 stat_shift, u8 stat_width);
+=======
+		u8 clk_mux_flags, u32 *table, spinlock_t *lock);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 void of_fixed_factor_clk_setup(struct device_node *node);
 
@@ -448,15 +462,29 @@ const char *of_clk_get_parent_name(struct device_node *np, int index);
 
 void of_clk_init(const struct of_device_id *matches);
 
+<<<<<<< HEAD
 /*
  * samsung specific clk_get API which uses register address and bit field
  */
 extern struct clk *samsung_clk_get_by_reg(unsigned long offset, u8 bit_idx);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define CLK_OF_DECLARE(name, compat, fn)			\
 	static const struct of_device_id __clk_of_table_##name	\
 		__used __section(__clk_of_table)		\
 		= { .compatible = compat, .data = fn };
+<<<<<<< HEAD
+=======
+#else
+
+struct of_device_id;
+
+static inline void __init of_clk_init(const struct of_device_id *matches)
+{
+	return;
+}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #endif /* CONFIG_COMMON_CLK */
 #endif /* CLK_PROVIDER_H */

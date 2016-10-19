@@ -37,6 +37,7 @@
 #include <asm/irq.h>
 #include <asm/uaccess.h>
 
+<<<<<<< HEAD
 #if defined(CONFIG_BT_BCM4339) || defined(CONFIG_BT_BCM4354) || defined(CONFIG_BT_BCM4358) || defined(CONFIG_BT_BCM43455)/* This is just temporary features*/
 #if defined(CONFIG_SOC_EXYNOS5430) || defined(CONFIG_SOC_EXYNOS5433)
 #define BT4339_LINE 3
@@ -45,6 +46,8 @@
 #endif
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * This is used to lock changes in serial line configuration.
  */
@@ -191,12 +194,16 @@ static int uart_port_startup(struct tty_struct *tty, struct uart_state *state,
 		if (tty_port_cts_enabled(port)) {
 			spin_lock_irq(&uport->lock);
 			if (!(uport->ops->get_mctrl(uport) & TIOCM_CTS))
+<<<<<<< HEAD
 #if defined(CONFIG_BT_BCM4339) || defined(CONFIG_BT_BCM4354) || defined(CONFIG_BT_BCM4358) || defined(CONFIG_BT_BCM43455)
 				if (uport->line != BT4339_LINE)
 				tty->hw_stopped = 1;
 #else
 				tty->hw_stopped = 1;
 #endif
+=======
+				tty->hw_stopped = 1;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			spin_unlock_irq(&uport->lock);
 		}
 	}
@@ -1315,12 +1322,16 @@ static void uart_set_termios(struct tty_struct *tty,
 	else if (!(old_termios->c_cflag & CRTSCTS) && (cflag & CRTSCTS)) {
 		spin_lock_irqsave(&uport->lock, flags);
 		if (!(uport->ops->get_mctrl(uport) & TIOCM_CTS)) {
+<<<<<<< HEAD
 #if defined(CONFIG_BT_BCM4339) || defined(CONFIG_BT_BCM4354) || defined(CONFIG_BT_BCM4358) || defined(CONFIG_BT_BCM43455)
 			if (uport->line != BT4339_LINE)
 				tty->hw_stopped = 1;
 #else
 			tty->hw_stopped = 1;
 #endif
+=======
+			tty->hw_stopped = 1;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			uport->ops->stop_tx(uport);
 		}
 		spin_unlock_irqrestore(&uport->lock, flags);
@@ -2065,9 +2076,13 @@ int uart_resume_port(struct uart_driver *drv, struct uart_port *uport)
 
 		uart_change_pm(state, UART_PM_STATE_ON);
 		spin_lock_irq(&uport->lock);
+<<<<<<< HEAD
 #if !defined(CONFIG_GPS_BCMxxxxx)
 		ops->set_mctrl(uport, 0);
 #endif
+=======
+		ops->set_mctrl(uport, 0);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		spin_unlock_irq(&uport->lock);
 		if (console_suspend_enabled || !uart_console(uport)) {
 			/* Protected by port mutex for now */

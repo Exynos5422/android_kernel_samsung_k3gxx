@@ -68,6 +68,7 @@ struct rlimit64 {
  * GPG2 wants 64kB of mlocked memory, to make sure pass phrases
  * and other sensitive information are never written to disk.
  */
+<<<<<<< HEAD
 //#define MLOCK_LIMIT	((PAGE_SIZE > 64*1024) ? PAGE_SIZE : 64*1024)
 
 /*
@@ -75,6 +76,9 @@ struct rlimit64 {
  * the authentication of an application using Secure Storage.
  */
 #define MLOCK_LIMIT	((PAGE_SIZE > 64*1024*1024) ? PAGE_SIZE : 64*1024*1024)
+=======
+#define MLOCK_LIMIT	((PAGE_SIZE > 64*1024) ? PAGE_SIZE : 64*1024)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /*
  * Due to binary compatibility, the actual resource numbers

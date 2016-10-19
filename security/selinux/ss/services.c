@@ -1519,7 +1519,10 @@ out:
 	kfree(s);
 	kfree(t);
 	kfree(n);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (!selinux_enforcing)
 		return 0;
 	return -EACCES;
@@ -2425,7 +2428,11 @@ out:
 }
 
 /**
+<<<<<<< HEAD
  * __security_genfs_sid - Helper to obtain a SID for a file in a filesystem
+=======
+ * security_genfs_sid - Obtain a SID for a file in a filesystem
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  * @fstype: filesystem type
  * @path: path from root of mount
  * @sclass: file security class
@@ -2434,6 +2441,7 @@ out:
  * Obtain a SID to use for a file in a filesystem that
  * cannot support xattr or use a fixed labeling behavior like
  * transition SIDs or task SIDs.
+<<<<<<< HEAD
  *
  * The caller must acquire the policy_rwlock before calling this function.
  */
@@ -2441,6 +2449,13 @@ static inline int __security_genfs_sid(const char *fstype,
 				       char *path,
 				       u16 orig_sclass,
 				       u32 *sid)
+=======
+ */
+int security_genfs_sid(const char *fstype,
+		       char *path,
+		       u16 orig_sclass,
+		       u32 *sid)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	int len;
 	u16 sclass;
@@ -2451,6 +2466,11 @@ static inline int __security_genfs_sid(const char *fstype,
 	while (path[0] == '/' && path[1] == '/')
 		path++;
 
+<<<<<<< HEAD
+=======
+	read_lock(&policy_rwlock);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	sclass = unmap_class(orig_sclass);
 	*sid = SECINITSID_UNLABELED;
 
@@ -2484,6 +2504,7 @@ static inline int __security_genfs_sid(const char *fstype,
 	*sid = c->sid[0];
 	rc = 0;
 out:
+<<<<<<< HEAD
 	return rc;
 }
 
@@ -2508,6 +2529,10 @@ int security_genfs_sid(const char *fstype,
 	retval = __security_genfs_sid(fstype, path, orig_sclass, sid);
 	read_unlock(&policy_rwlock);
 	return retval;
+=======
+	read_unlock(&policy_rwlock);
+	return rc;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 /**
@@ -2523,7 +2548,10 @@ int security_fs_use(
 {
 	int rc = 0;
 	struct ocontext *c;
+<<<<<<< HEAD
 	u32 tmpsid;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	read_lock(&policy_rwlock);
 
@@ -2538,15 +2566,23 @@ int security_fs_use(
 		*behavior = c->v.behavior;
 		if (!c->sid[0]) {
 			rc = sidtab_context_to_sid(&sidtab, &c->context[0],
+<<<<<<< HEAD
 						   &tmpsid);
 			c->sid[0] = tmpsid;
+=======
+						   &c->sid[0]);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			if (rc)
 				goto out;
 		}
 		*sid = c->sid[0];
 	} else {
+<<<<<<< HEAD
 		rc = __security_genfs_sid(fstype, "/", SECCLASS_DIR,
 					sid);
+=======
+		rc = security_genfs_sid(fstype, "/", SECCLASS_DIR, sid);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (rc) {
 			*behavior = SECURITY_FS_USE_NONE;
 			rc = 0;
@@ -3010,10 +3046,13 @@ int selinux_audit_rule_init(u32 field, u32 op, char *rulestr, void **vrule)
 	struct selinux_audit_rule **rule = (struct selinux_audit_rule **)vrule;
 	int rc = 0;
 
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_RO_CRED
 	if ((rc = security_integrity_current()))
 		return rc;
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	*rule = NULL;
 
 	if (!ss_initialized)
@@ -3105,12 +3144,15 @@ out:
 int selinux_audit_rule_known(struct audit_krule *rule)
 {
 	int i;
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_RO_CRED
 	int rc;
 
 	if ((rc = security_integrity_current()))
 		return rc;
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	for (i = 0; i < rule->field_count; i++) {
 		struct audit_field *f = &rule->fields[i];
@@ -3139,12 +3181,15 @@ int selinux_audit_rule_match(u32 sid, u32 field, u32 op, void *vrule,
 	struct mls_level *level;
 	struct selinux_audit_rule *rule = vrule;
 	int match = 0;
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_RO_CRED
 	int rc;
 
 	if ((rc = security_integrity_current()))
 		return rc;
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (!rule) {
 		audit_log(actx, GFP_ATOMIC, AUDIT_SELINUX_ERR,

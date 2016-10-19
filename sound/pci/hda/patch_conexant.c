@@ -3225,6 +3225,10 @@ enum {
 	CXT_PINCFG_LEMOTE_A1205,
 	CXT_FIXUP_STEREO_DMIC,
 	CXT_FIXUP_INC_MIC_BOOST,
+<<<<<<< HEAD
+=======
+	CXT_FIXUP_GPIO1,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 static void cxt_fixup_stereo_dmic(struct hda_codec *codec,
@@ -3303,6 +3307,18 @@ static const struct hda_fixup cxt_fixups[] = {
 		.type = HDA_FIXUP_FUNC,
 		.v.func = cxt5066_increase_mic_boost,
 	},
+<<<<<<< HEAD
+=======
+	[CXT_FIXUP_GPIO1] = {
+		.type = HDA_FIXUP_VERBS,
+		.v.verbs = (const struct hda_verb[]) {
+			{ 0x01, AC_VERB_SET_GPIO_MASK, 0x01 },
+			{ 0x01, AC_VERB_SET_GPIO_DIRECTION, 0x01 },
+			{ 0x01, AC_VERB_SET_GPIO_DATA, 0x01 },
+			{ }
+		},
+	},
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 static const struct snd_pci_quirk cxt5051_fixups[] = {
@@ -3312,6 +3328,10 @@ static const struct snd_pci_quirk cxt5051_fixups[] = {
 
 static const struct snd_pci_quirk cxt5066_fixups[] = {
 	SND_PCI_QUIRK(0x1025, 0x0543, "Acer Aspire One 522", CXT_FIXUP_STEREO_DMIC),
+<<<<<<< HEAD
+=======
+	SND_PCI_QUIRK(0x1025, 0x054c, "Acer Aspire 3830TG", CXT_FIXUP_GPIO1),
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	SND_PCI_QUIRK(0x17aa, 0x20f2, "Lenovo T400", CXT_PINCFG_LENOVO_TP410),
 	SND_PCI_QUIRK(0x17aa, 0x215e, "Lenovo T410", CXT_PINCFG_LENOVO_TP410),
 	SND_PCI_QUIRK(0x17aa, 0x215f, "Lenovo T510", CXT_PINCFG_LENOVO_TP410),
@@ -3480,6 +3500,11 @@ static const struct hda_codec_preset snd_hda_preset_conexant[] = {
 	  .patch = patch_conexant_auto },
 	{ .id = 0x14f15115, .name = "CX20757",
 	  .patch = patch_conexant_auto },
+<<<<<<< HEAD
+=======
+	{ .id = 0x14f151d7, .name = "CX20952",
+	  .patch = patch_conexant_auto },
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	{} /* terminator */
 };
 
@@ -3506,6 +3531,10 @@ MODULE_ALIAS("snd-hda-codec-id:14f15111");
 MODULE_ALIAS("snd-hda-codec-id:14f15113");
 MODULE_ALIAS("snd-hda-codec-id:14f15114");
 MODULE_ALIAS("snd-hda-codec-id:14f15115");
+<<<<<<< HEAD
+=======
+MODULE_ALIAS("snd-hda-codec-id:14f151d7");
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 MODULE_LICENSE("GPL");
 MODULE_DESCRIPTION("Conexant HD-audio codec");

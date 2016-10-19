@@ -530,7 +530,11 @@ static int esp_need_to_nego_sync(struct esp_target_data *tp)
 static int esp_alloc_lun_tag(struct esp_cmd_entry *ent,
 			     struct esp_lun_data *lp)
 {
+<<<<<<< HEAD
 	if (!ent->tag[0]) {
+=======
+	if (!ent->orig_tag[0]) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		/* Non-tagged, slot already taken?  */
 		if (lp->non_tagged_cmd)
 			return -EBUSY;
@@ -564,9 +568,15 @@ static int esp_alloc_lun_tag(struct esp_cmd_entry *ent,
 			return -EBUSY;
 	}
 
+<<<<<<< HEAD
 	BUG_ON(lp->tagged_cmds[ent->tag[1]]);
 
 	lp->tagged_cmds[ent->tag[1]] = ent;
+=======
+	BUG_ON(lp->tagged_cmds[ent->orig_tag[1]]);
+
+	lp->tagged_cmds[ent->orig_tag[1]] = ent;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	lp->num_tagged++;
 
 	return 0;
@@ -575,9 +585,15 @@ static int esp_alloc_lun_tag(struct esp_cmd_entry *ent,
 static void esp_free_lun_tag(struct esp_cmd_entry *ent,
 			     struct esp_lun_data *lp)
 {
+<<<<<<< HEAD
 	if (ent->tag[0]) {
 		BUG_ON(lp->tagged_cmds[ent->tag[1]] != ent);
 		lp->tagged_cmds[ent->tag[1]] = NULL;
+=======
+	if (ent->orig_tag[0]) {
+		BUG_ON(lp->tagged_cmds[ent->orig_tag[1]] != ent);
+		lp->tagged_cmds[ent->orig_tag[1]] = NULL;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		lp->num_tagged--;
 	} else {
 		BUG_ON(lp->non_tagged_cmd != ent);
@@ -667,6 +683,11 @@ static struct esp_cmd_entry *find_and_prep_issuable_command(struct esp *esp)
 			ent->tag[0] = 0;
 			ent->tag[1] = 0;
 		}
+<<<<<<< HEAD
+=======
+		ent->orig_tag[0] = ent->tag[0];
+		ent->orig_tag[1] = ent->tag[1];
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 		if (esp_alloc_lun_tag(ent, lp) < 0)
 			continue;

@@ -751,6 +751,10 @@ static int sdhci_s3c_remove(struct platform_device *pdev)
 }
 
 #ifdef CONFIG_PM_SLEEP
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int sdhci_s3c_suspend(struct device *dev)
 {
 	struct sdhci_host *host = dev_get_drvdata(dev);
@@ -804,6 +808,16 @@ static const struct dev_pm_ops sdhci_s3c_pmops = {
 
 #define SDHCI_S3C_PMOPS (&sdhci_s3c_pmops)
 
+<<<<<<< HEAD
+=======
+static const struct dev_pm_ops sdhci_s3c_pmops = {
+	.suspend	= sdhci_s3c_suspend,
+	.resume		= sdhci_s3c_resume,
+};
+
+#define SDHCI_S3C_PMOPS (&sdhci_s3c_pmops)
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #else
 #define SDHCI_S3C_PMOPS NULL
 #endif

@@ -17,9 +17,14 @@
 #include <asm/firmware.h>
 
 #include <mach/map.h>
+<<<<<<< HEAD
 #include <mach/smc.h>
 
 static void __iomem *ns_base;
+=======
+
+#include "smc.h"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 static int exynos_do_idle(void)
 {
@@ -35,7 +40,11 @@ static int exynos_cpu_boot(int cpu)
 
 static int exynos_set_cpu_boot_addr(int cpu, unsigned long boot_addr)
 {
+<<<<<<< HEAD
 	void __iomem *boot_reg = ns_base + 0x1c;
+=======
+	void __iomem *boot_reg = S5P_VA_SYSRAM_NS + 0x1c + 4*cpu;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	__raw_writel(boot_addr, boot_reg);
 	return 0;
@@ -63,12 +72,15 @@ void __init exynos_firmware_init(void)
 			pr_err("%s: No address specified.\n", __func__);
 			return;
 		}
+<<<<<<< HEAD
 
 		ns_base = of_iomap(nd, 0);
 		if (!ns_base) {
 			pr_err("%s: Failed to get address.\n", __func__);
 			return;
 		}
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	pr_info("Running under secure firmware.\n");

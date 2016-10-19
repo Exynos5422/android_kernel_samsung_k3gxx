@@ -36,6 +36,15 @@
 #include <linux/genalloc.h>
 #include <linux/of_address.h>
 #include <linux/of_device.h>
+<<<<<<< HEAD
+=======
+#include <linux/vmalloc.h>
+
+static inline size_t chunk_size(const struct gen_pool_chunk *chunk)
+{
+	return chunk->end_addr - chunk->start_addr + 1;
+}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 static int set_bits_ll(unsigned long *addr, unsigned long mask_to_set)
 {
@@ -174,7 +183,11 @@ EXPORT_SYMBOL(gen_pool_create);
  *
  * Returns 0 on success or a -ve errno on failure.
  */
+<<<<<<< HEAD
 int gen_pool_add_virt(struct gen_pool *pool, unsigned long virt, phys_addr_t phys,
+=======
+int gen_pool_add_virt(struct gen_pool *pool, u64 virt, phys_addr_t phys,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		 size_t size, int nid)
 {
 	struct gen_pool_chunk *chunk;
@@ -182,6 +195,7 @@ int gen_pool_add_virt(struct gen_pool *pool, unsigned long virt, phys_addr_t phy
 	int nbytes = sizeof(struct gen_pool_chunk) +
 				BITS_TO_LONGS(nbits) * sizeof(long);
 
+<<<<<<< HEAD
 	chunk = kmalloc_node(nbytes, GFP_KERNEL | __GFP_ZERO, nid);
 	if (unlikely(chunk == NULL))
 		return -ENOMEM;
@@ -189,6 +203,20 @@ int gen_pool_add_virt(struct gen_pool *pool, unsigned long virt, phys_addr_t phy
 	chunk->phys_addr = phys;
 	chunk->start_addr = virt;
 	chunk->end_addr = virt + size;
+=======
+	if (nbytes <= PAGE_SIZE)
+		chunk = kmalloc_node(nbytes, __GFP_ZERO, nid);
+	else
+		chunk = vmalloc(nbytes);
+	if (unlikely(chunk == NULL))
+		return -ENOMEM;
+	if (nbytes > PAGE_SIZE)
+		memset(chunk, 0, nbytes);
+
+	chunk->phys_addr = phys;
+	chunk->start_addr = virt;
+	chunk->end_addr = virt + size - 1;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	atomic_set(&chunk->avail, size);
 
 	spin_lock(&pool->lock);
@@ -206,14 +234,22 @@ EXPORT_SYMBOL(gen_pool_add_virt);
  *
  * Returns the physical address on success, or -1 on error.
  */
+<<<<<<< HEAD
 phys_addr_t gen_pool_virt_to_phys(struct gen_pool *pool, unsigned long addr)
+=======
+phys_addr_t gen_pool_virt_to_phys(struct gen_pool *pool, u64 addr)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	struct gen_pool_chunk *chunk;
 	phys_addr_t paddr = -1;
 
 	rcu_read_lock();
 	list_for_each_entry_rcu(chunk, &pool->chunks, next_chunk) {
+<<<<<<< HEAD
 		if (addr >= chunk->start_addr && addr < chunk->end_addr) {
+=======
+		if (addr >= chunk->start_addr && addr <= chunk->end_addr) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			paddr = chunk->phys_addr + (addr - chunk->start_addr);
 			break;
 		}
@@ -239,6 +275,7 @@ void gen_pool_destroy(struct gen_pool *pool)
 	int bit, end_bit;
 
 	list_for_each_safe(_chunk, _next_chunk, &pool->chunks) {
+<<<<<<< HEAD
 		chunk = list_entry(_chunk, struct gen_pool_chunk, next_chunk);
 		list_del(&chunk->next_chunk);
 
@@ -247,6 +284,22 @@ void gen_pool_destroy(struct gen_pool *pool)
 		BUG_ON(bit < end_bit);
 
 		kfree(chunk);
+=======
+		int nbytes;
+		chunk = list_entry(_chunk, struct gen_pool_chunk, next_chunk);
+		list_del(&chunk->next_chunk);
+
+		end_bit = chunk_size(chunk) >> order;
+		nbytes = sizeof(struct gen_pool_chunk) +
+				BITS_TO_LONGS(end_bit) * sizeof(long);
+		bit = find_next_bit(chunk->bits, end_bit, 0);
+		BUG_ON(bit < end_bit);
+
+		if (nbytes <= PAGE_SIZE)
+			kfree(chunk);
+		else
+			vfree(chunk);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 	kfree(pool);
 	return;
@@ -254,21 +307,40 @@ void gen_pool_destroy(struct gen_pool *pool)
 EXPORT_SYMBOL(gen_pool_destroy);
 
 /**
+<<<<<<< HEAD
  * gen_pool_alloc - allocate special memory from the pool
  * @pool: pool to allocate from
  * @size: number of bytes to allocate from the pool
+=======
+ * gen_pool_alloc_aligned - allocate special memory from the pool
+ * @pool: pool to allocate from
+ * @size: number of bytes to allocate from the pool
+ * @alignment_order: Order the allocated space should be
+ *                   aligned to (eg. 20 means allocated space
+ *                   must be aligned to 1MiB).
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  *
  * Allocate the requested number of bytes from the specified pool.
  * Uses the pool allocation function (with first-fit algorithm by default).
  * Can not be used in NMI handler on architectures without
  * NMI-safe cmpxchg implementation.
  */
+<<<<<<< HEAD
 unsigned long gen_pool_alloc(struct gen_pool *pool, size_t size)
 {
 	struct gen_pool_chunk *chunk;
 	unsigned long addr = 0;
 	int order = pool->min_alloc_order;
 	int nbits, start_bit = 0, end_bit, remain;
+=======
+u64 gen_pool_alloc_aligned(struct gen_pool *pool, size_t size,
+				     unsigned alignment_order)
+{
+	struct gen_pool_chunk *chunk;
+	u64 addr = 0, align_mask = 0;
+	int order = pool->min_alloc_order;
+	int nbits, start_bit = 0, remain;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #ifndef CONFIG_ARCH_HAVE_NMI_SAFE_CMPXCHG
 	BUG_ON(in_nmi());
@@ -277,6 +349,7 @@ unsigned long gen_pool_alloc(struct gen_pool *pool, size_t size)
 	if (size == 0)
 		return 0;
 
+<<<<<<< HEAD
 	nbits = (size + (1UL << order) - 1) >> order;
 	rcu_read_lock();
 	list_for_each_entry_rcu(chunk, &pool->chunks, next_chunk) {
@@ -288,6 +361,25 @@ retry:
 		start_bit = pool->algo(chunk->bits, end_bit, start_bit, nbits,
 				pool->data);
 		if (start_bit >= end_bit)
+=======
+	if (alignment_order > order)
+		align_mask = (1 << (alignment_order - order)) - 1;
+
+	nbits = (size + (1UL << order) - 1) >> order;
+
+	rcu_read_lock();
+	list_for_each_entry_rcu(chunk, &pool->chunks, next_chunk) {
+		unsigned long chunk_len;
+		if (size > atomic_read(&chunk->avail))
+			continue;
+		chunk_len = chunk_size(chunk) >> order;
+
+retry:
+		start_bit = bitmap_find_next_zero_area_off(chunk->bits, chunk_len,
+						   0, nbits, align_mask,
+						   chunk->start_addr >> order);
+		if (start_bit >= chunk_len)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			continue;
 		remain = bitmap_set_ll(chunk->bits, start_bit, nbits);
 		if (remain) {
@@ -297,15 +389,24 @@ retry:
 			goto retry;
 		}
 
+<<<<<<< HEAD
 		addr = chunk->start_addr + ((unsigned long)start_bit << order);
 		size = nbits << order;
+=======
+		addr = chunk->start_addr + ((u64)start_bit << order);
+		size = nbits << pool->min_alloc_order;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		atomic_sub(size, &chunk->avail);
 		break;
 	}
 	rcu_read_unlock();
 	return addr;
 }
+<<<<<<< HEAD
 EXPORT_SYMBOL(gen_pool_alloc);
+=======
+EXPORT_SYMBOL(gen_pool_alloc_aligned);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /**
  * gen_pool_free - free allocated special memory back to the pool
@@ -317,7 +418,11 @@ EXPORT_SYMBOL(gen_pool_alloc);
  * pool.  Can not be used in NMI handler on architectures without
  * NMI-safe cmpxchg implementation.
  */
+<<<<<<< HEAD
 void gen_pool_free(struct gen_pool *pool, unsigned long addr, size_t size)
+=======
+void gen_pool_free(struct gen_pool *pool, u64 addr, size_t size)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	struct gen_pool_chunk *chunk;
 	int order = pool->min_alloc_order;
@@ -330,8 +435,13 @@ void gen_pool_free(struct gen_pool *pool, unsigned long addr, size_t size)
 	nbits = (size + (1UL << order) - 1) >> order;
 	rcu_read_lock();
 	list_for_each_entry_rcu(chunk, &pool->chunks, next_chunk) {
+<<<<<<< HEAD
 		if (addr >= chunk->start_addr && addr < chunk->end_addr) {
 			BUG_ON(addr + size > chunk->end_addr);
+=======
+		if (addr >= chunk->start_addr && addr <= chunk->end_addr) {
+			BUG_ON(addr + size - 1 > chunk->end_addr);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			start_bit = (addr - chunk->start_addr) >> order;
 			remain = bitmap_clear_ll(chunk->bits, start_bit, nbits);
 			BUG_ON(remain);
@@ -400,7 +510,11 @@ size_t gen_pool_size(struct gen_pool *pool)
 
 	rcu_read_lock();
 	list_for_each_entry_rcu(chunk, &pool->chunks, next_chunk)
+<<<<<<< HEAD
 		size += chunk->end_addr - chunk->start_addr;
+=======
+		size += chunk_size(chunk);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	rcu_read_unlock();
 	return size;
 }
@@ -439,7 +553,11 @@ EXPORT_SYMBOL(gen_pool_set_algo);
  * @nr: The number of zeroed bits we're looking for
  * @data: additional data - unused
  */
+<<<<<<< HEAD
 unsigned long gen_pool_first_fit(unsigned long *map, unsigned long size,
+=======
+u64 gen_pool_first_fit(unsigned long *map, unsigned long size,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		unsigned long start, unsigned int nr, void *data)
 {
 	return bitmap_find_next_zero_area(map, size, start, nr, 0);
@@ -458,7 +576,11 @@ EXPORT_SYMBOL(gen_pool_first_fit);
  * Iterate over the bitmap to find the smallest free region
  * which we can allocate the memory.
  */
+<<<<<<< HEAD
 unsigned long gen_pool_best_fit(unsigned long *map, unsigned long size,
+=======
+u64 gen_pool_best_fit(unsigned long *map, unsigned long size,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		unsigned long start, unsigned int nr, void *data)
 {
 	unsigned long start_bit = size;

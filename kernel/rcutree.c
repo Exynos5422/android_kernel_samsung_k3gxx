@@ -357,9 +357,15 @@ static void rcu_eqs_enter_common(struct rcu_dynticks *rdtp, long long oldval,
 	}
 	rcu_prepare_for_idle(smp_processor_id());
 	/* CPUs seeing atomic_inc() must see prior RCU read-side crit sects */
+<<<<<<< HEAD
 	smp_mb__before_atomic_inc();  /* See above. */
 	atomic_inc(&rdtp->dynticks);
 	smp_mb__after_atomic_inc();  /* Force ordering with next sojourn. */
+=======
+	smp_mb__before_atomic();  /* See above. */
+	atomic_inc(&rdtp->dynticks);
+	smp_mb__after_atomic();  /* Force ordering with next sojourn. */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	WARN_ON_ONCE(atomic_read(&rdtp->dynticks) & 0x1);
 
 	/*
@@ -495,10 +501,17 @@ void rcu_irq_exit(void)
 static void rcu_eqs_exit_common(struct rcu_dynticks *rdtp, long long oldval,
 			       int user)
 {
+<<<<<<< HEAD
 	smp_mb__before_atomic_inc();  /* Force ordering w/previous sojourn. */
 	atomic_inc(&rdtp->dynticks);
 	/* CPUs seeing atomic_inc() must see later RCU read-side crit sects */
 	smp_mb__after_atomic_inc();  /* See above. */
+=======
+	smp_mb__before_atomic();  /* Force ordering w/previous sojourn. */
+	atomic_inc(&rdtp->dynticks);
+	/* CPUs seeing atomic_inc() must see later RCU read-side crit sects */
+	smp_mb__after_atomic();  /* See above. */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	WARN_ON_ONCE(!(atomic_read(&rdtp->dynticks) & 0x1));
 	rcu_cleanup_after_idle(smp_processor_id());
 	trace_rcu_dyntick("End", oldval, rdtp->dynticks_nesting);
@@ -641,10 +654,17 @@ void rcu_nmi_enter(void)
 	    (atomic_read(&rdtp->dynticks) & 0x1))
 		return;
 	rdtp->dynticks_nmi_nesting++;
+<<<<<<< HEAD
 	smp_mb__before_atomic_inc();  /* Force delay from prior write. */
 	atomic_inc(&rdtp->dynticks);
 	/* CPUs seeing atomic_inc() must see later RCU read-side crit sects */
 	smp_mb__after_atomic_inc();  /* See above. */
+=======
+	smp_mb__before_atomic();  /* Force delay from prior write. */
+	atomic_inc(&rdtp->dynticks);
+	/* CPUs seeing atomic_inc() must see later RCU read-side crit sects */
+	smp_mb__after_atomic();  /* See above. */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	WARN_ON_ONCE(!(atomic_read(&rdtp->dynticks) & 0x1));
 }
 
@@ -663,9 +683,15 @@ void rcu_nmi_exit(void)
 	    --rdtp->dynticks_nmi_nesting != 0)
 		return;
 	/* CPUs seeing atomic_inc() must see prior RCU read-side crit sects */
+<<<<<<< HEAD
 	smp_mb__before_atomic_inc();  /* See above. */
 	atomic_inc(&rdtp->dynticks);
 	smp_mb__after_atomic_inc();  /* Force delay to next write. */
+=======
+	smp_mb__before_atomic();  /* See above. */
+	atomic_inc(&rdtp->dynticks);
+	smp_mb__after_atomic();  /* Force delay to next write. */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	WARN_ON_ONCE(atomic_read(&rdtp->dynticks) & 0x1);
 }
 
@@ -2659,7 +2685,11 @@ void synchronize_sched_expedited(void)
 		s = atomic_long_read(&rsp->expedited_done);
 		if (ULONG_CMP_GE((ulong)s, (ulong)firstsnap)) {
 			/* ensure test happens before caller kfree */
+<<<<<<< HEAD
 			smp_mb__before_atomic_inc(); /* ^^^ */
+=======
+			smp_mb__before_atomic(); /* ^^^ */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			atomic_long_inc(&rsp->expedited_workdone1);
 			return;
 		}
@@ -2677,7 +2707,11 @@ void synchronize_sched_expedited(void)
 		s = atomic_long_read(&rsp->expedited_done);
 		if (ULONG_CMP_GE((ulong)s, (ulong)firstsnap)) {
 			/* ensure test happens before caller kfree */
+<<<<<<< HEAD
 			smp_mb__before_atomic_inc(); /* ^^^ */
+=======
+			smp_mb__before_atomic(); /* ^^^ */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			atomic_long_inc(&rsp->expedited_workdone2);
 			return;
 		}
@@ -2706,7 +2740,11 @@ void synchronize_sched_expedited(void)
 		s = atomic_long_read(&rsp->expedited_done);
 		if (ULONG_CMP_GE((ulong)s, (ulong)snap)) {
 			/* ensure test happens before caller kfree */
+<<<<<<< HEAD
 			smp_mb__before_atomic_inc(); /* ^^^ */
+=======
+			smp_mb__before_atomic(); /* ^^^ */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			atomic_long_inc(&rsp->expedited_done_lost);
 			break;
 		}

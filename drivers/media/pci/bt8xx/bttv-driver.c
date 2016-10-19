@@ -4226,7 +4226,12 @@ static int bttv_probe(struct pci_dev *dev, const struct pci_device_id *pci_id)
 	}
 	btv->std = V4L2_STD_PAL;
 	init_irqreg(btv);
+<<<<<<< HEAD
 	v4l2_ctrl_handler_setup(hdl);
+=======
+	if (!bttv_tvcards[btv->c.type].no_video)
+		v4l2_ctrl_handler_setup(hdl);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (hdl->error) {
 		result = hdl->error;
 		goto fail2;

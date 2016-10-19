@@ -80,7 +80,13 @@ _nouveau_mc_dtor(struct nouveau_object *object)
 
 int
 nouveau_mc_create_(struct nouveau_object *parent, struct nouveau_object *engine,
+<<<<<<< HEAD
 		   struct nouveau_oclass *oclass, int length, void **pobject)
+=======
+		   struct nouveau_oclass *oclass,
+		   const struct nouveau_mc_intr *intr_map,
+		   int length, void **pobject)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	struct nouveau_device *device = nv_device(parent);
 	struct nouveau_mc *pmc;
@@ -92,6 +98,11 @@ nouveau_mc_create_(struct nouveau_object *parent, struct nouveau_object *engine,
 	if (ret)
 		return ret;
 
+<<<<<<< HEAD
+=======
+	pmc->intr_map = intr_map;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ret = request_irq(device->pdev->irq, nouveau_mc_intr,
 			  IRQF_SHARED, "nouveau", pmc);
 	if (ret < 0)

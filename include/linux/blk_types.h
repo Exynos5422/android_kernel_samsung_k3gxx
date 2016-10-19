@@ -73,9 +73,19 @@ struct bio {
 #if defined(CONFIG_BLK_DEV_INTEGRITY)
 	struct bio_integrity_payload *bi_integrity;  /* data integrity */
 #endif
+<<<<<<< HEAD
 #ifdef CONFIG_MMC_DW_FMP_DM_CRYPT
 	unsigned int		bi_sensitive_data;
 #endif
+=======
+
+	/*
+	 * When using dircet-io (O_DIRECT), we can't get the inode from a bio
+	 * by walking bio->bi_io_vec->bv_page->mapping->host
+	 * since the page is anon.
+	 */
+	struct inode		*bi_dio_inode;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/*
 	 * Everything starting with bi_max_vecs will be preserved by bio_reset()
@@ -123,6 +133,16 @@ struct bio {
 #define BIO_RESET_BITS	13
 #define BIO_OWNS_VEC	13	/* bio_free() should free bvec */
 
+<<<<<<< HEAD
+=======
+/*
+ * Added for Req based dm which need to perform post processing. This flag
+ * ensures blk_update_request does not free the bios or request, this is done
+ * at the dm level
+ */
+#define BIO_DONTFREE 14
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define bio_flagged(bio, flag)	((bio)->bi_flags & (1 << (flag)))
 
 /*
@@ -157,7 +177,10 @@ enum rq_flag_bits {
 	__REQ_NOIDLE,		/* don't anticipate more IO after this one */
 	__REQ_FUA,		/* forced unit access */
 	__REQ_FLUSH,		/* request for cache flush */
+<<<<<<< HEAD
 	__REQ_KERNEL, 		/* direct IO to kernel pages */
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/* bio only flags */
 	__REQ_RAHEAD,		/* read ahead, can fail anytime */
@@ -165,7 +188,11 @@ enum rq_flag_bits {
 				 * throttling rules. Don't do it again. */
 
 	/* request only flags */
+<<<<<<< HEAD
 	__REQ_SORTED,		/* elevator knows about this request */
+=======
+	__REQ_SORTED = __REQ_RAHEAD, /* elevator knows about this request */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	__REQ_SOFTBARRIER,	/* may not be passed by ioscheduler */
 	__REQ_NOMERGE,		/* don't touch this for merging */
 	__REQ_STARTED,		/* drive already may have started this one */
@@ -180,7 +207,13 @@ enum rq_flag_bits {
 	__REQ_FLUSH_SEQ,	/* request for flush sequence */
 	__REQ_IO_STAT,		/* account I/O stat */
 	__REQ_MIXED_MERGE,	/* merge of different types, fail separately */
+<<<<<<< HEAD
 	__REQ_PM,		/* runtime pm request */
+=======
+	__REQ_KERNEL, 		/* direct IO to kernel pages */
+	__REQ_PM,		/* runtime pm request */
+	__REQ_URGENT,		/* urgent request */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	__REQ_NR_BITS,		/* stops here */
 };
 
@@ -193,6 +226,10 @@ enum rq_flag_bits {
 #define REQ_PRIO		(1 << __REQ_PRIO)
 #define REQ_DISCARD		(1 << __REQ_DISCARD)
 #define REQ_WRITE_SAME		(1 << __REQ_WRITE_SAME)
+<<<<<<< HEAD
+=======
+#define REQ_URGENT		(1 << __REQ_URGENT)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define REQ_NOIDLE		(1 << __REQ_NOIDLE)
 
 #define REQ_FAILFAST_MASK \
@@ -200,7 +237,11 @@ enum rq_flag_bits {
 #define REQ_COMMON_MASK \
 	(REQ_WRITE | REQ_FAILFAST_MASK | REQ_SYNC | REQ_META | REQ_PRIO | \
 	 REQ_DISCARD | REQ_WRITE_SAME | REQ_NOIDLE | REQ_FLUSH | REQ_FUA | \
+<<<<<<< HEAD
 	 REQ_SECURE | REQ_KERNEL)
+=======
+	 REQ_SECURE)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define REQ_CLONE_MASK		REQ_COMMON_MASK
 
 #define BIO_NO_ADVANCE_ITER_MASK	(REQ_DISCARD|REQ_WRITE_SAME)
@@ -209,6 +250,11 @@ enum rq_flag_bits {
 #define REQ_NOMERGE_FLAGS \
 	(REQ_NOMERGE | REQ_STARTED | REQ_SOFTBARRIER | REQ_FLUSH | REQ_FUA)
 
+<<<<<<< HEAD
+=======
+#define MMC_REQ_NOREINSERT_MASK (REQ_URGENT | REQ_FUA | REQ_FLUSH)
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define REQ_RAHEAD		(1 << __REQ_RAHEAD)
 #define REQ_THROTTLED		(1 << __REQ_THROTTLED)
 

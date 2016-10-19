@@ -485,8 +485,16 @@ int mei_nfc_host_init(struct mei_device *dev)
 	if (ndev->cl_info)
 		return 0;
 
+<<<<<<< HEAD
 	cl_info = mei_cl_allocate(dev);
 	cl = mei_cl_allocate(dev);
+=======
+	ndev->cl_info = mei_cl_allocate(dev);
+	ndev->cl = mei_cl_allocate(dev);
+
+	cl = ndev->cl;
+	cl_info = ndev->cl_info;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (!cl || !cl_info) {
 		ret = -ENOMEM;
@@ -527,10 +535,16 @@ int mei_nfc_host_init(struct mei_device *dev)
 
 	cl->device_uuid = mei_nfc_guid;
 
+<<<<<<< HEAD
 	list_add_tail(&cl->device_link, &dev->device_list);
 
 	ndev->cl_info = cl_info;
 	ndev->cl = cl;
+=======
+
+	list_add_tail(&cl->device_link, &dev->device_list);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ndev->req_id = 1;
 
 	INIT_WORK(&ndev->init_work, mei_nfc_init);

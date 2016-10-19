@@ -33,9 +33,12 @@
 #include <linux/statfs.h>
 #include <linux/magic.h>
 #include "ecryptfs_kernel.h"
+<<<<<<< HEAD
 #ifdef CONFIG_SDP
 #include "ecryptfs_dek.h"
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 struct kmem_cache *ecryptfs_inode_info_cache;
 
@@ -63,10 +66,13 @@ static struct inode *ecryptfs_alloc_inode(struct super_block *sb)
 	mutex_init(&inode_info->lower_file_mutex);
 	atomic_set(&inode_info->lower_file_count, 0);
 	inode_info->lower_file = NULL;
+<<<<<<< HEAD
 #ifdef CONFIG_SDP
 	// get userid from super block
 	inode_info->crypt_stat.engine_id = -1;
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	inode = &inode_info->vfs_inode;
 out:
 	return inode;
@@ -155,8 +161,11 @@ static int ecryptfs_show_options(struct seq_file *m, struct dentry *root)
 	struct super_block *sb = root->d_sb;
 	struct ecryptfs_mount_crypt_stat *mount_crypt_stat =
 		&ecryptfs_superblock_to_private(sb)->mount_crypt_stat;
+<<<<<<< HEAD
 	struct ecryptfs_propagate_stat *propagate_stat =
 		&ecryptfs_superblock_to_private(sb)->propagate_stat;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct ecryptfs_global_auth_tok *walker;
 
 	mutex_lock(&mount_crypt_stat->global_auth_tok_list_mutex);
@@ -170,6 +179,7 @@ static int ecryptfs_show_options(struct seq_file *m, struct dentry *root)
 	}
 	mutex_unlock(&mount_crypt_stat->global_auth_tok_list_mutex);
 
+<<<<<<< HEAD
 #ifdef CONFIG_SDP
 	seq_printf(m, ",userid=%d", mount_crypt_stat->userid);
 
@@ -186,12 +196,15 @@ static int ecryptfs_show_options(struct seq_file *m, struct dentry *root)
 		seq_printf(m, ",dlp_enabled");
 	}
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	seq_printf(m, ",ecryptfs_cipher=%s",
 		mount_crypt_stat->global_default_cipher_name);
 
 	if (mount_crypt_stat->global_default_cipher_key_size)
 		seq_printf(m, ",ecryptfs_key_bytes=%zd",
 			   mount_crypt_stat->global_default_cipher_key_size);
+<<<<<<< HEAD
 #ifdef CONFIG_WTL_ENCRYPTION_FILTER
 	if (mount_crypt_stat->flags & ECRYPTFS_ENABLE_FILTERING)
 		seq_printf(m, ",ecryptfs_enable_filtering");
@@ -200,6 +213,8 @@ static int ecryptfs_show_options(struct seq_file *m, struct dentry *root)
 	if (mount_crypt_stat->flags & ECRYPTFS_ENABLE_CC)
 		seq_printf(m, ",ecryptfs_enable_cc");
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (mount_crypt_stat->flags & ECRYPTFS_PLAINTEXT_PASSTHROUGH_ENABLED)
 		seq_printf(m, ",ecryptfs_passthrough");
 	if (mount_crypt_stat->flags & ECRYPTFS_XATTR_METADATA_ENABLED)
@@ -211,6 +226,7 @@ static int ecryptfs_show_options(struct seq_file *m, struct dentry *root)
 	if (mount_crypt_stat->flags & ECRYPTFS_GLOBAL_MOUNT_AUTH_TOK_ONLY)
 		seq_printf(m, ",ecryptfs_mount_auth_tok_only");
 
+<<<<<<< HEAD
 	seq_printf(m, ",base=%s", propagate_stat->base_path);
 	if (propagate_stat->propagate_type == TYPE_E_DEFAULT)
 		seq_printf(m, ",type=default");
@@ -276,12 +292,18 @@ static long ecryptfs_propagate_lookup(struct super_block *sb, char *pathname){
 	return ret;
 }
 
+=======
+	return 0;
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 const struct super_operations ecryptfs_sops = {
 	.alloc_inode = ecryptfs_alloc_inode,
 	.destroy_inode = ecryptfs_destroy_inode,
 	.statfs = ecryptfs_statfs,
 	.remount_fs = NULL,
 	.evict_inode = ecryptfs_evict_inode,
+<<<<<<< HEAD
 	.show_options = ecryptfs_show_options,
 	.drop_inode = generic_delete_inode,
 };
@@ -295,4 +317,7 @@ const struct super_operations ecryptfs_multimount_sops = {
 	.show_options = ecryptfs_show_options,
 	.drop_inode = generic_delete_inode,
 	.unlink_callback = ecryptfs_propagate_lookup,
+=======
+	.show_options = ecryptfs_show_options
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };

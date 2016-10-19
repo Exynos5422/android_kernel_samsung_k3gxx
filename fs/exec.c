@@ -654,10 +654,17 @@ int setup_arg_pages(struct linux_binprm *bprm,
 	unsigned long rlim_stack;
 
 #ifdef CONFIG_STACK_GROWSUP
+<<<<<<< HEAD
 	/* Limit stack size to 1GB */
 	stack_base = rlimit_max(RLIMIT_STACK);
 	if (stack_base > (1 << 30))
 		stack_base = 1 << 30;
+=======
+	/* Limit stack size */
+	stack_base = rlimit_max(RLIMIT_STACK);
+	if (stack_base > STACK_SIZE_MAX)
+		stack_base = STACK_SIZE_MAX;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/* Make sure we didn't let the argument array grow too large. */
 	if (vma->vm_end - vma->vm_start > stack_base)
@@ -1082,10 +1089,13 @@ int flush_old_exec(struct linux_binprm * bprm)
 	retval = exec_mmap(bprm->mm);
 	if (retval)
 		goto out;
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_RO_CRED
 	if(rkp_cred_enable)
 	tima_send_cmd2((unsigned int)current_cred(), (unsigned int)bprm->mm->pgd, 0x43);
 #endif /*CONFIG_TIMA_RKP_RO_CRED*/
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	bprm->mm = NULL;		/* We're using it now */
 
@@ -1224,7 +1234,11 @@ EXPORT_SYMBOL(install_exec_creds);
 /*
  * determine how safe it is to execute the proposed program
  * - the caller must hold ->cred_guard_mutex to protect against
+<<<<<<< HEAD
  *   PTRACE_ATTACH
+=======
+ *   PTRACE_ATTACH or seccomp thread-sync
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  */
 static int check_unsafe_exec(struct linux_binprm *bprm)
 {
@@ -1269,6 +1283,7 @@ static int check_unsafe_exec(struct linux_binprm *bprm)
 	return res;
 }
 
+<<<<<<< HEAD
 static void bprm_fill_uid(struct linux_binprm *bprm)
 {
 	struct inode *inode;
@@ -1316,6 +1331,8 @@ static void bprm_fill_uid(struct linux_binprm *bprm)
 	}
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /* 
  * Fill the binprm structure from the inode. 
  * Check permissions, then read the first 128 (BINPRM_BUF_SIZE) bytes
@@ -1324,12 +1341,48 @@ static void bprm_fill_uid(struct linux_binprm *bprm)
  */
 int prepare_binprm(struct linux_binprm *bprm)
 {
+<<<<<<< HEAD
 	int retval;
 
 	if (bprm->file->f_op == NULL)
 		return -EACCES;
 
 	bprm_fill_uid(bprm);
+=======
+	umode_t mode;
+	struct inode * inode = file_inode(bprm->file);
+	int retval;
+
+	mode = inode->i_mode;
+	if (bprm->file->f_op == NULL)
+		return -EACCES;
+
+	/* clear any previous set[ug]id data from a previous binary */
+	bprm->cred->euid = current_euid();
+	bprm->cred->egid = current_egid();
+
+	if (!(bprm->file->f_path.mnt->mnt_flags & MNT_NOSUID) &&
+	    !task_no_new_privs(current) &&
+	    kuid_has_mapping(bprm->cred->user_ns, inode->i_uid) &&
+	    kgid_has_mapping(bprm->cred->user_ns, inode->i_gid)) {
+		/* Set-uid? */
+		if (mode & S_ISUID) {
+			bprm->per_clear |= PER_CLEAR_ON_SETID;
+			bprm->cred->euid = inode->i_uid;
+		}
+
+		/* Set-gid? */
+		/*
+		 * If setgid is set but no group execute bit then this
+		 * is a candidate for mandatory locking, not a setgid
+		 * executable.
+		 */
+		if ((mode & (S_ISGID | S_IXGRP)) == (S_ISGID | S_IXGRP)) {
+			bprm->per_clear |= PER_CLEAR_ON_SETID;
+			bprm->cred->egid = inode->i_gid;
+		}
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/* fill in binprm security blob */
 	retval = security_bprm_set_creds(bprm);
@@ -1475,6 +1528,7 @@ int search_binary_handler(struct linux_binprm *bprm)
 
 EXPORT_SYMBOL(search_binary_handler);
 
+<<<<<<< HEAD
 #if defined CONFIG_SEC_RESTRICT_FORK
 #if defined CONFIG_SEC_RESTRICT_ROOTING_LOG
 #define PRINT_LOG(...)	printk(KERN_ERR __VA_ARGS__)
@@ -1600,6 +1654,8 @@ out:
 }
 #endif	/* End of CONFIG_SEC_RESTRICT_FORK */
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * sys_execve() executes a new program.
  */
@@ -1818,6 +1874,15 @@ int __get_dumpable(unsigned long mm_flags)
 	return (ret > SUID_DUMP_USER) ? SUID_DUMP_ROOT : ret;
 }
 
+<<<<<<< HEAD
+=======
+/*
+ * This returns the actual value of the suid_dumpable flag. For things
+ * that are using this for checking for privilege transitions, it must
+ * test against SUID_DUMP_USER rather than treating it as a boolean
+ * value.
+ */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 int get_dumpable(struct mm_struct *mm)
 {
 	return __get_dumpable(mm->flags);
@@ -1831,6 +1896,7 @@ SYSCALL_DEFINE3(execve,
 	struct filename *path = getname(filename);
 	int error = PTR_ERR(path);
 	if (!IS_ERR(path)) {
+<<<<<<< HEAD
 
 #if defined CONFIG_SEC_RESTRICT_FORK
 		if(CHECK_ROOT_UID(current)){
@@ -1844,6 +1910,8 @@ SYSCALL_DEFINE3(execve,
 		}
 #endif	// End of CONFIG_SEC_RESTRICT_FORK
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		error = do_execve(path->name, argv, envp);
 		putname(path);
 	}

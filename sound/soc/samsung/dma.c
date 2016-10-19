@@ -17,6 +17,7 @@
 #include <linux/slab.h>
 #include <linux/dma-mapping.h>
 #include <linux/module.h>
+<<<<<<< HEAD
 #include <linux/of.h>
 #include <linux/delay.h>
 #include <linux/kthread.h>
@@ -25,10 +26,16 @@
 #include <sound/soc.h>
 #include <sound/pcm_params.h>
 #include <sound/exynos.h>
+=======
+
+#include <sound/soc.h>
+#include <sound/pcm_params.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #include <asm/dma.h>
 #include <mach/hardware.h>
 #include <mach/dma.h>
+<<<<<<< HEAD
 #include <mach/map.h>
 
 #include "dma.h"
@@ -58,6 +65,28 @@ static const struct snd_pcm_hardware dma_hardware = {
 	.buffer_bytes_max	= 256*1024,
 	.period_bytes_min	= 128,
 	.period_bytes_max	= 64*1024,
+=======
+
+#include "dma.h"
+
+#define ST_RUNNING		(1<<0)
+#define ST_OPENED		(1<<1)
+
+static const struct snd_pcm_hardware dma_hardware = {
+	.info			= SNDRV_PCM_INFO_INTERLEAVED |
+				    SNDRV_PCM_INFO_BLOCK_TRANSFER |
+				    SNDRV_PCM_INFO_MMAP |
+				    SNDRV_PCM_INFO_MMAP_VALID,
+	.formats		= SNDRV_PCM_FMTBIT_S16_LE |
+				    SNDRV_PCM_FMTBIT_U16_LE |
+				    SNDRV_PCM_FMTBIT_U8 |
+				    SNDRV_PCM_FMTBIT_S8,
+	.channels_min		= 2,
+	.channels_max		= 2,
+	.buffer_bytes_max	= 128*1024,
+	.period_bytes_min	= PAGE_SIZE,
+	.period_bytes_max	= PAGE_SIZE*2,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	.periods_min		= 2,
 	.periods_max		= 128,
 	.fifo_size		= 32,
@@ -72,6 +101,7 @@ struct runtime_data {
 	dma_addr_t dma_pos;
 	dma_addr_t dma_end;
 	struct s3c_dma_params *params;
+<<<<<<< HEAD
 	struct snd_pcm_hardware hw;
 	bool dram_used;
 	dma_addr_t irq_pos;
@@ -102,6 +132,12 @@ int check_adma_status(void)
 	return atomic_read(&dram_usage_cnt) ? 1 : 0;
 }
 
+=======
+};
+
+static void audio_buffdone(void *data);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /* dma_enqueue
  *
  * place a dma buffer onto the queue for the dma system
@@ -114,7 +150,11 @@ static void dma_enqueue(struct snd_pcm_substream *substream)
 	unsigned int limit;
 	struct samsung_dma_prep dma_info;
 
+<<<<<<< HEAD
 	pr_info("Entered %s\n", __func__);
+=======
+	pr_debug("Entered %s\n", __func__);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	limit = (prtd->dma_end - prtd->dma_start) / prtd->dma_period;
 
@@ -130,6 +170,7 @@ static void dma_enqueue(struct snd_pcm_substream *substream)
 	dma_info.period = prtd->dma_period;
 	dma_info.len = prtd->dma_period*limit;
 
+<<<<<<< HEAD
 	if (samsung_dma_has_infiniteloop()) {
 		dma_info.buf = prtd->dma_pos;
 		dma_info.infiniteloop = limit;
@@ -155,11 +196,33 @@ static void dma_enqueue(struct snd_pcm_substream *substream)
 		}
 		prtd->dma_pos = pos;
 	}
+=======
+	while (prtd->dma_loaded < limit) {
+		pr_debug("dma_loaded: %d\n", prtd->dma_loaded);
+
+		if ((pos + dma_info.period) > prtd->dma_end) {
+			dma_info.period  = prtd->dma_end - pos;
+			pr_debug("%s: corrected dma len %ld\n",
+					__func__, dma_info.period);
+		}
+
+		dma_info.buf = pos;
+		prtd->params->ops->prepare(prtd->params->ch, &dma_info);
+
+		prtd->dma_loaded++;
+		pos += prtd->dma_period;
+		if (pos >= prtd->dma_end)
+			pos = prtd->dma_start;
+	}
+
+	prtd->dma_pos = pos;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static void audio_buffdone(void *data)
 {
 	struct snd_pcm_substream *substream = data;
+<<<<<<< HEAD
 	struct runtime_data *prtd;
 	dma_addr_t src, dst, pos;
 
@@ -193,6 +256,26 @@ static void audio_buffdone(void *data)
 				dma_enqueue(substream);
 			spin_unlock(&prtd->lock);
 		}
+=======
+	struct runtime_data *prtd = substream->runtime->private_data;
+
+	pr_debug("Entered %s\n", __func__);
+
+	if (prtd->state & ST_RUNNING) {
+		prtd->dma_pos += prtd->dma_period;
+		if (prtd->dma_pos >= prtd->dma_end)
+			prtd->dma_pos = prtd->dma_start;
+
+		if (substream)
+			snd_pcm_period_elapsed(substream);
+
+		spin_lock(&prtd->lock);
+		if (!samsung_dma_has_circular()) {
+			prtd->dma_loaded--;
+			dma_enqueue(substream);
+		}
+		spin_unlock(&prtd->lock);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 }
 
@@ -233,11 +316,15 @@ static int dma_hw_params(struct snd_pcm_substream *substream,
 			(substream->stream == SNDRV_PCM_STREAM_PLAYBACK
 			? DMA_MEM_TO_DEV : DMA_DEV_TO_MEM);
 		config.width = prtd->params->dma_size;
+<<<<<<< HEAD
 		/* config.maxburst = 1; */
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		config.fifo = prtd->params->dma_addr;
 		prtd->params->ch = prtd->params->ops->request(
 				prtd->params->channel, &req, rtd->cpu_dai->dev,
 				prtd->params->ch_name);
+<<<<<<< HEAD
 		pr_debug("dma_request: ch %d, req %p, dev %p, ch_name [%s]\n",
 			prtd->params->channel, &req, rtd->cpu_dai->dev,
 			prtd->params->ch_name);
@@ -249,6 +336,12 @@ static int dma_hw_params(struct snd_pcm_substream *substream,
 		snd_pcm_set_runtime_buffer(substream, dram_uhqa_tx_buf);
 	else
 		snd_pcm_set_runtime_buffer(substream, &substream->dma_buffer);
+=======
+		prtd->params->ops->config(prtd->params->ch, &config);
+	}
+
+	snd_pcm_set_runtime_buffer(substream, &substream->dma_buffer);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	runtime->dma_bytes = totbytes;
 
@@ -258,6 +351,7 @@ static int dma_hw_params(struct snd_pcm_substream *substream,
 	prtd->dma_start = runtime->dma_addr;
 	prtd->dma_pos = prtd->dma_start;
 	prtd->dma_end = prtd->dma_start + totbytes;
+<<<<<<< HEAD
 	prtd->dram_used = runtime->dma_addr < SRAM_END ? false : true;
 	while ((totbytes / prtd->dma_period) < PERIOD_MIN)
 		prtd->dma_period >>= 1;
@@ -269,6 +363,10 @@ static int dma_hw_params(struct snd_pcm_substream *substream,
 		params_period_bytes(params), prtd->dma_period,
 		params_periods(params), (unsigned int)runtime->dma_area);
 
+=======
+	spin_unlock_irq(&prtd->lock);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 
@@ -295,7 +393,11 @@ static int dma_prepare(struct snd_pcm_substream *substream)
 	struct runtime_data *prtd = substream->runtime->private_data;
 	int ret = 0;
 
+<<<<<<< HEAD
 	pr_info("Entered %s\n", __func__);
+=======
+	pr_debug("Entered %s\n", __func__);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/* return if this is a bufferless transfer e.g.
 	 * codec <--> BT codec or GSM modem -- lg FIXME */
@@ -304,10 +406,16 @@ static int dma_prepare(struct snd_pcm_substream *substream)
 
 	/* flush the DMA channel */
 	prtd->params->ops->flush(prtd->params->ch);
+<<<<<<< HEAD
 	prtd->dma_loaded = 0;
 	prtd->dma_pos = prtd->dma_start;
 	prtd->irq_pos = prtd->dma_start;
 	prtd->irq_cnt = 0;
+=======
+
+	prtd->dma_loaded = 0;
+	prtd->dma_pos = prtd->dma_start;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/* enqueue dma buffers */
 	dma_enqueue(substream);
@@ -328,15 +436,21 @@ static int dma_trigger(struct snd_pcm_substream *substream, int cmd)
 	case SNDRV_PCM_TRIGGER_START:
 		prtd->state |= ST_RUNNING;
 		prtd->params->ops->trigger(prtd->params->ch);
+<<<<<<< HEAD
 		if (prtd->dram_used)
 			atomic_inc(&dram_usage_cnt);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		break;
 
 	case SNDRV_PCM_TRIGGER_STOP:
 		prtd->state &= ~ST_RUNNING;
 		prtd->params->ops->stop(prtd->params->ch);
+<<<<<<< HEAD
 		if (prtd->dram_used)
 			atomic_dec(&dram_usage_cnt);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		break;
 
 	default:
@@ -349,7 +463,12 @@ static int dma_trigger(struct snd_pcm_substream *substream, int cmd)
 	return ret;
 }
 
+<<<<<<< HEAD
 static snd_pcm_uframes_t dma_pointer(struct snd_pcm_substream *substream)
+=======
+static snd_pcm_uframes_t
+dma_pointer(struct snd_pcm_substream *substream)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	struct snd_pcm_runtime *runtime = substream->runtime;
 	struct runtime_data *prtd = runtime->private_data;
@@ -382,12 +501,19 @@ static int dma_open(struct snd_pcm_substream *substream)
 
 	pr_debug("Entered %s\n", __func__);
 
+<<<<<<< HEAD
+=======
+	snd_pcm_hw_constraint_integer(runtime, SNDRV_PCM_HW_PARAM_PERIODS);
+	snd_soc_set_runtime_hwparams(substream, &dma_hardware);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	prtd = kzalloc(sizeof(struct runtime_data), GFP_KERNEL);
 	if (prtd == NULL)
 		return -ENOMEM;
 
 	spin_lock_init(&prtd->lock);
 
+<<<<<<< HEAD
 	memcpy(&prtd->hw, &dma_hardware, sizeof(struct snd_pcm_hardware));
 
 	snd_pcm_hw_constraint_integer(runtime, SNDRV_PCM_HW_PARAM_PERIODS);
@@ -396,6 +522,9 @@ static int dma_open(struct snd_pcm_substream *substream)
 
 	pr_info("%s: prtd = %p\n", __func__, prtd);
 
+=======
+	runtime->private_data = prtd;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 
@@ -408,9 +537,13 @@ static int dma_close(struct snd_pcm_substream *substream)
 
 	if (!prtd)
 		pr_debug("dma_close called with prtd == NULL\n");
+<<<<<<< HEAD
 	else
 		pr_info("%s: prtd = %p, irq_cnt %u\n",
 				__func__, prtd, prtd->irq_cnt);
+=======
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	kfree(prtd);
 
 	return 0;
@@ -420,6 +553,7 @@ static int dma_mmap(struct snd_pcm_substream *substream,
 	struct vm_area_struct *vma)
 {
 	struct snd_pcm_runtime *runtime = substream->runtime;
+<<<<<<< HEAD
 	dma_addr_t dma_pa = runtime->dma_addr;
 #ifdef CONFIG_SND_SAMSUNG_IOMMU
 	struct dma_iova *di;
@@ -435,6 +569,14 @@ static int dma_mmap(struct snd_pcm_substream *substream,
 #endif
 	return dma_mmap_writecombine(substream->pcm->card->dev, vma,
 				     runtime->dma_area, dma_pa,
+=======
+
+	pr_debug("Entered %s\n", __func__);
+
+	return dma_mmap_writecombine(substream->pcm->card->dev, vma,
+				     runtime->dma_area,
+				     runtime->dma_addr,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				     runtime->dma_bytes);
 }
 
@@ -469,6 +611,7 @@ static int preallocate_dma_buffer(struct snd_pcm *pcm, int stream)
 	return 0;
 }
 
+<<<<<<< HEAD
 static const char *dma_prop_addr[2] = {
 	[SNDRV_PCM_STREAM_PLAYBACK] = "samsung,tx-buf",
 	[SNDRV_PCM_STREAM_CAPTURE]  = "samsung,rx-buf"
@@ -610,11 +753,16 @@ static int preallocate_dma_buffer_of(struct snd_pcm *pcm, int stream,
 	return 0;
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static void dma_free_dma_buffers(struct snd_pcm *pcm)
 {
 	struct snd_pcm_substream *substream;
 	struct snd_dma_buffer *buf;
+<<<<<<< HEAD
 	struct runtime_data *prtd;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	int stream;
 
 	pr_debug("Entered %s\n", __func__);
@@ -628,6 +776,7 @@ static void dma_free_dma_buffers(struct snd_pcm *pcm)
 		if (!buf->area)
 			continue;
 
+<<<<<<< HEAD
 		prtd = substream->runtime->private_data;
 		if (prtd->dram_used)
 			dma_free_writecombine(pcm->card->dev, buf->bytes,
@@ -635,6 +784,10 @@ static void dma_free_dma_buffers(struct snd_pcm *pcm)
 		else
 			iounmap(buf->area);
 
+=======
+		dma_free_writecombine(pcm->card->dev, buf->bytes,
+				      buf->area, buf->addr);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		buf->area = NULL;
 	}
 }
@@ -645,7 +798,10 @@ static int dma_new(struct snd_soc_pcm_runtime *rtd)
 {
 	struct snd_card *card = rtd->card->snd_card;
 	struct snd_pcm *pcm = rtd->pcm;
+<<<<<<< HEAD
 	struct device_node *np = rtd->cpu_dai->dev->of_node;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	int ret = 0;
 
 	pr_debug("Entered %s\n", __func__);
@@ -656,6 +812,7 @@ static int dma_new(struct snd_soc_pcm_runtime *rtd)
 		card->dev->coherent_dma_mask = DMA_BIT_MASK(32);
 
 	if (pcm->streams[SNDRV_PCM_STREAM_PLAYBACK].substream) {
+<<<<<<< HEAD
 		ret = 0;
 		if (np)
 			ret = preallocate_dma_buffer_of(pcm,
@@ -663,11 +820,16 @@ static int dma_new(struct snd_soc_pcm_runtime *rtd)
 		if (ret)
 			ret = preallocate_dma_buffer(pcm,
 				SNDRV_PCM_STREAM_PLAYBACK);
+=======
+		ret = preallocate_dma_buffer(pcm,
+			SNDRV_PCM_STREAM_PLAYBACK);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (ret)
 			goto out;
 	}
 
 	if (pcm->streams[SNDRV_PCM_STREAM_CAPTURE].substream) {
+<<<<<<< HEAD
 		ret = 0;
 		if (np)
 			ret = preallocate_dma_buffer_of(pcm,
@@ -675,6 +837,10 @@ static int dma_new(struct snd_soc_pcm_runtime *rtd)
 		if (ret)
 			ret = preallocate_dma_buffer(pcm,
 				SNDRV_PCM_STREAM_CAPTURE);
+=======
+		ret = preallocate_dma_buffer(pcm,
+			SNDRV_PCM_STREAM_CAPTURE);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (ret)
 			goto out;
 	}

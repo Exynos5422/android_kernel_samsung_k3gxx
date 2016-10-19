@@ -272,8 +272,14 @@ struct perf_event_attr {
 
 				exclude_callchain_kernel : 1, /* exclude kernel callchains */
 				exclude_callchain_user   : 1, /* exclude user callchains */
+<<<<<<< HEAD
 
 				__reserved_1   : 41;
+=======
+				constraint_duplicate : 1,
+
+				__reserved_1   : 40;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	union {
 		__u32		wakeup_events;	  /* wakeup every n events */
@@ -425,6 +431,7 @@ struct perf_event_mmap_page {
 	/*
 	 * Control data for the mmap() data buffer.
 	 *
+<<<<<<< HEAD
 	 * User-space reading the @data_head value should issue an rmb(), on
 	 * SMP capable platforms, after reading this value -- see
 	 * perf_event_wakeup().
@@ -432,6 +439,17 @@ struct perf_event_mmap_page {
 	 * When the mapping is PROT_WRITE the @data_tail value should be
 	 * written by userspace to reflect the last read data. In this case
 	 * the kernel will not over-write unread data.
+=======
+	 * User-space reading the @data_head value should issue an smp_rmb(),
+	 * after reading this value.
+	 *
+	 * When the mapping is PROT_WRITE the @data_tail value should be
+	 * written by userspace to reflect the last read data, after issueing
+	 * an smp_mb() to separate the data read from the ->data_tail store.
+	 * In this case the kernel will not over-write unread data.
+	 *
+	 * See perf_output_put_handle() for the data ordering.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	 */
 	__u64   data_head;		/* head in the data section */
 	__u64	data_tail;		/* user-space written tail */

@@ -587,7 +587,11 @@ fail:
 	gfs2_recovery_done(sdp, jd->jd_jid, LM_RD_GAVEUP);
 done:
 	clear_bit(JDF_RECOVERY, &jd->jd_flags);
+<<<<<<< HEAD
 	smp_mb__after_clear_bit();
+=======
+	smp_mb__after_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	wake_up_bit(&jd->jd_flags, JDF_RECOVERY);
 }
 

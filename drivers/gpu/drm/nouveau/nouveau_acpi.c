@@ -372,9 +372,12 @@ bool nouveau_acpi_rom_supported(struct pci_dev *pdev)
 	acpi_status status;
 	acpi_handle dhandle, rom_handle;
 
+<<<<<<< HEAD
 	if (!nouveau_dsm_priv.dsm_detected && !nouveau_dsm_priv.optimus_detected)
 		return false;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	dhandle = DEVICE_ACPI_HANDLE(&pdev->dev);
 	if (!dhandle)
 		return false;

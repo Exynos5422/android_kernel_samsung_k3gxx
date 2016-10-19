@@ -979,6 +979,11 @@ struct drm_radeon_cs {
 #define RADEON_INFO_RING_WORKING	0x15
 /* SI tile mode array */
 #define RADEON_INFO_SI_TILE_MODE_ARRAY	0x16
+<<<<<<< HEAD
+=======
+/* query if CP DMA is supported on the compute ring */
+#define RADEON_INFO_SI_CP_DMA_COMPUTE	0x17
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 
 struct drm_radeon_info {

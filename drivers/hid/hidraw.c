@@ -113,7 +113,11 @@ static ssize_t hidraw_send_report(struct file *file, const char __user *buffer, 
 	__u8 *buf;
 	int ret = 0;
 
+<<<<<<< HEAD
 	if (!hidraw_table[minor]) {
+=======
+	if (!hidraw_table[minor] || !hidraw_table[minor]->exist) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		ret = -ENODEV;
 		goto out;
 	}
@@ -261,7 +265,11 @@ static int hidraw_open(struct inode *inode, struct file *file)
 	}
 
 	mutex_lock(&minors_lock);
+<<<<<<< HEAD
 	if (!hidraw_table[minor]) {
+=======
+	if (!hidraw_table[minor] || !hidraw_table[minor]->exist) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		err = -ENODEV;
 		goto out_unlock;
 	}
@@ -302,6 +310,7 @@ static int hidraw_fasync(int fd, struct file *file, int on)
 	return fasync_helper(fd, file, on, &list->fasync);
 }
 
+<<<<<<< HEAD
 static int hidraw_release(struct inode * inode, struct file * file)
 {
 	unsigned int minor = iminor(inode);
@@ -335,6 +344,40 @@ unlock:
 	mutex_unlock(&minors_lock);
 
 	return ret;
+=======
+static void drop_ref(struct hidraw *hidraw, int exists_bit)
+{
+	if (exists_bit) {
+		hid_hw_close(hidraw->hid);
+		hidraw->exist = 0;
+		if (hidraw->open)
+			wake_up_interruptible(&hidraw->wait);
+	} else {
+		--hidraw->open;
+	}
+
+	if (!hidraw->open && !hidraw->exist) {
+		device_destroy(hidraw_class, MKDEV(hidraw_major, hidraw->minor));
+		hidraw_table[hidraw->minor] = NULL;
+		kfree(hidraw);
+	}
+}
+
+static int hidraw_release(struct inode * inode, struct file * file)
+{
+	unsigned int minor = iminor(inode);
+	struct hidraw_list *list = file->private_data;
+
+	mutex_lock(&minors_lock);
+
+	list_del(&list->node);
+	kfree(list);
+
+	drop_ref(hidraw_table[minor], 0);
+
+	mutex_unlock(&minors_lock);
+	return 0;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static long hidraw_ioctl(struct file *file, unsigned int cmd,
@@ -539,6 +582,7 @@ void hidraw_disconnect(struct hid_device *hid)
 	struct hidraw *hidraw = hid->hidraw;
 
 	mutex_lock(&minors_lock);
+<<<<<<< HEAD
 	hidraw->exist = 0;
 
 	device_destroy(hidraw_class, MKDEV(hidraw_major, hidraw->minor));
@@ -551,6 +595,11 @@ void hidraw_disconnect(struct hid_device *hid)
 	} else {
 		kfree(hidraw);
 	}
+=======
+
+	drop_ref(hidraw, 1);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	mutex_unlock(&minors_lock);
 }
 EXPORT_SYMBOL_GPL(hidraw_disconnect);

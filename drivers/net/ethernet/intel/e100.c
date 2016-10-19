@@ -3039,7 +3039,11 @@ static void __e100_shutdown(struct pci_dev *pdev, bool *enable_wake)
 		*enable_wake = false;
 	}
 
+<<<<<<< HEAD
 	pci_disable_device(pdev);
+=======
+	pci_clear_master(pdev);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static int __e100_power_off(struct pci_dev *pdev, bool wake)

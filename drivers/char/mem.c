@@ -36,10 +36,13 @@
 # include <linux/efi.h>
 #endif
 
+<<<<<<< HEAD
 #ifdef CONFIG_KNOX_KAP
 #include <linux/knox_kap.h>
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define DEVPORT_MINOR	4
 
 static inline unsigned long size_inside_page(unsigned long start,
@@ -890,9 +893,12 @@ static const struct memdev {
 #ifdef CONFIG_CRASH_DUMP
 	[12] = { "oldmem", 0, &oldmem_fops, NULL },
 #endif
+<<<<<<< HEAD
 #ifdef CONFIG_KNOX_KAP
 	[13] = { "knox_kap", 0666, &knox_kap_fops, NULL },
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 static int memory_open(struct inode *inode, struct file *filp)

@@ -107,6 +107,10 @@ struct netfront_info {
 	} tx_skbs[NET_TX_RING_SIZE];
 	grant_ref_t gref_tx_head;
 	grant_ref_t grant_tx_ref[NET_TX_RING_SIZE];
+<<<<<<< HEAD
+=======
+	struct page *grant_tx_page[NET_TX_RING_SIZE];
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	unsigned tx_skb_freelist;
 
 	spinlock_t   rx_lock ____cacheline_aligned_in_smp;
@@ -386,6 +390,10 @@ static void xennet_tx_buf_gc(struct net_device *dev)
 			gnttab_release_grant_reference(
 				&np->gref_tx_head, np->grant_tx_ref[id]);
 			np->grant_tx_ref[id] = GRANT_INVALID_REF;
+<<<<<<< HEAD
+=======
+			np->grant_tx_page[id] = NULL;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			add_id_to_freelist(&np->tx_skb_freelist, np->tx_skbs, id);
 			dev_kfree_skb_irq(skb);
 		}
@@ -442,6 +450,10 @@ static void xennet_make_frags(struct sk_buff *skb, struct net_device *dev,
 		gnttab_grant_foreign_access_ref(ref, np->xbdev->otherend_id,
 						mfn, GNTMAP_readonly);
 
+<<<<<<< HEAD
+=======
+		np->grant_tx_page[id] = virt_to_page(data);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		tx->gref = np->grant_tx_ref[id] = ref;
 		tx->offset = offset;
 		tx->size = len;
@@ -487,6 +499,10 @@ static void xennet_make_frags(struct sk_buff *skb, struct net_device *dev,
 							np->xbdev->otherend_id,
 							mfn, GNTMAP_readonly);
 
+<<<<<<< HEAD
+=======
+			np->grant_tx_page[id] = page;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			tx->gref = np->grant_tx_ref[id] = ref;
 			tx->offset = offset;
 			tx->size = bytes;
@@ -586,6 +602,10 @@ static int xennet_start_xmit(struct sk_buff *skb, struct net_device *dev)
 	mfn = virt_to_mfn(data);
 	gnttab_grant_foreign_access_ref(
 		ref, np->xbdev->otherend_id, mfn, GNTMAP_readonly);
+<<<<<<< HEAD
+=======
+	np->grant_tx_page[id] = virt_to_page(data);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	tx->gref = np->grant_tx_ref[id] = ref;
 	tx->offset = offset;
 	tx->size = len;
@@ -1115,10 +1135,18 @@ static void xennet_release_tx_bufs(struct netfront_info *np)
 			continue;
 
 		skb = np->tx_skbs[i].skb;
+<<<<<<< HEAD
 		gnttab_end_foreign_access_ref(np->grant_tx_ref[i],
 					      GNTMAP_readonly);
 		gnttab_release_grant_reference(&np->gref_tx_head,
 					       np->grant_tx_ref[i]);
+=======
+		get_page(np->grant_tx_page[i]);
+		gnttab_end_foreign_access(np->grant_tx_ref[i],
+					  GNTMAP_readonly,
+					  (unsigned long)page_address(np->grant_tx_page[i]));
+		np->grant_tx_page[i] = NULL;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		np->grant_tx_ref[i] = GRANT_INVALID_REF;
 		add_id_to_freelist(&np->tx_skb_freelist, np->tx_skbs, i);
 		dev_kfree_skb_irq(skb);
@@ -1127,6 +1155,7 @@ static void xennet_release_tx_bufs(struct netfront_info *np)
 
 static void xennet_release_rx_bufs(struct netfront_info *np)
 {
+<<<<<<< HEAD
 	struct mmu_update      *mmu = np->rx_mmu;
 	struct multicall_entry *mcl = np->rx_mcl;
 	struct sk_buff_head free_list;
@@ -1199,6 +1228,37 @@ static void xennet_release_rx_bufs(struct netfront_info *np)
 
 	__skb_queue_purge(&free_list);
 
+=======
+	int id, ref;
+
+	spin_lock_bh(&np->rx_lock);
+
+	for (id = 0; id < NET_RX_RING_SIZE; id++) {
+		struct sk_buff *skb;
+		struct page *page;
+
+		skb = np->rx_skbs[id];
+		if (!skb)
+			continue;
+
+		ref = np->grant_rx_ref[id];
+		if (ref == GRANT_INVALID_REF)
+			continue;
+
+		page = skb_frag_page(&skb_shinfo(skb)->frags[0]);
+
+		/* gnttab_end_foreign_access() needs a page ref until
+		 * foreign access is ended (which may be deferred).
+		 */
+		get_page(page);
+		gnttab_end_foreign_access(ref, 0,
+					  (unsigned long)page_address(page));
+		np->grant_rx_ref[id] = GRANT_INVALID_REF;
+
+		kfree_skb(skb);
+	}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	spin_unlock_bh(&np->rx_lock);
 }
 
@@ -1333,6 +1393,10 @@ static struct net_device *xennet_create_dev(struct xenbus_device *dev)
 	for (i = 0; i < NET_RX_RING_SIZE; i++) {
 		np->rx_skbs[i] = NULL;
 		np->grant_rx_ref[i] = GRANT_INVALID_REF;
+<<<<<<< HEAD
+=======
+		np->grant_tx_page[i] = NULL;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	/* A grant for every tx ring slot */

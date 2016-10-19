@@ -587,7 +587,11 @@ static void p54_rx_stats(struct p54_common *priv, struct sk_buff *skb)
 	chan = priv->curchan;
 	if (chan) {
 		struct survey_info *survey = &priv->survey[chan->hw_value];
+<<<<<<< HEAD
 		survey->noise = clamp_t(s8, priv->noise, -128, 127);
+=======
+		survey->noise = clamp(priv->noise, -128, 127);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		survey->channel_time = priv->survey_raw.active;
 		survey->channel_time_tx = priv->survey_raw.tx;
 		survey->channel_time_busy = priv->survey_raw.tx +

@@ -16,8 +16,17 @@
 	interrupt-parent = <&intc>;
 
 	cpus {
+<<<<<<< HEAD
 		cpu@0 {
 			compatible = "arm,cortex-a8";
+=======
+		#address-cells = <1>;
+		#size-cells = <0>;
+		cpu@0 {
+			device_type = "cpu";
+			compatible = "arm,cortex-a8";
+			reg = <0x0>;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		};
 	};
 

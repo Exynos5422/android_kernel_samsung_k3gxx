@@ -6267,7 +6267,12 @@ static struct scsi_host_template driver_template = {
 	.use_clustering = ENABLE_CLUSTERING,
 	.shost_attrs = ipr_ioa_attrs,
 	.sdev_attrs = ipr_dev_attrs,
+<<<<<<< HEAD
 	.proc_name = IPR_NAME
+=======
+	.proc_name = IPR_NAME,
+	.no_write_same = 1,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 /**

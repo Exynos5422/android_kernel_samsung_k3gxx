@@ -150,12 +150,15 @@ static inline void ptep_set_wrprotect(struct mm_struct *mm, unsigned long addres
 }
 #endif
 
+<<<<<<< HEAD
 static inline void ptep_set_nxprotect(struct mm_struct *mm, unsigned long address, pte_t *ptep)
 {
 	pte_t old_pte = *ptep;
 	set_pte_at(mm, address, ptep, pte_mknoexec(old_pte));
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifndef __HAVE_ARCH_PMDP_SET_WRPROTECT
 #ifdef CONFIG_TRANSPARENT_HUGEPAGE
 static inline void pmdp_set_wrprotect(struct mm_struct *mm,
@@ -226,7 +229,11 @@ static inline int pmd_same(pmd_t pmd_a, pmd_t pmd_b)
 #endif
 
 #ifndef pte_accessible
+<<<<<<< HEAD
 # define pte_accessible(pte)		((void)(pte),1)
+=======
+# define pte_accessible(mm, pte)	((void)(pte), 1)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif
 
 #ifndef flush_tlb_fix_spurious_fault
@@ -556,10 +563,18 @@ static inline int pmd_none_or_trans_huge_or_clear_bad(pmd_t *pmd)
 #ifdef CONFIG_TRANSPARENT_HUGEPAGE
 	barrier();
 #endif
+<<<<<<< HEAD
 	if (pmd_none(pmdval) || pmd_trans_huge(pmdval))
 		return 1;
 	if (unlikely(pmd_bad(pmdval))) {
 		pmd_clear_bad(pmd);
+=======
+	if (pmd_none(pmdval))
+		return 1;
+	if (unlikely(pmd_bad(pmdval))) {
+		if (!pmd_trans_huge(pmdval))
+			pmd_clear_bad(pmd);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return 1;
 	}
 	return 0;
@@ -625,32 +640,67 @@ static inline int pmd_numa(pmd_t pmd)
 #ifndef pte_mknonnuma
 static inline pte_t pte_mknonnuma(pte_t pte)
 {
+<<<<<<< HEAD
 	pte = pte_clear_flags(pte, _PAGE_NUMA);
 	return pte_set_flags(pte, _PAGE_PRESENT|_PAGE_ACCESSED);
+=======
+	pteval_t val = pte_val(pte);
+
+	val &= ~_PAGE_NUMA;
+	val |= (_PAGE_PRESENT|_PAGE_ACCESSED);
+	return __pte(val);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 #endif
 
 #ifndef pmd_mknonnuma
 static inline pmd_t pmd_mknonnuma(pmd_t pmd)
 {
+<<<<<<< HEAD
 	pmd = pmd_clear_flags(pmd, _PAGE_NUMA);
 	return pmd_set_flags(pmd, _PAGE_PRESENT|_PAGE_ACCESSED);
+=======
+	pmdval_t val = pmd_val(pmd);
+
+	val &= ~_PAGE_NUMA;
+	val |= (_PAGE_PRESENT|_PAGE_ACCESSED);
+
+	return __pmd(val);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 #endif
 
 #ifndef pte_mknuma
 static inline pte_t pte_mknuma(pte_t pte)
 {
+<<<<<<< HEAD
 	pte = pte_set_flags(pte, _PAGE_NUMA);
 	return pte_clear_flags(pte, _PAGE_PRESENT);
+=======
+	pteval_t val = pte_val(pte);
+
+	val &= ~_PAGE_PRESENT;
+	val |= _PAGE_NUMA;
+
+	return __pte(val);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 #endif
 
 #ifndef pmd_mknuma
 static inline pmd_t pmd_mknuma(pmd_t pmd)
 {
+<<<<<<< HEAD
 	pmd = pmd_set_flags(pmd, _PAGE_NUMA);
 	return pmd_clear_flags(pmd, _PAGE_PRESENT);
+=======
+	pmdval_t val = pmd_val(pmd);
+
+	val &= ~_PAGE_PRESENT;
+	val |= _PAGE_NUMA;
+
+	return __pmd(val);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 #endif
 #else
@@ -697,4 +747,11 @@ static inline pmd_t pmd_mknuma(pmd_t pmd)
 
 #endif /* !__ASSEMBLY__ */
 
+<<<<<<< HEAD
+=======
+#ifndef io_remap_pfn_range
+#define io_remap_pfn_range remap_pfn_range
+#endif
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif /* _ASM_GENERIC_PGTABLE_H */

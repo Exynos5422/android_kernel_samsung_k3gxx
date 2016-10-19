@@ -10,8 +10,11 @@
 
 #include <linux/linkage.h>
 
+<<<<<<< HEAD
 #include <mach/smc.h>
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * Function signature: void exynos_smc(u32 cmd, u32 arg1, u32 arg2, u32 arg3)
  */
@@ -22,6 +25,7 @@ ENTRY(exynos_smc)
 	smc	#0
 	ldmfd	sp!, {r4-r11, pc}
 ENDPROC(exynos_smc)
+<<<<<<< HEAD
 
 ENTRY(exynos_smc_readsfr)
 	stmfd	sp!, {r2-r11, lr}
@@ -40,3 +44,5 @@ ENTRY(exynos_smc_readsfr)
 	streq	r2, [r3]
 	ldmfd	sp!, {r2-r11, pc}
 ENDPROC(exynos_smc_readsfr)
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

@@ -31,10 +31,13 @@
 #define I2SLVL1ADDR	0x34
 #define I2SLVL2ADDR	0x38
 #define I2SLVL3ADDR	0x3c
+<<<<<<< HEAD
 #define I2SSTR1		0x40
 #define I2SVER		0x44
 #define I2SFIC2		0x48
 #define I2STDM		0x4c
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define CON_RSTCLR		(1 << 31)
 #define CON_FRXOFSTATUS		(1 << 26)
@@ -88,12 +91,16 @@
 #define MOD_C1DD_LHALF		(1 << 18)
 #define MOD_DC2_EN		(1 << 17)
 #define MOD_DC1_EN		(1 << 16)
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define MOD_BLC_16BIT		(0 << 13)
 #define MOD_BLC_8BIT		(1 << 13)
 #define MOD_BLC_24BIT		(2 << 13)
 #define MOD_BLC_MASK		(3 << 13)
 
+<<<<<<< HEAD
 #define MOD_CDCLKCON		(1 << 12)
 #define MOD_SLAVE		(1 << 11)
 #define MOD_RCLKSRC		(1 << 10)
@@ -165,6 +172,33 @@
 #define EXYNOS5430_MOD_BCLK_SHIFT	EXYNOS5420_MOD_BCLK_SHIFT
 #define EXYNOS5430_MOD_BCLK_MASK	EXYNOS5420_MOD_BCLK_MASK
 
+=======
+#define MOD_IMS_SYSMUX		(1 << 10)
+#define MOD_SLAVE		(1 << 11)
+#define MOD_TXONLY		(0 << 8)
+#define MOD_RXONLY		(1 << 8)
+#define MOD_TXRX		(2 << 8)
+#define MOD_MASK		(3 << 8)
+#define MOD_LR_LLOW		(0 << 7)
+#define MOD_LR_RLOW		(1 << 7)
+#define MOD_SDF_IIS		(0 << 5)
+#define MOD_SDF_MSB		(1 << 5)
+#define MOD_SDF_LSB		(2 << 5)
+#define MOD_SDF_MASK		(3 << 5)
+#define MOD_RCLK_256FS		(0 << 3)
+#define MOD_RCLK_512FS		(1 << 3)
+#define MOD_RCLK_384FS		(2 << 3)
+#define MOD_RCLK_768FS		(3 << 3)
+#define MOD_RCLK_MASK		(3 << 3)
+#define MOD_BCLK_32FS		(0 << 1)
+#define MOD_BCLK_48FS		(1 << 1)
+#define MOD_BCLK_16FS		(2 << 1)
+#define MOD_BCLK_24FS		(3 << 1)
+#define MOD_BCLK_MASK		(3 << 1)
+#define MOD_8BIT		(1 << 0)
+
+#define MOD_CDCLKCON		(1 << 12)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define PSR_PSREN		(1 << 15)
 

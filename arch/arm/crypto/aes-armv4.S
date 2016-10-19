@@ -148,7 +148,11 @@ AES_Te:
 @ 		 const AES_KEY *key) {
 .align	5
 ENTRY(AES_encrypt)
+<<<<<<< HEAD
 	sub	r3,pc,#8		@ AES_encrypt
+=======
+	adr	r3,AES_encrypt
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	stmdb   sp!,{r1,r4-r12,lr}
 	mov	r12,r0		@ inp
 	mov	r11,r2
@@ -381,7 +385,11 @@ _armv4_AES_encrypt:
 .align	5
 ENTRY(private_AES_set_encrypt_key)
 _armv4_AES_set_encrypt_key:
+<<<<<<< HEAD
 	sub	r3,pc,#8		@ AES_set_encrypt_key
+=======
+	adr	r3,_armv4_AES_set_encrypt_key
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	teq	r0,#0
 	moveq	r0,#-1
 	beq	.Labrt
@@ -843,7 +851,11 @@ AES_Td:
 @ 		 const AES_KEY *key) {
 .align	5
 ENTRY(AES_decrypt)
+<<<<<<< HEAD
 	sub	r3,pc,#8		@ AES_decrypt
+=======
+	adr	r3,AES_decrypt
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	stmdb   sp!,{r1,r4-r12,lr}
 	mov	r12,r0		@ inp
 	mov	r11,r2

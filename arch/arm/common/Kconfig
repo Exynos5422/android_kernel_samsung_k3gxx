@@ -21,6 +21,7 @@ config SHARP_SCOOP
 config FIQ_GLUE
 	bool
 	select FIQ
+<<<<<<< HEAD
 
 config FIQ_DEBUGGER
 	bool "FIQ Mode Serial Debugger"
@@ -67,3 +68,5 @@ config FIQ_DEBUGGER_CONSOLE_DEFAULT_ENABLE
 	help
 	  If enabled, this puts the fiq debugger into console mode by default.
 	  Otherwise, the fiq debugger will start out in debug mode.
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

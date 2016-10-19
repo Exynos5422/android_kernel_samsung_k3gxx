@@ -5,7 +5,10 @@
 #include <stdbool.h>
 #include <sys/vfs.h>
 #include <sys/mount.h>
+<<<<<<< HEAD
 #include <linux/magic.h>
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <linux/kernel.h>
 
 #include "debugfs.h"

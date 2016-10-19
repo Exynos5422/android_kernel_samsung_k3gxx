@@ -548,7 +548,11 @@ static int wlcore_irq_locked(struct wl1271 *wl)
 		 * wl1271_ps_elp_wakeup cannot be called concurrently.
 		 */
 		clear_bit(WL1271_FLAG_IRQ_RUNNING, &wl->flags);
+<<<<<<< HEAD
 		smp_mb__after_clear_bit();
+=======
+		smp_mb__after_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 		ret = wlcore_fw_status(wl, wl->fw_status_1, wl->fw_status_2);
 		if (ret < 0)

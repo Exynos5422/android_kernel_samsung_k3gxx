@@ -59,7 +59,11 @@ static const unsigned xscale_perf_map[PERF_COUNT_HW_MAX] = {
 	[PERF_COUNT_HW_STALLED_CYCLES_BACKEND]	= HW_OP_UNSUPPORTED,
 };
 
+<<<<<<< HEAD
 static const unsigned xscale_perf_cache_map[PERF_COUNT_HW_CACHE_MAX]
+=======
+static unsigned xscale_perf_cache_map[PERF_COUNT_HW_CACHE_MAX]
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 					   [PERF_COUNT_HW_CACHE_OP_MAX]
 					   [PERF_COUNT_HW_CACHE_RESULT_MAX] = {
 	[C(L1D)] = {

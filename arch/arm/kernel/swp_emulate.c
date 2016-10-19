@@ -205,7 +205,11 @@ static int swp_handler(struct pt_regs *regs, unsigned int instr)
 	}
 
 	if (current->pid != previous_pid) {
+<<<<<<< HEAD
 		pr_debug("\"%s\" (%ld) uses deprecated SWP{B} instruction\n",
+=======
+		pr_warn_ratelimited("\"%s\" (%ld) uses deprecated SWP{B} instruction\n",
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			 current->comm, (unsigned long)current->pid);
 		previous_pid = current->pid;
 	}

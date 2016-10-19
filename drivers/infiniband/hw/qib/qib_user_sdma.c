@@ -284,8 +284,12 @@ static int qib_user_sdma_pin_pages(const struct qib_devdata *dd,
 	int j;
 	int ret;
 
+<<<<<<< HEAD
 	ret = get_user_pages(current, current->mm, addr,
 			     npages, 0, 1, pages, NULL);
+=======
+	ret = get_user_pages_fast(addr, npages, 0, pages);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (ret != npages) {
 		int i;
@@ -830,10 +834,14 @@ int qib_user_sdma_writev(struct qib_ctxtdata *rcd,
 	while (dim) {
 		const int mxp = 8;
 
+<<<<<<< HEAD
 		down_write(&current->mm->mmap_sem);
 		ret = qib_user_sdma_queue_pkts(dd, pq, &list, iov, dim, mxp);
 		up_write(&current->mm->mmap_sem);
 
+=======
+		ret = qib_user_sdma_queue_pkts(dd, pq, &list, iov, dim, mxp);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (ret <= 0)
 			goto done_unlock;
 		else {

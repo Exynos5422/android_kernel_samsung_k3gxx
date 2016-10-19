@@ -14,9 +14,21 @@
 
 #include <linux/compiler.h>
 #include <asm/fpstate.h>
+<<<<<<< HEAD
 
 #define THREAD_SIZE_ORDER	1
 #define THREAD_SIZE		8192
+=======
+#include <asm/page.h>
+
+#ifndef CONFIG_4KSTACKS
+#define THREAD_SIZE_ORDER	1
+#else
+#define THREAD_SIZE_ORDER	0
+#endif
+
+#define THREAD_SIZE		(PAGE_SIZE << THREAD_SIZE_ORDER)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define THREAD_START_SP		(THREAD_SIZE - 8)
 
 #ifndef __ASSEMBLY__
@@ -58,7 +70,11 @@ struct thread_info {
 	struct cpu_context_save	cpu_context;	/* cpu context */
 	__u32			syscall;	/* syscall number */
 	__u8			used_cp[16];	/* thread used copro */
+<<<<<<< HEAD
 	unsigned long		tp_value;
+=======
+	unsigned long		tp_value[2];	/* TLS registers */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifdef CONFIG_CRUNCH
 	struct crunch_state	crunchstate;
 #endif
@@ -156,6 +172,10 @@ extern int vfp_restore_user_hwstate(struct user_vfp __user *,
 #define TIF_USING_IWMMXT	17
 #define TIF_MEMDIE		18	/* is terminating due to OOM killer */
 #define TIF_RESTORE_SIGMASK	20
+<<<<<<< HEAD
+=======
+#define TIF_MM_RELEASED		23	/* task MM has been released */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define _TIF_SIGPENDING		(1 << TIF_SIGPENDING)
 #define _TIF_NEED_RESCHED	(1 << TIF_NEED_RESCHED)

@@ -88,7 +88,11 @@ int ubifs_add_orphan(struct ubifs_info *c, ino_t inum)
 		else if (inum > o->inum)
 			p = &(*p)->rb_right;
 		else {
+<<<<<<< HEAD
 			ubifs_err("orphaned twice");
+=======
+			ubifs_err("orphaned twice", c->vi.ubi_num);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			spin_unlock(&c->orphan_lock);
 			kfree(orphan);
 			return 0;
@@ -155,7 +159,11 @@ void ubifs_delete_orphan(struct ubifs_info *c, ino_t inum)
 		}
 	}
 	spin_unlock(&c->orphan_lock);
+<<<<<<< HEAD
 	ubifs_err("missing orphan ino %lu", (unsigned long)inum);
+=======
+	ubifs_err("missing orphan ino %lu", c->vi.ubi_num, (unsigned long)inum);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	dump_stack();
 }
 
@@ -287,7 +295,11 @@ static int write_orph_node(struct ubifs_info *c, int atomic)
 			 * We limit the number of orphans so that this should
 			 * never happen.
 			 */
+<<<<<<< HEAD
 			ubifs_err("out of space in orphan area");
+=======
+			ubifs_err("out of space in orphan area", c->vi.ubi_num);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			return -EINVAL;
 		}
 	}
@@ -398,7 +410,11 @@ static int consolidate(struct ubifs_info *c)
 		 * We limit the number of orphans so that this should
 		 * never happen.
 		 */
+<<<<<<< HEAD
 		ubifs_err("out of space in orphan area");
+=======
+		ubifs_err("out of space in orphan area", c->vi.ubi_num);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		err = -EINVAL;
 	}
 	spin_unlock(&c->orphan_lock);
@@ -571,7 +587,12 @@ static int do_kill_orphans(struct ubifs_info *c, struct ubifs_scan_leb *sleb,
 	list_for_each_entry(snod, &sleb->nodes, list) {
 		if (snod->type != UBIFS_ORPH_NODE) {
 			ubifs_err("invalid node type %d in orphan area at %d:%d",
+<<<<<<< HEAD
 				  snod->type, sleb->lnum, snod->offs);
+=======
+				  c->vi.ubi_num, snod->type, sleb->lnum,
+				  snod->offs);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			ubifs_dump_node(c, snod->node);
 			return -EINVAL;
 		}
@@ -598,7 +619,12 @@ static int do_kill_orphans(struct ubifs_info *c, struct ubifs_scan_leb *sleb,
 			 */
 			if (!first) {
 				ubifs_err("out of order commit number %llu in orphan node at %d:%d",
+<<<<<<< HEAD
 					  cmt_no, sleb->lnum, snod->offs);
+=======
+					  c->vi.ubi_num, cmt_no, sleb->lnum,
+					  snod->offs);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				ubifs_dump_node(c, snod->node);
 				return -EINVAL;
 			}
@@ -850,12 +876,22 @@ static int dbg_orphan_check(struct ubifs_info *c, struct ubifs_zbranch *zbr,
 		/* Lowest node type is the inode node, so it comes first */
 		if (key_type(c, &zbr->key) != UBIFS_INO_KEY)
 			ubifs_err("found orphan node ino %lu, type %d",
+<<<<<<< HEAD
 				  (unsigned long)inum, key_type(c, &zbr->key));
+=======
+				  c->vi.ubi_num, (unsigned long)inum,
+				  key_type(c, &zbr->key));
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		ci->last_ino = inum;
 		ci->tot_inos += 1;
 		err = ubifs_tnc_read_node(c, zbr, ci->node);
 		if (err) {
+<<<<<<< HEAD
 			ubifs_err("node read failed, error %d", err);
+=======
+			ubifs_err("node read failed, error %d", c->vi.ubi_num,
+				  err);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			return err;
 		}
 		if (ci->node->nlink == 0)
@@ -863,7 +899,11 @@ static int dbg_orphan_check(struct ubifs_info *c, struct ubifs_zbranch *zbr,
 			if (!dbg_find_check_orphan(&ci->root, inum) &&
 			    !dbg_find_orphan(c, inum)) {
 				ubifs_err("missing orphan, ino %lu",
+<<<<<<< HEAD
 					  (unsigned long)inum);
+=======
+					  c->vi.ubi_num, (unsigned long)inum);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				ci->missing += 1;
 			}
 	}
@@ -905,7 +945,12 @@ static int dbg_scan_orphans(struct ubifs_info *c, struct check_info *ci)
 
 	buf = __vmalloc(c->leb_size, GFP_NOFS, PAGE_KERNEL);
 	if (!buf) {
+<<<<<<< HEAD
 		ubifs_err("cannot allocate memory to check orphans");
+=======
+		ubifs_err("cannot allocate memory to check orphans",
+				c->vi.ubi_num);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return 0;
 	}
 
@@ -943,7 +988,11 @@ static int dbg_check_orphans(struct ubifs_info *c)
 	ci.root = RB_ROOT;
 	ci.node = kmalloc(UBIFS_MAX_INO_NODE_SZ, GFP_NOFS);
 	if (!ci.node) {
+<<<<<<< HEAD
 		ubifs_err("out of memory");
+=======
+		ubifs_err("out of memory", c->vi.ubi_num);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return -ENOMEM;
 	}
 
@@ -953,12 +1002,20 @@ static int dbg_check_orphans(struct ubifs_info *c)
 
 	err = dbg_walk_index(c, &dbg_orphan_check, NULL, &ci);
 	if (err) {
+<<<<<<< HEAD
 		ubifs_err("cannot scan TNC, error %d", err);
+=======
+		ubifs_err("cannot scan TNC, error %d", c->vi.ubi_num, err);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		goto out;
 	}
 
 	if (ci.missing) {
+<<<<<<< HEAD
 		ubifs_err("%lu missing orphan(s)", ci.missing);
+=======
+		ubifs_err("%lu missing orphan(s)", c->vi.ubi_num, ci.missing);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		err = -EINVAL;
 		goto out;
 	}

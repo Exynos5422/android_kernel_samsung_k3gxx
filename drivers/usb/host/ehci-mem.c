@@ -93,7 +93,10 @@ static struct ehci_qh *ehci_qh_alloc (struct ehci_hcd *ehci, gfp_t flags)
 	qh->qh_dma = dma;
 	// INIT_LIST_HEAD (&qh->qh_list);
 	INIT_LIST_HEAD (&qh->qtd_list);
+<<<<<<< HEAD
 	INIT_LIST_HEAD(&qh->unlink_node);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/* dummy td enables safe urb queuing */
 	qh->dummy = ehci_qtd_alloc (ehci, flags);
@@ -160,12 +163,22 @@ static void ehci_mem_cleanup (struct ehci_hcd *ehci)
 static int ehci_mem_init (struct ehci_hcd *ehci, gfp_t flags)
 {
 	int i;
+<<<<<<< HEAD
+=======
+	size_t align;
+
+	align = ((ehci->pool_64_bit_align) ? 64 : 32);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/* QTDs for control/bulk/intr transfers */
 	ehci->qtd_pool = dma_pool_create ("ehci_qtd",
 			ehci_to_hcd(ehci)->self.controller,
 			sizeof (struct ehci_qtd),
+<<<<<<< HEAD
 			32 /* byte alignment (for hw parts) */,
+=======
+			align /* byte alignment (for hw parts) */,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			4096 /* can't cross 4K */);
 	if (!ehci->qtd_pool) {
 		goto fail;
@@ -175,7 +188,11 @@ static int ehci_mem_init (struct ehci_hcd *ehci, gfp_t flags)
 	ehci->qh_pool = dma_pool_create ("ehci_qh",
 			ehci_to_hcd(ehci)->self.controller,
 			sizeof(struct ehci_qh_hw),
+<<<<<<< HEAD
 			32 /* byte alignment (for hw parts) */,
+=======
+			align /* byte alignment (for hw parts) */,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			4096 /* can't cross 4K */);
 	if (!ehci->qh_pool) {
 		goto fail;

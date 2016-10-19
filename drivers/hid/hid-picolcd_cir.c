@@ -145,6 +145,11 @@ void picolcd_exit_cir(struct picolcd_data *data)
 	struct rc_dev *rdev = data->rc_dev;
 
 	data->rc_dev = NULL;
+<<<<<<< HEAD
 	rc_unregister_device(rdev);
+=======
+	if (rdev)
+		rc_unregister_device(rdev);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 

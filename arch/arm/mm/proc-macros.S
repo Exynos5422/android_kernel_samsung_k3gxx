@@ -30,8 +30,13 @@
  * act_mm - get current->active_mm
  */
 	.macro	act_mm, rd
+<<<<<<< HEAD
 	bic	\rd, sp, #8128
 	bic	\rd, \rd, #63
+=======
+	mov	\rd, sp, lsr #12 + THREAD_SIZE_ORDER
+	mov	\rd, \rd, lsl #12 + THREAD_SIZE_ORDER
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ldr	\rd, [\rd, #TI_TASK]
 	ldr	\rd, [\rd, #TSK_ACTIVE_MM]
 	.endm
@@ -112,6 +117,7 @@
  *  100x   1   0   1	r/o	no acc
  *  10x0   1   0   1	r/o	no acc
  *  1011   0   0   1	r/w	no acc
+<<<<<<< HEAD
  *  110x   0   1   0	r/w	r/o
  *  11x0   0   1   0	r/w	r/o
  *  1111   0   1   1	r/w	r/w
@@ -119,6 +125,11 @@
  * If !CONFIG_CPU_USE_DOMAINS, the following permissions are changed:
  *  110x   1   1   1	r/o	r/o
  *  11x0   1   1   1	r/o	r/o
+=======
+ *  110x   1   1   1	r/o	r/o
+ *  11x0   1   1   1	r/o	r/o
+ *  1111   0   1   1	r/w	r/w
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  */
 	.macro	armv6_mt_table pfx
 \pfx\()_mt_table:
@@ -137,7 +148,11 @@
 	.long	PTE_EXT_TEX(2)					@ L_PTE_MT_DEV_NONSHARED
 	.long	0x00						@ unused
 	.long	0x00						@ unused
+<<<<<<< HEAD
 	.long	0x00						@ unused
+=======
+	.long	PTE_CACHEABLE | PTE_BUFFERABLE | PTE_EXT_APX	@ L_PTE_MT_VECTORS
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	.endm
 
 	.macro	armv6_set_pte_ext pfx
@@ -158,24 +173,40 @@
 
 	tst	r1, #L_PTE_USER
 	orrne	r3, r3, #PTE_EXT_AP1
+<<<<<<< HEAD
 #ifdef CONFIG_CPU_USE_DOMAINS
 	@ allow kernel read/write access to read-only user pages
 	tstne	r3, #PTE_EXT_APX
 	bicne	r3, r3, #PTE_EXT_APX | PTE_EXT_AP0
 #endif
+=======
+	tstne	r3, #PTE_EXT_APX
+
+	@ user read-only -> kernel read-only
+	bicne	r3, r3, #PTE_EXT_AP0
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	tst	r1, #L_PTE_XN
 	orrne	r3, r3, #PTE_EXT_XN
 
+<<<<<<< HEAD
 	orr	r3, r3, r2
+=======
+	eor	r3, r3, r2
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	tst	r1, #L_PTE_YOUNG
 	tstne	r1, #L_PTE_PRESENT
 	moveq	r3, #0
+<<<<<<< HEAD
 #ifndef CONFIG_CPU_USE_DOMAINS
 	tstne	r1, #L_PTE_NONE
 	movne	r3, #0
 #endif
+=======
+	tstne	r1, #L_PTE_NONE
+	movne	r3, #0
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	str	r3, [r0]
 	mcr	p15, 0, r0, c7, c10, 1		@ flush_pte
@@ -316,6 +347,11 @@ ENTRY(\name\()_cache_fns)
 	.long	\name\()_flush_kern_dcache_area
 	.long	\name\()_dma_map_area
 	.long	\name\()_dma_unmap_area
+<<<<<<< HEAD
+=======
+	.long   \name\()_dma_inv_range
+	.long   \name\()_dma_clean_range
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	.long	\name\()_dma_flush_range
 	.size	\name\()_cache_fns, . - \name\()_cache_fns
 .endm

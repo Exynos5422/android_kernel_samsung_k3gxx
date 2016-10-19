@@ -82,7 +82,11 @@ ext4_unaligned_aio(struct inode *inode, const struct iovec *iov,
 	size_t count = iov_length(iov, nr_segs);
 	loff_t final_size = pos + count;
 
+<<<<<<< HEAD
 	if (pos >= inode->i_size)
+=======
+	if (pos >= i_size_read(inode))
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return 0;
 
 	if ((pos & blockmask) || (final_size & blockmask))
@@ -211,6 +215,7 @@ static int ext4_file_mmap(struct file *file, struct vm_area_struct *vma)
 	if (!mapping->a_ops->readpage)
 		return -ENOEXEC;
 	file_accessed(file);
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_IOMMU_OPT
 	if (vma->vm_end - vma->vm_start) {
 		/* iommu optimization- needs to be turned ON from
@@ -219,6 +224,8 @@ static int ext4_file_mmap(struct file *file, struct vm_area_struct *vma)
 		cpu_v7_tima_iommu_opt(vma->vm_start, vma->vm_end, (unsigned long)vma->vm_mm->pgd);
 	}
 #endif /* CONFIG_TIMA_IOMMU_OPT */
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	vma->vm_ops = &ext4_file_vm_ops;
 	return 0;
 }

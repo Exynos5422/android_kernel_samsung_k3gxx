@@ -55,7 +55,11 @@ extern int usb_match_one_id_intf(struct usb_device *dev,
 extern int usb_match_device(struct usb_device *dev,
 			    const struct usb_device_id *id);
 extern void usb_forced_unbind_intf(struct usb_interface *intf);
+<<<<<<< HEAD
 extern void usb_rebind_intf(struct usb_interface *intf);
+=======
+extern void usb_unbind_and_rebind_marked_interfaces(struct usb_device *udev);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 extern int usb_hub_claim_port(struct usb_device *hdev, unsigned port,
 		struct dev_state *owner);
@@ -122,6 +126,13 @@ static inline int usb_set_usb2_hardware_lpm(struct usb_device *udev, int enable)
 }
 #endif
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_USB_OTG
+extern void usb_hnp_polling_work(struct work_struct *work);
+#endif
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 extern struct bus_type usb_bus_type;
 extern struct device_type usb_device_type;
 extern struct device_type usb_if_device_type;
@@ -177,6 +188,10 @@ extern void usb_devio_cleanup(void);
 /* internal notify stuff */
 extern void usb_notify_add_device(struct usb_device *udev);
 extern void usb_notify_remove_device(struct usb_device *udev);
+<<<<<<< HEAD
+=======
+extern void usb_notify_config_device(struct usb_device *udev);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 extern void usb_notify_add_bus(struct usb_bus *ubus);
 extern void usb_notify_remove_bus(struct usb_bus *ubus);
 extern enum usb_port_connect_type

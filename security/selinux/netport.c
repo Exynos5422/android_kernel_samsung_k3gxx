@@ -41,6 +41,10 @@
 
 #include "netport.h"
 #include "objsec.h"
+<<<<<<< HEAD
+=======
+#include "avc.h"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define SEL_NETPORT_HASH_SIZE       256
 #define SEL_NETPORT_HASH_BKT_LIMIT   16
@@ -217,7 +221,11 @@ int sel_netport_sid(u8 protocol, u16 pnum, u32 *sid)
  * Remove all entries from the network address table.
  *
  */
+<<<<<<< HEAD
 static void sel_netport_flush(void)
+=======
+void sel_netport_flush(void)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	unsigned int idx;
 	struct sel_netport *port, *port_tmp;
@@ -234,6 +242,7 @@ static void sel_netport_flush(void)
 	spin_unlock_bh(&sel_netport_lock);
 }
 
+<<<<<<< HEAD
 static int sel_netport_avc_callback(u32 event)
 {
 	if (event == AVC_CALLBACK_RESET) {
@@ -243,11 +252,16 @@ static int sel_netport_avc_callback(u32 event)
 	return 0;
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static __init int sel_netport_init(void)
 {
 	int iter;
 	int ret;
+<<<<<<< HEAD
  
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (!selinux_enabled)
 		return 0;
@@ -257,10 +271,13 @@ static __init int sel_netport_init(void)
 		sel_netport_hash[iter].size = 0;
 	}
 
+<<<<<<< HEAD
 	ret = avc_add_callback(sel_netport_avc_callback, AVC_CALLBACK_RESET);
 	if (ret != 0)
 		panic("avc_add_callback() failed, error %d\n", ret);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return ret;
 }
 

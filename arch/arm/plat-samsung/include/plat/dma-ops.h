@@ -29,7 +29,10 @@ struct samsung_dma_prep {
 	unsigned long len;
 	void (*fp)(void *data);
 	void *fp_param;
+<<<<<<< HEAD
 	unsigned int infiniteloop;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 struct samsung_dma_config {
@@ -46,7 +49,10 @@ struct samsung_dma_ops {
 	int (*prepare)(unsigned ch, struct samsung_dma_prep *param);
 	int (*trigger)(unsigned ch);
 	int (*started)(unsigned ch);
+<<<<<<< HEAD
 	int (*getposition)(unsigned ch, dma_addr_t *src, dma_addr_t *dst);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	int (*flush)(unsigned ch);
 	int (*stop)(unsigned ch);
 };

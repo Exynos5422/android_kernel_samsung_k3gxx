@@ -20,7 +20,11 @@
 #include <linux/threads.h>
 #include <asm/irq.h>
 
+<<<<<<< HEAD
 #define NR_IPI	4
+=======
+#define NR_IPI	8
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 typedef struct {
 	unsigned int __softirq_pending;

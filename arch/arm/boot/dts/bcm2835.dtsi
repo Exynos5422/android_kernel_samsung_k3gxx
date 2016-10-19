@@ -85,6 +85,11 @@
 			reg = <0x7e205000 0x1000>;
 			interrupts = <2 21>;
 			clocks = <&clk_i2c>;
+<<<<<<< HEAD
+=======
+			#address-cells = <1>;
+			#size-cells = <0>;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			status = "disabled";
 		};
 
@@ -93,6 +98,11 @@
 			reg = <0x7e804000 0x1000>;
 			interrupts = <2 21>;
 			clocks = <&clk_i2c>;
+<<<<<<< HEAD
+=======
+			#address-cells = <1>;
+			#size-cells = <0>;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			status = "disabled";
 		};
 

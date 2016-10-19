@@ -47,8 +47,11 @@ struct device_node;
 
 #define FB_MISC_PRIM_COLOR	1
 #define FB_MISC_1ST_DETAIL	2	/* First Detailed Timing is preferred */
+<<<<<<< HEAD
 #define FB_MISC_HDMI		4	/* display supports HDMI signaling */
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 struct fb_chroma {
 	__u32 redx;	/* in fraction of 1024 */
 	__u32 greenx;
@@ -88,11 +91,14 @@ struct fb_monspecs {
 	__u8  revision;			/* ...and revision */
 	__u8  max_x;			/* Maximum horizontal size (cm) */
 	__u8  max_y;			/* Maximum vertical size (cm) */
+<<<<<<< HEAD
 	struct fb_video *videodb;	/* video database */
 	__u32 videodb_len;		/* video database length */
 	struct fb_audio *audiodb;	/* audio database */
 	__u32 audiodb_len;		/* audio database length */
 	struct fb_vendor *vsdb;		/* video specific database */
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 struct fb_cmap_user {
@@ -451,9 +457,12 @@ struct fb_tile_ops {
    output like oopses */
 #define FBINFO_CAN_FORCE_OUTPUT     0x200000
 
+<<<<<<< HEAD
 /* for esd */
 #define FBINFO_MISC_ESD_DETECTED     0x400000
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 struct fb_info {
 	atomic_t count;
 	int node;
@@ -469,6 +478,7 @@ struct fb_info {
 	struct fb_cmap cmap;		/* Current cmap */
 	struct list_head modelist;      /* mode list */
 	struct fb_videomode *mode;	/* current mode */
+<<<<<<< HEAD
 
 #ifdef CONFIG_FB_BACKLIGHT
 	/* assigned backlight device */
@@ -480,6 +490,10 @@ struct fb_info {
 	struct mutex bl_curve_mutex;	
 	u8 bl_curve[FB_BACKLIGHT_LEVELS];
 #endif
+=======
+	struct file *file;		/* current file node */
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifdef CONFIG_FB_DEFERRED_IO
 	struct delayed_work deferred_work;
 	struct fb_deferred_io *fbdefio;
@@ -720,6 +734,7 @@ extern int fb_validate_mode(const struct fb_var_screeninfo *var,
 			    struct fb_info *info);
 extern int fb_parse_edid(unsigned char *edid, struct fb_var_screeninfo *var);
 extern const unsigned char *fb_firmware_edid(struct device *device);
+<<<<<<< HEAD
 extern int fb_edid_to_monspecs(unsigned char *edid,
 				struct fb_monspecs *specs);
 extern int fb_edid_add_monspecs(unsigned char *edid,
@@ -728,6 +743,13 @@ extern void fb_destroy_modedb(struct fb_videomode *modedb);
 extern void fb_destroy_audiodb(struct fb_audio *audiodb);
 extern void fb_destroy_videodb(struct fb_video *videodb);
 extern void fb_destroy_vsdb(struct fb_vendor *vsdb);
+=======
+extern void fb_edid_to_monspecs(unsigned char *edid,
+				struct fb_monspecs *specs);
+extern void fb_edid_add_monspecs(unsigned char *edid,
+				 struct fb_monspecs *specs);
+extern void fb_destroy_modedb(struct fb_videomode *modedb);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 extern int fb_find_mode_cvt(struct fb_videomode *mode, int margins, int rb);
 extern unsigned char *fb_ddc_read(struct i2c_adapter *adapter);
 
@@ -739,8 +761,11 @@ extern int fb_videomode_from_videomode(const struct videomode *vm,
 
 /* drivers/video/modedb.c */
 #define VESA_MODEDB_SIZE 34
+<<<<<<< HEAD
 #define CEA_MODEDB_SIZE 65
 #define UD_MODEDB_SIZE 4
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 extern void fb_var_to_videomode(struct fb_videomode *mode,
 				const struct fb_var_screeninfo *var);
 extern void fb_videomode_to_var(struct fb_var_screeninfo *var,
@@ -791,6 +816,7 @@ struct fb_videomode {
 	u32 flag;
 };
 
+<<<<<<< HEAD
 #define FB_AUDIO_LPCM	1
 
 #define FB_AUDIO_192KHZ	(1 << 6)
@@ -843,6 +869,11 @@ extern const char *fb_mode_option;
 extern const struct fb_videomode vesa_modes[];
 extern const struct fb_videomode cea_modes[];
 extern const struct fb_videomode ud_modes[];
+=======
+extern const char *fb_mode_option;
+extern const struct fb_videomode vesa_modes[];
+extern const struct fb_videomode cea_modes[64];
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 struct fb_modelist {
 	struct list_head list;

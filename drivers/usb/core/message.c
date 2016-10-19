@@ -146,10 +146,13 @@ int usb_control_msg(struct usb_device *dev, unsigned int pipe, __u8 request,
 	dr->wIndex = cpu_to_le16(index);
 	dr->wLength = cpu_to_le16(size);
 
+<<<<<<< HEAD
 	if (request == USB_REQ_GET_STATUS && 
 		(requesttype & USB_RECIP_DEVICE) == USB_RECIP_DEVICE)
 		dev_dbg(&dev->dev, "(%d)send start USB_REQ_GET_STATUS\n", index);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ret = usb_internal_control_msg(dev, pipe, dr, data, size, timeout);
 
 	kfree(dr);
@@ -1847,6 +1850,12 @@ free_interfaces:
 	}
 	kfree(new_interfaces);
 
+<<<<<<< HEAD
+=======
+	dev->actconfig = cp;
+	if (cp)
+		usb_notify_config_device(dev);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ret = usb_control_msg(dev, usb_sndctrlpipe(dev, 0),
 			      USB_REQ_SET_CONFIGURATION, 0, configuration, 0,
 			      NULL, 0, USB_CTRL_SET_TIMEOUT);
@@ -1861,6 +1870,7 @@ free_interfaces:
 			put_device(&cp->interface[i]->dev);
 			cp->interface[i] = NULL;
 		}
+<<<<<<< HEAD
 		cp = NULL;
 	}
 
@@ -1868,6 +1878,15 @@ free_interfaces:
 	mutex_unlock(hcd->bandwidth_mutex);
 
 	if (!cp) {
+=======
+		dev->actconfig = cp = NULL;
+	}
+
+	mutex_unlock(hcd->bandwidth_mutex);
+
+	if (!cp) {
+		usb_notify_config_device(dev);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		usb_set_device_state(dev, USB_STATE_ADDRESS);
 
 		/* Leave LPM disabled while the device is unconfigured. */
@@ -1875,6 +1894,11 @@ free_interfaces:
 		return ret;
 	}
 	usb_set_device_state(dev, USB_STATE_CONFIGURED);
+<<<<<<< HEAD
+=======
+	if (dev->parent && hcd->driver->udev_enum_done)
+		hcd->driver->udev_enum_done(hcd);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (cp->string == NULL &&
 			!(dev->quirks & USB_QUIRK_CONFIG_INTF_STRINGS))

@@ -252,7 +252,11 @@ static int pppoatm_may_send(struct pppoatm_vcc *pvcc, int size)
 	 * we need to ensure there's a memory barrier after it. The bit
 	 * *must* be set before we do the atomic_inc() on pvcc->inflight.
 	 * There's no smp_mb__after_set_bit(), so it's this or abuse
+<<<<<<< HEAD
 	 * smp_mb__after_clear_bit().
+=======
+	 * smp_mb__after_atomic().
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	 */
 	test_and_set_bit(BLOCKED, &pvcc->blocked);
 

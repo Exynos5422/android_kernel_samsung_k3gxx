@@ -42,6 +42,7 @@ extern struct dma_chan *of_dma_request_slave_channel(struct device_node *np,
 						     const char *name);
 extern struct dma_chan *of_dma_simple_xlate(struct of_phandle_args *dma_spec,
 		struct of_dma *ofdma);
+<<<<<<< HEAD
 extern unsigned int of_dma_get_mcode_addr(struct device_node *np);
 extern bool of_dma_secure_mode(struct device_node *np);
 #else
@@ -53,6 +54,9 @@ static inline bool of_dma_secure_mode(struct device_node *np)
 {
 	return -ENODEV;
 }
+=======
+#else
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static inline int of_dma_controller_register(struct device_node *np,
 		struct dma_chan *(*of_dma_xlate)
 		(struct of_phandle_args *, struct of_dma *),

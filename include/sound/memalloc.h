@@ -103,7 +103,11 @@ static inline dma_addr_t snd_sgbuf_get_addr(struct snd_dma_buffer *dmab,
 {
 	struct snd_sg_buf *sgbuf = dmab->private_data;
 	dma_addr_t addr = sgbuf->table[offset >> PAGE_SHIFT].addr;
+<<<<<<< HEAD
 	addr &= PAGE_MASK;
+=======
+	addr &= ~((dma_addr_t)PAGE_SIZE - 1);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return addr + offset % PAGE_SIZE;
 }
 

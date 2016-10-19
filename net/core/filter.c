@@ -36,7 +36,10 @@
 #include <asm/uaccess.h>
 #include <asm/unaligned.h>
 #include <linux/filter.h>
+<<<<<<< HEAD
 #include <linux/reciprocal_div.h>
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <linux/ratelimit.h>
 #include <linux/seccomp.h>
 #include <linux/if_vlan.h>
@@ -166,7 +169,11 @@ unsigned int sk_run_filter(const struct sk_buff *skb,
 			A /= X;
 			continue;
 		case BPF_S_ALU_DIV_K:
+<<<<<<< HEAD
 			A = reciprocal_divide(A, K);
+=======
+			A /= K;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			continue;
 		case BPF_S_ALU_MOD_X:
 			if (X == 0)
@@ -356,6 +363,11 @@ load_b:
 
 			if (skb_is_nonlinear(skb))
 				return 0;
+<<<<<<< HEAD
+=======
+			if (skb->len < sizeof(struct nlattr))
+				return 0;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			if (A > skb->len - sizeof(struct nlattr))
 				return 0;
 
@@ -372,11 +384,20 @@ load_b:
 
 			if (skb_is_nonlinear(skb))
 				return 0;
+<<<<<<< HEAD
+=======
+			if (skb->len < sizeof(struct nlattr))
+				return 0;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			if (A > skb->len - sizeof(struct nlattr))
 				return 0;
 
 			nla = (struct nlattr *)&skb->data[A];
+<<<<<<< HEAD
 			if (nla->nla_len > A - skb->len)
+=======
+			if (nla->nla_len > skb->len - A)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				return 0;
 
 			nla = nla_find_nested(nla, X);
@@ -553,11 +574,14 @@ int sk_chk_filter(struct sock_filter *filter, unsigned int flen)
 		/* Some instructions need special checks */
 		switch (code) {
 		case BPF_S_ALU_DIV_K:
+<<<<<<< HEAD
 			/* check for division by zero */
 			if (ftest->k == 0)
 				return -EINVAL;
 			ftest->k = reciprocal_value(ftest->k);
 			break;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		case BPF_S_ALU_MOD_K:
 			/* check for division by zero */
 			if (ftest->k == 0)
@@ -853,6 +877,7 @@ void sk_decode_filter(struct sock_filter *filt, struct sock_filter *to)
 	to->code = decodes[code];
 	to->jt = filt->jt;
 	to->jf = filt->jf;
+<<<<<<< HEAD
 
 	if (code == BPF_S_ALU_DIV_K) {
 		/*
@@ -874,6 +899,9 @@ void sk_decode_filter(struct sock_filter *filt, struct sock_filter *to)
 		BUG_ON(reciprocal_value(to->k) != filt->k);
 	} else
 		to->k = filt->k;
+=======
+	to->k = filt->k;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 int sk_get_filter(struct sock *sk, struct sock_filter __user *ubuf, unsigned int len)

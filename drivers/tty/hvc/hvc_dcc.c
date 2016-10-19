@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 /* Copyright (c) 2010, Code Aurora Forum. All rights reserved.
+=======
+/* Copyright (c) 2010, 2014 The Linux Foundation. All rights reserved.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -8,6 +12,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+<<<<<<< HEAD
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
@@ -22,6 +27,14 @@
 #include <linux/moduleparam.h>
 #include <linux/types.h>
 
+=======
+ */
+
+#include <linux/console.h>
+#include <linux/init.h>
+
+#include <asm/dcc.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <asm/processor.h>
 
 #include "hvc_console.h"
@@ -30,6 +43,7 @@
 #define DCC_STATUS_RX		(1 << 30)
 #define DCC_STATUS_TX		(1 << 29)
 
+<<<<<<< HEAD
 static inline u32 __dcc_getstatus(void)
 {
 	u32 __ret;
@@ -59,6 +73,8 @@ static inline void __dcc_putchar(char c)
 	isb();
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int hvc_dcc_put_chars(uint32_t vt, const char *buf, int count)
 {
 	int i;

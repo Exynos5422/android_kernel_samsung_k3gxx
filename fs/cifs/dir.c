@@ -491,6 +491,10 @@ cifs_atomic_open(struct inode *inode, struct dentry *direntry,
 		if (server->ops->close)
 			server->ops->close(xid, tcon, &fid);
 		cifs_del_pending_open(&open);
+<<<<<<< HEAD
+=======
+		fput(file);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		rc = -ENOMEM;
 	}
 

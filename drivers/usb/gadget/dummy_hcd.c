@@ -923,8 +923,14 @@ static int dummy_udc_stop(struct usb_gadget *g,
 	struct dummy_hcd	*dum_hcd = gadget_to_dummy_hcd(g);
 	struct dummy		*dum = dum_hcd->dum;
 
+<<<<<<< HEAD
 	dev_dbg(udc_dev(dum), "unregister gadget driver '%s'\n",
 			driver->driver.name);
+=======
+	if (driver)
+		dev_dbg(udc_dev(dum), "unregister gadget driver '%s'\n",
+				driver->driver.name);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	dum->driver = NULL;
 
@@ -1000,8 +1006,13 @@ static int dummy_udc_remove(struct platform_device *pdev)
 {
 	struct dummy	*dum = platform_get_drvdata(pdev);
 
+<<<<<<< HEAD
 	usb_del_gadget_udc(&dum->gadget);
 	device_remove_file(&dum->gadget.dev, &dev_attr_function);
+=======
+	device_remove_file(&dum->gadget.dev, &dev_attr_function);
+	usb_del_gadget_udc(&dum->gadget);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 

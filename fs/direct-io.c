@@ -380,19 +380,43 @@ static inline void dio_bio_submit(struct dio *dio, struct dio_submit *sdio)
 	if (dio->is_async && dio->rw == READ)
 		bio_set_pages_dirty(bio);
 
+<<<<<<< HEAD
 	dio->rw = (dio->rw == READ) ? KERNEL_READ : KERNEL_WRITE;
+=======
+	bio->bi_dio_inode = dio->inode;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (sdio->submit_io)
 		sdio->submit_io(dio->rw, bio, dio->inode,
 			       sdio->logical_offset_in_bio);
 	else
 		submit_bio(dio->rw, bio);
+<<<<<<< HEAD
 	dio->rw = (dio->rw == KERNEL_READ) ? READ : WRITE;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	sdio->bio = NULL;
 	sdio->boundary = 0;
 	sdio->logical_offset_in_bio = 0;
 }
 
+<<<<<<< HEAD
+=======
+struct inode *dio_bio_get_inode(struct bio *bio)
+{
+	struct inode *inode = NULL;
+
+	if (bio == NULL)
+		return NULL;
+
+	inode = bio->bi_dio_inode;
+
+	return inode;
+}
+EXPORT_SYMBOL(dio_bio_get_inode);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * Release any resources in case of a failure
  */

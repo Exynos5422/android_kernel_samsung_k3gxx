@@ -69,9 +69,12 @@ extern struct processor {
 	void (*set_pte_ext)(pte_t *ptep, pte_t pte);
 #else
 	void (*set_pte_ext)(pte_t *ptep, pte_t pte, unsigned int ext);
+<<<<<<< HEAD
 # ifdef CONFIG_TIMA_RKP_L2_TABLES
 	void (*tima_set_pte_ext)(pte_t *ptep, pte_t pte, unsigned int ext);
 # endif	
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif
 
 	/* Suspend/resume */
@@ -89,9 +92,12 @@ extern void cpu_do_switch_mm(unsigned long pgd_phys, struct mm_struct *mm);
 #ifdef CONFIG_ARM_LPAE
 extern void cpu_set_pte_ext(pte_t *ptep, pte_t pte);
 #else
+<<<<<<< HEAD
 # ifdef CONFIG_TIMA_RKP_L2_TABLES
 extern void cpu_tima_set_pte_ext(pte_t *ptep, pte_t pte, unsigned int ext);
 # endif	
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 extern void cpu_set_pte_ext(pte_t *ptep, pte_t pte, unsigned int ext);
 #endif
 extern void cpu_reset(unsigned long addr) __attribute__((noreturn));

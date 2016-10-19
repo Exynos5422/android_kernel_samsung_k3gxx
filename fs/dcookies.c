@@ -204,7 +204,11 @@ out:
 }
 
 #ifdef CONFIG_COMPAT
+<<<<<<< HEAD
 COMPAT_SYSCALL_DEFINE4(lookup_dcookie, u32, w0, u32, w1, char __user *, buf, size_t, len)
+=======
+COMPAT_SYSCALL_DEFINE4(lookup_dcookie, u32, w0, u32, w1, char __user *, buf, compat_size_t, len)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 #ifdef __BIG_ENDIAN
 	return sys_lookup_dcookie(((u64)w0 << 32) | w1, buf, len);

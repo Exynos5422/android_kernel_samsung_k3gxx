@@ -21,6 +21,7 @@
 #include <linux/clk.h>
 #include <linux/io.h>
 #include <linux/pwm.h>
+<<<<<<< HEAD
 #include <linux/of.h>
 #include <linux/spinlock.h>
 
@@ -104,10 +105,48 @@ int pwm_check_enable_cnt(void)
 	return pwm_enable_cnt;
 }
 EXPORT_SYMBOL_GPL(pwm_check_enable_cnt);
+=======
+
+#include <mach/map.h>
+
+#include <plat/regs-timer.h>
+
+struct s3c_chip {
+	struct platform_device	*pdev;
+
+	struct clk		*clk_div;
+	struct clk		*clk;
+	const char		*label;
+
+	unsigned int		 period_ns;
+	unsigned int		 duty_ns;
+
+	unsigned char		 tcon_base;
+	unsigned char		 pwm_id;
+	struct pwm_chip		 chip;
+};
+
+#define to_s3c_chip(chip)	container_of(chip, struct s3c_chip, chip)
+
+#define pwm_dbg(_pwm, msg...) dev_dbg(&(_pwm)->pdev->dev, msg)
+
+static struct clk *clk_scaler[2];
+
+static inline int pwm_is_tdiv(struct s3c_chip *chip)
+{
+	return clk_get_parent(chip->clk) == chip->clk_div;
+}
+
+#define pwm_tcon_start(pwm) (1 << (pwm->tcon_base + 0))
+#define pwm_tcon_invert(pwm) (1 << (pwm->tcon_base + 2))
+#define pwm_tcon_autoreload(pwm) (1 << (pwm->tcon_base + 3))
+#define pwm_tcon_manulupdate(pwm) (1 << (pwm->tcon_base + 1))
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 static int s3c_pwm_enable(struct pwm_chip *chip, struct pwm_device *pwm)
 {
 	struct s3c_chip *s3c = to_s3c_chip(chip);
+<<<<<<< HEAD
 	struct s3c_pwm_device *s3c_pwm = pwm_get_chip_data(pwm);
 	void __iomem *reg_base = s3c->reg_base;
 	unsigned long flags;
@@ -150,12 +189,26 @@ static int s3c_pwm_enable(struct pwm_chip *chip, struct pwm_device *pwm)
 	pwm_enable_cnt++;
 
 	spin_unlock_irqrestore(&pwm_spinlock, flags);
+=======
+	unsigned long flags;
+	unsigned long tcon;
+
+	local_irq_save(flags);
+
+	tcon = __raw_readl(S3C2410_TCON);
+	tcon |= pwm_tcon_start(s3c);
+	__raw_writel(tcon, S3C2410_TCON);
+
+	local_irq_restore(flags);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 
 static void s3c_pwm_disable(struct pwm_chip *chip, struct pwm_device *pwm)
 {
 	struct s3c_chip *s3c = to_s3c_chip(chip);
+<<<<<<< HEAD
 	struct s3c_pwm_device *s3c_pwm = pwm_get_chip_data(pwm);
 	void __iomem *reg_base = s3c->reg_base;
 	unsigned long flags;
@@ -190,6 +243,27 @@ static unsigned long pwm_calc_tin(struct pwm_device *pwm, unsigned long freq)
 
 	tin_parent_rate = clk_get_rate(clk_get_parent(s3c_pwm->clk_div));
 	clk_set_rate(clk_get_parent(s3c_pwm->clk_div),tin_parent_rate);
+=======
+	unsigned long flags;
+	unsigned long tcon;
+
+	local_irq_save(flags);
+
+	tcon = __raw_readl(S3C2410_TCON);
+	tcon &= ~pwm_tcon_start(s3c);
+	__raw_writel(tcon, S3C2410_TCON);
+
+	local_irq_restore(flags);
+}
+
+static unsigned long pwm_calc_tin(struct s3c_chip *s3c, unsigned long freq)
+{
+	unsigned long tin_parent_rate;
+	unsigned int div;
+
+	tin_parent_rate = clk_get_rate(clk_get_parent(s3c->clk_div));
+	pwm_dbg(s3c, "tin parent at %lu\n", tin_parent_rate);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	for (div = 2; div <= 16; div *= 2) {
 		if ((tin_parent_rate / (div << 16)) < freq)
@@ -199,12 +273,20 @@ static unsigned long pwm_calc_tin(struct pwm_device *pwm, unsigned long freq)
 	return tin_parent_rate / 16;
 }
 
+<<<<<<< HEAD
+=======
+#define NS_IN_HZ (1000000000UL)
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int s3c_pwm_config(struct pwm_chip *chip, struct pwm_device *pwm,
 		int duty_ns, int period_ns)
 {
 	struct s3c_chip *s3c = to_s3c_chip(chip);
+<<<<<<< HEAD
 	struct s3c_pwm_device *s3c_pwm = pwm_get_chip_data(pwm);
 	void __iomem *reg_base = s3c->reg_base;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	unsigned long tin_rate;
 	unsigned long tin_ns;
 	unsigned long period;
@@ -212,13 +294,17 @@ static int s3c_pwm_config(struct pwm_chip *chip, struct pwm_device *pwm,
 	unsigned long tcon;
 	unsigned long tcnt;
 	long tcmp;
+<<<<<<< HEAD
 	enum duty_cycle duty_cycle;
 	unsigned int id = pwm->pwm;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/* We currently avoid using 64bit arithmetic by using the
 	 * fact that anything faster than 1Hz is easily representable
 	 * by 32bits. */
 
+<<<<<<< HEAD
 	if (s3c->need_hw_init)
 		s3c_pwm_restore(s3c);
 
@@ -270,12 +356,54 @@ static int s3c_pwm_config(struct pwm_chip *chip, struct pwm_device *pwm,
 	else
 		duty_cycle = DUTY_CYCLE_PULSE;
 
+=======
+	if (period_ns > NS_IN_HZ || duty_ns > NS_IN_HZ)
+		return -ERANGE;
+
+	if (period_ns == s3c->period_ns &&
+	    duty_ns == s3c->duty_ns)
+		return 0;
+
+	/* The TCMP and TCNT can be read without a lock, they're not
+	 * shared between the timers. */
+
+	tcmp = __raw_readl(S3C2410_TCMPB(s3c->pwm_id));
+	tcnt = __raw_readl(S3C2410_TCNTB(s3c->pwm_id));
+
+	period = NS_IN_HZ / period_ns;
+
+	pwm_dbg(s3c, "duty_ns=%d, period_ns=%d (%lu)\n",
+		duty_ns, period_ns, period);
+
+	/* Check to see if we are changing the clock rate of the PWM */
+
+	if (s3c->period_ns != period_ns) {
+		if (pwm_is_tdiv(s3c)) {
+			tin_rate = pwm_calc_tin(s3c, period);
+			clk_set_rate(s3c->clk_div, tin_rate);
+		} else
+			tin_rate = clk_get_rate(s3c->clk);
+
+		s3c->period_ns = period_ns;
+
+		pwm_dbg(s3c, "tin_rate=%lu\n", tin_rate);
+
+		tin_ns = NS_IN_HZ / tin_rate;
+		tcnt = period_ns / tin_ns;
+	} else
+		tin_ns = NS_IN_HZ / clk_get_rate(s3c->clk);
+
+	/* Note, counters count down */
+
+	tcmp = duty_ns / tin_ns;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	tcmp = tcnt - tcmp;
 	/* the pwm hw only checks the compare register after a decrement,
 	   so the pin never toggles if tcmp = tcnt */
 	if (tcmp == tcnt)
 		tcmp--;
 
+<<<<<<< HEAD
 	/*
 	 * PWM counts 1 hidden tick at the end of each period on S3C64XX and
 	 * EXYNOS series, so tcmp and tcnt should be subtracted 1.
@@ -431,12 +559,41 @@ static void s3c_pwm_free(struct pwm_chip *chip,
 static struct pwm_ops s3c_pwm_ops = {
 	.request = s3c_pwm_request,
 	.free = s3c_pwm_free,
+=======
+	pwm_dbg(s3c, "tin_ns=%lu, tcmp=%ld/%lu\n", tin_ns, tcmp, tcnt);
+
+	if (tcmp < 0)
+		tcmp = 0;
+
+	/* Update the PWM register block. */
+
+	local_irq_save(flags);
+
+	__raw_writel(tcmp, S3C2410_TCMPB(s3c->pwm_id));
+	__raw_writel(tcnt, S3C2410_TCNTB(s3c->pwm_id));
+
+	tcon = __raw_readl(S3C2410_TCON);
+	tcon |= pwm_tcon_manulupdate(s3c);
+	tcon |= pwm_tcon_autoreload(s3c);
+	__raw_writel(tcon, S3C2410_TCON);
+
+	tcon &= ~pwm_tcon_manulupdate(s3c);
+	__raw_writel(tcon, S3C2410_TCON);
+
+	local_irq_restore(flags);
+
+	return 0;
+}
+
+static struct pwm_ops s3c_pwm_ops = {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	.enable = s3c_pwm_enable,
 	.disable = s3c_pwm_disable,
 	.config = s3c_pwm_config,
 	.owner = THIS_MODULE,
 };
 
+<<<<<<< HEAD
 static int s3c_pwm_clk_init(struct platform_device *pdev,
 				struct s3c_chip *s3c)
 {
@@ -521,11 +678,26 @@ static int s3c_pwm_probe(struct platform_device *pdev)
 	if (pwm_mem == NULL) {
 		dev_err(dev, "no memory resource specified\n");
 		return -ENOENT;
+=======
+static int s3c_pwm_probe(struct platform_device *pdev)
+{
+	struct device *dev = &pdev->dev;
+	struct s3c_chip *s3c;
+	unsigned long flags;
+	unsigned long tcon;
+	unsigned int id = pdev->id;
+	int ret;
+
+	if (id == 4) {
+		dev_err(dev, "TIMER4 is currently not supported\n");
+		return -ENXIO;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	s3c = devm_kzalloc(&pdev->dev, sizeof(*s3c), GFP_KERNEL);
 	if (s3c == NULL) {
 		dev_err(dev, "failed to allocate pwm_device\n");
+<<<<<<< HEAD
 		ret = -ENOMEM;
 		return ret;
 	}
@@ -552,15 +724,71 @@ static int s3c_pwm_probe(struct platform_device *pdev)
 	s3c->chip.npwm = NPWM;
 	s3c->pwm_type = s3c_pwm_get_driver_data(dev);
 	g_s3c = s3c;
+=======
+		return -ENOMEM;
+	}
+
+	/* calculate base of control bits in TCON */
+	s3c->tcon_base = id == 0 ? 0 : (id * 4) + 4;
+	s3c->pwm_id = id;
+	s3c->chip.dev = &pdev->dev;
+	s3c->chip.ops = &s3c_pwm_ops;
+	s3c->chip.base = -1;
+	s3c->chip.npwm = 1;
+
+	s3c->clk = devm_clk_get(dev, "pwm-tin");
+	if (IS_ERR(s3c->clk)) {
+		dev_err(dev, "failed to get pwm tin clk\n");
+		return PTR_ERR(s3c->clk);
+	}
+
+	s3c->clk_div = devm_clk_get(dev, "pwm-tdiv");
+	if (IS_ERR(s3c->clk_div)) {
+		dev_err(dev, "failed to get pwm tdiv clk\n");
+		return PTR_ERR(s3c->clk_div);
+	}
+
+	clk_enable(s3c->clk);
+	clk_enable(s3c->clk_div);
+
+	local_irq_save(flags);
+
+	tcon = __raw_readl(S3C2410_TCON);
+	tcon |= pwm_tcon_invert(s3c);
+	__raw_writel(tcon, S3C2410_TCON);
+
+	local_irq_restore(flags);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	ret = pwmchip_add(&s3c->chip);
 	if (ret < 0) {
 		dev_err(dev, "failed to register pwm\n");
+<<<<<<< HEAD
 		return ret;
 	}
 
 	platform_set_drvdata(pdev, s3c);
 	return 0;
+=======
+		goto err_clk_tdiv;
+	}
+
+	pwm_dbg(s3c, "config bits %02x\n",
+		(__raw_readl(S3C2410_TCON) >> s3c->tcon_base) & 0x0f);
+
+	dev_info(dev, "tin at %lu, tdiv at %lu, tin=%sclk, base %d\n",
+		 clk_get_rate(s3c->clk),
+		 clk_get_rate(s3c->clk_div),
+		 pwm_is_tdiv(s3c) ? "div" : "ext", s3c->tcon_base);
+
+	platform_set_drvdata(pdev, s3c);
+	return 0;
+
+ err_clk_tdiv:
+	clk_disable(s3c->clk_div);
+	clk_disable(s3c->clk);
+	return ret;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static int s3c_pwm_remove(struct platform_device *pdev)
@@ -572,6 +800,7 @@ static int s3c_pwm_remove(struct platform_device *pdev)
 	if (err < 0)
 		return err;
 
+<<<<<<< HEAD
 	clk_disable_unprepare(s3c->clk);
 
 	return 0;
@@ -630,6 +859,12 @@ static void s3c_pwm_restore(struct s3c_chip *s3c)
 		s3c_pwm = s3c->s3c_pwm[i];
 		s3c_pwm_init(s3c, s3c_pwm);
 	}
+=======
+	clk_disable(s3c->clk_div);
+	clk_disable(s3c->clk);
+
+	return 0;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 #ifdef CONFIG_PM_SLEEP
@@ -637,16 +872,36 @@ static int s3c_pwm_suspend(struct device *dev)
 {
 	struct s3c_chip *s3c = dev_get_drvdata(dev);
 
+<<<<<<< HEAD
 	if(!s3c->need_hw_init)
 		s3c_pwm_save(s3c);
+=======
+	/* No one preserve these values during suspend so reset them
+	 * Otherwise driver leaves PWM unconfigured if same values
+	 * passed to pwm_config
+	 */
+	s3c->period_ns = 0;
+	s3c->duty_ns = 0;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 
 static int s3c_pwm_resume(struct device *dev)
 {
 	struct s3c_chip *s3c = dev_get_drvdata(dev);
+<<<<<<< HEAD
 
 	s3c_pwm_restore(s3c);
+=======
+	unsigned long tcon;
+
+	/* Restore invertion */
+	tcon = __raw_readl(S3C2410_TCON);
+	tcon |= pwm_tcon_invert(s3c);
+	__raw_writel(tcon, S3C2410_TCON);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 #endif
@@ -659,9 +914,12 @@ static struct platform_driver s3c_pwm_driver = {
 		.name	= "s3c24xx-pwm",
 		.owner	= THIS_MODULE,
 		.pm	= &s3c_pwm_pm_ops,
+<<<<<<< HEAD
 #ifdef CONFIG_OF
 		.of_match_table	= of_match_ptr(s3c_pwm_match),
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	},
 	.probe		= s3c_pwm_probe,
 	.remove		= s3c_pwm_remove,
@@ -671,9 +929,20 @@ static int __init pwm_init(void)
 {
 	int ret;
 
+<<<<<<< HEAD
 #ifdef CONFIG_EXYNOS_PWM_RESET_DURING_DSTOP
 	exynos_pm_register_notifier(&pwm_samsung_notifier_block);
 #endif
+=======
+	clk_scaler[0] = clk_get(NULL, "pwm-scaler0");
+	clk_scaler[1] = clk_get(NULL, "pwm-scaler1");
+
+	if (IS_ERR(clk_scaler[0]) || IS_ERR(clk_scaler[1])) {
+		pr_err("failed to get scaler clocks\n");
+		return -EINVAL;
+	}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ret = platform_driver_register(&s3c_pwm_driver);
 	if (ret)
 		pr_err("failed to add pwm driver\n");

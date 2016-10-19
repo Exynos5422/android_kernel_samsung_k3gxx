@@ -23,6 +23,10 @@
 #include <linux/platform_device.h>
 #include <linux/libata.h>
 #include <linux/ahci_platform.h>
+<<<<<<< HEAD
+=======
+#include <linux/pm_runtime.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include "ahci.h"
 
 static void ahci_host_stop(struct ata_host *host);
@@ -216,6 +220,17 @@ static int ahci_probe(struct platform_device *pdev)
 	if (rc)
 		goto pdata_exit;
 
+<<<<<<< HEAD
+=======
+	rc = pm_runtime_set_active(dev);
+	if (rc) {
+		dev_warn(dev, "Unable to set runtime pm active err=%d\n", rc);
+	} else {
+		pm_runtime_enable(dev);
+		pm_runtime_forbid(dev);
+	}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 pdata_exit:
 	if (pdata && pdata->exit)
@@ -254,6 +269,12 @@ static int ahci_suspend(struct device *dev)
 	u32 ctl;
 	int rc;
 
+<<<<<<< HEAD
+=======
+	if (pm_runtime_suspended(dev))
+		return 0;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (hpriv->flags & AHCI_HFLAG_NO_SUSPEND) {
 		dev_err(dev, "firmware update required for suspend/resume\n");
 		return -EIO;
@@ -282,7 +303,11 @@ static int ahci_suspend(struct device *dev)
 	return 0;
 }
 
+<<<<<<< HEAD
 static int ahci_resume(struct device *dev)
+=======
+static int ahci_resume_common(struct device *dev)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	struct ahci_platform_data *pdata = dev_get_platdata(dev);
 	struct ata_host *host = dev_get_drvdata(dev);
@@ -321,9 +346,32 @@ disable_unprepare_clk:
 
 	return rc;
 }
+<<<<<<< HEAD
 #endif
 
 static SIMPLE_DEV_PM_OPS(ahci_pm_ops, ahci_suspend, ahci_resume);
+=======
+
+static int ahci_resume(struct device *dev)
+{
+	int rc;
+
+	rc = ahci_resume_common(dev);
+	if (!rc) {
+		pm_runtime_disable(dev);
+		pm_runtime_set_active(dev);
+		pm_runtime_enable(dev);
+	}
+
+	return rc;
+}
+#endif
+
+static const struct dev_pm_ops ahci_pm_ops = {
+	SET_SYSTEM_SLEEP_PM_OPS(ahci_suspend, ahci_resume)
+	SET_RUNTIME_PM_OPS(ahci_suspend, ahci_resume_common, NULL)
+};
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 static const struct of_device_id ahci_of_match[] = {
 	{ .compatible = "snps,spear-ahci", },

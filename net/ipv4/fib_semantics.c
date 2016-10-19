@@ -629,6 +629,10 @@ static int fib_check_nh(struct fib_config *cfg, struct fib_info *fi,
 				.daddr = nh->nh_gw,
 				.flowi4_scope = cfg->fc_scope + 1,
 				.flowi4_oif = nh->nh_oif,
+<<<<<<< HEAD
+=======
+				.flowi4_iif = LOOPBACK_IFINDEX,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			};
 
 			/* It is not necessary, but requires a bit of thinking */
@@ -818,13 +822,20 @@ struct fib_info *fib_create_info(struct fib_config *cfg)
 	fi = kzalloc(sizeof(*fi)+nhs*sizeof(struct fib_nh), GFP_KERNEL);
 	if (fi == NULL)
 		goto failure;
+<<<<<<< HEAD
+=======
+	fib_info_cnt++;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (cfg->fc_mx) {
 		fi->fib_metrics = kzalloc(sizeof(u32) * RTAX_MAX, GFP_KERNEL);
 		if (!fi->fib_metrics)
 			goto failure;
 	} else
 		fi->fib_metrics = (u32 *) dst_default_metrics;
+<<<<<<< HEAD
 	fib_info_cnt++;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	fi->fib_net = hold_net(net);
 	fi->fib_protocol = cfg->fc_protocol;

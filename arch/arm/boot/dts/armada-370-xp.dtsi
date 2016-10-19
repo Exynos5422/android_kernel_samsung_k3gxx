@@ -51,7 +51,11 @@
 
 			coherency-fabric@20200 {
 				compatible = "marvell,coherency-fabric";
+<<<<<<< HEAD
 				reg = <0x20200 0xb0>, <0x21810 0x1c>;
+=======
+				reg = <0x20200 0xb0>, <0x21010 0x1c>;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			};
 
 			serial@12000 {
@@ -92,6 +96,10 @@
 				#size-cells = <0>;
 				compatible = "marvell,orion-mdio";
 				reg = <0x72004 0x4>;
+<<<<<<< HEAD
+=======
+				clocks = <&gateclk 4>;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			};
 
 			ethernet@70000 {

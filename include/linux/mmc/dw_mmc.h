@@ -15,8 +15,11 @@
 #define LINUX_MMC_DW_MMC_H
 
 #include <linux/scatterlist.h>
+<<<<<<< HEAD
 #include <linux/mmc/core.h>
 #include <linux/pm_qos.h>
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define MAX_MCI_SLOTS	2
 
@@ -34,13 +37,18 @@ enum {
 	EVENT_XFER_COMPLETE,
 	EVENT_DATA_COMPLETE,
 	EVENT_DATA_ERROR,
+<<<<<<< HEAD
 	EVENT_XFER_ERROR,
 	EVENT_QUEUE_READY
+=======
+	EVENT_XFER_ERROR
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 struct mmc_data;
 
 /**
+<<<<<<< HEAD
  * struct dw_mci_slot - MMC slot state
  * @mmc: The mmc_host representing this slot.
  * @host: The MMC controller this slot is using.
@@ -159,6 +167,8 @@ struct dw_mci_debug_data {
 };
 
 /**
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  * struct dw_mci - MMC controller state shared between all slots
  * @lock: Spinlock protecting the queue and associated data.
  * @regs: Pointer to MMIO registers.
@@ -248,6 +258,7 @@ struct dw_mci {
 
 	struct dw_mci_slot	*cur_slot;
 	struct mmc_request	*mrq;
+<<<<<<< HEAD
 	struct mmc_request	*mrq_cmd;
 	struct mmc_request	*mrq_dat;
 	struct mmc_command	*cmd;
@@ -256,6 +267,10 @@ struct dw_mci {
 	struct mmc_data		*data_dat;
 	struct mmc_command	stop;
 	bool			stop_snd;
+=======
+	struct mmc_command	*cmd;
+	struct mmc_data		*data;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct workqueue_struct	*card_workqueue;
 
 	/* DMA interface members*/
@@ -270,30 +285,42 @@ struct dw_mci {
 #else
 	struct dw_mci_dma_data	*dma_data;
 #endif
+<<<<<<< HEAD
 	unsigned int		desc_sz;
 	unsigned int		align_size;
 
 	struct pm_qos_request	pm_qos_int;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	u32			cmd_status;
 	u32			data_status;
 	u32			stop_cmdr;
 	u32			dir_status;
 	struct tasklet_struct	tasklet;
+<<<<<<< HEAD
 	u32			tasklet_state;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct work_struct	card_work;
 	unsigned long		pending_events;
 	unsigned long		completed_events;
 	enum dw_mci_state	state;
+<<<<<<< HEAD
 	enum dw_mci_state	state_cmd;
 	enum dw_mci_state	state_dat;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct list_head	queue;
 
 	u32			bus_hz;
 	u32			current_speed;
 	u32			num_slots;
 	u32			fifoth_val;
+<<<<<<< HEAD
 	u32			cd_rd_thr;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	u16			verid;
 	u16			data_offset;
 	struct device		*dev;
@@ -302,6 +329,7 @@ struct dw_mci {
 	void			*priv;
 	struct clk		*biu_clk;
 	struct clk		*ciu_clk;
+<<<<<<< HEAD
 	struct clk		*gate_clk;
 	atomic_t		biu_clk_cnt;
 	atomic_t		ciu_clk_cnt;
@@ -312,6 +340,10 @@ struct dw_mci {
 	struct pinctrl		*pinctrl;
 	struct pinctrl_state	*pins_direction;
 
+=======
+	struct dw_mci_slot	*slot[MAX_MCI_SLOTS];
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* FIFO push and pull */
 	int			fifo_depth;
 	int			data_shift;
@@ -328,6 +360,7 @@ struct dw_mci {
 	/* Workaround flags */
 	u32			quirks;
 
+<<<<<<< HEAD
 	/* S/W reset timer */
 	struct timer_list       timer;
 
@@ -354,6 +387,11 @@ struct dw_mci {
 #define DW_MMC_REQ_BUSY		1
 	unsigned int		req_state;
 	struct dw_mci_debug_info	*debug_info;	/* debug info */
+=======
+	struct regulator	*vmmc;	/* Power regulator */
+	unsigned long		irq_flags; /* IRQ flags */
+	int			irq;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 /* DMA ops for Internal/External DMAC interface */
@@ -363,7 +401,10 @@ struct dw_mci_dma_ops {
 	void (*start)(struct dw_mci *host, unsigned int sg_len);
 	void (*complete)(struct dw_mci *host);
 	void (*stop)(struct dw_mci *host);
+<<<<<<< HEAD
 	void (*reset)(struct dw_mci *host);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	void (*cleanup)(struct dw_mci *host);
 	void (*exit)(struct dw_mci *host);
 };
@@ -377,6 +418,7 @@ struct dw_mci_dma_ops {
 #define DW_MCI_QUIRK_HIGHSPEED			BIT(2)
 /* Unreliable card detection */
 #define DW_MCI_QUIRK_BROKEN_CARD_DETECTION	BIT(3)
+<<<<<<< HEAD
 /* Bypass the security management unit */
 #define DW_MCI_QUIRK_BYPASS_SMU			BIT(4)
 /* No detect end bit during read */
@@ -397,11 +439,14 @@ struct dw_mci_dma_ops {
 #define DW_MCI_QUIRK_USE_SMU			BIT(13)
 /* Enables ultra low power mode */
 #define DW_MCI_QUIRK_ENABLE_ULP			BIT(14)
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /* Slot level quirks */
 /* This slot has no write protect */
 #define DW_MCI_SLOT_QUIRK_NO_WRITE_PROTECT	BIT(0)
 
+<<<<<<< HEAD
 enum dw_mci_cd_types {
 	DW_MCI_CD_INTERNAL = 1,	/* use mmc internal CD line */
 	DW_MCI_CD_EXTERNAL,	/* use external callback */
@@ -410,6 +455,8 @@ enum dw_mci_cd_types {
 	DW_MCI_CD_PERMANENT,	/* no CD line, card permanently wired to host */
 };
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 struct dma_pdata;
 
 struct block_settings {
@@ -420,6 +467,7 @@ struct block_settings {
 	unsigned int	max_seg_size;	/* see blk_queue_max_segment_size */
 };
 
+<<<<<<< HEAD
 struct dw_mci_mon_table {
 	u32	range;
 	s32	mif_lock_value;
@@ -429,6 +477,8 @@ struct dw_mci_mon_table {
 #endif
 };
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /* Board platform data */
 struct dw_mci_board {
 	u32 num_slots;
@@ -446,6 +496,7 @@ struct dw_mci_board {
 	 */
 	unsigned int fifo_depth;
 
+<<<<<<< HEAD
 	/*
 	 * clk_smpl is "clock-in sample phase shift" value that is
 	 * determined by execute_tuning() support.
@@ -459,6 +510,8 @@ struct dw_mci_board {
 	bool only_once_tune;
 	bool register_notifier;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* delay in mS before detecting cards after interrupt */
 	u32 detect_delay_ms;
 
@@ -467,6 +520,7 @@ struct dw_mci_board {
 	int (*get_cd)(u32 slot_id);
 	int (*get_ocr)(u32 slot_id);
 	int (*get_bus_wd)(u32 slot_id);
+<<<<<<< HEAD
 	void (*hw_reset)(struct dw_mci *host);
 
 	/* INT QOS khz */
@@ -494,6 +548,8 @@ struct dw_mci_board {
 	int (*ext_cd_cleanup)(void (*notify_func)
 			(void *dev_id, int state), void *dev_id);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/*
 	 * Enable power to selected slot and set voltage to desired level.
 	 * Voltage levels are specified using MMC_VDD_xxx defines defined
@@ -506,6 +562,7 @@ struct dw_mci_board {
 	struct dw_mci_dma_ops *dma_ops;
 	struct dma_pdata *data;
 	struct block_settings *blk_settings;
+<<<<<<< HEAD
 	struct dw_mci_mon_table *tp_mon_tbl;
 	unsigned int sw_timeout;
 	bool use_gate_clock;
@@ -522,6 +579,8 @@ struct dw_mci_board {
 	atomic_t log_count;
 	bool dw_mci_cmd_logging;
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 #endif /* LINUX_MMC_DW_MMC_H */

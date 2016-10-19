@@ -293,7 +293,11 @@ static void _rtl88ee_translate_rx_signal_stuff(struct ieee80211_hw *hw,
 	u8 *psaddr;
 	__le16 fc;
 	u16 type, ufc;
+<<<<<<< HEAD
 	bool match_bssid, packet_toself, packet_beacon, addr;
+=======
+	bool match_bssid, packet_toself, packet_beacon = false, addr;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	tmp_buf = skb->data + pstatus->rx_drvinfo_size + pstatus->rx_bufshift;
 

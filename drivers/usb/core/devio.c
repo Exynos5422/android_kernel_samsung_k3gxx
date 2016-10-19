@@ -742,6 +742,25 @@ static int check_ctrlrecip(struct dev_state *ps, unsigned int requesttype,
 		if ((index & ~USB_DIR_IN) == 0)
 			return 0;
 		ret = findintfep(ps->dev, index);
+<<<<<<< HEAD
+=======
+		if (ret < 0) {
+			/*
+			 * Some not fully compliant Win apps seem to get
+			 * index wrong and have the endpoint number here
+			 * rather than the endpoint address (with the
+			 * correct direction). Win does let this through,
+			 * so we'll not reject it here but leave it to
+			 * the device to not break KVM. But we warn.
+			 */
+			ret = findintfep(ps->dev, index ^ 0x80);
+			if (ret >= 0)
+				dev_info(&ps->dev->dev,
+					"%s: process %i (%s) requesting ep %02x but needs %02x\n",
+					__func__, task_pid_nr(current),
+					current->comm, index, index ^ 0x80);
+		}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (ret >= 0)
 			ret = checkintf(ps, ret);
 		break;
@@ -1089,10 +1108,18 @@ static int proc_getdriver(struct dev_state *ps, void __user *arg)
 
 static int proc_connectinfo(struct dev_state *ps, void __user *arg)
 {
+<<<<<<< HEAD
 	struct usbdevfs_connectinfo ci = {
 		.devnum = ps->dev->devnum,
 		.slow = ps->dev->speed == USB_SPEED_LOW
 	};
+=======
+	struct usbdevfs_connectinfo ci;
+
+	memset(&ci, 0, sizeof(ci));
+	ci.devnum = ps->dev->devnum;
+	ci.slow = ps->dev->speed == USB_SPEED_LOW;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (copy_to_user(arg, &ci, sizeof(ci)))
 		return -EFAULT;

@@ -154,7 +154,11 @@ unsigned long __init init_bootmem(unsigned long start, unsigned long pages)
  * down, but we are still initializing the system.  Pages are given directly
  * to the page allocator, no bootmem metadata is updated because it is gone.
  */
+<<<<<<< HEAD
 void __init free_bootmem_late(unsigned long physaddr, unsigned long size)
+=======
+void free_bootmem_late(unsigned long physaddr, unsigned long size)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	unsigned long cursor, end;
 
@@ -241,6 +245,7 @@ static unsigned long __init free_all_bootmem_core(bootmem_data_t *bdata)
 	return count;
 }
 
+<<<<<<< HEAD
 static void reset_node_lowmem_managed_pages(pg_data_t *pgdat)
 {
 	struct zone *z;
@@ -255,6 +260,28 @@ static void reset_node_lowmem_managed_pages(pg_data_t *pgdat)
 	for (z = pgdat->node_zones; z < pgdat->node_zones + MAX_NR_ZONES; z++)
 		if (!is_highmem(z))
 			z->managed_pages = 0;
+=======
+static int reset_managed_pages_done __initdata;
+
+static inline void __init reset_node_managed_pages(pg_data_t *pgdat)
+{
+	struct zone *z;
+
+	if (reset_managed_pages_done)
+		return;
+
+	for (z = pgdat->node_zones; z < pgdat->node_zones + MAX_NR_ZONES; z++)
+		z->managed_pages = 0;
+}
+
+void __init reset_all_zones_managed_pages(void)
+{
+	struct pglist_data *pgdat;
+
+	for_each_online_pgdat(pgdat)
+		reset_node_managed_pages(pgdat);
+	reset_managed_pages_done = 1;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 /**
@@ -265,9 +292,20 @@ static void reset_node_lowmem_managed_pages(pg_data_t *pgdat)
  */
 unsigned long __init free_all_bootmem_node(pg_data_t *pgdat)
 {
+<<<<<<< HEAD
 	register_page_bootmem_info_node(pgdat);
 	reset_node_lowmem_managed_pages(pgdat);
 	return free_all_bootmem_core(pgdat->bdata);
+=======
+	unsigned long pages;
+
+	register_page_bootmem_info_node(pgdat);
+	reset_node_managed_pages(pgdat);
+	pages = free_all_bootmem_core(pgdat->bdata);
+	totalram_pages += pages;
+
+	return pages;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 /**
@@ -279,14 +317,24 @@ unsigned long __init free_all_bootmem(void)
 {
 	unsigned long total_pages = 0;
 	bootmem_data_t *bdata;
+<<<<<<< HEAD
 	struct pglist_data *pgdat;
 
 	for_each_online_pgdat(pgdat)
 		reset_node_lowmem_managed_pages(pgdat);
+=======
+
+	reset_all_zones_managed_pages();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	list_for_each_entry(bdata, &bdata_list, list)
 		total_pages += free_all_bootmem_core(bdata);
 
+<<<<<<< HEAD
+=======
+	totalram_pages += total_pages;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return total_pages;
 }
 

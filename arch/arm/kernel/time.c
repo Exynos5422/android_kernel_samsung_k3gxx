@@ -24,9 +24,15 @@
 #include <linux/timer.h>
 #include <linux/clocksource.h>
 #include <linux/irq.h>
+<<<<<<< HEAD
 
 #include <asm/thread_info.h>
 #include <asm/sched_clock.h>
+=======
+#include <linux/sched_clock.h>
+
+#include <asm/thread_info.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <asm/stacktrace.h>
 #include <asm/mach/arch.h>
 #include <asm/mach/time.h>
@@ -120,6 +126,9 @@ void __init time_init(void)
 		machine_desc->init_time();
 	else
 		clocksource_of_init();
+<<<<<<< HEAD
 
 	sched_clock_postinit();
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }

@@ -495,7 +495,11 @@ int __usermodehelper_disable(enum umh_disable_depth depth)
 static void helper_lock(void)
 {
 	atomic_inc(&running_helpers);
+<<<<<<< HEAD
 	smp_mb__after_atomic_inc();
+=======
+	smp_mb__after_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static void helper_unlock(void)

@@ -4,7 +4,10 @@
  *
  *  Copyright (C) 2005-2008  Marcel Holtmann <marcel@holtmann.org>
  *
+<<<<<<< HEAD
  *
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -36,7 +39,12 @@ static bool ignore_sniffer;
 static bool disable_scofix;
 static bool force_scofix;
 
+<<<<<<< HEAD
 static bool reset = 1;
+=======
+static int sco_conn;
+static int reset = 1;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 static struct usb_driver btusb_driver;
 
@@ -102,6 +110,10 @@ static struct usb_device_id btusb_table[] = {
 
 	/* Broadcom BCM20702A0 */
 	{ USB_DEVICE(0x0b05, 0x17b5) },
+<<<<<<< HEAD
+=======
+	{ USB_DEVICE(0x0b05, 0x17cb) },
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	{ USB_DEVICE(0x04ca, 0x2003) },
 	{ USB_DEVICE(0x0489, 0xe042) },
 	{ USB_DEVICE(0x413c, 0x8197) },
@@ -145,9 +157,17 @@ static struct usb_device_id blacklist_table[] = {
 	{ USB_DEVICE(0x04ca, 0x3004), .driver_info = BTUSB_ATH3012 },
 	{ USB_DEVICE(0x04ca, 0x3005), .driver_info = BTUSB_ATH3012 },
 	{ USB_DEVICE(0x04ca, 0x3006), .driver_info = BTUSB_ATH3012 },
+<<<<<<< HEAD
 	{ USB_DEVICE(0x04ca, 0x3008), .driver_info = BTUSB_ATH3012 },
 	{ USB_DEVICE(0x13d3, 0x3362), .driver_info = BTUSB_ATH3012 },
 	{ USB_DEVICE(0x0cf3, 0xe004), .driver_info = BTUSB_ATH3012 },
+=======
+	{ USB_DEVICE(0x04ca, 0x3007), .driver_info = BTUSB_ATH3012 },
+	{ USB_DEVICE(0x04ca, 0x3008), .driver_info = BTUSB_ATH3012 },
+	{ USB_DEVICE(0x13d3, 0x3362), .driver_info = BTUSB_ATH3012 },
+	{ USB_DEVICE(0x0cf3, 0xe004), .driver_info = BTUSB_ATH3012 },
+	{ USB_DEVICE(0x0cf3, 0xe005), .driver_info = BTUSB_ATH3012 },
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	{ USB_DEVICE(0x0930, 0x0219), .driver_info = BTUSB_ATH3012 },
 	{ USB_DEVICE(0x0489, 0xe057), .driver_info = BTUSB_ATH3012 },
 	{ USB_DEVICE(0x13d3, 0x3393), .driver_info = BTUSB_ATH3012 },
@@ -828,8 +848,14 @@ static void btusb_notify(struct hci_dev *hdev, unsigned int evt)
 
 	BT_DBG("%s evt %d", hdev->name, evt);
 
+<<<<<<< HEAD
 	if (hdev->conn_hash.sco_num != data->sco_num) {
 		data->sco_num = hdev->conn_hash.sco_num;
+=======
+	if ((evt == HCI_NOTIFY_SCO_COMPLETE) || (evt == HCI_NOTIFY_CONN_DEL)) {
+		BT_DBG("SCO conn state changed: evt %d", evt);
+		sco_conn = (evt == HCI_NOTIFY_SCO_COMPLETE) ? 1 : 0;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		schedule_work(&data->work);
 	}
 }
@@ -884,7 +910,11 @@ static void btusb_work(struct work_struct *work)
 	int new_alts;
 	int err;
 
+<<<<<<< HEAD
 	if (hdev->conn_hash.sco_num > 0) {
+=======
+	if (sco_conn) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (!test_bit(BTUSB_DID_ISO_RESUME, &data->flags)) {
 			err = usb_autopm_get_interface(data->isoc ? data->isoc : data->intf);
 			if (err < 0) {
@@ -1330,7 +1360,11 @@ static int btusb_probe(struct usb_interface *intf,
 	struct usb_endpoint_descriptor *ep_desc;
 	struct btusb_data *data;
 	struct hci_dev *hdev;
+<<<<<<< HEAD
 	int i, err;
+=======
+	int i, version, err;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	BT_DBG("intf %p id %p", intf, id);
 
@@ -1360,12 +1394,26 @@ static int btusb_probe(struct usb_interface *intf,
 	if (id->driver_info & BTUSB_ATH3012) {
 		struct usb_device *udev = interface_to_usbdev(intf);
 
+<<<<<<< HEAD
 		/* Old firmware would otherwise let ath3k driver load
 		 * patch and sysconfig files */
 		if (le16_to_cpu(udev->descriptor.bcdDevice) <= 0x0001)
 			return -ENODEV;
 	}
 
+=======
+		version = get_rome_version(udev);
+		BT_INFO("Rome Version: 0x%x",  version);
+		/* Old firmware would otherwise let ath3k driver load
+		 * patch and sysconfig files */
+		if (version)
+			rome_download(udev);
+		else if (le16_to_cpu(udev->descriptor.bcdDevice) <= 0x0001) {
+			BT_INFO("FW for ar3k is yet to be downloaded");
+			return -ENODEV;
+		}
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	data = devm_kzalloc(&intf->dev, sizeof(*data), GFP_KERNEL);
 	if (!data)
 		return -ENOMEM;
@@ -1485,6 +1533,10 @@ static int btusb_probe(struct usb_interface *intf,
 	}
 
 	usb_set_intfdata(intf, data);
+<<<<<<< HEAD
+=======
+	usb_enable_autosuspend(data->udev);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return 0;
 }

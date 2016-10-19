@@ -29,10 +29,13 @@
 #include <linux/rcupdate.h>
 #include "input-compat.h"
 
+<<<<<<< HEAD
 #if !defined(CONFIG_INPUT_BOOSTER) // Input Booster +
 #include <linux/input/input.h>
 #endif // Input Booster - 
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 MODULE_AUTHOR("Vojtech Pavlik <vojtech@suse.cz>");
 MODULE_DESCRIPTION("Input core");
 MODULE_LICENSE("GPL");
@@ -270,6 +273,11 @@ static int input_get_disposition(struct input_dev *dev,
 	case EV_SYN:
 		switch (code) {
 		case SYN_CONFIG:
+<<<<<<< HEAD
+=======
+		case SYN_TIME_SEC:
+		case SYN_TIME_NSEC:
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			disposition = INPUT_PASS_TO_ALL;
 			break;
 
@@ -405,6 +413,7 @@ static void input_handle_event(struct input_dev *dev,
 
 }
 
+<<<<<<< HEAD
 
 #if !defined(CONFIG_INPUT_BOOSTER) // Input Booster +
 // ********** Define Timeout Functions ********** //
@@ -723,6 +732,8 @@ void input_booster_init()
 } 
 #endif  // Input Booster - 
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /**
  * input_event() - report new input event
  * @dev: device that generated the event
@@ -750,6 +761,7 @@ void input_event(struct input_dev *dev,
 		spin_lock_irqsave(&dev->event_lock, flags);
 		input_handle_event(dev, type, code, value);
 		spin_unlock_irqrestore(&dev->event_lock, flags);
+<<<<<<< HEAD
 
 #if !defined(CONFIG_INPUT_BOOSTER) // Input Booster +
 		if (type == EV_SYN && input_count > 0) {
@@ -767,6 +779,8 @@ void input_event(struct input_dev *dev,
 		}
 #endif  // Input Booster -
 		 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 }
 EXPORT_SYMBOL(input_event);
@@ -930,6 +944,7 @@ int input_open_device(struct input_handle *handle)
 
 	handle->open++;
 
+<<<<<<< HEAD
 	dev->users_private++;
 	if (!dev->disabled && !dev->users++ && dev->open)
 		retval = dev->open(dev);
@@ -938,6 +953,13 @@ int input_open_device(struct input_handle *handle)
 		dev->users_private--;
 		if (!dev->disabled)
 			dev->users--;
+=======
+	if (!dev->users++ && dev->open)
+		retval = dev->open(dev);
+
+	if (retval) {
+		dev->users--;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (!--handle->open) {
 			/*
 			 * Make sure we are not delivering any more events
@@ -985,8 +1007,12 @@ void input_close_device(struct input_handle *handle)
 
 	__input_release_device(handle);
 
+<<<<<<< HEAD
 	--dev->users_private;
 	if (!dev->disabled && !--dev->users && dev->close)
+=======
+	if (!--dev->users && dev->close)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		dev->close(dev);
 
 	if (!--handle->open) {
@@ -1002,6 +1028,7 @@ void input_close_device(struct input_handle *handle)
 }
 EXPORT_SYMBOL(input_close_device);
 
+<<<<<<< HEAD
 static int input_enable_device(struct input_dev *dev)
 {
 	int retval;
@@ -1046,6 +1073,8 @@ static int input_disable_device(struct input_dev *dev)
 	return 0;
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * Simulate keyup events for all keys that are marked as pressed.
  * The function must be called with dev->event_lock held.
@@ -1765,6 +1794,7 @@ static ssize_t input_dev_show_properties(struct device *dev,
 }
 static DEVICE_ATTR(properties, S_IRUGO, input_dev_show_properties, NULL);
 
+<<<<<<< HEAD
 static ssize_t input_dev_show_enabled(struct device *dev,
 					 struct device_attribute *attr,
 					 char *buf)
@@ -1798,13 +1828,18 @@ static ssize_t input_dev_store_enabled(struct device *dev,
 static DEVICE_ATTR(enabled, S_IRUGO | S_IWUSR,
 		   input_dev_show_enabled, input_dev_store_enabled);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static struct attribute *input_dev_attrs[] = {
 	&dev_attr_name.attr,
 	&dev_attr_phys.attr,
 	&dev_attr_uniq.attr,
 	&dev_attr_modalias.attr,
 	&dev_attr_properties.attr,
+<<<<<<< HEAD
 	&dev_attr_enabled.attr,
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	NULL
 };
 
@@ -2083,9 +2118,17 @@ void input_reset_device(struct input_dev *dev)
 		 * Keys that have been pressed at suspend time are unlikely
 		 * to be still pressed when we resume.
 		 */
+<<<<<<< HEAD
 /*		spin_lock_irq(&dev->event_lock);
 		input_dev_release_keys(dev);
 		spin_unlock_irq(&dev->event_lock);*/
+=======
+		if (!test_bit(INPUT_PROP_NO_DUMMY_RELEASE, dev->propbit)) {
+			spin_lock_irq(&dev->event_lock);
+			input_dev_release_keys(dev);
+			spin_unlock_irq(&dev->event_lock);
+		}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	mutex_unlock(&dev->mutex);
@@ -2287,6 +2330,13 @@ void input_set_capability(struct input_dev *dev, unsigned int type, unsigned int
 		break;
 
 	case EV_ABS:
+<<<<<<< HEAD
+=======
+		input_alloc_absinfo(dev);
+		if (!dev->absinfo)
+			return;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		__set_bit(code, dev->absbit);
 		break;
 
@@ -2798,10 +2848,13 @@ static int __init input_init(void)
 		goto fail2;
 	}
 
+<<<<<<< HEAD
 #if !defined(CONFIG_INPUT_BOOSTER) // Input Booster +
 	input_booster_init();
 #endif  // Input Booster -
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 
  fail2:	input_proc_exit();

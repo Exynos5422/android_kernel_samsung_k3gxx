@@ -244,6 +244,12 @@ struct smi_info {
 	/* The timer for this si. */
 	struct timer_list   si_timer;
 
+<<<<<<< HEAD
+=======
+	/* This flag is set, if the timer is running (timer_pending() isn't enough) */
+	bool		    timer_running;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* The time (in jiffies) the last timeout occurred at. */
 	unsigned long       last_timeout_jiffies;
 
@@ -427,6 +433,16 @@ static void start_clear_flags(struct smi_info *smi_info)
 	smi_info->si_state = SI_CLEARING_FLAGS;
 }
 
+<<<<<<< HEAD
+=======
+static void smi_mod_timer(struct smi_info *smi_info, unsigned long new_val)
+{
+	smi_info->last_timeout_jiffies = jiffies;
+	mod_timer(&smi_info->si_timer, new_val);
+	smi_info->timer_running = true;
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * When we have a situtaion where we run out of memory and cannot
  * allocate messages, we just leave them in the BMC and run the system
@@ -439,8 +455,12 @@ static inline void disable_si_irq(struct smi_info *smi_info)
 		start_disable_irq(smi_info);
 		smi_info->interrupt_disabled = 1;
 		if (!atomic_read(&smi_info->stop_operation))
+<<<<<<< HEAD
 			mod_timer(&smi_info->si_timer,
 				  jiffies + SI_TIMEOUT_JIFFIES);
+=======
+			smi_mod_timer(smi_info, jiffies + SI_TIMEOUT_JIFFIES);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 }
 
@@ -900,6 +920,7 @@ static void sender(void                *send_info,
 		list_add_tail(&msg->link, &smi_info->xmit_msgs);
 
 	if (smi_info->si_state == SI_NORMAL && smi_info->curr_msg == NULL) {
+<<<<<<< HEAD
 		/*
 		 * last_timeout_jiffies is updated here to avoid
 		 * smi_timeout() handler passing very large time_diff
@@ -909,6 +930,9 @@ static void sender(void                *send_info,
 		smi_info->last_timeout_jiffies = jiffies;
 
 		mod_timer(&smi_info->si_timer, jiffies + SI_TIMEOUT_JIFFIES);
+=======
+		smi_mod_timer(smi_info, jiffies + SI_TIMEOUT_JIFFIES);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 		if (smi_info->thread)
 			wake_up_process(smi_info->thread);
@@ -997,6 +1021,20 @@ static int ipmi_thread(void *data)
 
 		spin_lock_irqsave(&(smi_info->si_lock), flags);
 		smi_result = smi_event_handler(smi_info, 0);
+<<<<<<< HEAD
+=======
+
+		/*
+		 * If the driver is doing something, there is a possible
+		 * race with the timer.  If the timer handler see idle,
+		 * and the thread here sees something else, the timer
+		 * handler won't restart the timer even though it is
+		 * required.  So start it here if necessary.
+		 */
+		if (smi_result != SI_SM_IDLE && !smi_info->timer_running)
+			smi_mod_timer(smi_info, jiffies + SI_TIMEOUT_JIFFIES);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		spin_unlock_irqrestore(&(smi_info->si_lock), flags);
 		busy_wait = ipmi_thread_busy_wait(smi_result, smi_info,
 						  &busy_until);
@@ -1066,10 +1104,13 @@ static void smi_timeout(unsigned long data)
 		     * SI_USEC_PER_JIFFY);
 	smi_result = smi_event_handler(smi_info, time_diff);
 
+<<<<<<< HEAD
 	spin_unlock_irqrestore(&(smi_info->si_lock), flags);
 
 	smi_info->last_timeout_jiffies = jiffies_now;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if ((smi_info->irq) && (!smi_info->interrupt_disabled)) {
 		/* Running with interrupts, only do long timeouts. */
 		timeout = jiffies + SI_TIMEOUT_JIFFIES;
@@ -1091,7 +1132,14 @@ static void smi_timeout(unsigned long data)
 
  do_mod_timer:
 	if (smi_result != SI_SM_IDLE)
+<<<<<<< HEAD
 		mod_timer(&(smi_info->si_timer), timeout);
+=======
+		smi_mod_timer(smi_info, timeout);
+	else
+		smi_info->timer_running = false;
+	spin_unlock_irqrestore(&(smi_info->si_lock), flags);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static irqreturn_t si_irq_handler(int irq, void *data)
@@ -1139,8 +1187,12 @@ static int smi_start_processing(void       *send_info,
 
 	/* Set up the timer that drives the interface. */
 	setup_timer(&new_smi->si_timer, smi_timeout, (long)new_smi);
+<<<<<<< HEAD
 	new_smi->last_timeout_jiffies = jiffies;
 	mod_timer(&new_smi->si_timer, jiffies + SI_TIMEOUT_JIFFIES);
+=======
+	smi_mod_timer(new_smi, jiffies + SI_TIMEOUT_JIFFIES);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/*
 	 * Check if the user forcefully enabled the daemon.

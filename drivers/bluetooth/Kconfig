@@ -94,6 +94,7 @@ config BT_HCIUART_3WIRE
 
 	  Say Y here to compile support for Three-wire UART protocol.
 
+<<<<<<< HEAD
 config BT_UART_IN_AUDIO
 	bool "UART of audio block in Exynos 5430"
 	help
@@ -102,6 +103,18 @@ config BT_UART_IN_AUDIO
 	  For audio block enter the sleep state, the uart go to suspend state.
 
 	  Say Y here to compile support for UART of audio block in Exynos 5430.
+=======
+config BT_HCIUART_IBS
+	bool "HCI_IBS protocol support"
+	depends on BT_HCIUART
+	default n
+	help
+	  HCI_IBS (HCI In-Band Sleep) is a serial protocol for communication
+	  between Bluetooth device and host. This protocol is required for
+	  UART clock control for some Qualcomm Bluetooth devices.
+
+	  Say Y here to compile support for HCI_IBS protocol.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 config BT_HCIBCM203X
 	tristate "HCI BCM203x USB driver"
@@ -252,6 +265,7 @@ config BT_WILINK
 	  Say Y here to compile support for Texas Instrument's WiLink7 driver
 	  into the kernel or say M to compile it as module.
 
+<<<<<<< HEAD
 config BT_BCM43457
 	bool "Enable BCM43457 driver"
 	default n
@@ -286,4 +300,14 @@ config BT_BCM43455
 	help
 	  Adds BCM43455 RFKILL driver for Broadcom BCM43455 chipset for exynos54xx.
 	  default is n.
+=======
+config MSM_BT_POWER
+	tristate "MSM Bluetooth Power Control"
+	depends on ARCH_MSM && RFKILL
+	default m
+	help
+	  Provides a parameter to switch on/off power from PMIC
+	  to Bluetooth device.
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 endmenu

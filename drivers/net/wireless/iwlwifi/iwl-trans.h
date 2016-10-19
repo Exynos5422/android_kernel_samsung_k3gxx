@@ -605,8 +605,15 @@ static inline int iwl_trans_send_cmd(struct iwl_trans *trans,
 {
 	int ret;
 
+<<<<<<< HEAD
 	WARN_ONCE(trans->state != IWL_TRANS_FW_ALIVE,
 		  "%s bad state = %d", __func__, trans->state);
+=======
+	if (trans->state != IWL_TRANS_FW_ALIVE) {
+		IWL_ERR(trans, "%s bad state = %d", __func__, trans->state);
+		return -EIO;
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (!(cmd->flags & CMD_ASYNC))
 		lock_map_acquire_read(&trans->sync_cmd_lockdep_map);

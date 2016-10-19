@@ -20,12 +20,23 @@ static void __dma_tx_complete(void *param)
 	struct uart_8250_port	*p = param;
 	struct uart_8250_dma	*dma = p->dma;
 	struct circ_buf		*xmit = &p->port.state->xmit;
+<<<<<<< HEAD
 
 	dma->tx_running = 0;
+=======
+	unsigned long	flags;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	dma_sync_single_for_cpu(dma->txchan->device->dev, dma->tx_addr,
 				UART_XMIT_SIZE, DMA_TO_DEVICE);
 
+<<<<<<< HEAD
+=======
+	spin_lock_irqsave(&p->port.lock, flags);
+
+	dma->tx_running = 0;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	xmit->tail += dma->tx_size;
 	xmit->tail &= UART_XMIT_SIZE - 1;
 	p->port.icount.tx += dma->tx_size;
@@ -35,6 +46,11 @@ static void __dma_tx_complete(void *param)
 
 	if (!uart_circ_empty(xmit) && !uart_tx_stopped(&p->port))
 		serial8250_tx_dma(p);
+<<<<<<< HEAD
+=======
+
+	spin_unlock_irqrestore(&p->port.lock, flags);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static void __dma_rx_complete(void *param)

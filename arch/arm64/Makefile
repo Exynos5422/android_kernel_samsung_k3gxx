@@ -20,9 +20,21 @@ LIBGCC 		:= $(shell $(CC) $(KBUILD_CFLAGS) -print-libgcc-file-name)
 KBUILD_DEFCONFIG := defconfig
 
 KBUILD_CFLAGS	+= -mgeneral-regs-only
+<<<<<<< HEAD
 KBUILD_CPPFLAGS	+= -mlittle-endian
 AS		+= -EL
 LD		+= -EL
+=======
+ifeq ($(CONFIG_CPU_BIG_ENDIAN), y)
+KBUILD_CPPFLAGS	+= -mbig-endian
+AS		+= -EB
+LD		+= -EB
+else
+KBUILD_CPPFLAGS	+= -mlittle-endian
+AS		+= -EL
+LD		+= -EL
+endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 comma = ,
 
@@ -37,11 +49,30 @@ TEXT_OFFSET := 0x00080000
 export	TEXT_OFFSET GZFLAGS
 
 core-y		+= arch/arm64/kernel/ arch/arm64/mm/
+<<<<<<< HEAD
+=======
+core-$(CONFIG_XEN)		+= arch/arm64/xen/
+core-$(CONFIG_KVM) += arch/arm64/kvm/
+core-$(CONFIG_CRYPTO) += arch/arm64/crypto/
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 libs-y		:= arch/arm64/lib/ $(libs-y)
 libs-y		+= $(LIBGCC)
 
 # Default target when executing plain make
+<<<<<<< HEAD
 KBUILD_IMAGE	:= Image.gz
+=======
+ifeq ($(CONFIG_BUILD_ARM64_APPENDED_DTB_IMAGE),y)
+KBUILD_IMAGE	:= Image.gz-dtb
+else
+KBUILD_IMAGE	:= Image.gz
+endif
+
+ifeq ($(CONFIG_OF_RESOLVE),y)
+DTC_FLAGS += -@
+endif
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 KBUILD_DTBS	:= dtbs
 
 all:	$(KBUILD_IMAGE) $(KBUILD_DTBS)
@@ -59,6 +90,17 @@ zinstall install: vmlinux
 
 dtbs: scripts
 	$(Q)$(MAKE) $(build)=$(boot)/dts dtbs
+<<<<<<< HEAD
+=======
+	$(Q)$(MAKE) $(build)=$(boot)/dts/qcom dtbs DTC_FLAGS=$(DTC_FLAGS)
+
+PHONY += vdso_install
+vdso_install:
+	$(Q)$(MAKE) $(build)=arch/arm64/kernel/vdso $@
+
+Image.gz-dtb: vmlinux scripts dtbs
+	$(Q)$(MAKE) $(build)=$(boot) $(boot)/$@
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 # We use MRPROPER_FILES and CLEAN_FILES now
 archclean:

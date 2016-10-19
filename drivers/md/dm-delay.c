@@ -20,6 +20,10 @@
 struct delay_c {
 	struct timer_list delay_timer;
 	struct mutex timer_lock;
+<<<<<<< HEAD
+=======
+	struct workqueue_struct *kdelayd_wq;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct work_struct flush_expired_bios;
 	struct list_head delayed_bios;
 	atomic_t may_delay;
@@ -45,14 +49,21 @@ struct dm_delay_info {
 
 static DEFINE_MUTEX(delayed_bios_lock);
 
+<<<<<<< HEAD
 static struct workqueue_struct *kdelayd_wq;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static struct kmem_cache *delayed_cache;
 
 static void handle_delayed_timer(unsigned long data)
 {
 	struct delay_c *dc = (struct delay_c *)data;
 
+<<<<<<< HEAD
 	queue_work(kdelayd_wq, &dc->flush_expired_bios);
+=======
+	queue_work(dc->kdelayd_wq, &dc->flush_expired_bios);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static void queue_timeout(struct delay_c *dc, unsigned long expires)
@@ -191,6 +202,15 @@ out:
 		goto bad_dev_write;
 	}
 
+<<<<<<< HEAD
+=======
+	dc->kdelayd_wq = alloc_workqueue("kdelayd", WQ_MEM_RECLAIM, 0);
+	if (!dc->kdelayd_wq) {
+		DMERR("Couldn't start kdelayd");
+		goto bad_queue;
+	}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	setup_timer(&dc->delay_timer, handle_delayed_timer, (unsigned long)dc);
 
 	INIT_WORK(&dc->flush_expired_bios, flush_expired_bios);
@@ -203,6 +223,11 @@ out:
 	ti->private = dc;
 	return 0;
 
+<<<<<<< HEAD
+=======
+bad_queue:
+	mempool_destroy(dc->delayed_pool);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 bad_dev_write:
 	if (dc->dev_write)
 		dm_put_device(ti, dc->dev_write);
@@ -217,7 +242,11 @@ static void delay_dtr(struct dm_target *ti)
 {
 	struct delay_c *dc = ti->private;
 
+<<<<<<< HEAD
 	flush_workqueue(kdelayd_wq);
+=======
+	destroy_workqueue(dc->kdelayd_wq);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	dm_put_device(ti, dc->dev_read);
 
@@ -350,12 +379,15 @@ static int __init dm_delay_init(void)
 {
 	int r = -ENOMEM;
 
+<<<<<<< HEAD
 	kdelayd_wq = alloc_workqueue("kdelayd", WQ_MEM_RECLAIM, 0);
 	if (!kdelayd_wq) {
 		DMERR("Couldn't start kdelayd");
 		goto bad_queue;
 	}
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	delayed_cache = KMEM_CACHE(dm_delay_info, 0);
 	if (!delayed_cache) {
 		DMERR("Couldn't create delayed bio cache.");
@@ -373,8 +405,11 @@ static int __init dm_delay_init(void)
 bad_register:
 	kmem_cache_destroy(delayed_cache);
 bad_memcache:
+<<<<<<< HEAD
 	destroy_workqueue(kdelayd_wq);
 bad_queue:
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return r;
 }
 
@@ -382,7 +417,10 @@ static void __exit dm_delay_exit(void)
 {
 	dm_unregister_target(&delay_target);
 	kmem_cache_destroy(delayed_cache);
+<<<<<<< HEAD
 	destroy_workqueue(kdelayd_wq);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 /* Module hooks */

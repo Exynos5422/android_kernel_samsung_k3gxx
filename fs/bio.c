@@ -114,7 +114,12 @@ static struct kmem_cache *bio_find_or_create_slab(unsigned int extra_size)
 	bslab = &bio_slabs[entry];
 
 	snprintf(bslab->name, sizeof(bslab->name), "bio-%d", entry);
+<<<<<<< HEAD
 	slab = kmem_cache_create(bslab->name, sz, 0, SLAB_HWCACHE_ALIGN, NULL);
+=======
+	slab = kmem_cache_create(bslab->name, sz, ARCH_KMALLOC_MINALIGN,
+				 SLAB_HWCACHE_ALIGN, NULL);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (!slab)
 		goto out_unlock;
 
@@ -539,9 +544,13 @@ void __bio_clone(struct bio *bio, struct bio *bio_src)
 	bio->bi_vcnt = bio_src->bi_vcnt;
 	bio->bi_size = bio_src->bi_size;
 	bio->bi_idx = bio_src->bi_idx;
+<<<<<<< HEAD
 #ifdef CONFIG_MMC_DW_FMP_DM_CRYPT
 	bio->bi_sensitive_data = bio_src->bi_sensitive_data;
 #endif
+=======
+	bio->bi_dio_inode = bio_src->bi_dio_inode;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 EXPORT_SYMBOL(__bio_clone);
 
@@ -920,8 +929,13 @@ void bio_copy_data(struct bio *dst, struct bio *src)
 		src_p = kmap_atomic(src_bv->bv_page);
 		dst_p = kmap_atomic(dst_bv->bv_page);
 
+<<<<<<< HEAD
 		memcpy(dst_p + dst_bv->bv_offset,
 		       src_p + src_bv->bv_offset,
+=======
+		memcpy(dst_p + dst_offset,
+		       src_p + src_offset,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		       bytes);
 
 		kunmap_atomic(dst_p);
@@ -1048,12 +1062,31 @@ static int __bio_copy_iov(struct bio *bio, struct bio_vec *iovecs,
 int bio_uncopy_user(struct bio *bio)
 {
 	struct bio_map_data *bmd = bio->bi_private;
+<<<<<<< HEAD
 	int ret = 0;
 
 	if (!bio_flagged(bio, BIO_NULL_MAPPED))
 		ret = __bio_copy_iov(bio, bmd->iovecs, bmd->sgvecs,
 				     bmd->nr_sgvecs, bio_data_dir(bio) == READ,
 				     0, bmd->is_our_pages);
+=======
+	struct bio_vec *bvec;
+	int ret = 0, i;
+
+	if (!bio_flagged(bio, BIO_NULL_MAPPED)) {
+		/*
+		 * if we're in a workqueue, the request is orphaned, so
+		 * don't copy into a random user address space, just free.
+		 */
+		if (current->mm)
+			ret = __bio_copy_iov(bio, bmd->iovecs, bmd->sgvecs,
+					     bmd->nr_sgvecs, bio_data_dir(bio) == READ,
+					     0, bmd->is_our_pages);
+		else if (bmd->is_our_pages)
+			bio_for_each_segment_all(bvec, bio, i)
+				__free_page(bvec->bv_page);
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	bio_free_map_data(bmd);
 	bio_put(bio);
 	return ret;

@@ -29,7 +29,11 @@
 #include <linux/usb/gadget.h>
 #include <linux/usb/otg.h>
 
+<<<<<<< HEAD
 #include "phy-otg-fsm.h"
+=======
+#include "phy-fsm-usb.h"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /* Change USB protocol when there is a protocol change */
 static int otg_set_protocol(struct otg_fsm *fsm, int protocol)

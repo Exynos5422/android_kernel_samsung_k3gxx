@@ -178,6 +178,7 @@ int atags_to_fdt(void *atag_list, void *fdt, int total_space)
 			setprop_cell(fdt, "/chosen", "linux,initrd-end",
 					initrd_start + initrd_size);
 		}
+<<<<<<< HEAD
 		else if (atag->hdr.tag == ATAG_REVISION) {
 			uint32_t revision;
 			revision = atag->u.revision.rev;
@@ -190,6 +191,8 @@ int atags_to_fdt(void *atag_list, void *fdt, int total_space)
 			setprop(fdt, "/chosen", "serial", serial_property, 4 * 2);
 		}
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	if (memcount) {

@@ -311,9 +311,14 @@ static inline struct Scsi_Host *to_shost(struct isci_host *ihost)
 }
 
 #define for_each_isci_host(id, ihost, pdev) \
+<<<<<<< HEAD
 	for (id = 0, ihost = to_pci_info(pdev)->hosts[id]; \
 	     id < ARRAY_SIZE(to_pci_info(pdev)->hosts) && ihost; \
 	     ihost = to_pci_info(pdev)->hosts[++id])
+=======
+	for (id = 0; id < SCI_MAX_CONTROLLERS && \
+	     (ihost = to_pci_info(pdev)->hosts[id]); id++)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 static inline void wait_for_start(struct isci_host *ihost)
 {

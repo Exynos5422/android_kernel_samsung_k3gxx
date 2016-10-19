@@ -357,7 +357,11 @@ static int parse_mount_options(struct ceph_mount_options **pfsopt,
 	}
 	err = -EINVAL;
 	dev_name_end--;		/* back up to ':' separator */
+<<<<<<< HEAD
 	if (*dev_name_end != ':') {
+=======
+	if (dev_name_end < dev_name || *dev_name_end != ':') {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		pr_err("device name is missing path (no : separator in %s)\n",
 				dev_name);
 		goto out;

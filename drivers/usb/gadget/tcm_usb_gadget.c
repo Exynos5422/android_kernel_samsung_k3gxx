@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 /* Target based USB-Gadget
+=======
+/* Target based USB-Gadget Function
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  *
  * UAS protocol handling, target callbacks, configfs handling,
  * BBB (USB Mass Storage Class Bulk-Only (BBB) and Transport protocol handling.
@@ -6,6 +10,7 @@
  * Author: Sebastian Andrzej Siewior <bigeasy at linutronix dot de>
  * License: GPLv2 as published by FSF.
  */
+<<<<<<< HEAD
 #include <linux/kernel.h>
 #include <linux/module.h>
 #include <linux/types.h>
@@ -2182,10 +2187,32 @@ static struct usb_descriptor_header *uasp_ss_function_desc[] = {
 	(struct usb_descriptor_header *) &uasp_cmd_pipe_desc,
 	NULL,
 };
+=======
+
+#include <linux/init.h>
+#include <linux/module.h>
+
+#include <linux/usb/composite.h>
+#include <linux/usb/gadget.h>
+
+#include "usbstring.c"
+#include "epautoconf.c"
+#include "config.c"
+#include "composite.c"
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define UAS_VENDOR_ID	0x0525	/* NetChip */
 #define UAS_PRODUCT_ID	0xa4a5	/* Linux-USB File-backed Storage Gadget */
 
+<<<<<<< HEAD
+=======
+#define USB_G_STR_MANUFACTOR    1
+#define USB_G_STR_PRODUCT       2
+#define USB_G_STR_SERIAL        3
+#define USB_G_STR_CONFIG        4
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static struct usb_device_descriptor usbg_device_desc = {
 	.bLength =		sizeof(usbg_device_desc),
 	.bDescriptorType =	USB_DT_DEVICE,
@@ -2201,8 +2228,11 @@ static struct usb_string	usbg_us_strings[] = {
 	[USB_GADGET_PRODUCT_IDX].s	= "Target Product",
 	[USB_GADGET_SERIAL_IDX].s	= "000000000001",
 	[USB_G_STR_CONFIG].s		= "default config",
+<<<<<<< HEAD
 	[USB_G_STR_INT_UAS].s		= "USB Attached SCSI",
 	[USB_G_STR_INT_BBB].s		= "Bulk Only Transport",
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	{ },
 };
 
@@ -2216,17 +2246,21 @@ static struct usb_gadget_strings *usbg_strings[] = {
 	NULL,
 };
 
+<<<<<<< HEAD
 static int guas_unbind(struct usb_composite_dev *cdev)
 {
 	return 0;
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static struct usb_configuration usbg_config_driver = {
 	.label                  = "Linux Target",
 	.bConfigurationValue    = 1,
 	.bmAttributes           = USB_CONFIG_ATT_SELFPOWER,
 };
 
+<<<<<<< HEAD
 static void give_back_ep(struct usb_ep **pep)
 {
 	struct usb_ep *ep = *pep;
@@ -2411,6 +2445,11 @@ static int usbg_cfg_bind(struct usb_configuration *c)
 err:
 	kfree(fu);
 	return ret;
+=======
+static int usbg_cfg_bind(struct usb_configuration *c)
+{
+	return tcm_bind_config(c);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static int usb_target_bind(struct usb_composite_dev *cdev)
@@ -2437,6 +2476,14 @@ static int usb_target_bind(struct usb_composite_dev *cdev)
 	return 0;
 }
 
+<<<<<<< HEAD
+=======
+static int guas_unbind(struct usb_composite_dev *cdev)
+{
+	return 0;
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static __refdata struct usb_composite_driver usbg_driver = {
 	.name           = "g_target",
 	.dev            = &usbg_device_desc,
@@ -2446,6 +2493,7 @@ static __refdata struct usb_composite_driver usbg_driver = {
 	.unbind         = guas_unbind,
 };
 
+<<<<<<< HEAD
 static int usbg_attach(struct usbg_tpg *tpg)
 {
 	return usb_composite_probe(&usbg_driver);
@@ -2454,20 +2502,40 @@ static int usbg_attach(struct usbg_tpg *tpg)
 static void usbg_detach(struct usbg_tpg *tpg)
 {
 	usb_composite_unregister(&usbg_driver);
+=======
+static int usbg_attach_cb(bool connect)
+{
+	int ret = 0;
+
+	if (connect)
+		ret = usb_composite_probe(&usbg_driver, usb_target_bind);
+	else
+		usb_composite_unregister(&usbg_driver);
+
+	return ret;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static int __init usb_target_gadget_init(void)
 {
 	int ret;
 
+<<<<<<< HEAD
 	ret = usbg_register_configfs();
+=======
+	ret = f_tcm_init(&usbg_attach_cb);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return ret;
 }
 module_init(usb_target_gadget_init);
 
 static void __exit usb_target_gadget_exit(void)
 {
+<<<<<<< HEAD
 	usbg_deregister_configfs();
+=======
+	f_tcm_exit();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 module_exit(usb_target_gadget_exit);
 

@@ -281,7 +281,11 @@ static int pptp_xmit(struct ppp_channel *chan, struct sk_buff *skb)
 	nf_reset(skb);
 
 	skb->ip_summed = CHECKSUM_NONE;
+<<<<<<< HEAD
 	ip_select_ident(iph, &rt->dst, NULL);
+=======
+	ip_select_ident(skb, &rt->dst, NULL);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ip_send_check(iph);
 
 	ip_local_out(skb);
@@ -420,9 +424,12 @@ static int pptp_bind(struct socket *sock, struct sockaddr *uservaddr,
 	struct pptp_opt *opt = &po->proto.pptp;
 	int error = 0;
 
+<<<<<<< HEAD
 	if (sockaddr_len < sizeof(struct sockaddr_pppox))
 		return -EINVAL;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	lock_sock(sk);
 
 	opt->src_addr = sp->sa_addr.pptp;
@@ -444,9 +451,12 @@ static int pptp_connect(struct socket *sock, struct sockaddr *uservaddr,
 	struct flowi4 fl4;
 	int error = 0;
 
+<<<<<<< HEAD
 	if (sockaddr_len < sizeof(struct sockaddr_pppox))
 		return -EINVAL;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (sp->sa_protocol != PX_PROTO_PPTP)
 		return -EINVAL;
 

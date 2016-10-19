@@ -231,7 +231,11 @@ struct jffs2_tmp_dnode_info
 	uint32_t version;
 	uint32_t data_crc;
 	uint32_t partial_crc;
+<<<<<<< HEAD
 	uint16_t csize;
+=======
+	uint32_t csize;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	uint16_t overlapped;
 };
 

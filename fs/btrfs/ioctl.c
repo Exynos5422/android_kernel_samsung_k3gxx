@@ -1528,6 +1528,15 @@ static noinline int btrfs_ioctl_snap_create_transid(struct file *file,
 			printk(KERN_INFO "btrfs: Snapshot src from "
 			       "another FS\n");
 			ret = -EINVAL;
+<<<<<<< HEAD
+=======
+		} else if (!inode_owner_or_capable(src_inode)) {
+			/*
+			 * Subvolume creation is not restricted, but snapshots
+			 * are limited to own subvolumes only
+			 */
+			ret = -EPERM;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		} else {
 			ret = btrfs_mksubvol(&file->f_path, name, namelen,
 					     BTRFS_I(src_inode)->root,
@@ -2093,7 +2102,11 @@ static noinline int btrfs_ioctl_snap_destroy(struct file *file,
 
 	err = mutex_lock_killable_nested(&dir->i_mutex, I_MUTEX_PARENT);
 	if (err == -EINTR)
+<<<<<<< HEAD
 		goto out;
+=======
+		goto out_drop_write;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	dentry = lookup_one_len(vol_args->name, parent, namelen);
 	if (IS_ERR(dentry)) {
 		err = PTR_ERR(dentry);
@@ -2235,6 +2248,10 @@ out_dput:
 	dput(dentry);
 out_unlock_dir:
 	mutex_unlock(&dir->i_mutex);
+<<<<<<< HEAD
+=======
+out_drop_write:
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	mnt_drop_write_file(file);
 out:
 	kfree(vol_args);
@@ -3299,6 +3316,12 @@ static long btrfs_ioctl_dev_replace(struct btrfs_root *root, void __user *arg)
 
 	switch (p->cmd) {
 	case BTRFS_IOCTL_DEV_REPLACE_CMD_START:
+<<<<<<< HEAD
+=======
+		if (root->fs_info->sb->s_flags & MS_RDONLY)
+			return -EROFS;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (atomic_xchg(
 			&root->fs_info->mutually_exclusive_operation_running,
 			1)) {

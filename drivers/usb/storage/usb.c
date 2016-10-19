@@ -745,6 +745,31 @@ static int get_pipes(struct us_data *us)
 	return 0;
 }
 
+<<<<<<< HEAD
+=======
+/* Initialize SCSI device auto-suspend timeout here */
+static void usb_stor_set_scsi_autosuspend(struct us_data *us)
+{
+	struct usb_device *udev = us->pusb_dev;
+	struct usb_host_config *config = udev->actconfig;
+	struct usb_host_interface *intf;
+	int i;
+
+	/*
+	 * Some USB UICC devices has Mass storage interface along
+	 * with CCID interface.  These cards are inserted all the
+	 * time.  Enable SCSI auto-suspend for such devices.
+	 */
+	for (i = 0; i < config->desc.bNumInterfaces; i++) {
+		intf = config->interface[i]->cur_altsetting;
+		if (intf->desc.bInterfaceClass == USB_CLASS_CSCID) {
+			us->sdev_autosuspend_delay = 2000; /* msec */
+			return;
+		}
+	}
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /* Initialize all the dynamic resources we need */
 static int usb_stor_acquire_resources(struct us_data *us)
 {
@@ -820,6 +845,10 @@ static void quiesce_and_remove_host(struct us_data *us)
 
 	/* If the device is really gone, cut short reset delays */
 	if (us->pusb_dev->state == USB_STATE_NOTATTACHED) {
+<<<<<<< HEAD
+=======
+		pm_suspend_ignore_children(&us->pusb_intf->dev, true);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		set_bit(US_FLIDX_DISCONNECTING, &us->dflags);
 		wake_up(&us->delay_wait);
 	}
@@ -917,9 +946,12 @@ int usb_stor_probe1(struct us_data **pus,
 	/*
 	 * Allow 16-byte CDBs and thus > 2TB
 	 */
+<<<<<<< HEAD
 #ifdef CONFIG_USB_HOST_NOTIFY
 	host->by_usb = 1;
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	host->max_cmd_len = 16;
 	host->sg_tablesize = usb_stor_sg_tablesize(intf);
 	*pus = us = host_to_us(host);
@@ -993,6 +1025,13 @@ int usb_stor_probe2(struct us_data *us)
 	result = usb_stor_acquire_resources(us);
 	if (result)
 		goto BadDevice;
+<<<<<<< HEAD
+=======
+
+	us->sdev_autosuspend_delay = -1;
+	usb_stor_set_scsi_autosuspend(us);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	snprintf(us->scsi_name, sizeof(us->scsi_name), "usb-storage %s",
 					dev_name(&us->pusb_intf->dev));
 	result = scsi_add_host(us_to_host(us), dev);

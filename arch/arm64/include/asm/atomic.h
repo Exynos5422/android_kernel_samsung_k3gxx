@@ -54,8 +54,12 @@ static inline void atomic_add(int i, atomic_t *v)
 "	stxr	%w1, %w0, %2\n"
 "	cbnz	%w1, 1b"
 	: "=&r" (result), "=&r" (tmp), "+Q" (v->counter)
+<<<<<<< HEAD
 	: "Ir" (i)
 	: "cc");
+=======
+	: "Ir" (i));
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static inline int atomic_add_return(int i, atomic_t *v)
@@ -64,14 +68,24 @@ static inline int atomic_add_return(int i, atomic_t *v)
 	int result;
 
 	asm volatile("// atomic_add_return\n"
+<<<<<<< HEAD
 "1:	ldaxr	%w0, %2\n"
+=======
+"1:	ldxr	%w0, %2\n"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 "	add	%w0, %w0, %w3\n"
 "	stlxr	%w1, %w0, %2\n"
 "	cbnz	%w1, 1b"
 	: "=&r" (result), "=&r" (tmp), "+Q" (v->counter)
 	: "Ir" (i)
+<<<<<<< HEAD
 	: "cc", "memory");
 
+=======
+	: "memory");
+
+	smp_mb();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return result;
 }
 
@@ -86,8 +100,12 @@ static inline void atomic_sub(int i, atomic_t *v)
 "	stxr	%w1, %w0, %2\n"
 "	cbnz	%w1, 1b"
 	: "=&r" (result), "=&r" (tmp), "+Q" (v->counter)
+<<<<<<< HEAD
 	: "Ir" (i)
 	: "cc");
+=======
+	: "Ir" (i));
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static inline int atomic_sub_return(int i, atomic_t *v)
@@ -96,14 +114,24 @@ static inline int atomic_sub_return(int i, atomic_t *v)
 	int result;
 
 	asm volatile("// atomic_sub_return\n"
+<<<<<<< HEAD
 "1:	ldaxr	%w0, %2\n"
+=======
+"1:	ldxr	%w0, %2\n"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 "	sub	%w0, %w0, %w3\n"
 "	stlxr	%w1, %w0, %2\n"
 "	cbnz	%w1, 1b"
 	: "=&r" (result), "=&r" (tmp), "+Q" (v->counter)
 	: "Ir" (i)
+<<<<<<< HEAD
 	: "cc", "memory");
 
+=======
+	: "memory");
+
+	smp_mb();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return result;
 }
 
@@ -112,15 +140,26 @@ static inline int atomic_cmpxchg(atomic_t *ptr, int old, int new)
 	unsigned long tmp;
 	int oldval;
 
+<<<<<<< HEAD
 	asm volatile("// atomic_cmpxchg\n"
 "1:	ldaxr	%w1, %2\n"
 "	cmp	%w1, %w3\n"
 "	b.ne	2f\n"
 "	stlxr	%w0, %w4, %2\n"
+=======
+	smp_mb();
+
+	asm volatile("// atomic_cmpxchg\n"
+"1:	ldxr	%w1, %2\n"
+"	cmp	%w1, %w3\n"
+"	b.ne	2f\n"
+"	stxr	%w0, %w4, %2\n"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 "	cbnz	%w0, 1b\n"
 "2:"
 	: "=&r" (tmp), "=&r" (oldval), "+Q" (ptr->counter)
 	: "Ir" (old), "r" (new)
+<<<<<<< HEAD
 	: "cc", "memory");
 
 	return oldval;
@@ -140,6 +179,14 @@ static inline void atomic_clear_mask(unsigned long mask, unsigned long *addr)
 	: "cc");
 }
 
+=======
+	: "cc");
+
+	smp_mb();
+	return oldval;
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define atomic_xchg(v, new) (xchg(&((v)->counter), new))
 
 static inline int __atomic_add_unless(atomic_t *v, int a, int u)
@@ -163,17 +210,24 @@ static inline int __atomic_add_unless(atomic_t *v, int a, int u)
 
 #define atomic_add_negative(i,v) (atomic_add_return(i, v) < 0)
 
+<<<<<<< HEAD
 #define smp_mb__before_atomic_dec()	smp_mb()
 #define smp_mb__after_atomic_dec()	smp_mb()
 #define smp_mb__before_atomic_inc()	smp_mb()
 #define smp_mb__after_atomic_inc()	smp_mb()
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * 64-bit atomic operations.
  */
 #define ATOMIC64_INIT(i) { (i) }
 
+<<<<<<< HEAD
 #define atomic64_read(v)	(*(volatile long long *)&(v)->counter)
+=======
+#define atomic64_read(v)	(*(volatile long *)&(v)->counter)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define atomic64_set(v,i)	(((v)->counter) = (i))
 
 static inline void atomic64_add(u64 i, atomic64_t *v)
@@ -187,8 +241,12 @@ static inline void atomic64_add(u64 i, atomic64_t *v)
 "	stxr	%w1, %0, %2\n"
 "	cbnz	%w1, 1b"
 	: "=&r" (result), "=&r" (tmp), "+Q" (v->counter)
+<<<<<<< HEAD
 	: "Ir" (i)
 	: "cc");
+=======
+	: "Ir" (i));
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static inline long atomic64_add_return(long i, atomic64_t *v)
@@ -197,14 +255,24 @@ static inline long atomic64_add_return(long i, atomic64_t *v)
 	unsigned long tmp;
 
 	asm volatile("// atomic64_add_return\n"
+<<<<<<< HEAD
 "1:	ldaxr	%0, %2\n"
+=======
+"1:	ldxr	%0, %2\n"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 "	add	%0, %0, %3\n"
 "	stlxr	%w1, %0, %2\n"
 "	cbnz	%w1, 1b"
 	: "=&r" (result), "=&r" (tmp), "+Q" (v->counter)
 	: "Ir" (i)
+<<<<<<< HEAD
 	: "cc", "memory");
 
+=======
+	: "memory");
+
+	smp_mb();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return result;
 }
 
@@ -219,8 +287,12 @@ static inline void atomic64_sub(u64 i, atomic64_t *v)
 "	stxr	%w1, %0, %2\n"
 "	cbnz	%w1, 1b"
 	: "=&r" (result), "=&r" (tmp), "+Q" (v->counter)
+<<<<<<< HEAD
 	: "Ir" (i)
 	: "cc");
+=======
+	: "Ir" (i));
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static inline long atomic64_sub_return(long i, atomic64_t *v)
@@ -229,14 +301,24 @@ static inline long atomic64_sub_return(long i, atomic64_t *v)
 	unsigned long tmp;
 
 	asm volatile("// atomic64_sub_return\n"
+<<<<<<< HEAD
 "1:	ldaxr	%0, %2\n"
+=======
+"1:	ldxr	%0, %2\n"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 "	sub	%0, %0, %3\n"
 "	stlxr	%w1, %0, %2\n"
 "	cbnz	%w1, 1b"
 	: "=&r" (result), "=&r" (tmp), "+Q" (v->counter)
 	: "Ir" (i)
+<<<<<<< HEAD
 	: "cc", "memory");
 
+=======
+	: "memory");
+
+	smp_mb();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return result;
 }
 
@@ -245,17 +327,33 @@ static inline long atomic64_cmpxchg(atomic64_t *ptr, long old, long new)
 	long oldval;
 	unsigned long res;
 
+<<<<<<< HEAD
 	asm volatile("// atomic64_cmpxchg\n"
 "1:	ldaxr	%1, %2\n"
 "	cmp	%1, %3\n"
 "	b.ne	2f\n"
 "	stlxr	%w0, %4, %2\n"
+=======
+	smp_mb();
+
+	asm volatile("// atomic64_cmpxchg\n"
+"1:	ldxr	%1, %2\n"
+"	cmp	%1, %3\n"
+"	b.ne	2f\n"
+"	stxr	%w0, %4, %2\n"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 "	cbnz	%w0, 1b\n"
 "2:"
 	: "=&r" (res), "=&r" (oldval), "+Q" (ptr->counter)
 	: "Ir" (old), "r" (new)
+<<<<<<< HEAD
 	: "cc", "memory");
 
+=======
+	: "cc");
+
+	smp_mb();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return oldval;
 }
 
@@ -267,11 +365,19 @@ static inline long atomic64_dec_if_positive(atomic64_t *v)
 	unsigned long tmp;
 
 	asm volatile("// atomic64_dec_if_positive\n"
+<<<<<<< HEAD
 "1:	ldaxr	%0, %2\n"
+=======
+"1:	ldxr	%0, %2\n"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 "	subs	%0, %0, #1\n"
 "	b.mi	2f\n"
 "	stlxr	%w1, %0, %2\n"
 "	cbnz	%w1, 1b\n"
+<<<<<<< HEAD
+=======
+"	dmb	ish\n"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 "2:"
 	: "=&r" (result), "=&r" (tmp), "+Q" (v->counter)
 	:

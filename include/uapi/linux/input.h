@@ -158,11 +158,14 @@ struct input_keymap_entry {
 
 #define EVIOCSCLOCKID		_IOW('E', 0xa0, int)			/* Set clockid to be used for timestamps */
 
+<<<<<<< HEAD
 #ifdef CONFIG_INPUT_EXPANDED_ABS
 #define EVIOCGABS_LIMIT		(0x40)
 #define EVIOCGABS_CHG_LIMIT(nr)	(nr + EVIOCGABS_LIMIT)
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * Device properties and quirks
  */
@@ -171,6 +174,10 @@ struct input_keymap_entry {
 #define INPUT_PROP_DIRECT		0x01	/* direct input devices */
 #define INPUT_PROP_BUTTONPAD		0x02	/* has button(s) under pad */
 #define INPUT_PROP_SEMI_MT		0x03	/* touch rectangle only */
+<<<<<<< HEAD
+=======
+#define INPUT_PROP_NO_DUMMY_RELEASE	0x04	/* no dummy event */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define INPUT_PROP_MAX			0x1f
 #define INPUT_PROP_CNT			(INPUT_PROP_MAX + 1)
@@ -191,9 +198,12 @@ struct input_keymap_entry {
 #define EV_FF			0x15
 #define EV_PWR			0x16
 #define EV_FF_STATUS		0x17
+<<<<<<< HEAD
 #ifdef CONFIG_VT_TKEY_SKIP_MATCH
 #define EV_TOUCHKEY		0x18
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define EV_MAX			0x1f
 #define EV_CNT			(EV_MAX+1)
 
@@ -205,6 +215,11 @@ struct input_keymap_entry {
 #define SYN_CONFIG		1
 #define SYN_MT_REPORT		2
 #define SYN_DROPPED		3
+<<<<<<< HEAD
+=======
+#define SYN_TIME_SEC		4
+#define SYN_TIME_NSEC		5
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /*
  * Keys and buttons
@@ -417,8 +432,11 @@ struct input_keymap_entry {
 #define KEY_F22			192
 #define KEY_F23			193
 #define KEY_F24			194
+<<<<<<< HEAD
 #define KEY_LPSD_WAKEUP		198
 #define KEY_VOICE_WAKEUP	199
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define KEY_PLAYCD		200
 #define KEY_PAUSECD		201
@@ -471,14 +489,26 @@ struct input_keymap_entry {
 #define KEY_VIDEO_NEXT		241	/* drive next video source */
 #define KEY_VIDEO_PREV		242	/* drive previous video source */
 #define KEY_BRIGHTNESS_CYCLE	243	/* brightness up, after max is min */
+<<<<<<< HEAD
 #define KEY_BRIGHTNESS_ZERO	244	/* brightness off, use ambient */
 #define KEY_DISPLAY_OFF		245	/* display device to off state */
 
 #define KEY_WIMAX		246
+=======
+#define KEY_BRIGHTNESS_AUTO	244	/* Set Auto Brightness: manual
+					  brightness control is off,
+					  rely on ambient */
+#define KEY_BRIGHTNESS_ZERO	KEY_BRIGHTNESS_AUTO
+#define KEY_DISPLAY_OFF		245	/* display device to off state */
+
+#define KEY_WWAN		246	/* Wireless WAN (LTE, UMTS, GSM, etc.) */
+#define KEY_WIMAX		KEY_WWAN
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define KEY_RFKILL		247	/* Key that controls all radios */
 
 #define KEY_MICMUTE		248	/* Mute / unmute the microphone */
 
+<<<<<<< HEAD
 /* Dummy touchkey code */
 #define KEY_DUMMY_HOME1		249
 #define KEY_DUMMY_HOME2		250
@@ -488,6 +518,8 @@ struct input_keymap_entry {
 
 #define KEY_RECENT   254
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /* Code 255 is reserved for special needs of AT keyboard driver */
 
 #define BTN_MISC		0x100
@@ -528,11 +560,23 @@ struct input_keymap_entry {
 #define BTN_DEAD		0x12f
 
 #define BTN_GAMEPAD		0x130
+<<<<<<< HEAD
 #define BTN_A			0x130
 #define BTN_B			0x131
 #define BTN_C			0x132
 #define BTN_X			0x133
 #define BTN_Y			0x134
+=======
+#define BTN_SOUTH		0x130
+#define BTN_A			BTN_SOUTH
+#define BTN_EAST		0x131
+#define BTN_B			BTN_EAST
+#define BTN_C			0x132
+#define BTN_NORTH		0x133
+#define BTN_X			BTN_NORTH
+#define BTN_WEST		0x134
+#define BTN_Y			BTN_WEST
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define BTN_Z			0x135
 #define BTN_TL			0x136
 #define BTN_TR			0x137
@@ -543,7 +587,10 @@ struct input_keymap_entry {
 #define BTN_MODE		0x13c
 #define BTN_THUMBL		0x13d
 #define BTN_THUMBR		0x13e
+<<<<<<< HEAD
 #define BTN_GAME		0x13f	/* Add game button for samsung bluetooth keypad */
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define BTN_DIGI		0x140
 #define BTN_TOOL_PEN		0x140
@@ -566,10 +613,13 @@ struct input_keymap_entry {
 #define BTN_GEAR_DOWN		0x150
 #define BTN_GEAR_UP		0x151
 
+<<<<<<< HEAD
 #define BTN_SUBSCREEN_FLAG		0x15D
 #define BTN_R_FLICK_FLAG		0x15E
 #define BTN_L_FLICK_FLAG		0x15F
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define KEY_OK			0x160
 #define KEY_SELECT		0x161
 #define KEY_GOTO		0x162
@@ -650,6 +700,10 @@ struct input_keymap_entry {
 #define KEY_ADDRESSBOOK		0x1ad	/* AL Contacts/Address Book */
 #define KEY_MESSENGER		0x1ae	/* AL Instant Messaging */
 #define KEY_DISPLAYTOGGLE	0x1af	/* Turn display (LCD) on and off */
+<<<<<<< HEAD
+=======
+#define KEY_BRIGHTNESS_TOGGLE	KEY_DISPLAYTOGGLE
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define KEY_SPELLCHECK		0x1b0   /* AL Spell Check */
 #define KEY_LOGOFF		0x1b1   /* AL Logoff */
 
@@ -668,12 +722,15 @@ struct input_keymap_entry {
 #define KEY_DEL_EOS		0x1c1
 #define KEY_INS_LINE		0x1c2
 #define KEY_DEL_LINE		0x1c3
+<<<<<<< HEAD
 #define KEY_REAR_CAMERA_DETECTED	0x1c4	/* Rear Camera launch(MAIN CAM) @ SEC */
 #define KEY_FRONT_CAMERA_DETECTED	0x1c5	/* Front Camera launch(SUB CAM) @ SEC */
 #define KEY_SIDE_GESTURE	0x1c6
 #define KEY_BLACK_UI_GESTURE	0x1c7
 #define KEY_BLACK_UI_QUICKAPP_ACCESS	0x1c8
 #define KEY_BLACK_UI_DIRECT_INDICATOR	0x1c9
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define KEY_FN			0x1d0
 #define KEY_FN_ESC		0x1d1
@@ -721,6 +778,10 @@ struct input_keymap_entry {
 #define KEY_NUMERIC_STAR	0x20a
 #define KEY_NUMERIC_POUND	0x20b
 
+<<<<<<< HEAD
+=======
+#define KEY_CAMERA_SNAPSHOT	0x2fe
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define KEY_CAMERA_FOCUS	0x210
 #define KEY_WPS_BUTTON		0x211	/* WiFi Protected Setup key */
 
@@ -740,8 +801,29 @@ struct input_keymap_entry {
 #define KEY_ATTENDANT_TOGGLE	0x21d	/* Attendant call on or off */
 #define KEY_LIGHTS_TOGGLE	0x21e	/* Reading light on or off */
 
+<<<<<<< HEAD
 #define KEY_VOICECOMMAND		0x246	/* Listening Voice Command */
 
+=======
+#define BTN_DPAD_UP		0x220
+#define BTN_DPAD_DOWN		0x221
+#define BTN_DPAD_LEFT		0x222
+#define BTN_DPAD_RIGHT		0x223
+
+#define KEY_ALS_TOGGLE		0x230	/* Ambient light sensor */
+
+#define KEY_BUTTONCONFIG		0x240	/* AL Button Configuration */
+#define KEY_TASKMANAGER		0x241	/* AL Task/Project Manager */
+#define KEY_JOURNAL		0x242	/* AL Log/Journal/Timecard */
+#define KEY_CONTROLPANEL		0x243	/* AL Control Panel */
+#define KEY_APPSELECT		0x244	/* AL Select Task/Application */
+#define KEY_SCREENSAVER		0x245	/* AL Screen Saver */
+#define KEY_VOICECOMMAND		0x246	/* Listening Voice Command */
+
+#define KEY_BRIGHTNESS_MIN		0x250	/* Set Brightness to Minimum */
+#define KEY_BRIGHTNESS_MAX		0x251	/* Set Brightness to Maximum */
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define BTN_TRIGGER_HAPPY		0x2c0
 #define BTN_TRIGGER_HAPPY1		0x2c0
 #define BTN_TRIGGER_HAPPY2		0x2c1
@@ -784,6 +866,7 @@ struct input_keymap_entry {
 #define BTN_TRIGGER_HAPPY39		0x2e6
 #define BTN_TRIGGER_HAPPY40		0x2e7
 
+<<<<<<< HEAD
 /* SAMSUNG
  * 0	 3
  * 1	 4
@@ -799,6 +882,8 @@ struct input_keymap_entry {
 #define KEY_SIDE_TOUCH_7		0x2ef
 #define KEY_SIDE_CAMERA_DETECTED	0x2f0
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /* We avoid low common keys in module aliases so they don't get huge. */
 #define KEY_MIN_INTERESTING	KEY_MUTE
 #define KEY_MAX			0x2ff
@@ -870,6 +955,7 @@ struct input_keymap_entry {
 #define ABS_MT_TOOL_X		0x3c	/* Center X tool position */
 #define ABS_MT_TOOL_Y		0x3d	/* Center Y tool position */
 
+<<<<<<< HEAD
 #ifdef CONFIG_INPUT_EXPANDED_ABS
 #define ABS_MT_PALM		0x40	/* palm touch */
 #define ABS_MT_GRIP		0x41	/* grip touch */
@@ -882,6 +968,10 @@ struct input_keymap_entry {
 #define ABS_MAX			0x3f
 #endif
 
+=======
+
+#define ABS_MAX			0x3f
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define ABS_CNT			(ABS_MAX+1)
 
 /*
@@ -904,6 +994,7 @@ struct input_keymap_entry {
 #define SW_FRONT_PROXIMITY	0x0b  /* set = front proximity sensor active */
 #define SW_ROTATE_LOCK		0x0c  /* set = rotate locked/disabled */
 #define SW_LINEIN_INSERT	0x0d  /* set = inserted */
+<<<<<<< HEAD
 
 #define SW_3D_ACC		0x12	/* set = 3d accessory */
 #define SW_PEN_INSERT	0x13	/* set = pen out */
@@ -915,6 +1006,13 @@ struct input_keymap_entry {
 #define SW_W1			0x1A	/* set = w1 slave */
 #define	SW_CERTIFYHALL	0x1b	/* set = certify_hall... */
 
+=======
+#define SW_HPHL_OVERCURRENT	0x0e  /* set = over current on left hph */
+#define SW_HPHR_OVERCURRENT	0x0f  /* set = over current on right hph */
+#define SW_UNSUPPORT_INSERT	0x10  /* set = unsupported device inserted */
+#define SW_MICROPHONE2_INSERT   0x11  /* set = inserted */
+#define SW_MUTE_DEVICE		0x12  /* set = device disabled */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define SW_MAX			0x20
 #define SW_CNT			(SW_MAX+1)
 

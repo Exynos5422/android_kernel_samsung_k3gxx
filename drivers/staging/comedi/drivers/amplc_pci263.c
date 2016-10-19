@@ -59,6 +59,12 @@ static int pci263_do_insn_bits(struct comedi_device *dev,
 		outb(s->state & 0xFF, dev->iobase);
 		outb(s->state >> 8, dev->iobase + 1);
 	}
+<<<<<<< HEAD
+=======
+
+	data[1] = s->state;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return insn->n;
 }
 

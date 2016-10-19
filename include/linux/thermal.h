@@ -66,10 +66,26 @@ enum thermal_device_mode {
 	THERMAL_DEVICE_ENABLED,
 };
 
+<<<<<<< HEAD
 enum thermal_trip_type {
 	THERMAL_TRIP_ACTIVE = 0,
 	THERMAL_TRIP_PASSIVE,
 	THERMAL_TRIP_CRITICAL,
+=======
+enum thermal_trip_activation_mode {
+	THERMAL_TRIP_ACTIVATION_DISABLED = 0,
+	THERMAL_TRIP_ACTIVATION_ENABLED,
+};
+
+enum thermal_trip_type {
+	THERMAL_TRIP_ACTIVE = 0,
+	THERMAL_TRIP_PASSIVE,
+	THERMAL_TRIP_HOT,
+	THERMAL_TRIP_CRITICAL,
+	THERMAL_TRIP_CONFIGURABLE_HI,
+	THERMAL_TRIP_CONFIGURABLE_LOW,
+	THERMAL_TRIP_CRITICAL_LOW,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 enum thermal_trend {
@@ -116,6 +132,11 @@ struct thermal_zone_device_ops {
 		enum thermal_device_mode);
 	int (*get_trip_type) (struct thermal_zone_device *, int,
 		enum thermal_trip_type *);
+<<<<<<< HEAD
+=======
+	int (*activate_trip_type) (struct thermal_zone_device *, int,
+		enum thermal_trip_activation_mode);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	int (*get_trip_temp) (struct thermal_zone_device *, int,
 			      unsigned long *);
 	int (*set_trip_temp) (struct thermal_zone_device *, int,
@@ -130,7 +151,10 @@ struct thermal_zone_device_ops {
 			  enum thermal_trend *);
 	int (*notify) (struct thermal_zone_device *, int,
 		       enum thermal_trip_type);
+<<<<<<< HEAD
 	int (*throttle_cpu_hotplug) (struct thermal_zone_device *);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 struct thermal_cooling_device_ops {
@@ -156,6 +180,31 @@ struct thermal_attr {
 	char name[THERMAL_NAME_LENGTH];
 };
 
+<<<<<<< HEAD
+=======
+struct sensor_threshold {
+	long temp;
+	enum thermal_trip_type trip;
+	int (*notify)(enum thermal_trip_type type, int temp, void *data);
+	void *data;
+	uint8_t active;
+	struct list_head list;
+};
+
+struct sensor_info {
+	uint32_t sensor_id;
+	struct thermal_zone_device *tz;
+	long threshold_min;
+	long threshold_max;
+	int max_idx;
+	int min_idx;
+	struct list_head sensor_list;
+	struct list_head threshold_list;
+	struct mutex lock;
+	struct work_struct work;
+};
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 struct thermal_zone_device {
 	int id;
 	char type[THERMAL_NAME_LENGTH];
@@ -171,7 +220,10 @@ struct thermal_zone_device {
 	int last_temperature;
 	int emul_temperature;
 	int passive;
+<<<<<<< HEAD
 	bool cooling_dev_en;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	unsigned int forced_passive;
 	const struct thermal_zone_device_ops *ops;
 	const struct thermal_zone_params *tzp;
@@ -181,6 +233,11 @@ struct thermal_zone_device {
 	struct mutex lock; /* protect thermal_instances list */
 	struct list_head node;
 	struct delayed_work poll_queue;
+<<<<<<< HEAD
+=======
+	struct sensor_threshold tz_threshold[2];
+	struct sensor_info sensor;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 /* Structure that holds thermal governor information */
@@ -249,6 +306,18 @@ struct thermal_instance *get_thermal_instance(struct thermal_zone_device *,
 void thermal_cdev_update(struct thermal_cooling_device *);
 void thermal_notify_framework(struct thermal_zone_device *, int);
 
+<<<<<<< HEAD
+=======
+int sensor_get_temp(uint32_t sensor_id, long *temp);
+int sensor_get_id(char *name);
+int sensor_set_trip(uint32_t sensor_id, struct sensor_threshold *threshold);
+int sensor_cancel_trip(uint32_t sensor_id, struct sensor_threshold *threshold);
+int sensor_activate_trip(uint32_t sensor_id, struct sensor_threshold *threshold,
+		bool enable);
+int thermal_sensor_trip(struct thermal_zone_device *tz,
+		enum thermal_trip_type trip, long temp);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifdef CONFIG_NET
 extern int thermal_generate_netlink_event(struct thermal_zone_device *tz,
 						enum events event);

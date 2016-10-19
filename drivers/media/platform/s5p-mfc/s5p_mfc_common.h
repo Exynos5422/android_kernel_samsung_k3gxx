@@ -113,6 +113,7 @@ enum s5p_mfc_fmt_type {
 };
 
 /**
+<<<<<<< HEAD
  * enum s5p_mfc_node_type - The type of an MFC device node.
  */
 enum s5p_mfc_node_type {
@@ -122,6 +123,8 @@ enum s5p_mfc_node_type {
 };
 
 /**
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  * enum s5p_mfc_inst_type - The type of an MFC instance.
  */
 enum s5p_mfc_inst_type {

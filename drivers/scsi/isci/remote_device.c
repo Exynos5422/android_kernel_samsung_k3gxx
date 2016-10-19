@@ -1541,7 +1541,11 @@ void isci_remote_device_release(struct kref *kref)
 	clear_bit(IDEV_STOP_PENDING, &idev->flags);
 	clear_bit(IDEV_IO_READY, &idev->flags);
 	clear_bit(IDEV_GONE, &idev->flags);
+<<<<<<< HEAD
 	smp_mb__before_clear_bit();
+=======
+	smp_mb__before_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	clear_bit(IDEV_ALLOCATED, &idev->flags);
 	wake_up(&ihost->eventq);
 }

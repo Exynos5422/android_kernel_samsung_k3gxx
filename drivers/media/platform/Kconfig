@@ -33,8 +33,11 @@ source "drivers/media/platform/omap/Kconfig"
 
 source "drivers/media/platform/blackfin/Kconfig"
 
+<<<<<<< HEAD
 source "drivers/media/platform/exynos/Kconfig"
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 config VIDEO_SH_VOU
 	tristate "SuperH VOU video output driver"
 	depends on MEDIA_CAMERA_SUPPORT
@@ -205,7 +208,11 @@ config VIDEO_SAMSUNG_EXYNOS_GSC
 
 config VIDEO_SH_VEU
 	tristate "SuperH VEU mem2mem video processing driver"
+<<<<<<< HEAD
 	depends on VIDEO_DEV && VIDEO_V4L2 && GENERIC_HARDIRQS
+=======
+	depends on VIDEO_DEV && VIDEO_V4L2
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	select VIDEOBUF2_DMA_CONTIG
 	select V4L2_MEM2MEM_DEV
 	help
@@ -243,3 +250,8 @@ config VIDEO_MEM2MEM_TESTDEV
 	  This is a virtual test device for the memory-to-memory driver
 	  framework.
 endif #V4L_TEST_DRIVERS
+<<<<<<< HEAD
+=======
+
+source "drivers/media/platform/msm/Kconfig"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

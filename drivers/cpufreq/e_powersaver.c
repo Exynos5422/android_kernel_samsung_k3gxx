@@ -54,7 +54,11 @@ static struct acpi_processor_performance *eps_acpi_cpu_perf;
 /* Minimum necessary to get acpi_processor_get_bios_limit() working */
 static int eps_acpi_init(void)
 {
+<<<<<<< HEAD
 	eps_acpi_cpu_perf = kzalloc(sizeof(struct acpi_processor_performance),
+=======
+	eps_acpi_cpu_perf = kzalloc(sizeof(*eps_acpi_cpu_perf),
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				      GFP_KERNEL);
 	if (!eps_acpi_cpu_perf)
 		return -ENOMEM;
@@ -188,7 +192,11 @@ static int eps_target(struct cpufreq_policy *policy,
 	}
 
 	/* Make frequency transition */
+<<<<<<< HEAD
 	dest_state = centaur->freq_table[newstate].index & 0xffff;
+=======
+	dest_state = centaur->freq_table[newstate].driver_data & 0xffff;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ret = eps_set_state(centaur, policy, dest_state);
 	if (ret)
 		printk(KERN_ERR "eps: Timeout!\n");
@@ -363,7 +371,11 @@ static int eps_cpu_init(struct cpufreq_policy *policy)
 		states = 2;
 
 	/* Allocate private data and frequency table for current cpu */
+<<<<<<< HEAD
 	centaur = kzalloc(sizeof(struct eps_cpu_data)
+=======
+	centaur = kzalloc(sizeof(*centaur)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		    + (states + 1) * sizeof(struct cpufreq_frequency_table),
 		    GFP_KERNEL);
 	if (!centaur)
@@ -380,9 +392,15 @@ static int eps_cpu_init(struct cpufreq_policy *policy)
 	f_table = &centaur->freq_table[0];
 	if (brand != EPS_BRAND_C7M) {
 		f_table[0].frequency = fsb * min_multiplier;
+<<<<<<< HEAD
 		f_table[0].index = (min_multiplier << 8) | min_voltage;
 		f_table[1].frequency = fsb * max_multiplier;
 		f_table[1].index = (max_multiplier << 8) | max_voltage;
+=======
+		f_table[0].driver_data = (min_multiplier << 8) | min_voltage;
+		f_table[1].frequency = fsb * max_multiplier;
+		f_table[1].driver_data = (max_multiplier << 8) | max_voltage;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		f_table[2].frequency = CPUFREQ_TABLE_END;
 	} else {
 		k = 0;
@@ -391,7 +409,11 @@ static int eps_cpu_init(struct cpufreq_policy *policy)
 		for (i = min_multiplier; i <= max_multiplier; i++) {
 			voltage = (k * step) / 256 + min_voltage;
 			f_table[k].frequency = fsb * i;
+<<<<<<< HEAD
 			f_table[k].index = (i << 8) | voltage;
+=======
+			f_table[k].driver_data = (i << 8) | voltage;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			k++;
 		}
 		f_table[k].frequency = CPUFREQ_TABLE_END;
@@ -433,7 +455,10 @@ static struct cpufreq_driver eps_driver = {
 	.exit		= eps_cpu_exit,
 	.get		= eps_get,
 	.name		= "e_powersaver",
+<<<<<<< HEAD
 	.owner		= THIS_MODULE,
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	.attr		= eps_attr,
 };
 

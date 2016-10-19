@@ -75,7 +75,11 @@ static void for_each_companion(struct pci_dev *pdev, struct usb_hcd *hcd,
 				PCI_SLOT(companion->devfn) != slot)
 			continue;
 		companion_hcd = pci_get_drvdata(companion);
+<<<<<<< HEAD
 		if (!companion_hcd)
+=======
+		if (!companion_hcd || !companion_hcd->self.root_hub)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			continue;
 		fn(pdev, hcd, companion, companion_hcd);
 	}

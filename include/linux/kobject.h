@@ -114,7 +114,10 @@ struct kobj_type {
 };
 
 struct kobj_uevent_env {
+<<<<<<< HEAD
 	char *argv[3];
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	char *envp[UEVENT_NUM_ENVP];
 	int envp_idx;
 	char buf[UEVENT_BUFFER_SIZE];

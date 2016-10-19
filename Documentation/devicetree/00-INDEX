@@ -8,3 +8,7 @@ https://lists.ozlabs.org/listinfo/devicetree-discuss
 	- this file
 booting-without-of.txt
 	- Booting Linux without Open Firmware, describes history and format of device trees.
+<<<<<<< HEAD
+=======
+dt-object-internals.txt
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

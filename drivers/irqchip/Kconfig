@@ -6,10 +6,21 @@ config ARM_GIC
 	bool
 	select IRQ_DOMAIN
 	select MULTI_IRQ_HANDLER
+<<<<<<< HEAD
+=======
+	select MSM_SHOW_RESUME_IRQ
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 config GIC_NON_BANKED
 	bool
 
+<<<<<<< HEAD
+=======
+config GIC_SECURE
+	bool
+	depends on ARM_GIC
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 config ARM_VIC
 	bool
 	select IRQ_DOMAIN
@@ -25,6 +36,19 @@ config ARM_VIC_NR
 	  The maximum number of VICs available in the system, for
 	  power management.
 
+<<<<<<< HEAD
+=======
+config MSM_SHOW_RESUME_IRQ
+	bool "Enable logging of interrupts that could have caused resume"
+	depends on ARM_GIC
+	default n
+	help
+	  This option logs wake up interrupts that have triggered just before
+	  the resume loop unrolls. It helps to debug to know any unnecessary
+	  wake up interrupts that causes system to come out of low power modes.
+	  Say Y if you want to debug why the system resumed.
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 config RENESAS_INTC_IRQPIN
 	bool
 	select IRQ_DOMAIN
@@ -41,3 +65,10 @@ config VERSATILE_FPGA_IRQ_NR
        int
        default 4
        depends on VERSATILE_FPGA_IRQ
+<<<<<<< HEAD
+=======
+
+config MSM_IRQ
+	bool
+	select IRQ_DOMAIN
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

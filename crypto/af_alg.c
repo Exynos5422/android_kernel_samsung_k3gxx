@@ -21,7 +21,10 @@
 #include <linux/module.h>
 #include <linux/net.h>
 #include <linux/rwsem.h>
+<<<<<<< HEAD
 #include <linux/security.h>
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 struct alg_type_list {
 	const struct af_alg_type *type;
@@ -244,7 +247,10 @@ int af_alg_accept(struct sock *sk, struct socket *newsock)
 
 	sock_init_data(newsock, sk2);
 	sock_graft(sk2, newsock);
+<<<<<<< HEAD
 	security_sk_clone(sk, sk2);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	err = type->accept(ask->private, sk2);
 	if (err) {

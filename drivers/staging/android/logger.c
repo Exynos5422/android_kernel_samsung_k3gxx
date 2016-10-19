@@ -22,7 +22,10 @@
 #include <linux/sched.h>
 #include <linux/module.h>
 #include <linux/fs.h>
+<<<<<<< HEAD
 #include <linux/time.h>
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <linux/miscdevice.h>
 #include <linux/uaccess.h>
 #include <linux/poll.h>
@@ -33,8 +36,15 @@
 #include "logger.h"
 
 #include <asm/ioctls.h>
+<<<<<<< HEAD
 #include <linux/sec_debug.h>
 #include <linux/sec_bsp.h>
+=======
+
+#ifndef CONFIG_LOGCAT_SIZE
+#define CONFIG_LOGCAT_SIZE 256
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /**
  * struct logger_log - represents a specific log, such as 'main' or 'radio'
@@ -412,6 +422,7 @@ static void fix_up_readers(struct logger_log *log, size_t len)
 			reader->r_off = get_next_entry(log, reader->r_off, len);
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_EXYNOS_SNAPSHOT
 #define ESS_MAX_BUF_SIZE	4096
 #define ESS_MAX_SYNC_BUF_SIZE	256
@@ -449,6 +460,8 @@ static int reparse_hook_logger_header(struct logger_entry *entry)
 }
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * do_write_log - writes 'len' bytes from 'buf' to 'log'
  *
@@ -464,10 +477,13 @@ static void do_write_log(struct logger_log *log, const void *buf, size_t count)
 	if (count != len)
 		memcpy(log->buffer, buf + len, count - len);
 
+<<<<<<< HEAD
 #ifdef CONFIG_EXYNOS_SNAPSHOT
 	if (func_hook_logger)
 		ess_size = reparse_hook_logger_header((struct logger_entry *)buf);
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	log->w_off = logger_offset(log, log->w_off + count);
 
 }
@@ -499,6 +515,7 @@ static ssize_t do_write_log_from_user(struct logger_log *log,
 			 */
 			return -EFAULT;
 
+<<<<<<< HEAD
 #ifdef CONFIG_EXYNOS_SNAPSHOT
 	if (func_hook_logger && ess_size < ESS_MAX_BUF_SIZE) {
 		/*  sync with kernel log buffer */
@@ -541,6 +558,8 @@ static ssize_t do_write_log_from_user(struct logger_log *log,
 #endif
 		}
 	}
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	log->w_off = logger_offset(log, log->w_off + count);
 
 	return count;
@@ -606,6 +625,7 @@ static ssize_t logger_aio_write(struct kiocb *iocb, const struct iovec *iov,
 		iov++;
 		ret += nr;
 	}
+<<<<<<< HEAD
 #ifdef CONFIG_EXYNOS_SNAPSHOT
 	if (func_hook_logger && ess_size < ESS_MAX_BUF_SIZE) {
 		char *eatnl = ess_buf + ess_size - 1;
@@ -617,15 +637,21 @@ static ssize_t logger_aio_write(struct kiocb *iocb, const struct iovec *iov,
 		func_hook_logger(log->misc.name, ess_buf, ess_size);
 	}
 #endif
+=======
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	mutex_unlock(&log->mutex);
 
 	/* wake up any blocked readers */
 	wake_up_interruptible(&log->wq);
 
+<<<<<<< HEAD
 #ifdef CONFIG_EXYNOS_SNAPSHOT
 	if (func_hook_logger && strncmp(ess_sync_buf, "!@", 2) == 0)
 		printk(KERN_INFO "%s\n", ess_sync_buf);
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return ret;
 }
 
@@ -693,14 +719,21 @@ static int logger_release(struct inode *ignored, struct file *file)
 	if (file->f_mode & FMODE_READ) {
 		struct logger_reader *reader = file->private_data;
 		struct logger_log *log = reader->log;
+<<<<<<< HEAD
 		unsigned long start = jiffies;
+=======
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		mutex_lock(&log->mutex);
 		list_del(&reader->list);
 		mutex_unlock(&log->mutex);
 
 		kfree(reader);
+<<<<<<< HEAD
 		pr_info("%s: took %d msec\n", __func__,
 			jiffies_to_msecs(jiffies - start));
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	return 0;
@@ -854,7 +887,11 @@ static int __init create_log(char *log_name, int size)
 	struct logger_log *log;
 	unsigned char *buffer;
 
+<<<<<<< HEAD
 	buffer = kmalloc(size, GFP_KERNEL);
+=======
+	buffer = vmalloc(size);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (buffer == NULL)
 		return -ENOMEM;
 
@@ -896,14 +933,18 @@ static int __init create_log(char *log_name, int size)
 	pr_info("created %luK log '%s'\n",
 		(unsigned long) log->size >> 10, log->misc.name);
 
+<<<<<<< HEAD
 	sec_getlog_supply_loggerinfo(buffer, log->misc.name);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 
 out_free_log:
 	kfree(log);
 
 out_free_buffer:
+<<<<<<< HEAD
 	kfree(buffer);
 	return ret;
 }
@@ -944,10 +985,17 @@ int sec_debug_subsys_set_logger_info(
 }
 #endif
 
+=======
+	vfree(buffer);
+	return ret;
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int __init logger_init(void)
 {
 	int ret;
 
+<<<<<<< HEAD
 	ret = create_log(LOGGER_LOG_MAIN, 2048*1024);
 	if (unlikely(ret))
 		goto out;
@@ -970,6 +1018,24 @@ static int __init logger_init(void)
 		goto out;
 #endif
 
+=======
+	ret = create_log(LOGGER_LOG_MAIN, CONFIG_LOGCAT_SIZE*1024);
+	if (unlikely(ret))
+		goto out;
+
+	ret = create_log(LOGGER_LOG_EVENTS, CONFIG_LOGCAT_SIZE*1024);
+	if (unlikely(ret))
+		goto out;
+
+	ret = create_log(LOGGER_LOG_RADIO, CONFIG_LOGCAT_SIZE*1024);
+	if (unlikely(ret))
+		goto out;
+
+	ret = create_log(LOGGER_LOG_SYSTEM, CONFIG_LOGCAT_SIZE*1024);
+	if (unlikely(ret))
+		goto out;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 out:
 	return ret;
 }

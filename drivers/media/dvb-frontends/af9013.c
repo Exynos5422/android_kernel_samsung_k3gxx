@@ -24,6 +24,12 @@
 
 #include "af9013_priv.h"
 
+<<<<<<< HEAD
+=======
+/* Max transfer size done by I2C transfer functions */
+#define MAX_XFER_SIZE  64
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 struct af9013_state {
 	struct i2c_adapter *i2c;
 	struct dvb_frontend fe;
@@ -50,16 +56,34 @@ static int af9013_wr_regs_i2c(struct af9013_state *priv, u8 mbox, u16 reg,
 	const u8 *val, int len)
 {
 	int ret;
+<<<<<<< HEAD
 	u8 buf[3+len];
+=======
+	u8 buf[MAX_XFER_SIZE];
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct i2c_msg msg[1] = {
 		{
 			.addr = priv->config.i2c_addr,
 			.flags = 0,
+<<<<<<< HEAD
 			.len = sizeof(buf),
+=======
+			.len = 3 + len,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			.buf = buf,
 		}
 	};
 
+<<<<<<< HEAD
+=======
+	if (3 + len > sizeof(buf)) {
+		dev_warn(&priv->i2c->dev,
+			 "%s: i2c wr reg=%04x: len=%d is too big!\n",
+			 KBUILD_MODNAME, reg, len);
+		return -EINVAL;
+	}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	buf[0] = (reg >> 8) & 0xff;
 	buf[1] = (reg >> 0) & 0xff;
 	buf[2] = mbox;

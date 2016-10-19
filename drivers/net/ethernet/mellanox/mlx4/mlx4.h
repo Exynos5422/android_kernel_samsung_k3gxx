@@ -743,6 +743,10 @@ struct mlx4_priv {
 	spinlock_t		ctx_lock;
 
 	int			pci_dev_data;
+<<<<<<< HEAD
+=======
+	int                     removed;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	struct list_head        pgdir_list;
 	struct mutex            pgdir_mutex;

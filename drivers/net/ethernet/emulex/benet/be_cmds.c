@@ -1150,7 +1150,10 @@ int be_cmd_txq_create(struct be_adapter *adapter, struct be_tx_obj *txo)
 
 	if (lancer_chip(adapter)) {
 		req->hdr.version = 1;
+<<<<<<< HEAD
 		req->if_id = cpu_to_le16(adapter->if_handle);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	} else if (BEx_chip(adapter)) {
 		if (adapter->function_caps & BE_FUNCTION_CAPS_SUPER_NIC)
 			req->hdr.version = 2;
@@ -1158,6 +1161,11 @@ int be_cmd_txq_create(struct be_adapter *adapter, struct be_tx_obj *txo)
 		req->hdr.version = 2;
 	}
 
+<<<<<<< HEAD
+=======
+	if (req->hdr.version > 0)
+		req->if_id = cpu_to_le16(adapter->if_handle);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	req->num_pages = PAGES_4K_SPANNED(q_mem->va, q_mem->size);
 	req->ulp_num = BE_ULP1_NUM;
 	req->type = BE_ETH_TX_RING_TYPE_STANDARD;

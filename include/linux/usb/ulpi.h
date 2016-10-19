@@ -145,6 +145,10 @@
 #define ULPI_INT_SESS_VALID			(1 << 2)
 #define ULPI_INT_SESS_END			(1 << 3)
 #define ULPI_INT_IDGRD				(1 << 4)
+<<<<<<< HEAD
+=======
+#define ULPI_INT_DP				(1 << 7)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /* Debug */
 #define ULPI_DEBUG_LINESTATE0			(1 << 0)

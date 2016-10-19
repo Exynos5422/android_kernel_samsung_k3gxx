@@ -2374,8 +2374,13 @@ out_dio:
 
 	if (((file->f_flags & O_DSYNC) && !direct_io) || IS_SYNC(inode) ||
 	    ((file->f_flags & O_DIRECT) && !direct_io)) {
+<<<<<<< HEAD
 		ret = filemap_fdatawrite_range(file->f_mapping, pos,
 					       pos + count - 1);
+=======
+		ret = filemap_fdatawrite_range(file->f_mapping, *ppos,
+					       *ppos + count - 1);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (ret < 0)
 			written = ret;
 
@@ -2388,8 +2393,13 @@ out_dio:
 		}
 
 		if (!ret)
+<<<<<<< HEAD
 			ret = filemap_fdatawait_range(file->f_mapping, pos,
 						      pos + count - 1);
+=======
+			ret = filemap_fdatawait_range(file->f_mapping, *ppos,
+						      *ppos + count - 1);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	/*

@@ -1810,7 +1810,11 @@ int brcmf_fws_process_skb(struct brcmf_if *ifp, struct sk_buff *skb)
 
 	/* determine the priority */
 	if (!skb->priority)
+<<<<<<< HEAD
 		skb->priority = cfg80211_classify8021d(skb);
+=======
+		skb->priority = cfg80211_classify8021d(skb, NULL);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	drvr->tx_multicast += !!multicast;
 	if (ntohs(eh->h_proto) == ETH_P_PAE)

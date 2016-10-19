@@ -248,8 +248,13 @@ static int irqc_probe(struct platform_device *pdev)
 
 	return 0;
 err3:
+<<<<<<< HEAD
 	for (; k >= 0; k--)
 		free_irq(p->irq[k - 1].requested_irq, &p->irq[k - 1]);
+=======
+	while (--k >= 0)
+		free_irq(p->irq[k].requested_irq, &p->irq[k]);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	irq_domain_remove(p->irq_domain);
 err2:

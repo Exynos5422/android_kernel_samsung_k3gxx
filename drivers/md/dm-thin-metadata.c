@@ -1349,6 +1349,15 @@ dm_thin_id dm_thin_dev_id(struct dm_thin_device *td)
 	return td->id;
 }
 
+<<<<<<< HEAD
+=======
+/*
+ * Check whether @time (of block creation) is older than @td's last snapshot.
+ * If so then the associated block is shared with the last snapshot device.
+ * Any block on a device created *after* the device last got snapshotted is
+ * necessarily not shared.
+ */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static bool __snapshotted_since(struct dm_thin_device *td, uint32_t time)
 {
 	return td->snapshotted_time > time;
@@ -1458,6 +1467,23 @@ int dm_thin_remove_block(struct dm_thin_device *td, dm_block_t block)
 	return r;
 }
 
+<<<<<<< HEAD
+=======
+int dm_pool_block_is_used(struct dm_pool_metadata *pmd, dm_block_t b, bool *result)
+{
+	int r;
+	uint32_t ref_count;
+
+	down_read(&pmd->root_lock);
+	r = dm_sm_get_count(pmd->data_sm, b, &ref_count);
+	if (!r)
+		*result = (ref_count != 0);
+	up_read(&pmd->root_lock);
+
+	return r;
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 bool dm_thin_changed_this_transaction(struct dm_thin_device *td)
 {
 	int r;
@@ -1469,6 +1495,26 @@ bool dm_thin_changed_this_transaction(struct dm_thin_device *td)
 	return r;
 }
 
+<<<<<<< HEAD
+=======
+bool dm_pool_changed_this_transaction(struct dm_pool_metadata *pmd)
+{
+	bool r = false;
+	struct dm_thin_device *td, *tmp;
+
+	down_read(&pmd->root_lock);
+	list_for_each_entry_safe(td, tmp, &pmd->thin_devices, list) {
+		if (td->changed) {
+			r = td->changed;
+			break;
+		}
+	}
+	up_read(&pmd->root_lock);
+
+	return r;
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 bool dm_thin_aborted_changes(struct dm_thin_device *td)
 {
 	bool r;

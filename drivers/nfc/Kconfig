@@ -5,6 +5,7 @@
 menu "Near Field Communication (NFC) devices"
 	depends on NFC
 
+<<<<<<< HEAD
 config NFC_PN547
 	bool "NXP PN547 NFC Controller Driver"
 	depends on I2C
@@ -23,6 +24,8 @@ config NFC_PN547_CLOCK_REQUEST
 	  NXP PN547 Near Field Communication controller support.
 	  This option enables internal clock in AP support for the NFC.
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 config NFC_PN533
 	tristate "NXP PN533 USB driver"
 	depends on USB
@@ -54,6 +57,7 @@ config NFC_MEI_PHY
 
 	  If unsure, say N.
 
+<<<<<<< HEAD
 config NFC_PN65N
 	tristate "PN65N NFC driver"
 	depends on I2C
@@ -150,3 +154,18 @@ config SEC_NFC_LDO_CONTROL
 	  kernel.
 
 endmenu
+=======
+source "drivers/nfc/pn544/Kconfig"
+source "drivers/nfc/microread/Kconfig"
+
+endmenu
+
+config NFC_QNCI
+	bool "Qualcomm NCI based NFC Controller Driver for qca199x"
+	depends on I2C
+	select CRC_CCITT
+	help
+	  This enables the NFC driver for QCA199x based devices.
+	  This is for i2c connected version. NCI protocol logic
+	  resides in the usermode and it has no other NFC dependencies.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

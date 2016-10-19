@@ -984,8 +984,15 @@ static void cpuset_change_task_nodemask(struct task_struct *tsk,
 	need_loop = task_has_mempolicy(tsk) ||
 			!nodes_intersects(*newmems, tsk->mems_allowed);
 
+<<<<<<< HEAD
 	if (need_loop)
 		write_seqcount_begin(&tsk->mems_allowed_seq);
+=======
+	if (need_loop) {
+		local_irq_disable();
+		write_seqcount_begin(&tsk->mems_allowed_seq);
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	nodes_or(tsk->mems_allowed, tsk->mems_allowed, *newmems);
 	mpol_rebind_task(tsk, newmems, MPOL_REBIND_STEP1);
@@ -993,8 +1000,15 @@ static void cpuset_change_task_nodemask(struct task_struct *tsk,
 	mpol_rebind_task(tsk, newmems, MPOL_REBIND_STEP2);
 	tsk->mems_allowed = *newmems;
 
+<<<<<<< HEAD
 	if (need_loop)
 		write_seqcount_end(&tsk->mems_allowed_seq);
+=======
+	if (need_loop) {
+		write_seqcount_end(&tsk->mems_allowed_seq);
+		local_irq_enable();
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	task_unlock(tsk);
 }
@@ -1149,7 +1163,17 @@ done:
 
 int current_cpuset_is_being_rebound(void)
 {
+<<<<<<< HEAD
 	return task_cs(current) == cpuset_being_rebound;
+=======
+	int ret;
+
+	rcu_read_lock();
+	ret = task_cs(current) == cpuset_being_rebound;
+	rcu_read_unlock();
+
+	return ret;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static int update_relax_domain_level(struct cpuset *cs, s64 val)
@@ -2418,9 +2442,15 @@ int __cpuset_node_allowed_softwall(int node, gfp_t gfp_mask)
 
 	task_lock(current);
 	cs = nearest_hardwall_ancestor(task_cs(current));
+<<<<<<< HEAD
 	task_unlock(current);
 
 	allowed = node_isset(node, cs->mems_allowed);
+=======
+	allowed = node_isset(node, cs->mems_allowed);
+	task_unlock(current);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	mutex_unlock(&callback_mutex);
 	return allowed;
 }

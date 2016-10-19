@@ -45,6 +45,10 @@
 #define MAPPER_CTRL_MINOR	236
 #define LOOP_CTRL_MINOR		237
 #define VHOST_NET_MINOR		238
+<<<<<<< HEAD
+=======
+#define UHID_MINOR		239
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define MISC_DYNAMIC_MINOR	255
 
 struct device;

@@ -398,7 +398,11 @@ static void iucv_sock_destruct(struct sock *sk)
 	sk_mem_reclaim(sk);
 
 	if (!sock_flag(sk, SOCK_DEAD)) {
+<<<<<<< HEAD
 		pr_err("Attempt to release alive iucv socket %p\n", sk);
+=======
+		WARN(1, "Attempt to release alive iucv socket %p\n", sk);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return;
 	}
 
@@ -1324,8 +1328,11 @@ static int iucv_sock_recvmsg(struct kiocb *iocb, struct socket *sock,
 	int err = 0;
 	u32 offset;
 
+<<<<<<< HEAD
 	msg->msg_namelen = 0;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if ((sk->sk_state == IUCV_DISCONN) &&
 	    skb_queue_empty(&iucv->backlog_skb_q) &&
 	    skb_queue_empty(&sk->sk_receive_queue) &&
@@ -1831,7 +1838,11 @@ static void iucv_callback_txdone(struct iucv_path *path,
 		spin_lock_irqsave(&list->lock, flags);
 
 		while (list_skb != (struct sk_buff *)list) {
+<<<<<<< HEAD
 			if (msg->tag != IUCV_SKB_CB(list_skb)->tag) {
+=======
+			if (msg->tag == IUCV_SKB_CB(list_skb)->tag) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				this = list_skb;
 				break;
 			}

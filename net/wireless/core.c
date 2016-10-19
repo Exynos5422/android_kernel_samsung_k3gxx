@@ -846,6 +846,7 @@ void cfg80211_update_iface_num(struct cfg80211_registered_device *rdev,
 		rdev->num_running_monitor_ifaces += num;
 }
 
+<<<<<<< HEAD
 void cfg80211_leave(struct cfg80211_registered_device *rdev,
 		   struct wireless_dev *wdev)
 {
@@ -886,6 +887,8 @@ void cfg80211_leave(struct cfg80211_registered_device *rdev,
 	wdev->beacon_interval = 0;
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int cfg80211_netdev_notifier_call(struct notifier_block *nb,
 					 unsigned long state,
 					 void *ndev)
@@ -954,7 +957,44 @@ static int cfg80211_netdev_notifier_call(struct notifier_block *nb,
 			dev->priv_flags |= IFF_DONT_BRIDGE;
 		break;
 	case NETDEV_GOING_DOWN:
+<<<<<<< HEAD
 		cfg80211_leave(rdev, wdev);
+=======
+		switch (wdev->iftype) {
+		case NL80211_IFTYPE_ADHOC:
+			cfg80211_leave_ibss(rdev, dev, true);
+			break;
+		case NL80211_IFTYPE_P2P_CLIENT:
+		case NL80211_IFTYPE_STATION:
+			mutex_lock(&rdev->sched_scan_mtx);
+			__cfg80211_stop_sched_scan(rdev, false);
+			mutex_unlock(&rdev->sched_scan_mtx);
+
+			wdev_lock(wdev);
+#ifdef CONFIG_CFG80211_WEXT
+			kfree(wdev->wext.ie);
+			wdev->wext.ie = NULL;
+			wdev->wext.ie_len = 0;
+			wdev->wext.connect.auth_type =
+						NL80211_AUTHTYPE_AUTOMATIC;
+#endif
+			__cfg80211_disconnect(rdev, dev,
+					      WLAN_REASON_DEAUTH_LEAVING, true);
+			cfg80211_mlme_down(rdev, dev);
+			wdev_unlock(wdev);
+			break;
+		case NL80211_IFTYPE_MESH_POINT:
+			cfg80211_leave_mesh(rdev, dev);
+			break;
+		case NL80211_IFTYPE_AP:
+		case NL80211_IFTYPE_P2P_GO:
+			cfg80211_stop_ap(rdev, dev);
+			break;
+		default:
+			break;
+		}
+		wdev->beacon_interval = 0;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		break;
 	case NETDEV_DOWN:
 		cfg80211_update_iface_num(rdev, wdev->iftype, -1);

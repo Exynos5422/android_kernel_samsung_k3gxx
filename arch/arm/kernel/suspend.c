@@ -1,13 +1,27 @@
 #include <linux/init.h>
+<<<<<<< HEAD
 
+=======
+#include <linux/slab.h>
+
+#include <asm/cacheflush.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <asm/idmap.h>
 #include <asm/pgalloc.h>
 #include <asm/pgtable.h>
 #include <asm/memory.h>
+<<<<<<< HEAD
 #include <asm/suspend.h>
 #include <asm/tlbflush.h>
 
 extern int __cpu_suspend(unsigned long, int (*)(unsigned long));
+=======
+#include <asm/smp_plat.h>
+#include <asm/suspend.h>
+#include <asm/tlbflush.h>
+
+extern int __cpu_suspend(unsigned long, int (*)(unsigned long), u32 cpuid);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 extern void cpu_resume_mmu(void);
 
 /*
@@ -54,6 +68,10 @@ void __cpu_suspend_save(u32 *ptr, u32 ptrsz, u32 sp, u32 *save_ptr)
 int cpu_suspend(unsigned long arg, int (*fn)(unsigned long))
 {
 	struct mm_struct *mm = current->active_mm;
+<<<<<<< HEAD
+=======
+	u32 __mpidr = cpu_logical_map(smp_processor_id());
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	int ret;
 
 	if (!idmap_pgd)
@@ -65,7 +83,11 @@ int cpu_suspend(unsigned long arg, int (*fn)(unsigned long))
 	 * resume (indicated by a zero return code), we need to switch
 	 * back to the correct page tables.
 	 */
+<<<<<<< HEAD
 	ret = __cpu_suspend(arg, fn);
+=======
+	ret = __cpu_suspend(arg, fn, __mpidr);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (ret == 0) {
 		cpu_switch_mm(mm->pgd, mm);
 		local_flush_bp_all();
@@ -74,3 +96,23 @@ int cpu_suspend(unsigned long arg, int (*fn)(unsigned long))
 
 	return ret;
 }
+<<<<<<< HEAD
+=======
+
+extern struct sleep_save_sp sleep_save_sp;
+
+static int cpu_suspend_alloc_sp(void)
+{
+	void *ctx_ptr;
+	/* ctx_ptr is an array of physical addresses */
+	ctx_ptr = kcalloc(mpidr_hash_size(), sizeof(u32), GFP_KERNEL);
+
+	if (WARN_ON(!ctx_ptr))
+		return -ENOMEM;
+	sleep_save_sp.save_ptr_stash = ctx_ptr;
+	sleep_save_sp.save_ptr_stash_phys = virt_to_phys(ctx_ptr);
+	sync_cache_w(&sleep_save_sp);
+	return 0;
+}
+early_initcall(cpu_suspend_alloc_sp);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

@@ -33,18 +33,35 @@
 #define UL(x) _AC(x, UL)
 
 /*
+<<<<<<< HEAD
  * PAGE_OFFSET - the virtual address of the start of the kernel image.
+=======
+ * PAGE_OFFSET - the virtual address of the start of the kernel image (top
+ *		 (VA_BITS - 1))
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  * VA_BITS - the maximum number of bits for virtual addresses.
  * TASK_SIZE - the maximum size of a user space task.
  * TASK_UNMAPPED_BASE - the lower boundary of the mmap VM area.
  * The module space lives between the addresses given by TASK_SIZE
  * and PAGE_OFFSET - it must be within 128MB of the kernel text.
  */
+<<<<<<< HEAD
 #define PAGE_OFFSET		UL(0xffffffc000000000)
 #define MODULES_END		(PAGE_OFFSET)
 #define MODULES_VADDR		(MODULES_END - SZ_64M)
 #define EARLYCON_IOBASE		(MODULES_VADDR - SZ_4M)
 #define VA_BITS			(39)
+=======
+#ifdef CONFIG_ARM64_64K_PAGES
+#define VA_BITS			(42)
+#else
+#define VA_BITS			(39)
+#endif
+#define PAGE_OFFSET		(UL(0xffffffffffffffff) << (VA_BITS - 1))
+#define MODULES_END		(PAGE_OFFSET)
+#define MODULES_VADDR		(MODULES_END - SZ_64M)
+#define FIXADDR_TOP		(MODULES_VADDR - SZ_2M - PAGE_SIZE)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define TASK_SIZE_64		(UL(1) << VA_BITS)
 
 #ifdef CONFIG_COMPAT
@@ -90,6 +107,15 @@
 #define MT_NORMAL_NC		3
 #define MT_NORMAL		4
 
+<<<<<<< HEAD
+=======
+/*
+ * Memory types for Stage-2 translation
+ */
+#define MT_S2_NORMAL		0xf
+#define MT_S2_DEVICE_nGnRE	0x1
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifndef __ASSEMBLY__
 
 extern phys_addr_t		memstart_addr;
@@ -127,6 +153,10 @@ static inline void *phys_to_virt(phys_addr_t x)
 #define __pa(x)			__virt_to_phys((unsigned long)(x))
 #define __va(x)			((void *)__phys_to_virt((phys_addr_t)(x)))
 #define pfn_to_kaddr(pfn)	__va((pfn) << PAGE_SHIFT)
+<<<<<<< HEAD
+=======
+#define virt_to_pfn(x)      __phys_to_pfn(__virt_to_phys(x))
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /*
  *  virt_to_page(k)	convert a _valid_ virtual address to struct page *
@@ -135,8 +165,12 @@ static inline void *phys_to_virt(phys_addr_t x)
 #define ARCH_PFN_OFFSET		PHYS_PFN_OFFSET
 
 #define virt_to_page(kaddr)	pfn_to_page(__pa(kaddr) >> PAGE_SHIFT)
+<<<<<<< HEAD
 #define	virt_addr_valid(kaddr)	(((void *)(kaddr) >= (void *)PAGE_OFFSET) && \
 				 ((void *)(kaddr) < (void *)high_memory))
+=======
+#define	virt_addr_valid(kaddr)	pfn_valid(__pa(kaddr) >> PAGE_SHIFT)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #endif
 

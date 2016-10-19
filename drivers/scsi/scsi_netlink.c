@@ -77,7 +77,11 @@ scsi_nl_rcv_msg(struct sk_buff *skb)
 			goto next_msg;
 		}
 
+<<<<<<< HEAD
 		if (!capable(CAP_SYS_ADMIN)) {
+=======
+		if (!netlink_capable(skb, CAP_SYS_ADMIN)) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			err = -EPERM;
 			goto next_msg;
 		}

@@ -87,7 +87,11 @@ struct htb_class {
 	unsigned int children;
 	struct htb_class *parent;	/* parent class */
 
+<<<<<<< HEAD
 	int prio;		/* these two are used only by leaves... */
+=======
+	u32 prio;		/* these two are used only by leaves... */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	int quantum;		/* but stored for parent-to-leaf return */
 
 	union {
@@ -1312,6 +1316,10 @@ static int htb_change_class(struct Qdisc *sch, u32 classid,
 	struct htb_sched *q = qdisc_priv(sch);
 	struct htb_class *cl = (struct htb_class *)*arg, *parent;
 	struct nlattr *opt = tca[TCA_OPTIONS];
+<<<<<<< HEAD
+=======
+	struct qdisc_rate_table *rtab = NULL, *ctab = NULL;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct nlattr *tb[TCA_HTB_MAX + 1];
 	struct tc_htb_opt *hopt;
 
@@ -1333,6 +1341,21 @@ static int htb_change_class(struct Qdisc *sch, u32 classid,
 	if (!hopt->rate.rate || !hopt->ceil.rate)
 		goto failure;
 
+<<<<<<< HEAD
+=======
+	/* Keeping backward compatible with rate_table based iproute2 tc */
+	if (hopt->rate.linklayer == TC_LINKLAYER_UNAWARE) {
+		rtab = qdisc_get_rtab(&hopt->rate, tb[TCA_HTB_RTAB]);
+		if (rtab)
+			qdisc_put_rtab(rtab);
+	}
+	if (hopt->ceil.linklayer == TC_LINKLAYER_UNAWARE) {
+		ctab = qdisc_get_rtab(&hopt->ceil, tb[TCA_HTB_CTAB]);
+		if (ctab)
+			qdisc_put_rtab(ctab);
+	}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (!cl) {		/* new class */
 		struct Qdisc *new_q;
 		int prio;
@@ -1463,7 +1486,11 @@ static int htb_change_class(struct Qdisc *sch, u32 classid,
 	psched_ratecfg_precompute(&cl->ceil, &hopt->ceil);
 
 	cl->buffer = PSCHED_TICKS2NS(hopt->buffer);
+<<<<<<< HEAD
 	cl->cbuffer = PSCHED_TICKS2NS(hopt->buffer);
+=======
+	cl->cbuffer = PSCHED_TICKS2NS(hopt->cbuffer);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	sch_tree_unlock(sch);
 

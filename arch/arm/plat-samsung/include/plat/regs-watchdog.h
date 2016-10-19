@@ -19,7 +19,10 @@
 #define S3C2410_WTCON	   S3C_WDOGREG(0x00)
 #define S3C2410_WTDAT	   S3C_WDOGREG(0x04)
 #define S3C2410_WTCNT	   S3C_WDOGREG(0x08)
+<<<<<<< HEAD
 #define S3C2410_WTCLRINT   S3C_WDOGREG(0x0C)
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /* the watchdog can either generate a reset pulse, or an
  * interrupt.
@@ -33,6 +36,7 @@
 #define S3C2410_WTCON_DIV32   (1<<3)
 #define S3C2410_WTCON_DIV64   (2<<3)
 #define S3C2410_WTCON_DIV128  (3<<3)
+<<<<<<< HEAD
 #define S3C2410_WTCON_DIVMAX  (128)
 
 #define S3C2410_WTCON_PRESCALE(x) ((x) << 8)
@@ -40,6 +44,11 @@
 #define S3C2410_WTCON_PRESCALE_MAX  (0xFF)
 
 #define S3C2410_WTCNT_MAX     (0xFFFF)
+=======
+
+#define S3C2410_WTCON_PRESCALE(x) ((x) << 8)
+#define S3C2410_WTCON_PRESCALE_MASK (0xff00)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #endif /* __ASM_ARCH_REGS_WATCHDOG_H */
 

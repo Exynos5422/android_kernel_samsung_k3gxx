@@ -1027,15 +1027,41 @@ id_mode_to_cifs_acl(struct inode *inode, const char *path, __u64 nmode,
 	__u32 secdesclen = 0;
 	struct cifs_ntsd *pntsd = NULL; /* acl obtained from server */
 	struct cifs_ntsd *pnntsd = NULL; /* modified acl to be sent to server */
+<<<<<<< HEAD
+=======
+	struct cifs_sb_info *cifs_sb = CIFS_SB(inode->i_sb);
+	struct tcon_link *tlink = cifs_sb_tlink(cifs_sb);
+	struct cifs_tcon *tcon;
+
+	if (IS_ERR(tlink))
+		return PTR_ERR(tlink);
+	tcon = tlink_tcon(tlink);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	cifs_dbg(NOISY, "set ACL from mode for %s\n", path);
 
 	/* Get the security descriptor */
+<<<<<<< HEAD
 	pntsd = get_cifs_acl(CIFS_SB(inode->i_sb), inode, path, &secdesclen);
 	if (IS_ERR(pntsd)) {
 		rc = PTR_ERR(pntsd);
 		cifs_dbg(VFS, "%s: error %d getting sec desc\n", __func__, rc);
 		goto out;
+=======
+
+	if (tcon->ses->server->ops->get_acl == NULL) {
+		cifs_put_tlink(tlink);
+		return -EOPNOTSUPP;
+	}
+
+	pntsd = tcon->ses->server->ops->get_acl(cifs_sb, inode, path,
+						&secdesclen);
+	if (IS_ERR(pntsd)) {
+		rc = PTR_ERR(pntsd);
+		cifs_dbg(VFS, "%s: error %d getting sec desc\n", __func__, rc);
+		cifs_put_tlink(tlink);
+		return rc;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	/*
@@ -1048,6 +1074,10 @@ id_mode_to_cifs_acl(struct inode *inode, const char *path, __u64 nmode,
 	pnntsd = kmalloc(secdesclen, GFP_KERNEL);
 	if (!pnntsd) {
 		kfree(pntsd);
+<<<<<<< HEAD
+=======
+		cifs_put_tlink(tlink);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return -ENOMEM;
 	}
 
@@ -1056,6 +1086,7 @@ id_mode_to_cifs_acl(struct inode *inode, const char *path, __u64 nmode,
 
 	cifs_dbg(NOISY, "build_sec_desc rc: %d\n", rc);
 
+<<<<<<< HEAD
 	if (!rc) {
 		/* Set the security descriptor */
 		rc = set_cifs_acl(pnntsd, secdesclen, inode, path, aclflag);
@@ -1065,5 +1096,20 @@ id_mode_to_cifs_acl(struct inode *inode, const char *path, __u64 nmode,
 	kfree(pnntsd);
 	kfree(pntsd);
 out:
+=======
+	if (tcon->ses->server->ops->set_acl == NULL)
+		rc = -EOPNOTSUPP;
+
+	if (!rc) {
+		/* Set the security descriptor */
+		rc = tcon->ses->server->ops->set_acl(pnntsd, secdesclen, inode,
+						     path, aclflag);
+		cifs_dbg(NOISY, "set_cifs_acl rc: %d\n", rc);
+	}
+	cifs_put_tlink(tlink);
+
+	kfree(pnntsd);
+	kfree(pntsd);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return rc;
 }

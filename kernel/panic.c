@@ -22,6 +22,7 @@
 #include <linux/sysrq.h>
 #include <linux/init.h>
 #include <linux/nmi.h>
+<<<<<<< HEAD
 #include "sched/sched.h"
 #ifdef CONFIG_SEC_DEBUG_SUBSYS
 #include <linux/sec_debug.h>
@@ -40,6 +41,14 @@ extern void show_exynos_pmu(void);
 #if defined(CONFIG_SOC_EXYNOS5422) || defined(CONFIG_SOC_EXYNOS5430)
 extern void show_exynos_cmu(void);
 #endif
+=======
+
+#define CREATE_TRACE_POINTS
+#include <trace/events/exception.h>
+
+#define PANIC_TIMER_STEP 100
+#define PANIC_BLINK_SPD 18
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /* Machine specific panic information string */
 char *mach_panic_string;
@@ -94,6 +103,10 @@ void panic(const char *fmt, ...)
 	long i, i_next = 0;
 	int state = 0;
 
+<<<<<<< HEAD
+=======
+	trace_kernel_panic(0);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/*
 	 * Disable local interrupts. This will prevent panic_smp_self_stop
 	 * from deadlocking the first cpu that invokes the panic, since
@@ -128,6 +141,7 @@ void panic(const char *fmt, ...)
 	if (!test_taint(TAINT_DIE) && oops_in_progress <= 1)
 		dump_stack();
 #endif
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_DEBUG_SUBSYS
 	sec_debug_save_panic_info(buf,
 		(unsigned int)__builtin_return_address(0));
@@ -142,6 +156,8 @@ void panic(const char *fmt, ...)
 
 	exynos_ss_early_dump();
 	sysrq_sched_debug_show();
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/*
 	 * If we have crashed and we have a crash kernel loaded let it handle
@@ -159,9 +175,12 @@ void panic(const char *fmt, ...)
 
 	kmsg_dump(KMSG_DUMP_PANIC);
 
+<<<<<<< HEAD
 #ifdef CONFIG_EXYNOS_CORESIGHT_PC_INFO
 	exynos_cs_show_pcval();
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	atomic_notifier_call_chain(&panic_notifier_list, 0, buf);
 
 	bust_spinlocks(0);
@@ -185,6 +204,12 @@ void panic(const char *fmt, ...)
 			mdelay(PANIC_TIMER_STEP);
 		}
 	}
+<<<<<<< HEAD
+=======
+
+	trace_kernel_panic_late(0);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (panic_timeout != 0) {
 		/*
 		 * This will not be a clean reboot, with everything
@@ -391,6 +416,10 @@ void oops_enter(void)
 	tracing_off();
 	/* can't trust the integrity of the kernel anymore: */
 	debug_locks_off();
+<<<<<<< HEAD
+=======
+	oops_printk_start();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	do_oops_enter_exit();
 }
 
@@ -442,9 +471,12 @@ struct slowpath_args {
 static void warn_slowpath_common(const char *file, int line, void *caller,
 				 unsigned taint, struct slowpath_args *args)
 {
+<<<<<<< HEAD
 #if defined(CONFIG_SEC_BAT_AUT) && !defined(CONFIG_SAMSUNG_PRODUCT_SHIP)
 	printk(BAT_AUTOMAION_TEST_PREFIX_WARN "KERNEL WARN START\n");
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	printk(KERN_WARNING "------------[ cut here ]------------\n");
 	printk(KERN_WARNING "WARNING: at %s:%d %pS()\n", file, line, caller);
 
@@ -456,9 +488,12 @@ static void warn_slowpath_common(const char *file, int line, void *caller,
 	print_oops_end_marker();
 	/* Just a warning, don't kill lockdep. */
 	add_taint(taint, LOCKDEP_STILL_OK);
+<<<<<<< HEAD
 #if defined(CONFIG_SEC_BAT_AUT) && !defined(CONFIG_SAMSUNG_PRODUCT_SHIP)
 	printk(BAT_AUTOMAION_TEST_PREFIX_WARN "KERNEL WARN END\n");
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 void warn_slowpath_fmt(const char *file, int line, const char *fmt, ...)

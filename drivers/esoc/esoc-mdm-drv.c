@@ -84,6 +84,7 @@ static void mdm_handle_clink_evt(enum esoc_evt evt,
 
 static void mdm_ssr_fn(struct work_struct *work)
 {
+<<<<<<< HEAD
 	int ret;
 	struct mdm_drv *mdm_drv = container_of(work, struct mdm_drv, ssr_work);
 	struct esoc_clink *esoc_clink = mdm_drv->esoc_clink;
@@ -98,6 +99,14 @@ static void mdm_ssr_fn(struct work_struct *work)
 		dev_err(&esoc_clink->dev, "ssr request refused\n");
 		clink_ops->cmd_exe(ESOC_PWR_OFF, esoc_clink);
 	}
+=======
+	struct mdm_drv *mdm_drv = container_of(work, struct mdm_drv, ssr_work);
+
+	/*
+	 * If restarting esoc fails, the SSR framework triggers a kernel panic
+	 */
+	esoc_clink_request_ssr(mdm_drv->esoc_clink);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return;
 }
 
@@ -111,7 +120,12 @@ static void mdm_crash_shutdown(const struct subsys_desc *mdm_subsys)
 	clink_ops->notify(ESOC_PRIMARY_CRASH, esoc_clink);
 }
 
+<<<<<<< HEAD
 static int mdm_subsys_shutdown(const struct subsys_desc *crashed_subsys)
+=======
+static int mdm_subsys_shutdown(const struct subsys_desc *crashed_subsys,
+							bool force_stop)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	int ret;
 	struct esoc_clink *esoc_clink =
@@ -127,8 +141,17 @@ static int mdm_subsys_shutdown(const struct subsys_desc *crashed_subsys)
 			return ret;
 		}
 		mdm_drv->mode = IN_DEBUG;
+<<<<<<< HEAD
 	} else {
 		ret = clink_ops->cmd_exe(ESOC_PWR_OFF, esoc_clink);
+=======
+	} else if (!force_stop) {
+		if (esoc_clink->subsys.sysmon_shutdown_ret)
+			ret = clink_ops->cmd_exe(ESOC_FORCE_PWR_OFF,
+							esoc_clink);
+		else
+			ret = clink_ops->cmd_exe(ESOC_PWR_OFF, esoc_clink);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (ret) {
 			dev_err(&esoc_clink->dev, "failed to exe power off\n");
 			return ret;
@@ -170,13 +193,19 @@ static int mdm_subsys_powerup(const struct subsys_desc *crashed_subsys)
 			return ret;
 		}
 	}
+<<<<<<< HEAD
 #if 0
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	wait_for_completion(&mdm_drv->boot_done);
 	if (mdm_drv->boot_fail) {
 		dev_err(&esoc_clink->dev, "booting failed\n");
 		return -EIO;
 	}
+<<<<<<< HEAD
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 
@@ -189,7 +218,10 @@ static int mdm_subsys_ramdumps(int want_dumps,
 								subsys);
 	const struct esoc_clink_ops const *clink_ops = esoc_clink->clink_ops;
 
+<<<<<<< HEAD
 	pr_info("[MIF] %s, 1\n", __func__);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (want_dumps) {
 		ret = clink_ops->cmd_exe(ESOC_EXE_DEBUG, esoc_clink);
 		if (ret) {
@@ -197,7 +229,10 @@ static int mdm_subsys_ramdumps(int want_dumps,
 			return ret;
 		}
 	}
+<<<<<<< HEAD
 	pr_info("[MIF] %s, 2\n", __func__);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 
@@ -216,7 +251,10 @@ int esoc_ssr_probe(struct esoc_clink *esoc_clink)
 	struct mdm_drv *mdm_drv;
 	struct esoc_eng *esoc_eng;
 
+<<<<<<< HEAD
 	pr_info("[MIF] %s\n", __func__);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	mdm_drv = devm_kzalloc(&esoc_clink->dev, sizeof(*mdm_drv), GFP_KERNEL);
 	if (IS_ERR(mdm_drv))
 		return PTR_ERR(mdm_drv);
@@ -246,7 +284,10 @@ int esoc_ssr_probe(struct esoc_clink *esoc_clink)
 	ret = register_reboot_notifier(&mdm_drv->esoc_restart);
 	if (ret)
 		dev_err(&esoc_clink->dev, "register for reboot failed\n");
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 queue_err:
 	esoc_clink_unregister_ssr(esoc_clink);
@@ -277,11 +318,14 @@ static struct esoc_drv esoc_ssr_drv = {
 
 int __init esoc_ssr_init(void)
 {
+<<<<<<< HEAD
 	pr_err("[MIF] %s", __func__);
 #if defined(CONFIG_MACH_TRLTE_LDU) || defined(CONFIG_MACH_TBLTE_LDU)
 	pr_err("%s LDU doesn't have modem, skip esoc drv register", __func__);
 	return 0;
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return esoc_drv_register(&esoc_ssr_drv);
 }
 module_init(esoc_ssr_init);

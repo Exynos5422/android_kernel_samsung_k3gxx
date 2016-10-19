@@ -231,17 +231,34 @@ static void hidp_input_report(struct hidp_session *session, struct sk_buff *skb)
 
 static int hidp_send_report(struct hidp_session *session, struct hid_report *report)
 {
+<<<<<<< HEAD
 	unsigned char buf[32], hdr;
 	int rsize;
 
 	rsize = ((report->size - 1) >> 3) + 1 + (report->id > 0);
 	if (rsize > sizeof(buf))
+=======
+	unsigned char hdr;
+	u8 *buf;
+	int rsize, ret;
+
+	buf = hid_alloc_report_buf(report, GFP_ATOMIC);
+	if (!buf)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return -EIO;
 
 	hid_output_report(report, buf);
 	hdr = HIDP_TRANS_DATA | HIDP_DATA_RTYPE_OUPUT;
 
+<<<<<<< HEAD
 	return hidp_send_intr_message(session, hdr, buf, rsize);
+=======
+	rsize = ((report->size - 1) >> 3) + 1 + (report->id > 0);
+	ret = hidp_send_intr_message(session, hdr, buf, rsize);
+
+	kfree(buf);
+	return ret;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static int hidp_get_raw_report(struct hid_device *hid,
@@ -1263,7 +1280,11 @@ int hidp_connection_add(struct hidp_connadd_req *req,
 			struct socket *ctrl_sock,
 			struct socket *intr_sock)
 {
+<<<<<<< HEAD
 	struct hidp_session *session;
+=======
+	struct hidp_session *session = NULL;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct l2cap_conn *conn;
 	struct l2cap_chan *chan = l2cap_pi(ctrl_sock->sk)->chan;
 	int ret;

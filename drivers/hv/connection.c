@@ -55,6 +55,12 @@ static __u32 vmbus_get_next_version(__u32 current_version)
 	case (VERSION_WIN8):
 		return VERSION_WIN7;
 
+<<<<<<< HEAD
+=======
+	case (VERSION_WIN8_1):
+		return VERSION_WIN8;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	case (VERSION_WS2008):
 	default:
 		return VERSION_INVAL;
@@ -67,7 +73,10 @@ static int vmbus_negotiate_version(struct vmbus_channel_msginfo *msginfo,
 	int ret = 0;
 	struct vmbus_channel_initiate_contact *msg;
 	unsigned long flags;
+<<<<<<< HEAD
 	int t;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	init_completion(&msginfo->waitevent);
 
@@ -81,6 +90,12 @@ static int vmbus_negotiate_version(struct vmbus_channel_msginfo *msginfo,
 			(void *)((unsigned long)vmbus_connection.monitor_pages +
 				 PAGE_SIZE));
 
+<<<<<<< HEAD
+=======
+	if (version == VERSION_WIN8_1)
+		msg->target_vcpu = hv_context.vp_index[smp_processor_id()];
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/*
 	 * Add to list before we send the request since we may
 	 * receive the response before returning from this routine
@@ -102,6 +117,7 @@ static int vmbus_negotiate_version(struct vmbus_channel_msginfo *msginfo,
 	}
 
 	/* Wait for the connection response */
+<<<<<<< HEAD
 	t =  wait_for_completion_timeout(&msginfo->waitevent, 5*HZ);
 	if (t == 0) {
 		spin_lock_irqsave(&vmbus_connection.channelmsg_lock,
@@ -111,6 +127,9 @@ static int vmbus_negotiate_version(struct vmbus_channel_msginfo *msginfo,
 					flags);
 		return -ETIMEDOUT;
 	}
+=======
+	wait_for_completion(&msginfo->waitevent);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	spin_lock_irqsave(&vmbus_connection.channelmsg_lock, flags);
 	list_del(&msginfo->msglistentry);
@@ -307,9 +326,19 @@ static void process_chn_event(u32 relid)
 		 */
 
 		do {
+<<<<<<< HEAD
 			hv_begin_read(&channel->inbound);
 			channel->onchannel_callback(arg);
 			bytes_to_read = hv_end_read(&channel->inbound);
+=======
+			if (read_state)
+				hv_begin_read(&channel->inbound);
+			channel->onchannel_callback(arg);
+			if (read_state)
+				bytes_to_read = hv_end_read(&channel->inbound);
+			else
+				bytes_to_read = 0;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		} while (read_state && (bytes_to_read != 0));
 	} else {
 		pr_err("no channel callback for relid - %u\n", relid);

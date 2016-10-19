@@ -46,7 +46,10 @@ obj-$(CONFIG_BCM_WIMAX)		+= bcm/
 obj-$(CONFIG_FT1000)		+= ft1000/
 obj-$(CONFIG_SPEAKUP)		+= speakup/
 obj-$(CONFIG_TOUCHSCREEN_CLEARPAD_TM1217)	+= cptm1217/
+<<<<<<< HEAD
 obj-$(CONFIG_TOUCHSCREEN_SYNAPTICS_I2C_RMI4)	+= ste_rmi4/
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 obj-$(CONFIG_MFD_NVEC)		+= nvec/
 obj-$(CONFIG_ANDROID)		+= android/
 obj-$(CONFIG_USB_WPAN_HCD)	+= ozwpan/
@@ -62,5 +65,9 @@ obj-$(CONFIG_FIREWIRE_SERIAL)	+= fwserial/
 obj-$(CONFIG_ZCACHE)		+= zcache/
 obj-$(CONFIG_GOLDFISH)		+= goldfish/
 obj-$(CONFIG_USB_DWC2)		+= dwc2/
+<<<<<<< HEAD
 obj-$(CONFIG_SEC_EXT)		+= samsung/
 obj-$(CONFIG_VNSWAP)		+= vnswap/
+=======
+obj-$(CONFIG_PRONTO_WLAN)   += prima/
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

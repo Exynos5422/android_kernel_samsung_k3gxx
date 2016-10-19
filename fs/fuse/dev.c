@@ -1300,6 +1300,7 @@ static ssize_t fuse_dev_read(struct kiocb *iocb, const struct iovec *iov,
 	return fuse_dev_do_read(fc, file, &cs, iov_length(iov, nr_segs));
 }
 
+<<<<<<< HEAD
 static int fuse_dev_pipe_buf_steal(struct pipe_inode_info *pipe,
 				   struct pipe_buffer *buf)
 {
@@ -1316,6 +1317,8 @@ static const struct pipe_buf_operations fuse_dev_pipe_buf_ops = {
 	.get = generic_pipe_buf_get,
 };
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static ssize_t fuse_dev_splice_read(struct file *in, loff_t *ppos,
 				    struct pipe_inode_info *pipe,
 				    size_t len, unsigned int flags)
@@ -1362,7 +1365,15 @@ static ssize_t fuse_dev_splice_read(struct file *in, loff_t *ppos,
 		buf->page = bufs[page_nr].page;
 		buf->offset = bufs[page_nr].offset;
 		buf->len = bufs[page_nr].len;
+<<<<<<< HEAD
 		buf->ops = &fuse_dev_pipe_buf_ops;
+=======
+		/*
+		 * Need to be careful about this.  Having buf->ops in module
+		 * code can Oops if the buffer persists after module unload.
+		 */
+		buf->ops = &nosteal_pipe_buf_ops;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 		pipe->nrbufs++;
 		page_nr++;

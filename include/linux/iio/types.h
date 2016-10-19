@@ -29,12 +29,15 @@ enum iio_chan_type {
 	IIO_ALTVOLTAGE,
 	IIO_CCT,
 	IIO_PRESSURE,
+<<<<<<< HEAD
 	IIO_SIGN_MOTION,
 	IIO_STEP_COUNTER,
 	IIO_TILT,
 	IIO_STEP_DETECTOR,
 	IIO_GRIP,
 	IIO_GRIP_WIFI,
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 enum iio_modifier {
@@ -58,12 +61,15 @@ enum iio_modifier {
 	IIO_MOD_LIGHT_RED,
 	IIO_MOD_LIGHT_GREEN,
 	IIO_MOD_LIGHT_BLUE,
+<<<<<<< HEAD
 	IIO_MOD_LIGHT_LUX,
 	IIO_MOD_R,
 	IIO_MOD_GRIP,
 	IIO_MOD_GRIP_WIFI,
 	IIO_MOD_LIGHT,
 	IIO_MOD_PROXIMITY,
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 #define IIO_VAL_INT 1

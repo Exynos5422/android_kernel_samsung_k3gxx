@@ -1,8 +1,18 @@
+<<<<<<< HEAD
 /* A Bison parser, made by GNU Bison 2.5.  */
 
 /* Bison interface for Yacc-like parsers in C
    
       Copyright (C) 1984, 1989-1990, 2000-2011 Free Software Foundation, Inc.
+=======
+
+/* A Bison parser, made by GNU Bison 2.4.1.  */
+
+/* Skeleton interface for Bison's Yacc-like parsers in C
+   
+      Copyright (C) 1984, 1989, 1990, 2000, 2001, 2002, 2003, 2004, 2005, 2006
+   Free Software Foundation, Inc.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
    
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -38,6 +48,7 @@
       know about them.  */
    enum yytokentype {
      DT_V1 = 258,
+<<<<<<< HEAD
      DT_MEMRESERVE = 259,
      DT_LSHIFT = 260,
      DT_RSHIFT = 261,
@@ -59,6 +70,30 @@
      DT_LABEL = 277,
      DT_REF = 278,
      DT_INCBIN = 279
+=======
+     DT_PLUGIN = 259,
+     DT_MEMRESERVE = 260,
+     DT_LSHIFT = 261,
+     DT_RSHIFT = 262,
+     DT_LE = 263,
+     DT_GE = 264,
+     DT_EQ = 265,
+     DT_NE = 266,
+     DT_AND = 267,
+     DT_OR = 268,
+     DT_BITS = 269,
+     DT_DEL_PROP = 270,
+     DT_DEL_NODE = 271,
+     DT_PROPNODENAME = 272,
+     DT_LITERAL = 273,
+     DT_CHAR_LITERAL = 274,
+     DT_BASE = 275,
+     DT_BYTE = 276,
+     DT_STRING = 277,
+     DT_LABEL = 278,
+     DT_REF = 279,
+     DT_INCBIN = 280
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
    };
 #endif
 
@@ -68,8 +103,13 @@
 typedef union YYSTYPE
 {
 
+<<<<<<< HEAD
 /* Line 2068 of yacc.c  */
 #line 40 "dtc-parser.y"
+=======
+/* Line 1676 of yacc.c  */
+#line 41 "dtc-parser.y"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	char *propnodename;
 	char *literal;
@@ -89,11 +129,20 @@ typedef union YYSTYPE
 	struct node *nodelist;
 	struct reserve_info *re;
 	uint64_t integer;
+<<<<<<< HEAD
 
 
 
 /* Line 2068 of yacc.c  */
 #line 97 "dtc-parser.tab.h"
+=======
+	int is_plugin;
+
+
+
+/* Line 1676 of yacc.c  */
+#line 101 "dtc-parser.tab.h"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

@@ -93,7 +93,11 @@ void inet_frags_init(struct inet_frags *f)
 	}
 	rwlock_init(&f->lock);
 
+<<<<<<< HEAD
 	f->rnd = (u32) ((num_physpages ^ (num_physpages>>7)) ^
+=======
+	f->rnd = (u32) ((totalram_pages ^ (totalram_pages >> 7)) ^
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				   (jiffies ^ (jiffies >> 6)));
 
 	setup_timer(&f->secret_timer, inet_frag_secret_rebuild,
@@ -211,7 +215,11 @@ int inet_frag_evictor(struct netns_frags *nf, struct inet_frags *f, bool force)
 	}
 
 	work = frag_mem_limit(nf) - nf->low_thresh;
+<<<<<<< HEAD
 	while (work > 0) {
+=======
+	while (work > 0 || force) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		spin_lock(&nf->lru_lock);
 
 		if (list_empty(&nf->lru_list)) {

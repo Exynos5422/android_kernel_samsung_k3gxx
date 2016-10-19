@@ -1991,6 +1991,10 @@ static int __bond_release_one(struct net_device *bond_dev,
 	struct bonding *bond = netdev_priv(bond_dev);
 	struct slave *slave, *oldcurrent;
 	struct sockaddr addr;
+<<<<<<< HEAD
+=======
+	int old_flags = bond_dev->flags;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	netdev_features_t old_features = bond_dev->features;
 
 	/* slave is not a slave or master is not master of this slave */
@@ -2123,12 +2127,27 @@ static int __bond_release_one(struct net_device *bond_dev,
 	 * already taken care of above when we detached the slave
 	 */
 	if (!USES_PRIMARY(bond->params.mode)) {
+<<<<<<< HEAD
 		/* unset promiscuity level from slave */
 		if (bond_dev->flags & IFF_PROMISC)
 			dev_set_promiscuity(slave_dev, -1);
 
 		/* unset allmulti level from slave */
 		if (bond_dev->flags & IFF_ALLMULTI)
+=======
+		/* unset promiscuity level from slave
+		 * NOTE: The NETDEV_CHANGEADDR call above may change the value
+		 * of the IFF_PROMISC flag in the bond_dev, but we need the
+		 * value of that flag before that change, as that was the value
+		 * when this slave was attached, so we cache at the start of the
+		 * function and use it here. Same goes for ALLMULTI below
+		 */
+		if (old_flags & IFF_PROMISC)
+			dev_set_promiscuity(slave_dev, -1);
+
+		/* unset allmulti level from slave */
+		if (old_flags & IFF_ALLMULTI)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			dev_set_allmulti(slave_dev, -1);
 
 		/* flush master's mc_list from slave */
@@ -3770,11 +3789,24 @@ static int bond_neigh_init(struct neighbour *n)
  * The bonding ndo_neigh_setup is called at init time beofre any
  * slave exists. So we must declare proxy setup function which will
  * be used at run time to resolve the actual slave neigh param setup.
+<<<<<<< HEAD
+=======
+ *
+ * It's also called by master devices (such as vlans) to setup their
+ * underlying devices. In that case - do nothing, we're already set up from
+ * our init.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  */
 static int bond_neigh_setup(struct net_device *dev,
 			    struct neigh_parms *parms)
 {
+<<<<<<< HEAD
 	parms->neigh_setup   = bond_neigh_init;
+=======
+	/* modify only our neigh_parms */
+	if (parms->dev == dev)
+		parms->neigh_setup = bond_neigh_init;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return 0;
 }
@@ -4982,6 +5014,10 @@ static int __init bonding_init(void)
 out:
 	return res;
 err:
+<<<<<<< HEAD
+=======
+	bond_destroy_debugfs();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	rtnl_link_unregister(&bond_link_ops);
 err_link:
 	unregister_pernet_subsys(&bond_net_ops);

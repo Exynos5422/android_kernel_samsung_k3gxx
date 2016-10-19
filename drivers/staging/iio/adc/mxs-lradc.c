@@ -234,7 +234,10 @@ static int mxs_lradc_read_raw(struct iio_dev *iio_dev,
 {
 	struct mxs_lradc *lradc = iio_priv(iio_dev);
 	int ret;
+<<<<<<< HEAD
 	unsigned long mask;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (m != IIO_CHAN_INFO_RAW)
 		return -EINVAL;
@@ -243,12 +246,15 @@ static int mxs_lradc_read_raw(struct iio_dev *iio_dev,
 	if (chan->channel > LRADC_MAX_TOTAL_CHANS)
 		return -EINVAL;
 
+<<<<<<< HEAD
 	/* Validate the channel if it doesn't intersect with reserved chans. */
 	bitmap_set(&mask, chan->channel, 1);
 	ret = iio_validate_scan_mask_onehot(iio_dev, &mask);
 	if (ret)
 		return -EINVAL;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/*
 	 * See if there is no buffered operation in progess. If there is, simply
 	 * bail out. This can be improved to support both buffered and raw IO at
@@ -661,12 +667,20 @@ static int mxs_lradc_trigger_init(struct iio_dev *iio)
 {
 	int ret;
 	struct iio_trigger *trig;
+<<<<<<< HEAD
+=======
+	struct mxs_lradc *lradc = iio_priv(iio);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	trig = iio_trigger_alloc("%s-dev%i", iio->name, iio->id);
 	if (trig == NULL)
 		return -ENOMEM;
 
+<<<<<<< HEAD
 	trig->dev.parent = iio->dev.parent;
+=======
+	trig->dev.parent = lradc->dev;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	iio_trigger_set_drvdata(trig, iio);
 	trig->ops = &mxs_lradc_trigger_ops;
 
@@ -676,15 +690,26 @@ static int mxs_lradc_trigger_init(struct iio_dev *iio)
 		return ret;
 	}
 
+<<<<<<< HEAD
 	iio->trig = trig;
+=======
+	lradc->trig = trig;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return 0;
 }
 
 static void mxs_lradc_trigger_remove(struct iio_dev *iio)
 {
+<<<<<<< HEAD
 	iio_trigger_unregister(iio->trig);
 	iio_trigger_free(iio->trig);
+=======
+	struct mxs_lradc *lradc = iio_priv(iio);
+
+	iio_trigger_unregister(lradc->trig);
+	iio_trigger_free(lradc->trig);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static int mxs_lradc_buffer_preenable(struct iio_dev *iio)

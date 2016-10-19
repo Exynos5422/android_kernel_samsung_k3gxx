@@ -545,7 +545,11 @@ static struct kobject *brd_probe(dev_t dev, int *part, void *data)
 
 	mutex_lock(&brd_devices_mutex);
 	brd = brd_init_one(MINOR(dev) >> part_shift);
+<<<<<<< HEAD
 	kobj = brd ? get_disk(brd->brd_disk) : ERR_PTR(-ENOMEM);
+=======
+	kobj = brd ? get_disk(brd->brd_disk) : NULL;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	mutex_unlock(&brd_devices_mutex);
 
 	*part = 0;

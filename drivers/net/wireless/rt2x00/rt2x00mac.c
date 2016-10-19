@@ -90,7 +90,11 @@ static int rt2x00mac_tx_rts_cts(struct rt2x00_dev *rt2x00dev,
 				  frag_skb->data, data_length, tx_info,
 				  (struct ieee80211_rts *)(skb->data));
 
+<<<<<<< HEAD
 	retval = rt2x00queue_write_tx_frame(queue, skb, true);
+=======
+	retval = rt2x00queue_write_tx_frame(queue, skb, NULL, true);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (retval) {
 		dev_kfree_skb_any(skb);
 		rt2x00_warn(rt2x00dev, "Failed to send RTS/CTS frame\n");
@@ -151,7 +155,11 @@ void rt2x00mac_tx(struct ieee80211_hw *hw,
 			goto exit_fail;
 	}
 
+<<<<<<< HEAD
 	if (unlikely(rt2x00queue_write_tx_frame(queue, skb, false)))
+=======
+	if (unlikely(rt2x00queue_write_tx_frame(queue, skb, control->sta, false)))
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		goto exit_fail;
 
 	/*
@@ -489,6 +497,11 @@ int rt2x00mac_set_key(struct ieee80211_hw *hw, enum set_key_cmd cmd,
 	crypto.cipher = rt2x00crypto_key_to_cipher(key);
 	if (crypto.cipher == CIPHER_NONE)
 		return -EOPNOTSUPP;
+<<<<<<< HEAD
+=======
+	if (crypto.cipher == CIPHER_TKIP && rt2x00_is_usb(rt2x00dev))
+		return -EOPNOTSUPP;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	crypto.cmd = cmd;
 
@@ -623,6 +636,7 @@ void rt2x00mac_bss_info_changed(struct ieee80211_hw *hw,
 				      bss_conf->bssid);
 
 	/*
+<<<<<<< HEAD
 	 * Update the beacon. This is only required on USB devices. PCI
 	 * devices fetch beacons periodically.
 	 */
@@ -630,13 +644,26 @@ void rt2x00mac_bss_info_changed(struct ieee80211_hw *hw,
 		rt2x00queue_update_beacon(rt2x00dev, vif);
 
 	/*
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	 * Start/stop beaconing.
 	 */
 	if (changes & BSS_CHANGED_BEACON_ENABLED) {
 		if (!bss_conf->enable_beacon && intf->enable_beacon) {
+<<<<<<< HEAD
 			rt2x00queue_clear_beacon(rt2x00dev, vif);
 			rt2x00dev->intf_beaconing--;
 			intf->enable_beacon = false;
+=======
+			rt2x00dev->intf_beaconing--;
+			intf->enable_beacon = false;
+			/*
+			 * Clear beacon in the H/W for this vif. This is needed
+			 * to disable beaconing on this particular interface
+			 * and keep it running on other interfaces.
+			 */
+			rt2x00queue_clear_beacon(rt2x00dev, vif);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 			if (rt2x00dev->intf_beaconing == 0) {
 				/*
@@ -647,11 +674,23 @@ void rt2x00mac_bss_info_changed(struct ieee80211_hw *hw,
 				rt2x00queue_stop_queue(rt2x00dev->bcn);
 				mutex_unlock(&intf->beacon_skb_mutex);
 			}
+<<<<<<< HEAD
 
 
 		} else if (bss_conf->enable_beacon && !intf->enable_beacon) {
 			rt2x00dev->intf_beaconing++;
 			intf->enable_beacon = true;
+=======
+		} else if (bss_conf->enable_beacon && !intf->enable_beacon) {
+			rt2x00dev->intf_beaconing++;
+			intf->enable_beacon = true;
+			/*
+			 * Upload beacon to the H/W. This is only required on
+			 * USB devices. PCI devices fetch beacons periodically.
+			 */
+			if (rt2x00_is_usb(rt2x00dev))
+				rt2x00queue_update_beacon(rt2x00dev, vif);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 			if (rt2x00dev->intf_beaconing == 1) {
 				/*
@@ -754,6 +793,12 @@ void rt2x00mac_flush(struct ieee80211_hw *hw, u32 queues, bool drop)
 	struct rt2x00_dev *rt2x00dev = hw->priv;
 	struct data_queue *queue;
 
+<<<<<<< HEAD
+=======
+	if (!test_bit(DEVICE_STATE_PRESENT, &rt2x00dev->flags))
+		return;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	tx_queue_for_each(rt2x00dev, queue)
 		rt2x00queue_flush_queue(queue, drop);
 }

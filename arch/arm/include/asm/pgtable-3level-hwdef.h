@@ -41,6 +41,11 @@
  */
 #define PMD_SECT_BUFFERABLE	(_AT(pmdval_t, 1) << 2)
 #define PMD_SECT_CACHEABLE	(_AT(pmdval_t, 1) << 3)
+<<<<<<< HEAD
+=======
+#define PMD_SECT_USER		(_AT(pmdval_t, 1) << 6)		/* AP[1] */
+#define PMD_SECT_RDONLY		(_AT(pmdval_t, 1) << 7)		/* AP[2] */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define PMD_SECT_S		(_AT(pmdval_t, 3) << 8)
 #define PMD_SECT_AF		(_AT(pmdval_t, 1) << 10)
 #define PMD_SECT_nG		(_AT(pmdval_t, 1) << 11)
@@ -49,6 +54,10 @@
 #define PMD_SECT_AP_WRITE	(_AT(pmdval_t, 0))
 #define PMD_SECT_AP_READ	(_AT(pmdval_t, 0))
 #define PMD_SECT_AP1		(_AT(pmdval_t, 1) << 6)
+<<<<<<< HEAD
+=======
+#define PMD_SECT_AP2		(_AT(pmdval_t, 1) << 7)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define PMD_SECT_TEX(x)		(_AT(pmdval_t, 0))
 
 /*

@@ -18,7 +18,11 @@
 #include <linux/of.h>
 #include <linux/of_irq.h>
 #include <linux/of_address.h>
+<<<<<<< HEAD
 #include <asm/sched_clock.h>
+=======
+#include <linux/sched_clock.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <asm/mach/time.h>
 
 #define SIRFSOC_TIMER_COUNTER_LO	0x0000

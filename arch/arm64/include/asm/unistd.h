@@ -14,6 +14,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #ifdef CONFIG_COMPAT
+<<<<<<< HEAD
+=======
+#define __ARCH_WANT_COMPAT_SYS_GETDENTS64
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define __ARCH_WANT_COMPAT_STAT64
 #define __ARCH_WANT_SYS_GETHOSTNAME
 #define __ARCH_WANT_SYS_PAUSE
@@ -28,3 +32,8 @@
 #endif
 #define __ARCH_WANT_SYS_CLONE
 #include <uapi/asm/unistd.h>
+<<<<<<< HEAD
+=======
+
+#define NR_syscalls (__NR_syscalls)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

@@ -795,12 +795,27 @@ static int hvfb_remove(struct hv_device *hdev)
 }
 
 
+<<<<<<< HEAD
+=======
+static DEFINE_PCI_DEVICE_TABLE(pci_stub_id_table) = {
+	{
+		.vendor      = PCI_VENDOR_ID_MICROSOFT,
+		.device      = PCI_DEVICE_ID_HYPERV_VIDEO,
+	},
+	{ /* end of list */ }
+};
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static const struct hv_vmbus_device_id id_table[] = {
 	/* Synthetic Video Device GUID */
 	{HV_SYNTHVID_GUID},
 	{}
 };
 
+<<<<<<< HEAD
+=======
+MODULE_DEVICE_TABLE(pci, pci_stub_id_table);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 MODULE_DEVICE_TABLE(vmbus, id_table);
 
 static struct hv_driver hvfb_drv = {
@@ -810,14 +825,53 @@ static struct hv_driver hvfb_drv = {
 	.remove = hvfb_remove,
 };
 
+<<<<<<< HEAD
 
 static int __init hvfb_drv_init(void)
 {
 	return vmbus_driver_register(&hvfb_drv);
+=======
+static int hvfb_pci_stub_probe(struct pci_dev *pdev,
+			       const struct pci_device_id *ent)
+{
+	return 0;
+}
+
+static void hvfb_pci_stub_remove(struct pci_dev *pdev)
+{
+}
+
+static struct pci_driver hvfb_pci_stub_driver = {
+	.name =		KBUILD_MODNAME,
+	.id_table =	pci_stub_id_table,
+	.probe =	hvfb_pci_stub_probe,
+	.remove =	hvfb_pci_stub_remove,
+};
+
+static int __init hvfb_drv_init(void)
+{
+	int ret;
+
+	ret = vmbus_driver_register(&hvfb_drv);
+	if (ret != 0)
+		return ret;
+
+	ret = pci_register_driver(&hvfb_pci_stub_driver);
+	if (ret != 0) {
+		vmbus_driver_unregister(&hvfb_drv);
+		return ret;
+	}
+
+	return 0;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static void __exit hvfb_drv_exit(void)
 {
+<<<<<<< HEAD
+=======
+	pci_unregister_driver(&hvfb_pci_stub_driver);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	vmbus_driver_unregister(&hvfb_drv);
 }
 

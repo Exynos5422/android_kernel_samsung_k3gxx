@@ -40,12 +40,22 @@ do {									\
 
 #define ANDROID_ALARM_WAKEUP_MASK ( \
 	ANDROID_ALARM_RTC_WAKEUP_MASK | \
+<<<<<<< HEAD
 	ANDROID_ALARM_ELAPSED_REALTIME_WAKEUP_MASK)
 
 static int alarm_opened;
 static DEFINE_SPINLOCK(alarm_slock);
 static struct wakeup_source alarm_wake_lock;
 static struct wakeup_source temp_wake_lock;
+=======
+	ANDROID_ALARM_ELAPSED_REALTIME_WAKEUP_MASK | \
+	ANDROID_ALARM_RTC_POWEROFF_WAKEUP_MASK)
+
+static int alarm_opened;
+static DEFINE_SPINLOCK(alarm_slock);
+static DEFINE_MUTEX(alarm_mutex);
+static struct wakeup_source alarm_wake_lock;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static DECLARE_WAIT_QUEUE_HEAD(alarm_wait_queue);
 static uint32_t alarm_pending;
 static uint32_t alarm_enabled;
@@ -65,7 +75,12 @@ static struct devalarm alarms[ANDROID_ALARM_TYPE_COUNT];
 static int is_wakeup(enum android_alarm_type type)
 {
 	return (type == ANDROID_ALARM_RTC_WAKEUP ||
+<<<<<<< HEAD
 		type == ANDROID_ALARM_ELAPSED_REALTIME_WAKEUP);
+=======
+		type == ANDROID_ALARM_ELAPSED_REALTIME_WAKEUP ||
+		type == ANDROID_ALARM_RTC_POWEROFF_WAKEUP);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 
@@ -93,24 +108,43 @@ static void devalarm_cancel(struct devalarm *alrm)
 		hrtimer_cancel(&alrm->u.hrt);
 }
 
+<<<<<<< HEAD
 static void alarm_clear(enum android_alarm_type alarm_type)
+=======
+static void alarm_clear(enum android_alarm_type alarm_type, struct timespec *ts)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	uint32_t alarm_type_mask = 1U << alarm_type;
 	unsigned long flags;
 
+<<<<<<< HEAD
+=======
+	mutex_lock(&alarm_mutex);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	spin_lock_irqsave(&alarm_slock, flags);
 	alarm_dbg(IO, "alarm %d clear\n", alarm_type);
 	devalarm_try_to_cancel(&alarms[alarm_type]);
 	if (alarm_pending) {
 		alarm_pending &= ~alarm_type_mask;
+<<<<<<< HEAD
 		if (!alarm_pending && !wait_pending) {
 			__pm_relax(&alarm_wake_lock);
 			__pm_relax(&temp_wake_lock);
 		}
+=======
+		if (!alarm_pending && !wait_pending)
+			__pm_relax(&alarm_wake_lock);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 	alarm_enabled &= ~alarm_type_mask;
 	spin_unlock_irqrestore(&alarm_slock, flags);
 
+<<<<<<< HEAD
+=======
+	if (alarm_type == ANDROID_ALARM_RTC_POWEROFF_WAKEUP)
+		set_power_on_alarm(ts->tv_sec, 0);
+	mutex_unlock(&alarm_mutex);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static void alarm_set(enum android_alarm_type alarm_type,
@@ -119,12 +153,23 @@ static void alarm_set(enum android_alarm_type alarm_type,
 	uint32_t alarm_type_mask = 1U << alarm_type;
 	unsigned long flags;
 
+<<<<<<< HEAD
+=======
+	mutex_lock(&alarm_mutex);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	spin_lock_irqsave(&alarm_slock, flags);
 	alarm_dbg(IO, "alarm %d set %ld.%09ld\n",
 			alarm_type, ts->tv_sec, ts->tv_nsec);
 	alarm_enabled |= alarm_type_mask;
 	devalarm_start(&alarms[alarm_type], timespec_to_ktime(*ts));
 	spin_unlock_irqrestore(&alarm_slock, flags);
+<<<<<<< HEAD
+=======
+
+	if (alarm_type == ANDROID_ALARM_RTC_POWEROFF_WAKEUP)
+		set_power_on_alarm(ts->tv_sec, 1);
+	mutex_unlock(&alarm_mutex);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static int alarm_wait(void)
@@ -184,6 +229,10 @@ static int alarm_get_time(enum android_alarm_type alarm_type,
 	switch (alarm_type) {
 	case ANDROID_ALARM_RTC_WAKEUP:
 	case ANDROID_ALARM_RTC:
+<<<<<<< HEAD
+=======
+	case ANDROID_ALARM_RTC_POWEROFF_WAKEUP:
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		getnstimeofday(ts);
 		break;
 	case ANDROID_ALARM_ELAPSED_REALTIME_WAKEUP:
@@ -227,7 +276,11 @@ static long alarm_do_ioctl(struct file *file, unsigned int cmd,
 
 	switch (ANDROID_ALARM_BASE_CMD(cmd)) {
 	case ANDROID_ALARM_CLEAR(0):
+<<<<<<< HEAD
 		alarm_clear(alarm_type);
+=======
+		alarm_clear(alarm_type, ts);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		break;
 	case ANDROID_ALARM_SET(0):
 		alarm_set(alarm_type, ts);
@@ -261,6 +314,10 @@ static long alarm_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 	case ANDROID_ALARM_SET_AND_WAIT(0):
 	case ANDROID_ALARM_SET(0):
 	case ANDROID_ALARM_SET_RTC:
+<<<<<<< HEAD
+=======
+	case ANDROID_ALARM_CLEAR(0):
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (copy_from_user(&ts, (void __user *)arg, sizeof(ts)))
 			return -EFAULT;
 		break;
@@ -345,7 +402,10 @@ static int alarm_release(struct inode *inode, struct file *file)
 				alarm_dbg(INFO, "%s: clear pending alarms %x\n",
 					  __func__, alarm_pending);
 			__pm_relax(&alarm_wake_lock);
+<<<<<<< HEAD
 			__pm_relax(&temp_wake_lock);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			wait_pending = 0;
 			alarm_pending = 0;
 		}
@@ -364,7 +424,10 @@ static void devalarm_triggered(struct devalarm *alarm)
 	spin_lock_irqsave(&alarm_slock, flags);
 	if (alarm_enabled & alarm_type_mask) {
 		__pm_wakeup_event(&alarm_wake_lock, 5000); /* 5secs */
+<<<<<<< HEAD
 		__pm_wakeup_event(&temp_wake_lock, 1000); /* 1secs */
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		alarm_enabled &= ~alarm_type_mask;
 		alarm_pending |= alarm_type_mask;
 		wake_up(&alarm_wait_queue);
@@ -426,6 +489,11 @@ static int __init alarm_dev_init(void)
 			CLOCK_BOOTTIME, HRTIMER_MODE_ABS);
 	hrtimer_init(&alarms[ANDROID_ALARM_SYSTEMTIME].u.hrt,
 			CLOCK_MONOTONIC, HRTIMER_MODE_ABS);
+<<<<<<< HEAD
+=======
+	alarm_init(&alarms[ANDROID_ALARM_RTC_POWEROFF_WAKEUP].u.alrm,
+			ALARM_REALTIME, devalarm_alarmhandler);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	for (i = 0; i < ANDROID_ALARM_TYPE_COUNT; i++) {
 		alarms[i].type = i;
@@ -434,7 +502,10 @@ static int __init alarm_dev_init(void)
 	}
 
 	wakeup_source_init(&alarm_wake_lock, "alarm");
+<<<<<<< HEAD
 	wakeup_source_init(&temp_wake_lock, "alarm_temp");
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 
@@ -442,7 +513,10 @@ static void  __exit alarm_dev_exit(void)
 {
 	misc_deregister(&alarm_device);
 	wakeup_source_trash(&alarm_wake_lock);
+<<<<<<< HEAD
 	wakeup_source_trash(&temp_wake_lock);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 module_init(alarm_dev_init);

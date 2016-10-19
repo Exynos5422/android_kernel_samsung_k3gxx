@@ -386,8 +386,19 @@ void netpoll_send_skb_on_dev(struct netpoll *np, struct sk_buff *skb,
 					    !vlan_hw_offload_capable(netif_skb_features(skb),
 								     skb->vlan_proto)) {
 						skb = __vlan_put_tag(skb, skb->vlan_proto, vlan_tx_tag_get(skb));
+<<<<<<< HEAD
 						if (unlikely(!skb))
 							break;
+=======
+						if (unlikely(!skb)) {
+							/* This is actually a packet drop, but we
+							 * don't want the code at the end of this
+							 * function to try and re-queue a NULL skb.
+							 */
+							status = NETDEV_TX_OK;
+							goto unlock_txq;
+						}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 						skb->vlan_tci = 0;
 					}
 
@@ -395,6 +406,10 @@ void netpoll_send_skb_on_dev(struct netpoll *np, struct sk_buff *skb,
 					if (status == NETDEV_TX_OK)
 						txq_trans_update(txq);
 				}
+<<<<<<< HEAD
+=======
+			unlock_txq:
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				__netif_tx_unlock(txq);
 
 				if (status == NETDEV_TX_OK)
@@ -550,7 +565,11 @@ static void netpoll_neigh_reply(struct sk_buff *skb, struct netpoll_info *npinfo
 		return;
 
 	proto = ntohs(eth_hdr(skb)->h_proto);
+<<<<<<< HEAD
 	if (proto == ETH_P_IP) {
+=======
+	if (proto == ETH_P_ARP) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		struct arphdr *arp;
 		unsigned char *arp_ptr;
 		/* No arp on this interface */
@@ -738,7 +757,11 @@ static bool pkt_is_ns(struct sk_buff *skb)
 	struct nd_msg *msg;
 	struct ipv6hdr *hdr;
 
+<<<<<<< HEAD
 	if (skb->protocol != htons(ETH_P_ARP))
+=======
+	if (skb->protocol != htons(ETH_P_IPV6))
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return false;
 	if (!pskb_may_pull(skb, sizeof(struct ipv6hdr) + sizeof(struct nd_msg)))
 		return false;
@@ -941,6 +964,10 @@ int netpoll_parse_options(struct netpoll *np, char *opt)
 {
 	char *cur=opt, *delim;
 	int ipv6;
+<<<<<<< HEAD
+=======
+	bool ipversion_set = false;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (*cur != '@') {
 		if ((delim = strchr(cur, '@')) == NULL)
@@ -953,6 +980,10 @@ int netpoll_parse_options(struct netpoll *np, char *opt)
 	cur++;
 
 	if (*cur != '/') {
+<<<<<<< HEAD
+=======
+		ipversion_set = true;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if ((delim = strchr(cur, '/')) == NULL)
 			goto parse_failed;
 		*delim = 0;
@@ -995,7 +1026,11 @@ int netpoll_parse_options(struct netpoll *np, char *opt)
 	ipv6 = netpoll_parse_ip_addr(cur, &np->remote_ip);
 	if (ipv6 < 0)
 		goto parse_failed;
+<<<<<<< HEAD
 	else if (np->ipv6 != (bool)ipv6)
+=======
+	else if (ipversion_set && np->ipv6 != (bool)ipv6)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		goto parse_failed;
 	else
 		np->ipv6 = (bool)ipv6;
@@ -1289,6 +1324,7 @@ EXPORT_SYMBOL_GPL(__netpoll_free_async);
 
 void netpoll_cleanup(struct netpoll *np)
 {
+<<<<<<< HEAD
 	if (!np->dev)
 		return;
 
@@ -1298,6 +1334,16 @@ void netpoll_cleanup(struct netpoll *np)
 
 	dev_put(np->dev);
 	np->dev = NULL;
+=======
+	rtnl_lock();
+	if (!np->dev)
+		goto out;
+	__netpoll_cleanup(np);
+	dev_put(np->dev);
+	np->dev = NULL;
+out:
+	rtnl_unlock();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 EXPORT_SYMBOL(netpoll_cleanup);
 

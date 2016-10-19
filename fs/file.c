@@ -27,10 +27,13 @@ int sysctl_nr_open __read_mostly = 1024*1024;
 int sysctl_nr_open_min = BITS_PER_LONG;
 int sysctl_nr_open_max = 1024 * 1024; /* raised later */
 
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_FILE_LEAK_DEBUG
 extern void sec_debug_EMFILE_error_proc(unsigned long files_addr);
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static void *alloc_fdmem(size_t size)
 {
 	/*
@@ -38,7 +41,11 @@ static void *alloc_fdmem(size_t size)
 	 * vmalloc() if the allocation size will be considered "large" by the VM.
 	 */
 	if (size <= (PAGE_SIZE << PAGE_ALLOC_COSTLY_ORDER)) {
+<<<<<<< HEAD
 		void *data = kmalloc(size, GFP_KERNEL|__GFP_NOWARN);
+=======
+		void *data = kmalloc(size, GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (data != NULL)
 			return data;
 	}
@@ -161,9 +168,12 @@ static int expand_fdtable(struct files_struct *files, int nr)
 	 * caller and alloc_fdtable().  Cheaper to catch it here...
 	 */
 	if (unlikely(new_fdt->max_fds <= nr)) {
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_FILE_LEAK_DEBUG
 		sec_debug_EMFILE_error_proc((unsigned long)files);
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		__free_fdtable(new_fdt);
 		return -EMFILE;
 	}
@@ -204,12 +214,17 @@ static int expand_files(struct files_struct *files, int nr)
 		return 0;
 
 	/* Can we expand? */
+<<<<<<< HEAD
 	if (nr >= sysctl_nr_open) {
 #ifdef CONFIG_SEC_FILE_LEAK_DEBUG
 		sec_debug_EMFILE_error_proc((unsigned long)files);
 #endif
 		return -EMFILE;
 	}
+=======
+	if (nr >= sysctl_nr_open)
+		return -EMFILE;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/* All good, so we try */
 	return expand_fdtable(files, nr);
@@ -297,9 +312,12 @@ struct files_struct *dup_fd(struct files_struct *oldf, int *errorp)
 
 		/* beyond sysctl_nr_open; nothing to do */
 		if (unlikely(new_fdt->max_fds < open_files)) {
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_FILE_LEAK_DEBUG
 			sec_debug_EMFILE_error_proc((unsigned long)oldf);
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			__free_fdtable(new_fdt);
 			*errorp = -EMFILE;
 			goto out_release;
@@ -494,12 +512,17 @@ repeat:
 	 * will limit the total number of files that can be opened.
 	 */
 	error = -EMFILE;
+<<<<<<< HEAD
 	if (fd >= end) {
 #ifdef CONFIG_SEC_FILE_LEAK_DEBUG
 		sec_debug_EMFILE_error_proc((unsigned long)files);
 #endif
 		goto out;
 	}
+=======
+	if (fd >= end)
+		goto out;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	error = expand_files(files, fd);
 	if (error < 0)
@@ -538,6 +561,10 @@ static int alloc_fd(unsigned start, unsigned flags)
 {
 	return __alloc_fd(current->files, start, rlimit(RLIMIT_NOFILE), flags);
 }
+<<<<<<< HEAD
+=======
+EXPORT_SYMBOL(alloc_fd);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 int get_unused_fd_flags(unsigned flags)
 {
@@ -872,12 +899,17 @@ SYSCALL_DEFINE3(dup3, unsigned int, oldfd, unsigned int, newfd, int, flags)
 	if (unlikely(oldfd == newfd))
 		return -EINVAL;
 
+<<<<<<< HEAD
 	if (newfd >= rlimit(RLIMIT_NOFILE)) {
 #ifdef CONFIG_SEC_FILE_LEAK_DEBUG
 		sec_debug_EMFILE_error_proc((unsigned long)files);
 #endif
 		return -EBADF;
 	}
+=======
+	if (newfd >= rlimit(RLIMIT_NOFILE))
+		return -EBADF;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	spin_lock(&files->file_lock);
 	err = expand_files(files, newfd);

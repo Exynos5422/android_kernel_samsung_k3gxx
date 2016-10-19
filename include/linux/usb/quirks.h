@@ -30,6 +30,7 @@
    descriptor */
 #define USB_QUIRK_DELAY_INIT		0x00000040
 
+<<<<<<< HEAD
 /* device does not need GET_STATUS request after reset_resume */
 #define USB_QUIRK_NO_GET_STATUS		0x00000100
 
@@ -41,5 +42,8 @@
 
 /* Remove the kobj list to avoid device_shutdown race condition */
 #define USB_QUIRK_NO_REMOTE_WAKEUP      0x00000800
+=======
+#define USB_QUIRK_OTG_PET		0x00000080
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #endif /* __LINUX_USB_QUIRKS_H */

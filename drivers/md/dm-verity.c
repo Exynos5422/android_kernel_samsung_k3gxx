@@ -20,11 +20,14 @@
 #include <linux/device-mapper.h>
 #include <crypto/hash.h>
 
+<<<<<<< HEAD
 #if defined(CONFIG_TZ_ICCC)
 #include <mach/smc.h>
 #define SMC_CMD_DMV_WRITE_STATUS (0x83000014)
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define DM_MSG_PREFIX			"verity"
 
 #define DM_VERITY_IO_VEC_INLINE		16
@@ -33,8 +36,11 @@
 
 #define DM_VERITY_MAX_LEVELS		63
 
+<<<<<<< HEAD
 #define	FLAT_HASH_VERIFICATION		0
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static unsigned dm_verity_prefetch_cluster = DM_VERITY_DEFAULT_PREFETCH_SIZE;
 
 module_param_named(prefetch_cluster, dm_verity_prefetch_cluster, uint, S_IRUGO | S_IWUSR);
@@ -202,11 +208,17 @@ static int verity_verify_level(struct dm_verity_io *io, sector_t block,
 {
 	struct dm_verity *v = io->v;
 	struct dm_buffer *buf;
+<<<<<<< HEAD
 #if	!FLAT_HASH_VERIFICATION
 	struct buffer_aux *aux;
 	int r;
 #endif
 	u8 *data;
+=======
+	struct buffer_aux *aux;
+	u8 *data;
+	int r;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	sector_t hash_block;
 	unsigned offset;
 
@@ -216,8 +228,11 @@ static int verity_verify_level(struct dm_verity_io *io, sector_t block,
 	if (unlikely(IS_ERR(data)))
 		return PTR_ERR(data);
 
+<<<<<<< HEAD
 /* Implicitly trust the obtained hash meta-data for flat verification */
 #if	!FLAT_HASH_VERIFICATION
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	aux = dm_bufio_get_aux_data(buf);
 
 	if (!aux->hash_verified) {
@@ -275,7 +290,10 @@ static int verity_verify_level(struct dm_verity_io *io, sector_t block,
 		} else
 			aux->hash_verified = 1;
 	}
+<<<<<<< HEAD
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	data += offset;
 
@@ -284,12 +302,18 @@ static int verity_verify_level(struct dm_verity_io *io, sector_t block,
 	dm_bufio_release(buf);
 	return 0;
 
+<<<<<<< HEAD
 #if	!FLAT_HASH_VERIFICATION
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 release_ret_r:
 	dm_bufio_release(buf);
 
 	return r;
+<<<<<<< HEAD
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 /*
@@ -299,9 +323,13 @@ static int verity_verify_io(struct dm_verity_io *io)
 {
 	struct dm_verity *v = io->v;
 	unsigned b;
+<<<<<<< HEAD
 #if	!FLAT_HASH_VERIFICATION
 	int i;
 #endif
+=======
+	int i;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	unsigned vector = 0, offset = 0;
 
 	for (b = 0; b < io->n_blocks; b++) {
@@ -324,8 +352,11 @@ static int verity_verify_io(struct dm_verity_io *io)
 			if (r < 0)
 				return r;
 		}
+<<<<<<< HEAD
 #if	!FLAT_HASH_VERIFICATION
 /* flat model does not need meta-data verification */
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 		memcpy(io_want_digest(v, io), v->root_digest, v->digest_size);
 
@@ -334,7 +365,11 @@ static int verity_verify_io(struct dm_verity_io *io)
 			if (unlikely(r))
 				return r;
 		}
+<<<<<<< HEAD
 #endif
+=======
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 test_block_hash:
 		desc = io_hash_desc(v, io);
 		desc->tfm = v->tfm;
@@ -397,6 +432,7 @@ test_block_hash:
 		if (unlikely(memcmp(result, io_want_digest(v, io), v->digest_size))) {
 			DMERR_LIMIT("data block %llu is corrupted",
 				(unsigned long long)(io->block + b));
+<<<<<<< HEAD
 			if (io->block != 0) {
 				v->hash_failed = 1;
 #if defined(CONFIG_TZ_ICCC)
@@ -404,6 +440,10 @@ test_block_hash:
 #endif
 				return -EIO;
 			}
+=======
+			v->hash_failed = 1;
+			return -EIO;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		}
 	}
 	BUG_ON(vector != io->io_vec_size);
@@ -461,6 +501,7 @@ static void verity_prefetch_io(struct work_struct *work)
 	struct dm_verity *v = pw->v;
 	int i;
 
+<<<<<<< HEAD
 #if	!FLAT_HASH_VERIFICATION
 	for (i = v->levels - 2; i >= 0; i--) {
 #else
@@ -469,6 +510,9 @@ static void verity_prefetch_io(struct work_struct *work)
 	 */
 	for (i = 0; i >= 0; i--) {
 #endif
+=======
+	for (i = v->levels - 2; i >= 0; i--) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		sector_t hash_block_start;
 		sector_t hash_block_end;
 		verity_hash_at_level(v, pw->block, i, &hash_block_start, NULL);

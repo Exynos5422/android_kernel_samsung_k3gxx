@@ -13,6 +13,11 @@ obj-$(CONFIG_IR_RC5_SZ_DECODER) += ir-rc5-sz-decoder.o
 obj-$(CONFIG_IR_SANYO_DECODER) += ir-sanyo-decoder.o
 obj-$(CONFIG_IR_MCE_KBD_DECODER) += ir-mce_kbd-decoder.o
 obj-$(CONFIG_IR_LIRC_CODEC) += ir-lirc-codec.o
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_USER_RC_INPUT) += user-rc-input.o
+obj-$(CONFIG_USER_SP_RC_INPUT) += user-sp-rc-input.o
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 # stand-alone IR receivers/transmitters
 obj-$(CONFIG_RC_ATI_REMOTE) += ati_remote.o
@@ -30,3 +35,7 @@ obj-$(CONFIG_RC_LOOPBACK) += rc-loopback.o
 obj-$(CONFIG_IR_GPIO_CIR) += gpio-ir-recv.o
 obj-$(CONFIG_IR_IGUANA) += iguanair.o
 obj-$(CONFIG_IR_TTUSBIR) += ttusbir.o
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_IR_MSM_GENI) += msm-geni-ir.o
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

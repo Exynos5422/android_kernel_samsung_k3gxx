@@ -60,6 +60,12 @@
 	push	x0, x1
 	.if	\el == 0
 	mrs	x21, sp_el0
+<<<<<<< HEAD
+=======
+	get_thread_info tsk			// Ensure MDSCR_EL1.SS is clear,
+	ldr	x19, [tsk, #TI_FLAGS]		// since we can unmask debug
+	disable_step_tsk x19, x20		// exceptions when scheduling.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	.else
 	add	x21, sp, #S_FRAME_SIZE
 	.endif
@@ -121,7 +127,11 @@
 
 	.macro	get_thread_info, rd
 	mov	\rd, sp
+<<<<<<< HEAD
 	and	\rd, \rd, #~((1 << 13) - 1)	// top of 8K stack
+=======
+	and	\rd, \rd, #~(THREAD_SIZE - 1)	// top of stack
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	.endm
 
 /*
@@ -139,7 +149,16 @@ tsk	.req	x28		// current thread_info
  * Interrupt handling.
  */
 	.macro	irq_handler
+<<<<<<< HEAD
 	ldr	x1, handle_arch_irq
+=======
+#ifdef CONFIG_STRICT_MEMORY_RWX
+	ldr	x1, =handle_arch_irq
+	ldr	x1, [x1]
+#else
+	ldr	x1, handle_arch_irq
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	mov	x0, sp
 	blr	x1
 	.endm
@@ -259,7 +278,11 @@ el1_da:
 	 * Data abort handling
 	 */
 	mrs	x0, far_el1
+<<<<<<< HEAD
 	enable_dbg_if_not_stepping x2
+=======
+	enable_dbg
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	// re-enable interrupts if they were enabled in the aborted context
 	tbnz	x23, #7, 1f			// PSR_I_BIT
 	enable_irq
@@ -275,27 +298,48 @@ el1_sp_pc:
 	 * Stack or PC alignment exception handling
 	 */
 	mrs	x0, far_el1
+<<<<<<< HEAD
 	mov	x1, x25
+=======
+	enable_dbg
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	mov	x2, sp
 	b	do_sp_pc_abort
 el1_undef:
 	/*
 	 * Undefined instruction
 	 */
+<<<<<<< HEAD
+=======
+	enable_dbg
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	mov	x0, sp
 	b	do_undefinstr
 el1_dbg:
 	/*
 	 * Debug exception handling
 	 */
+<<<<<<< HEAD
+=======
+	cmp	x24, #ESR_EL1_EC_BRK64		// if BRK64
+	cinc	x24, x24, eq			// set bit '0'
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	tbz	x24, #0, el1_inv		// EL1 only
 	mrs	x0, far_el1
 	mov	x2, sp				// struct pt_regs
 	bl	do_debug_exception
+<<<<<<< HEAD
 
 	kernel_exit 1
 el1_inv:
 	// TODO: add support for undefined instructions in kernel mode
+=======
+	enable_dbg
+	kernel_exit 1
+el1_inv:
+	// TODO: add support for undefined instructions in kernel mode
+	enable_dbg
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	mov	x0, sp
 	mov	x1, #BAD_SYNC
 	mrs	x2, esr_el1
@@ -305,6 +349,7 @@ ENDPROC(el1_sync)
 	.align	6
 el1_irq:
 	kernel_entry 1
+<<<<<<< HEAD
 	enable_dbg_if_not_stepping x0
 #ifdef CONFIG_TRACE_IRQFLAGS
 	bl	trace_hardirqs_off
@@ -319,6 +364,19 @@ el1_irq:
 #ifdef CONFIG_PREEMPT
 	str	x24, [tsk, #TI_PREEMPT]		// restore preempt count
 	cbnz	x24, 1f				// preempt count != 0
+=======
+	enable_dbg
+#ifdef CONFIG_TRACE_IRQFLAGS
+	bl	trace_hardirqs_off
+#endif
+
+	irq_handler
+
+#ifdef CONFIG_PREEMPT
+	get_thread_info tsk
+	ldr	w24, [tsk, #TI_PREEMPT]		// get preempt count
+	cbnz	w24, 1f				// preempt count != 0
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ldr	x0, [tsk, #TI_FLAGS]		// get flags
 	tbz	x0, #TIF_NEED_RESCHED, 1f	// needs rescheduling?
 	bl	el1_preempt
@@ -333,8 +391,12 @@ ENDPROC(el1_irq)
 #ifdef CONFIG_PREEMPT
 el1_preempt:
 	mov	x24, lr
+<<<<<<< HEAD
 1:	enable_dbg
 	bl	preempt_schedule_irq		// irq en/disable is done inside
+=======
+1:	bl	preempt_schedule_irq		// irq en/disable is done inside
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ldr	x0, [tsk, #TI_FLAGS]		// get new tasks TI_FLAGS
 	tbnz	x0, #TIF_NEED_RESCHED, 1b	// needs rescheduling?
 	ret	x24
@@ -350,7 +412,11 @@ el0_sync:
 	lsr	x24, x25, #ESR_EL1_EC_SHIFT	// exception class
 	cmp	x24, #ESR_EL1_EC_SVC64		// SVC in 64-bit state
 	b.eq	el0_svc
+<<<<<<< HEAD
 	adr	lr, ret_from_exception
+=======
+	adr	lr, ret_to_user
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	cmp	x24, #ESR_EL1_EC_DABT_EL0	// data abort in EL0
 	b.eq	el0_da
 	cmp	x24, #ESR_EL1_EC_IABT_EL0	// instruction abort in EL0
@@ -379,7 +445,11 @@ el0_sync_compat:
 	lsr	x24, x25, #ESR_EL1_EC_SHIFT	// exception class
 	cmp	x24, #ESR_EL1_EC_SVC32		// SVC in 32-bit state
 	b.eq	el0_svc_compat
+<<<<<<< HEAD
 	adr	lr, ret_from_exception
+=======
+	adr	lr, ret_to_user
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	cmp	x24, #ESR_EL1_EC_DABT_EL0	// data abort in EL0
 	b.eq	el0_da
 	cmp	x24, #ESR_EL1_EC_IABT_EL0	// instruction abort in EL0
@@ -423,11 +493,17 @@ el0_da:
 	 * Data abort handling
 	 */
 	mrs	x0, far_el1
+<<<<<<< HEAD
 	disable_step x1
 	isb
 	enable_dbg
 	// enable interrupts before calling the main handler
 	enable_irq
+=======
+	bic	x0, x0, #(0xff << 56)
+	// enable interrupts before calling the main handler
+	enable_dbg_and_irq
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	mov	x1, x25
 	mov	x2, sp
 	b	do_mem_abort
@@ -436,11 +512,16 @@ el0_ia:
 	 * Instruction abort handling
 	 */
 	mrs	x0, far_el1
+<<<<<<< HEAD
 	disable_step x1
 	isb
 	enable_dbg
 	// enable interrupts before calling the main handler
 	enable_irq
+=======
+	// enable interrupts before calling the main handler
+	enable_dbg_and_irq
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	orr	x1, x25, #1 << 24		// use reserved ISS bit for instruction aborts
 	mov	x2, sp
 	b	do_mem_abort
@@ -448,6 +529,10 @@ el0_fpsimd_acc:
 	/*
 	 * Floating Point or Advanced SIMD access
 	 */
+<<<<<<< HEAD
+=======
+	enable_dbg
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	mov	x0, x25
 	mov	x1, sp
 	b	do_fpsimd_acc
@@ -455,6 +540,10 @@ el0_fpsimd_exc:
 	/*
 	 * Floating Point or Advanced SIMD exception
 	 */
+<<<<<<< HEAD
+=======
+	enable_dbg
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	mov	x0, x25
 	mov	x1, sp
 	b	do_fpsimd_exc
@@ -463,11 +552,16 @@ el0_sp_pc:
 	 * Stack or PC alignment exception handling
 	 */
 	mrs	x0, far_el1
+<<<<<<< HEAD
 	disable_step x1
 	isb
 	enable_dbg
 	// enable interrupts before calling the main handler
 	enable_irq
+=======
+	// enable interrupts before calling the main handler
+	enable_dbg_and_irq
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	mov	x1, x25
 	mov	x2, sp
 	b	do_sp_pc_abort
@@ -475,6 +569,11 @@ el0_undef:
 	/*
 	 * Undefined instruction
 	 */
+<<<<<<< HEAD
+=======
+	// enable interrupts before calling the main handler
+	enable_dbg_and_irq
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	mov	x0, sp
 	b	do_undefinstr
 el0_dbg:
@@ -483,11 +582,21 @@ el0_dbg:
 	 */
 	tbnz	x24, #0, el0_inv		// EL0 only
 	mrs	x0, far_el1
+<<<<<<< HEAD
 	disable_step x1
 	mov	x1, x25
 	mov	x2, sp
 	b	do_debug_exception
 el0_inv:
+=======
+	mov	x1, x25
+	mov	x2, sp
+	bl	do_debug_exception
+	enable_dbg
+	b	ret_to_user
+el0_inv:
+	enable_dbg
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	mov	x0, sp
 	mov	x1, #BAD_SYNC
 	mrs	x2, esr_el1
@@ -498,12 +607,16 @@ ENDPROC(el0_sync)
 el0_irq:
 	kernel_entry 0
 el0_irq_naked:
+<<<<<<< HEAD
 	disable_step x1
 	isb
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	enable_dbg
 #ifdef CONFIG_TRACE_IRQFLAGS
 	bl	trace_hardirqs_off
 #endif
+<<<<<<< HEAD
 	get_thread_info tsk
 #ifdef CONFIG_PREEMPT
 	ldr	x24, [tsk, #TI_PREEMPT]		// get preempt count
@@ -520,6 +633,11 @@ el0_irq_naked:
 	str	x1, [x1]			// BUG
 1:
 #endif
+=======
+
+	irq_handler
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifdef CONFIG_TRACE_IRQFLAGS
 	bl	trace_hardirqs_on
 #endif
@@ -527,6 +645,7 @@ el0_irq_naked:
 ENDPROC(el0_irq)
 
 /*
+<<<<<<< HEAD
  * This is the return code to user mode for abort handlers
  */
 ret_from_exception:
@@ -535,6 +654,8 @@ ret_from_exception:
 ENDPROC(ret_from_exception)
 
 /*
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  * Register switch for AArch64. The callee-saved registers need to be saved
  * and restored. On entry:
  *   x0 = previous task_struct (must be preserved across the switch)
@@ -573,10 +694,14 @@ ret_fast_syscall:
 	ldr	x1, [tsk, #TI_FLAGS]
 	and	x2, x1, #_TIF_WORK_MASK
 	cbnz	x2, fast_work_pending
+<<<<<<< HEAD
 	tbz	x1, #TIF_SINGLESTEP, fast_exit
 	disable_dbg
 	enable_step x2
 fast_exit:
+=======
+	enable_step_tsk x1, x2
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	kernel_exit 0, ret = 1
 
 /*
@@ -595,7 +720,10 @@ work_pending:
 	bl	do_notify_resume
 	b	ret_to_user
 work_resched:
+<<<<<<< HEAD
 	enable_dbg
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	bl	schedule
 
 /*
@@ -606,9 +734,13 @@ ret_to_user:
 	ldr	x1, [tsk, #TI_FLAGS]
 	and	x2, x1, #_TIF_WORK_MASK
 	cbnz	x2, work_pending
+<<<<<<< HEAD
 	tbz	x1, #TIF_SINGLESTEP, no_work_pending
 	disable_dbg
 	enable_step x2
+=======
+	enable_step_tsk x1, x2
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 no_work_pending:
 	kernel_exit 0, ret = 0
 ENDPROC(ret_to_user)
@@ -635,6 +767,7 @@ el0_svc:
 	mov	sc_nr, #__NR_syscalls
 el0_svc_naked:					// compat entry point
 	stp	x0, scno, [sp, #S_ORIG_X0]	// save the original x0 and syscall number
+<<<<<<< HEAD
 	disable_step x16
 	isb
 	enable_dbg
@@ -643,6 +776,13 @@ el0_svc_naked:					// compat entry point
 	get_thread_info tsk
 	ldr	x16, [tsk, #TI_FLAGS]		// check for syscall tracing
 	tbnz	x16, #TIF_SYSCALL_TRACE, __sys_trace // are we tracing syscalls?
+=======
+	enable_dbg_and_irq
+
+	ldr	x16, [tsk, #TI_FLAGS]		// check for syscall hooks
+	tst	x16, #_TIF_SYSCALL_WORK
+	b.ne	__sys_trace
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	adr	lr, ret_fast_syscall		// return address
 	cmp     scno, sc_nr                     // check upper syscall limit
 	b.hs	ni_sys
@@ -658,9 +798,14 @@ ENDPROC(el0_svc)
 	 * switches, and waiting for our parent to respond.
 	 */
 __sys_trace:
+<<<<<<< HEAD
 	mov	x1, sp
 	mov	w0, #0				// trace entry
 	bl	syscall_trace
+=======
+	mov	x0, sp
+	bl	syscall_trace_enter
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	adr	lr, __sys_trace_return		// return address
 	uxtw	scno, w0			// syscall number (possibly new)
 	mov	x1, sp				// pointer to regs
@@ -675,9 +820,14 @@ __sys_trace:
 
 __sys_trace_return:
 	str	x0, [sp]			// save returned x0
+<<<<<<< HEAD
 	mov	x1, sp
 	mov	w0, #1				// trace exit
 	bl	syscall_trace
+=======
+	mov	x0, sp
+	bl	syscall_trace_exit
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	b	ret_to_user
 
 /*
@@ -688,5 +838,12 @@ ENTRY(sys_rt_sigreturn_wrapper)
 	b	sys_rt_sigreturn
 ENDPROC(sys_rt_sigreturn_wrapper)
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_STRICT_MEMORY_RWX
+.data
+#endif
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 ENTRY(handle_arch_irq)
 	.quad	0

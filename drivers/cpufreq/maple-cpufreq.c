@@ -190,7 +190,10 @@ static int maple_cpufreq_cpu_init(struct cpufreq_policy *policy)
 
 static struct cpufreq_driver maple_cpufreq_driver = {
 	.name		= "maple",
+<<<<<<< HEAD
 	.owner		= THIS_MODULE,
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	.flags		= CPUFREQ_CONST_LOOPS,
 	.init		= maple_cpufreq_cpu_init,
 	.verify		= maple_cpufreq_verify,

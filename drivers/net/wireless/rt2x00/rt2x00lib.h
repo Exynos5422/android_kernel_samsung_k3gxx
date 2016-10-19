@@ -146,7 +146,11 @@ void rt2x00queue_remove_l2pad(struct sk_buff *skb, unsigned int header_length);
  * @local: frame is not from mac80211
  */
 int rt2x00queue_write_tx_frame(struct data_queue *queue, struct sk_buff *skb,
+<<<<<<< HEAD
 			       bool local);
+=======
+			       struct ieee80211_sta *sta, bool local);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /**
  * rt2x00queue_update_beacon - Send new beacon from mac80211

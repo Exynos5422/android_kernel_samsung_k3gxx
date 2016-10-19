@@ -9,3 +9,7 @@ header-y += ipt_ULOG.h
 header-y += ipt_ah.h
 header-y += ipt_ecn.h
 header-y += ipt_ttl.h
+<<<<<<< HEAD
+=======
+header-y += ipt_NATTYPE.h
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

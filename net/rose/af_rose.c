@@ -1216,7 +1216,10 @@ static int rose_recvmsg(struct kiocb *iocb, struct socket *sock,
 {
 	struct sock *sk = sock->sk;
 	struct rose_sock *rose = rose_sk(sk);
+<<<<<<< HEAD
 	struct sockaddr_rose *srose = (struct sockaddr_rose *)msg->msg_name;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	size_t copied;
 	unsigned char *asmptr;
 	struct sk_buff *skb;
@@ -1252,12 +1255,22 @@ static int rose_recvmsg(struct kiocb *iocb, struct socket *sock,
 
 	skb_copy_datagram_iovec(skb, 0, msg->msg_iov, copied);
 
+<<<<<<< HEAD
 	if (srose != NULL) {
 		memset(srose, 0, msg->msg_namelen);
+=======
+	if (msg->msg_name) {
+		struct sockaddr_rose *srose;
+		struct full_sockaddr_rose *full_srose = msg->msg_name;
+
+		memset(msg->msg_name, 0, sizeof(struct full_sockaddr_rose));
+		srose = msg->msg_name;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		srose->srose_family = AF_ROSE;
 		srose->srose_addr   = rose->dest_addr;
 		srose->srose_call   = rose->dest_call;
 		srose->srose_ndigis = rose->dest_ndigis;
+<<<<<<< HEAD
 		if (msg->msg_namelen >= sizeof(struct full_sockaddr_rose)) {
 			struct full_sockaddr_rose *full_srose = (struct full_sockaddr_rose *)msg->msg_name;
 			for (n = 0 ; n < rose->dest_ndigis ; n++)
@@ -1270,6 +1283,11 @@ static int rose_recvmsg(struct kiocb *iocb, struct socket *sock,
 			}
 			msg->msg_namelen = sizeof(struct sockaddr_rose);
 		}
+=======
+		for (n = 0 ; n < rose->dest_ndigis ; n++)
+			full_srose->srose_digis[n] = rose->dest_digis[n];
+		msg->msg_namelen = sizeof(struct full_sockaddr_rose);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	skb_free_datagram(sk, skb);

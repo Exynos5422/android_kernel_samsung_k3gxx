@@ -557,7 +557,11 @@ void clear_bdi_congested(struct backing_dev_info *bdi, int sync)
 	bit = sync ? BDI_sync_congested : BDI_async_congested;
 	if (test_and_clear_bit(bit, &bdi->state))
 		atomic_dec(&nr_bdi_congested[sync]);
+<<<<<<< HEAD
 	smp_mb__after_clear_bit();
+=======
+	smp_mb__after_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (waitqueue_active(wqh))
 		wake_up(wqh);
 }

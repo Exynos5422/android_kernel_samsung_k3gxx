@@ -153,6 +153,10 @@ static u16 bnx2x_free_tx_pkt(struct bnx2x *bp, struct bnx2x_fp_txdata *txdata,
 	struct sk_buff *skb = tx_buf->skb;
 	u16 bd_idx = TX_BD(tx_buf->first_bd), new_cons;
 	int nbd;
+<<<<<<< HEAD
+=======
+	u16 split_bd_len = 0;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/* prefetch skb end pointer to speedup dev_kfree_skb() */
 	prefetch(&skb->end);
@@ -160,10 +164,14 @@ static u16 bnx2x_free_tx_pkt(struct bnx2x *bp, struct bnx2x_fp_txdata *txdata,
 	DP(NETIF_MSG_TX_DONE, "fp[%d]: pkt_idx %d  buff @(%p)->skb %p\n",
 	   txdata->txq_index, idx, tx_buf, skb);
 
+<<<<<<< HEAD
 	/* unmap first bd */
 	tx_start_bd = &txdata->tx_desc_ring[bd_idx].start_bd;
 	dma_unmap_single(&bp->pdev->dev, BD_UNMAP_ADDR(tx_start_bd),
 			 BD_UNMAP_LEN(tx_start_bd), DMA_TO_DEVICE);
+=======
+	tx_start_bd = &txdata->tx_desc_ring[bd_idx].start_bd;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 
 	nbd = le16_to_cpu(tx_start_bd->nbd) - 1;
@@ -182,12 +190,27 @@ static u16 bnx2x_free_tx_pkt(struct bnx2x *bp, struct bnx2x_fp_txdata *txdata,
 	--nbd;
 	bd_idx = TX_BD(NEXT_TX_IDX(bd_idx));
 
+<<<<<<< HEAD
 	/* ...and the TSO split header bd since they have no mapping */
 	if (tx_buf->flags & BNX2X_TSO_SPLIT_BD) {
+=======
+	/* TSO headers+data bds share a common mapping. See bnx2x_tx_split() */
+	if (tx_buf->flags & BNX2X_TSO_SPLIT_BD) {
+		tx_data_bd = &txdata->tx_desc_ring[bd_idx].reg_bd;
+		split_bd_len = BD_UNMAP_LEN(tx_data_bd);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		--nbd;
 		bd_idx = TX_BD(NEXT_TX_IDX(bd_idx));
 	}
 
+<<<<<<< HEAD
+=======
+	/* unmap first bd */
+	dma_unmap_single(&bp->pdev->dev, BD_UNMAP_ADDR(tx_start_bd),
+			 BD_UNMAP_LEN(tx_start_bd) + split_bd_len,
+			 DMA_TO_DEVICE);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* now free frags */
 	while (nbd > 0) {
 
@@ -670,6 +693,10 @@ static void bnx2x_gro_receive(struct bnx2x *bp, struct bnx2x_fastpath *fp,
 		}
 	}
 #endif
+<<<<<<< HEAD
+=======
+	skb_record_rx_queue(skb, fp->rx_queue);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	napi_gro_receive(&fp->napi, skb);
 }
 
@@ -2702,7 +2729,11 @@ int bnx2x_nic_load(struct bnx2x *bp, int load_mode)
 
 	case LOAD_OPEN:
 		netif_tx_start_all_queues(bp->dev);
+<<<<<<< HEAD
 		smp_mb__after_clear_bit();
+=======
+		smp_mb__after_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		break;
 
 	case LOAD_DIAG:

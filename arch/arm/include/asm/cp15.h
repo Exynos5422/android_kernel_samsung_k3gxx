@@ -96,6 +96,7 @@ static inline void set_copro_access(unsigned int val)
 
 #endif /* ifdef CONFIG_CPU_CP15 / else */
 
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP
 #define RKP_DEFERRED_INIT 0xe
 
@@ -291,6 +292,8 @@ static inline void tima_send_cmd5 (unsigned int p1, unsigned int p2, unsigned in
 #endif /* CONFIG_HYP_RKP */
 #endif /* CONFIG_TIMA_RKP */
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif /* ifndef __ASSEMBLY__ */
 
 #endif

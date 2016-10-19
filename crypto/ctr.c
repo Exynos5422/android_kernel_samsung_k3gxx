@@ -135,7 +135,10 @@ static int crypto_ctr_crypt(struct blkcipher_desc *desc,
 	unsigned int bsize = crypto_cipher_blocksize(child);
 	int err;
 
+<<<<<<< HEAD
 	walk.flags = 0;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	blkcipher_walk_init(&walk, dst, src, nbytes);
 	err = blkcipher_walk_virt_block(desc, &walk, bsize);
 

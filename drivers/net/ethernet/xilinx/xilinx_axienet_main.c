@@ -1488,7 +1488,11 @@ static int axienet_of_probe(struct platform_device *op)
 
 	SET_NETDEV_DEV(ndev, &op->dev);
 	ndev->flags &= ~IFF_MULTICAST;  /* clear multicast */
+<<<<<<< HEAD
 	ndev->features = NETIF_F_SG | NETIF_F_FRAGLIST;
+=======
+	ndev->features = NETIF_F_SG;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ndev->netdev_ops = &axienet_netdev_ops;
 	ndev->ethtool_ops = &axienet_ethtool_ops;
 

@@ -616,6 +616,7 @@ int sysfs_add_file_to_group(struct kobject *kobj,
 }
 EXPORT_SYMBOL_GPL(sysfs_add_file_to_group);
 
+<<<<<<< HEAD
 #if defined(CONFIG_MMC_BKOPS_NODE_UID) || defined(CONFIG_MMC_BKOPS_NODE_GID)
 /**
  * sysfs_chown_file - modify the ownership of the object
@@ -657,6 +658,8 @@ out:
 EXPORT_SYMBOL_GPL(sysfs_chown_file);
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /**
  * sysfs_chmod_file - update the modified mode value on an object attribute.
  * @kobj: object we're acting for.

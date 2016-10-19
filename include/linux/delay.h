@@ -47,6 +47,14 @@ void msleep(unsigned int msecs);
 unsigned long msleep_interruptible(unsigned int msecs);
 void usleep_range(unsigned long min, unsigned long max);
 
+<<<<<<< HEAD
+=======
+static inline void usleep(unsigned long usecs)
+{
+	usleep_range(usecs, usecs);
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static inline void ssleep(unsigned int seconds)
 {
 	msleep(seconds * 1000);

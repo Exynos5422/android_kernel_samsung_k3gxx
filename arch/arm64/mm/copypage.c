@@ -27,8 +27,16 @@ void __cpu_copy_user_page(void *kto, const void *kfrom, unsigned long vaddr)
 	copy_page(kto, kfrom);
 	__flush_dcache_area(kto, PAGE_SIZE);
 }
+<<<<<<< HEAD
+=======
+EXPORT_SYMBOL_GPL(__cpu_copy_user_page);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 void __cpu_clear_user_page(void *kaddr, unsigned long vaddr)
 {
 	clear_page(kaddr);
 }
+<<<<<<< HEAD
+=======
+EXPORT_SYMBOL_GPL(__cpu_clear_user_page);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

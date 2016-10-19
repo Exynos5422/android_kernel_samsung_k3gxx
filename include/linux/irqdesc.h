@@ -27,6 +27,11 @@ struct irq_desc;
  * @irq_count:		stats field to detect stalled irqs
  * @last_unhandled:	aging timer for unhandled count
  * @irqs_unhandled:	stats field for spurious unhandled interrupts
+<<<<<<< HEAD
+=======
+ * @threads_handled:	stats field for deferred spurious detection of threaded handlers
+ * @threads_handled_last: comparator field for deferred spurious detection of theraded handlers
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  * @lock:		locking for SMP
  * @affinity_hint:	hint to user space for preferred irq affinity
  * @affinity_notify:	context for notification of affinity changes
@@ -52,6 +57,11 @@ struct irq_desc {
 	unsigned int		irq_count;	/* For detecting broken IRQs */
 	unsigned long		last_unhandled;	/* Aging timer for unhandled count */
 	unsigned int		irqs_unhandled;
+<<<<<<< HEAD
+=======
+	atomic_t		threads_handled;
+	int			threads_handled_last;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	raw_spinlock_t		lock;
 	struct cpumask		*percpu_enabled;
 #ifdef CONFIG_SMP
@@ -76,8 +86,11 @@ struct irq_desc {
 extern struct irq_desc irq_desc[NR_IRQS];
 #endif
 
+<<<<<<< HEAD
 #ifdef CONFIG_GENERIC_HARDIRQS
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static inline struct irq_data *irq_desc_get_irq_data(struct irq_desc *desc)
 {
 	return &desc->irq_data;
@@ -154,6 +167,17 @@ static inline int irq_balancing_disabled(unsigned int irq)
 	return desc->status_use_accessors & IRQ_NO_BALANCING_MASK;
 }
 
+<<<<<<< HEAD
+=======
+static inline int irq_is_percpu(unsigned int irq)
+{
+	struct irq_desc *desc;
+
+	desc = irq_to_desc(irq);
+	return desc->status_use_accessors & IRQ_PER_CPU;
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static inline void
 irq_set_lockdep_class(unsigned int irq, struct lock_class_key *class)
 {
@@ -173,6 +197,9 @@ __irq_set_preflow_handler(unsigned int irq, irq_preflow_handler_t handler)
 	desc->preflow_handler = handler;
 }
 #endif
+<<<<<<< HEAD
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #endif

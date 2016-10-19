@@ -765,6 +765,10 @@ static struct pnp_device_id pnp_kbd_devids[] = {
 	{ .id = "CPQA0D7", .driver_data = 0 },
 	{ .id = "", },
 };
+<<<<<<< HEAD
+=======
+MODULE_DEVICE_TABLE(pnp, pnp_kbd_devids);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 static struct pnp_driver i8042_pnp_kbd_driver = {
 	.name           = "i8042 kbd",
@@ -786,6 +790,10 @@ static struct pnp_device_id pnp_aux_devids[] = {
 	{ .id = "SYN0801", .driver_data = 0 },
 	{ .id = "", },
 };
+<<<<<<< HEAD
+=======
+MODULE_DEVICE_TABLE(pnp, pnp_aux_devids);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 static struct pnp_driver i8042_pnp_aux_driver = {
 	.name           = "i8042 aux",

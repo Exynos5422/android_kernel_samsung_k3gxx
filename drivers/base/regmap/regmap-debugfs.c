@@ -145,7 +145,11 @@ static unsigned int regmap_debugfs_get_dump_start(struct regmap *map,
 			reg_offset = fpos_offset / map->debugfs_tot_len;
 			*pos = c->min + (reg_offset * map->debugfs_tot_len);
 			mutex_unlock(&map->cache_lock);
+<<<<<<< HEAD
 			return c->base_reg + (reg_offset * map->reg_stride);
+=======
+			return c->base_reg + reg_offset;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		}
 
 		*pos = c->max;
@@ -248,7 +252,11 @@ static ssize_t regmap_map_read_file(struct file *file, char __user *user_buf,
 				   count, ppos);
 }
 
+<<<<<<< HEAD
 #define REGMAP_ALLOW_WRITE_DEBUGFS
+=======
+#undef REGMAP_ALLOW_WRITE_DEBUGFS
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifdef REGMAP_ALLOW_WRITE_DEBUGFS
 /*
  * This can be dangerous especially when we have clients such as

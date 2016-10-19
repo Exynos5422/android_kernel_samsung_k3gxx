@@ -19,6 +19,10 @@ obj-$(CONFIG_BT_ATH3K)		+= ath3k.o
 obj-$(CONFIG_BT_MRVL)		+= btmrvl.o
 obj-$(CONFIG_BT_MRVL_SDIO)	+= btmrvl_sdio.o
 obj-$(CONFIG_BT_WILINK)		+= btwilink.o
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_MSM_BT_POWER)	+= bluetooth-power.o
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 btmrvl-y			:= btmrvl_main.o
 btmrvl-$(CONFIG_DEBUG_FS)	+= btmrvl_debugfs.o
@@ -29,6 +33,7 @@ hci_uart-$(CONFIG_BT_HCIUART_BCSP)	+= hci_bcsp.o
 hci_uart-$(CONFIG_BT_HCIUART_LL)	+= hci_ll.o
 hci_uart-$(CONFIG_BT_HCIUART_ATH3K)	+= hci_ath.o
 hci_uart-$(CONFIG_BT_HCIUART_3WIRE)	+= hci_h5.o
+<<<<<<< HEAD
 hci_uart-objs				:= $(hci_uart-y)
 
 obj-$(CONFIG_BT_BCM43457)		+= bcm43457.o
@@ -36,3 +41,7 @@ obj-$(CONFIG_BT_BCM4339)		+= bcm4339.o
 obj-$(CONFIG_BT_BCM4354)		+= bcm4354.o
 obj-$(CONFIG_BT_BCM4358)		+= bcm4358.o
 obj-$(CONFIG_BT_BCM43455)		+= bcm43455.o
+=======
+hci_uart-$(CONFIG_BT_HCIUART_IBS)	+= hci_ibs.o
+hci_uart-objs				:= $(hci_uart-y)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

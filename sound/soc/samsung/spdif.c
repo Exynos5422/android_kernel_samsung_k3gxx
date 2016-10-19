@@ -13,6 +13,7 @@
 #include <linux/clk.h>
 #include <linux/io.h>
 #include <linux/module.h>
+<<<<<<< HEAD
 #include <linux/of.h>
 #include <linux/of_gpio.h>
 #include <linux/pm_runtime.h>
@@ -20,6 +21,11 @@
 #include <sound/soc.h>
 #include <sound/pcm_params.h>
 #include <sound/exynos.h>
+=======
+
+#include <sound/soc.h>
+#include <sound/pcm_params.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #include <linux/platform_data/asoc-s3c.h>
 #include <mach/dma.h>
@@ -284,6 +290,7 @@ err:
 	return -EINVAL;
 }
 
+<<<<<<< HEAD
 static int spdif_startup(struct snd_pcm_substream *substream,
 				struct snd_soc_dai *dai)
 {
@@ -295,6 +302,8 @@ static int spdif_startup(struct snd_pcm_substream *substream,
 	return 0;
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static void spdif_shutdown(struct snd_pcm_substream *substream,
 				struct snd_soc_dai *dai)
 {
@@ -312,8 +321,11 @@ static void spdif_shutdown(struct snd_pcm_substream *substream,
 	cpu_relax();
 
 	writel(clkcon & ~CLKCTL_PWR_ON, regs + CLKCON);
+<<<<<<< HEAD
 
 	pm_runtime_put_sync(spdif->dev);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 #ifdef CONFIG_PM
@@ -324,6 +336,7 @@ static int spdif_suspend(struct snd_soc_dai *cpu_dai)
 
 	dev_dbg(spdif->dev, "Entered %s\n", __func__);
 
+<<<<<<< HEAD
 	if (cpu_dai->active) {
 		spdif->saved_clkcon = readl(spdif->regs	+ CLKCON) & CLKCTL_MASK;
 		spdif->saved_con = readl(spdif->regs + CON) & CON_MASK;
@@ -332,6 +345,14 @@ static int spdif_suspend(struct snd_soc_dai *cpu_dai)
 		writel(con | CON_SW_RESET, spdif->regs + CON);
 		cpu_relax();
 	}
+=======
+	spdif->saved_clkcon = readl(spdif->regs	+ CLKCON) & CLKCTL_MASK;
+	spdif->saved_con = readl(spdif->regs + CON) & CON_MASK;
+	spdif->saved_cstas = readl(spdif->regs + CSTAS) & CSTAS_MASK;
+
+	writel(con | CON_SW_RESET, spdif->regs + CON);
+	cpu_relax();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return 0;
 }
@@ -342,11 +363,17 @@ static int spdif_resume(struct snd_soc_dai *cpu_dai)
 
 	dev_dbg(spdif->dev, "Entered %s\n", __func__);
 
+<<<<<<< HEAD
 	if (cpu_dai->active) {
 		writel(spdif->saved_clkcon, spdif->regs	+ CLKCON);
 		writel(spdif->saved_con, spdif->regs + CON);
 		writel(spdif->saved_cstas, spdif->regs + CSTAS);
 	}
+=======
+	writel(spdif->saved_clkcon, spdif->regs	+ CLKCON);
+	writel(spdif->saved_con, spdif->regs + CON);
+	writel(spdif->saved_cstas, spdif->regs + CSTAS);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return 0;
 }
@@ -359,7 +386,10 @@ static const struct snd_soc_dai_ops spdif_dai_ops = {
 	.set_sysclk	= spdif_set_sysclk,
 	.trigger	= spdif_trigger,
 	.hw_params	= spdif_hw_params,
+<<<<<<< HEAD
 	.startup	= spdif_startup,
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	.shutdown	= spdif_shutdown,
 };
 
@@ -383,6 +413,7 @@ static const struct snd_soc_component_driver samsung_spdif_component = {
 	.name		= "samsung-spdif",
 };
 
+<<<<<<< HEAD
 #ifdef CONFIG_PM_RUNTIME
 static int spdif_runtime_suspend(struct device *dev)
 {
@@ -418,17 +449,24 @@ static int spdif_runtime_resume(struct device *dev)
 #endif /* CONFIG_PM_RUNTIME */
 
 static int samsung_spdif_probe(struct platform_device *pdev)
+=======
+static int spdif_probe(struct platform_device *pdev)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	struct s3c_audio_pdata *spdif_pdata;
 	struct resource *mem_res, *dma_res;
 	struct samsung_spdif_info *spdif;
+<<<<<<< HEAD
 	struct device_node *np = pdev->dev.of_node;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	int ret;
 
 	spdif_pdata = pdev->dev.platform_data;
 
 	dev_dbg(&pdev->dev, "Entered %s\n", __func__);
 
+<<<<<<< HEAD
 	if (!np) {
 		dma_res = platform_get_resource(pdev, IORESOURCE_DMA, 0);
 		if (!dma_res) {
@@ -439,6 +477,12 @@ static int samsung_spdif_probe(struct platform_device *pdev)
 	} else {
 		if (of_find_property(np, "samsung,lpass-subip", NULL))
 			lpass_register_subip(&pdev->dev, "spdif");
+=======
+	dma_res = platform_get_resource(pdev, IORESOURCE_DMA, 0);
+	if (!dma_res) {
+		dev_err(&pdev->dev, "Unable to get dma resource.\n");
+		return -ENXIO;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	mem_res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
@@ -498,10 +542,17 @@ static int samsung_spdif_probe(struct platform_device *pdev)
 		goto err4;
 	}
 
+<<<<<<< HEAD
 	spdif_stereo_out.ch_name = "tx";
 	spdif_stereo_out.dma_size = 2;
 	spdif_stereo_out.client = &spdif_dma_client_out;
 	spdif_stereo_out.dma_addr = mem_res->start + DATA_OUTBUF;
+=======
+	spdif_stereo_out.dma_size = 2;
+	spdif_stereo_out.client = &spdif_dma_client_out;
+	spdif_stereo_out.dma_addr = mem_res->start + DATA_OUTBUF;
+	spdif_stereo_out.channel = dma_res->start;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	spdif->dma_playback = &spdif_stereo_out;
 
@@ -511,8 +562,11 @@ static int samsung_spdif_probe(struct platform_device *pdev)
 		goto err5;
 	}
 
+<<<<<<< HEAD
 	pm_runtime_enable(&pdev->dev);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 err5:
 	snd_soc_unregister_component(&pdev->dev);
@@ -530,7 +584,11 @@ err0:
 	return ret;
 }
 
+<<<<<<< HEAD
 static int samsung_spdif_remove(struct platform_device *pdev)
+=======
+static int spdif_remove(struct platform_device *pdev)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	struct samsung_spdif_info *spdif = &spdif_info;
 	struct resource *mem_res;
@@ -552,6 +610,7 @@ static int samsung_spdif_remove(struct platform_device *pdev)
 	return 0;
 }
 
+<<<<<<< HEAD
 static struct platform_device_id samsung_spdif_driver_ids[] = {
 	{ .name = "samsung-spdif", },
 	{},
@@ -580,6 +639,14 @@ static struct platform_driver samsung_spdif_driver = {
 		.owner	= THIS_MODULE,
 		.of_match_table = of_match_ptr(exynos_spdif_match),
 		.pm = &samsung_spdif_pm,
+=======
+static struct platform_driver samsung_spdif_driver = {
+	.probe	= spdif_probe,
+	.remove	= spdif_remove,
+	.driver	= {
+		.name	= "samsung-spdif",
+		.owner	= THIS_MODULE,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	},
 };
 

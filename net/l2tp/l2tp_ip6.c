@@ -485,6 +485,10 @@ static int l2tp_ip6_sendmsg(struct kiocb *iocb, struct sock *sk,
 		(struct sockaddr_l2tpip6 *) msg->msg_name;
 	struct in6_addr *daddr, *final_p, final;
 	struct ipv6_pinfo *np = inet6_sk(sk);
+<<<<<<< HEAD
+=======
+	struct ipv6_txoptions *opt_to_free = NULL;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct ipv6_txoptions *opt = NULL;
 	struct ip6_flowlabel *flowlabel = NULL;
 	struct dst_entry *dst = NULL;
@@ -575,8 +579,15 @@ static int l2tp_ip6_sendmsg(struct kiocb *iocb, struct sock *sk,
 			opt = NULL;
 	}
 
+<<<<<<< HEAD
 	if (opt == NULL)
 		opt = np->opt;
+=======
+	if (!opt) {
+		opt = txopt_get(np);
+		opt_to_free = opt;
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (flowlabel)
 		opt = fl6_merge_options(&opt_space, flowlabel, opt);
 	opt = ipv6_fixup_options(&opt_space, opt);
@@ -637,6 +648,10 @@ done:
 	dst_release(dst);
 out:
 	fl6_sock_release(flowlabel);
+<<<<<<< HEAD
+=======
+	txopt_put(opt_to_free);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return err < 0 ? err : len;
 
@@ -665,7 +680,11 @@ static int l2tp_ip6_recvmsg(struct kiocb *iocb, struct sock *sk,
 		*addr_len = sizeof(*lsa);
 
 	if (flags & MSG_ERRQUEUE)
+<<<<<<< HEAD
 		return ipv6_recv_error(sk, msg, len);
+=======
+		return ipv6_recv_error(sk, msg, len, addr_len);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	skb = skb_recv_datagram(sk, flags, noblock, &err);
 	if (!skb)

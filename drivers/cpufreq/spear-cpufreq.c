@@ -250,11 +250,19 @@ static int spear_cpufreq_driver_init(void)
 	}
 
 	for (i = 0; i < cnt; i++) {
+<<<<<<< HEAD
 		freq_tbl[i].index = i;
 		freq_tbl[i].frequency = be32_to_cpup(val++);
 	}
 
 	freq_tbl[i].index = i;
+=======
+		freq_tbl[i].driver_data = i;
+		freq_tbl[i].frequency = be32_to_cpup(val++);
+	}
+
+	freq_tbl[i].driver_data = i;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	freq_tbl[i].frequency = CPUFREQ_TABLE_END;
 
 	spear_cpufreq.freq_tbl = freq_tbl;

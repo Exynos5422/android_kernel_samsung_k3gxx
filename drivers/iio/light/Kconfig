@@ -63,6 +63,7 @@ config HID_SENSOR_ALS
 	  Say yes here to build support for the HID SENSOR
 	  Ambient light sensor.
 
+<<<<<<< HEAD
 config SENSORS_CM36652_IIO
 	depends on IIO
 	tristate "CM366852 driver"
@@ -95,4 +96,6 @@ config SENSORS_CS5032_IIO
 	help
 	  This option enables proximity & light sensors using CS5032 driver.
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 endmenu

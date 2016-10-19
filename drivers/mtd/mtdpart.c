@@ -313,6 +313,24 @@ static inline void free_partition(struct mtd_part *p)
 	kfree(p);
 }
 
+<<<<<<< HEAD
+=======
+void part_fill_badblockstats(struct mtd_info *mtd)
+{
+	struct mtd_part *part = PART(mtd);
+	if (part->master->_block_isbad) {
+		uint64_t offs = 0;
+		mtd->ecc_stats.badblocks = 0;
+		while (offs < mtd->size) {
+			if (mtd_block_isbad(part->master,
+						offs + part->offset))
+				mtd->ecc_stats.badblocks++;
+			offs += mtd->erasesize;
+		}
+	}
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * This function unregisters and destroy all slave MTD objects which are
  * attached to the given master MTD object.
@@ -519,6 +537,7 @@ static struct mtd_part *allocate_partition(struct mtd_info *master,
 	slave->mtd.ecc_strength = master->ecc_strength;
 	slave->mtd.bitflip_threshold = master->bitflip_threshold;
 
+<<<<<<< HEAD
 	if (master->_block_isbad) {
 		uint64_t offs = 0;
 
@@ -528,6 +547,12 @@ static struct mtd_part *allocate_partition(struct mtd_info *master,
 			offs += slave->mtd.erasesize;
 		}
 	}
+=======
+
+#ifndef CONFIG_MTD_LAZYECCSTATS
+	part_fill_badblockstats(&(slave->mtd));
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 out_register:
 	return slave;

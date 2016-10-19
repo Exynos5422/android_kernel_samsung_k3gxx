@@ -152,6 +152,11 @@ static ssize_t show_mem_removable(struct device *dev,
 		container_of(dev, struct memory_block, dev);
 
 	for (i = 0; i < sections_per_block; i++) {
+<<<<<<< HEAD
+=======
+		if (!present_section_nr(mem->start_section_nr + i))
+			continue;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		pfn = section_nr_to_pfn(mem->start_section_nr + i);
 		ret &= is_mem_section_removable(pfn, PAGES_PER_SECTION);
 	}

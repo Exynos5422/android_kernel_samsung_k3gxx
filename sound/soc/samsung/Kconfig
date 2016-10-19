@@ -34,6 +34,7 @@ config SND_SAMSUNG_SPDIF
 config SND_SAMSUNG_I2S
 	tristate
 
+<<<<<<< HEAD
 config SND_SAMSUNG_IDMA
 	tristate
 
@@ -61,6 +62,8 @@ config SND_SOC_ES515_I2C
 config SND_SOC_ES515_I2S
 	tristate
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 config SND_SOC_SAMSUNG_NEO1973_WM8753
 	tristate "Audio support for Openmoko Neo1973 Smartphones (GTA02)"
 	depends on SND_SOC_SAMSUNG && MACH_NEO1973_GTA02
@@ -84,13 +87,17 @@ config SND_SOC_SAMSUNG_SMDK_WM8580
 	depends on SND_SOC_SAMSUNG && (MACH_SMDK6410 || MACH_SMDKC100 || MACH_SMDK6440 || MACH_SMDK6450 || MACH_SMDKV210 || MACH_SMDKC110)
 	select SND_SOC_WM8580
 	select SND_SAMSUNG_I2S
+<<<<<<< HEAD
 	select SND_SAMSUNG_IDMA
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	help
 	  Say Y if you want to add support for SoC audio on the SMDKs.
 
 config SND_SOC_SAMSUNG_SMDK_WM8994
 	tristate "SoC I2S Audio support for WM8994 on SMDK"
 	depends on SND_SOC_SAMSUNG
+<<<<<<< HEAD
 	depends on I2C=y && GENERIC_HARDIRQS
 	select MFD_WM8994
 	select SND_SOC_WM8994
@@ -111,6 +118,15 @@ config SND_SOC_SAMSUNG_UNIVERSAL5430_RT5511
 	help
 	  Say Y if you want to add support for SoC audio on the UNIVERSALs.
 
+=======
+	depends on I2C=y
+	select MFD_WM8994
+	select SND_SOC_WM8994
+	select SND_SAMSUNG_I2S
+	help
+		Say Y if you want to add support for SoC audio on the SMDKs.
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 config SND_SOC_SAMSUNG_SMDK2443_WM9710
 	tristate "SoC AC97 Audio support for SMDK2443 - WM9710"
 	depends on SND_SOC_SAMSUNG && MACH_SMDK2443
@@ -192,7 +208,11 @@ config SND_SOC_SMARTQ
 config SND_SOC_GONI_AQUILA_WM8994
 	tristate "SoC I2S Audio support for AQUILA/GONI - WM8994"
 	depends on SND_SOC_SAMSUNG && (MACH_GONI || MACH_AQUILA)
+<<<<<<< HEAD
 	depends on I2C=y && GENERIC_HARDIRQS
+=======
+	depends on I2C=y
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	select SND_SAMSUNG_I2S
 	select MFD_WM8994
 	select SND_SOC_WM8994
@@ -218,7 +238,11 @@ config SND_SOC_SMDK_WM8580_PCM
 config SND_SOC_SMDK_WM8994_PCM
 	tristate "SoC PCM Audio support for WM8994 on SMDK"
 	depends on SND_SOC_SAMSUNG
+<<<<<<< HEAD
 	depends on I2C=y && GENERIC_HARDIRQS
+=======
+	depends on I2C=y
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	select MFD_WM8994
 	select SND_SOC_WM8994
 	select SND_SAMSUNG_PCM
@@ -263,6 +287,7 @@ config SND_SOC_LITTLEMILL
 	select SND_SAMSUNG_I2S
 	select MFD_WM8994
 	select SND_SOC_WM8994
+<<<<<<< HEAD
 
 config SND_SOC_SAMSUNG_ESPRESSO5433_WM5110
 	tristate "SoC I2S Audio support for WM5110 on ESPRESSO5433"
@@ -462,3 +487,5 @@ config DYNAMIC_MICBIAS_CONTROL_RT5659
 	 This is earjack micbias control for reduce current consumption.
 	 When mic does not used or button is released,
 	 micbias set to low voltage.
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

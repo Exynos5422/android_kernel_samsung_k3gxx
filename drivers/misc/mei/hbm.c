@@ -35,11 +35,22 @@ static void mei_hbm_me_cl_allocate(struct mei_device *dev)
 	struct mei_me_client *clients;
 	int b;
 
+<<<<<<< HEAD
+=======
+	dev->me_clients_num = 0;
+	dev->me_client_presentation_num = 0;
+	dev->me_client_index = 0;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* count how many ME clients we have */
 	for_each_set_bit(b, dev->me_clients_map, MEI_CLIENTS_MAX)
 		dev->me_clients_num++;
 
+<<<<<<< HEAD
 	if (dev->me_clients_num <= 0)
+=======
+	if (dev->me_clients_num == 0)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return;
 
 	kfree(dev->me_clients);
@@ -221,7 +232,11 @@ static int mei_hbm_prop_req(struct mei_device *dev)
 	struct hbm_props_request *prop_req;
 	const size_t len = sizeof(struct hbm_props_request);
 	unsigned long next_client_index;
+<<<<<<< HEAD
 	u8 client_num;
+=======
+	unsigned long client_num;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 
 	client_num = dev->me_client_presentation_num;
@@ -650,8 +665,11 @@ void mei_hbm_dispatch(struct mei_device *dev, struct mei_msg_hdr *hdr)
 		if (dev->dev_state == MEI_DEV_INIT_CLIENTS &&
 		    dev->hbm_state == MEI_HBM_ENUM_CLIENTS) {
 				dev->init_clients_timer = 0;
+<<<<<<< HEAD
 				dev->me_client_presentation_num = 0;
 				dev->me_client_index = 0;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				mei_hbm_me_cl_allocate(dev);
 				dev->hbm_state = MEI_HBM_CLIENT_PROPERTIES;
 

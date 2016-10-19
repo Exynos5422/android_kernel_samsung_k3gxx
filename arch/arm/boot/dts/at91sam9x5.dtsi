@@ -33,8 +33,17 @@
 		ssc0 = &ssc0;
 	};
 	cpus {
+<<<<<<< HEAD
 		cpu@0 {
 			compatible = "arm,arm926ejs";
+=======
+		#address-cells = <0>;
+		#size-cells = <0>;
+
+		cpu {
+			compatible = "arm,arm926ej-s";
+			device_type = "cpu";
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		};
 	};
 
@@ -643,7 +652,11 @@
 			};
 
 			rtc@fffffeb0 {
+<<<<<<< HEAD
 				compatible = "atmel,at91rm9200-rtc";
+=======
+				compatible = "atmel,at91sam9x5-rtc";
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				reg = <0xfffffeb0 0x40>;
 				interrupts = <1 4 7>;
 				status = "disabled";

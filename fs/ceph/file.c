@@ -313,9 +313,15 @@ static int striped_read(struct inode *inode,
 {
 	struct ceph_fs_client *fsc = ceph_inode_to_client(inode);
 	struct ceph_inode_info *ci = ceph_inode(inode);
+<<<<<<< HEAD
 	u64 pos, this_len;
 	int io_align, page_align;
 	int left, pages_left;
+=======
+	u64 pos, this_len, left;
+	int io_align, page_align;
+	int pages_left;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	int read;
 	struct page **page_pos;
 	int ret;
@@ -346,6 +352,7 @@ more:
 		ret = 0;
 	hit_stripe = this_len < left;
 	was_short = ret >= 0 && ret < this_len;
+<<<<<<< HEAD
 	dout("striped_read %llu~%u (read %u) got %d%s%s\n", pos, left, read,
 	     ret, hit_stripe ? " HITSTRIPE" : "", was_short ? " SHORT" : "");
 
@@ -357,12 +364,31 @@ more:
 			ceph_zero_page_vector_range(page_align + read,
 						    pos - off - read, pages);
 		}
+=======
+	dout("striped_read %llu~%llu (read %u) got %d%s%s\n", pos, left, read,
+	     ret, hit_stripe ? " HITSTRIPE" : "", was_short ? " SHORT" : "");
+
+	if (ret >= 0) {
+		int didpages;
+		if (was_short && (pos + ret < inode->i_size)) {
+			u64 tmp = min(this_len - ret,
+					inode->i_size - pos - ret);
+			dout(" zero gap %llu to %llu\n",
+				pos + ret, pos + ret + tmp);
+			ceph_zero_page_vector_range(page_align + read + ret,
+							tmp, pages);
+			ret += tmp;
+		}
+
+		didpages = (page_align + ret) >> PAGE_CACHE_SHIFT;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		pos += ret;
 		read = pos - off;
 		left -= ret;
 		page_pos += didpages;
 		pages_left -= didpages;
 
+<<<<<<< HEAD
 		/* hit stripe? */
 		if (left && hit_stripe)
 			goto more;
@@ -387,6 +413,20 @@ more:
 
 	if (ret >= 0)
 		ret = read;
+=======
+		/* hit stripe and need continue*/
+		if (left && hit_stripe && pos < inode->i_size)
+			goto more;
+	}
+
+	if (read > 0) {
+		ret = read;
+		/* did we bounce off eof? */
+		if (pos + left > inode->i_size)
+			*checkeof = 1;
+	}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	dout("striped_read returns %d\n", ret);
 	return ret;
 }
@@ -618,6 +658,11 @@ out:
 		if (check_caps)
 			ceph_check_caps(ceph_inode(inode), CHECK_CAPS_AUTHONLY,
 					NULL);
+<<<<<<< HEAD
+=======
+	} else if (ret != -EOLDSNAPC && written > 0) {
+		ret = written;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 	return ret;
 }

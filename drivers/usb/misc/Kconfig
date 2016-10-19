@@ -200,6 +200,24 @@ config USB_TEST
 	  See <http://www.linux-usb.org/usbtest/> for more information,
 	  including sample test device firmware and "how to use it".
 
+<<<<<<< HEAD
+=======
+config USB_EHSET_TEST_FIXTURE
+	tristate "USB EHSET Test Fixture Driver"
+	depends on USB && USB_EHCI_EHSET
+	default n
+	help
+	  Say Y here if you want to use EHSET Test Fixture device for host
+	  compliance testing.
+
+	  This driver initiates test modes on the downstream port to which the
+	  test fixture is attached.
+
+	  See <http://www.usb.org/developers/onthego/EHSET_v1.01.pdf>
+	  for more information.
+
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 config USB_ISIGHTFW
 	tristate "iSight firmware loading support"
 	select FW_LOADER
@@ -236,6 +254,7 @@ config USB_HSIC_USB3503
        help
          This option enables support for SMSC USB3503 HSIC to USB 2.0 Driver.
 
+<<<<<<< HEAD
 config USB_EXYNOS_SWITCH
 	bool "EXYNOS USB SWITCH driver"
 	depends on USB_EHCI_S5P || USB_OHCI_EXYNOS
@@ -244,6 +263,8 @@ config USB_EXYNOS_SWITCH
 	  This driver implements USB2.0 host <-> device switch functionality
 	  for Samsung Exynos series of SoCs.
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 config USB_QCOM_DIAG_BRIDGE
 	tristate "USB Qualcomm diagnostic bridge driver"
 	depends on USB
@@ -256,6 +277,7 @@ config USB_QCOM_DIAG_BRIDGE
 	  To compile this driver as a module, choose M here: the
 	  module will be called diag_bridge.  If unsure, choose N.
 
+<<<<<<< HEAD
 config USB_QCOM_DIAG_BRIDGE_TEST
 	tristate "USB Qualcomm diagnostic bridge driver test"
 	depends on USB && USB_QCOM_DIAG_BRIDGE
@@ -268,6 +290,8 @@ config USB_QCOM_DIAG_BRIDGE_TEST
 	  To compile this driver as a module, choose M here: the
 	  module will be called diag_bridge_test.  If unsure, choose N.
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 config USB_QCOM_MDM_BRIDGE
 	tristate "USB Qualcomm modem bridge driver for DUN and RMNET"
 	depends on USB
@@ -278,7 +302,10 @@ config USB_QCOM_MDM_BRIDGE
 	  driver for dial up network and RMNET.
 	  To compile this driver as a module, choose M here: the module
 	  will be called mdm_bridge. If unsure, choose N.
+<<<<<<< HEAD
 	  This option enables support for SMSC USB3503 HSIC to USB 2.0 Driver.
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 config USB_QCOM_KS_BRIDGE
 	tristate "USB Qualcomm kick start bridge"

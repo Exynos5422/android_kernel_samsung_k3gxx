@@ -212,6 +212,7 @@ extern void dump_stack(void) __cold;
 	printk(KERN_ALERT pr_fmt(fmt), ##__VA_ARGS__)
 #define pr_crit(fmt, ...) \
 	printk(KERN_CRIT pr_fmt(fmt), ##__VA_ARGS__)
+<<<<<<< HEAD
 #if defined(CONFIG_SEC_BAT_AUT) && !defined(CONFIG_SAMSUNG_PRODUCT_SHIP)
 #define BAT_AUTOMAION_TEST_PREFIX_ERR "<3>@BATAUTERR@"
 #define BAT_AUTOMAION_TEST_PREFIX_WARN "<3>@BATAUTWARN@"
@@ -221,6 +222,10 @@ extern void dump_stack(void) __cold;
 #define pr_err(fmt, ...) \
 	printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
 #endif
+=======
+#define pr_err(fmt, ...) \
+	printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define pr_warning(fmt, ...) \
 	printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
 #define pr_warn pr_warning
@@ -404,8 +409,18 @@ static inline void print_hex_dump_bytes(const char *prefix_str, int prefix_type,
 		       groupsize, buf, len, ascii)
 #endif /* defined(CONFIG_DYNAMIC_DEBUG) */
 
+<<<<<<< HEAD
 #if defined(CONFIG_SEC_DEBUG)
 extern void disable_printk_process(void);
 #endif /* defined(CONFIG_SEC_DEBUG) */
+=======
+#if defined(CONFIG_OOPS_LOG_BUFFER)
+extern void oops_printk_start(void);
+#else
+static inline void oops_printk_start(void)
+{
+}
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #endif

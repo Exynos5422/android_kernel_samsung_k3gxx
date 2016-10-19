@@ -126,6 +126,13 @@ static int mc13783_write(struct snd_soc_codec *codec,
 
 	ret = mc13xxx_reg_write(priv->mc13xxx, reg, value);
 
+<<<<<<< HEAD
+=======
+	/* include errata fix for spi audio problems */
+	if (reg == MC13783_AUDIO_CODEC || reg == MC13783_AUDIO_DAC)
+		ret = mc13xxx_reg_write(priv->mc13xxx, reg, value);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	mc13xxx_unlock(priv->mc13xxx);
 
 	return ret;

@@ -734,6 +734,11 @@ static void _rtl_pci_rx_interrupt(struct ieee80211_hw *hw)
 	};
 	int index = rtlpci->rx_ring[rx_queue_idx].idx;
 
+<<<<<<< HEAD
+=======
+	if (rtlpci->driver_is_goingto_unload)
+		return;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/*RX NORMAL PKT */
 	while (count--) {
 		/*rx descriptor */
@@ -1630,6 +1635,10 @@ static void rtl_pci_stop(struct ieee80211_hw *hw)
 	 */
 	set_hal_stop(rtlhal);
 
+<<<<<<< HEAD
+=======
+	rtlpci->driver_is_goingto_unload = true;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	rtlpriv->cfg->ops->disable_interrupt(hw);
 	cancel_work_sync(&rtlpriv->works.lps_change_work);
 
@@ -1647,7 +1656,10 @@ static void rtl_pci_stop(struct ieee80211_hw *hw)
 	ppsc->rfchange_inprogress = true;
 	spin_unlock_irqrestore(&rtlpriv->locks.rf_ps_lock, flags);
 
+<<<<<<< HEAD
 	rtlpci->driver_is_goingto_unload = true;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	rtlpriv->cfg->ops->hw_disable(hw);
 	/* some things are not needed if firmware not available */
 	if (!rtlpriv->max_fw_size)

@@ -1634,6 +1634,12 @@ int iwctl_siwencodeext(struct net_device *dev, struct iw_request_info *info,
 	if (pMgmt == NULL)
 		return -EFAULT;
 
+<<<<<<< HEAD
+=======
+	if (!(pDevice->flags & DEVICE_FLAGS_OPENED))
+		return -ENODEV;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	buf = kzalloc(sizeof(struct viawget_wpa_param), GFP_KERNEL);
 	if (buf == NULL)
 		return -ENOMEM;

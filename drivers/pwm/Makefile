@@ -17,3 +17,7 @@ obj-$(CONFIG_PWM_TIPWMSS)	+= pwm-tipwmss.o
 obj-$(CONFIG_PWM_TWL)		+= pwm-twl.o
 obj-$(CONFIG_PWM_TWL_LED)	+= pwm-twl-led.o
 obj-$(CONFIG_PWM_VT8500)	+= pwm-vt8500.o
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_PWM_QPNP)		+= pwm-qpnp.o
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

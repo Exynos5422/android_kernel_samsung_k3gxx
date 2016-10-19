@@ -114,6 +114,7 @@ static inline int tty_put_user(struct tty_struct *tty, unsigned char x,
 }
 
 /**
+<<<<<<< HEAD
  *	n_tty_set__room	-	receive space
  *	@tty: terminal
  *
@@ -121,6 +122,16 @@ static inline int tty_put_user(struct tty_struct *tty, unsigned char x,
  *	permitted to feed to the line discipline without any being lost
  *	and thus to manage flow control. Not serialized. Answers for the
  *	"instant".
+=======
+ *	n_tty_set_room	-	receive space
+ *	@tty: terminal
+ *
+ *	Sets tty->receive_room to reflect the currently available space
+ *	in the input buffer, and re-schedules the flip buffer work if space
+ *	just became available.
+ *
+ *	Locks: Concurrent update is protected with read_lock
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  */
 
 static void n_tty_set_room(struct tty_struct *tty)
@@ -132,7 +143,10 @@ static void n_tty_set_room(struct tty_struct *tty)
 
 	raw_spin_lock_irqsave(&ldata->read_lock, flags);
 
+<<<<<<< HEAD
 	/* ldata->read_cnt is not read locked ? */
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (I_PARMRK(tty)) {
 		/* Multiply read_cnt by 3, since each byte might take up to
 		 * three times as many spaces when PARMRK is set (depending on
@@ -1886,7 +1900,10 @@ do_it_again:
 				retval = -ERESTARTSYS;
 				break;
 			}
+<<<<<<< HEAD
 			/* FIXME: does n_tty_set_room need locking ? */
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			n_tty_set_room(tty);
 			timeout = schedule_timeout(timeout);
 			continue;

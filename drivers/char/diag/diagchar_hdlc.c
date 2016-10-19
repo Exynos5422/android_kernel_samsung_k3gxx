@@ -177,8 +177,13 @@ int diag_hdlc_decode(struct diag_hdlc_decode_type *hdlc)
 	int msg_start;
 
 	if (hdlc && hdlc->src_ptr && hdlc->dest_ptr &&
+<<<<<<< HEAD
 	    (hdlc->src_size - hdlc->src_idx > 0) &&
 	    (hdlc->dest_size - hdlc->dest_idx > 0)) {
+=======
+	    (hdlc->src_size > hdlc->src_idx) &&
+	    (hdlc->dest_size > hdlc->dest_idx)) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 		msg_start = (hdlc->src_idx == 0) ? 1 : 0;
 
@@ -207,6 +212,7 @@ int diag_hdlc_decode(struct diag_hdlc_decode_type *hdlc)
 							  ^ ESC_MASK;
 				}
 			} else if (src_byte == CONTROL_CHAR) {
+<<<<<<< HEAD
 				dest_ptr[len++] = src_byte;
 				/*
 				 * If this is the first byte in the message,
@@ -216,6 +222,13 @@ int diag_hdlc_decode(struct diag_hdlc_decode_type *hdlc)
 				 */
 				if (msg_start && i == 0 && src_length > 1)
 					continue;
+=======
+				if (msg_start && i == 0 && src_length > 1)
+					continue;
+				/* Byte 0x7E will be considered
+					as end of packet */
+				dest_ptr[len++] = src_byte;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				i++;
 				pkt_bnd = 1;
 				break;
@@ -246,8 +259,13 @@ int crc_check(uint8_t *buf, uint16_t len)
 	 * of data and 3 bytes for CRC
 	 */
 	if (!buf || len < 4) {
+<<<<<<< HEAD
 		pr_err_ratelimited("diag: In %s, invalid packet or length, buf: 0x%x, len: %d",
 				   __func__, (int)buf, len);
+=======
+		pr_err_ratelimited("diag: In %s, invalid packet or length, buf: 0x%p, len: %d",
+				   __func__, buf, len);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return -EIO;
 	}
 

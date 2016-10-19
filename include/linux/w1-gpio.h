@@ -15,6 +15,7 @@
  * @pin: GPIO pin to use
  * @is_open_drain: GPIO pin is configured as open drain
  */
+<<<<<<< HEAD
 
 #if defined(CONFIG_W1_MASTER_GPIO_EXYNOS5433)
 struct w1_gpio_platform_data {
@@ -28,12 +29,19 @@ struct w1_gpio_platform_data {
 	unsigned int register_num;
 };
 #else
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 struct w1_gpio_platform_data {
 	unsigned int pin;
 	unsigned int is_open_drain:1;
 	void (*enable_external_pullup)(int enable);
 	unsigned int ext_pullup_enable_pin;
+<<<<<<< HEAD
 	unsigned int slave_speed;
 };
 #endif
+=======
+};
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif /* _LINUX_W1_GPIO_H */

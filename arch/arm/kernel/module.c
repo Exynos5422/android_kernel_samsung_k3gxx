@@ -40,7 +40,11 @@
 void *module_alloc(unsigned long size)
 {
 	return __vmalloc_node_range(size, 1, MODULES_VADDR, MODULES_END,
+<<<<<<< HEAD
 				GFP_KERNEL, PAGE_KERNEL_EXEC, -1,
+=======
+				GFP_KERNEL, PAGE_KERNEL_EXEC, NUMA_NO_NODE,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				__builtin_return_address(0));
 }
 #endif

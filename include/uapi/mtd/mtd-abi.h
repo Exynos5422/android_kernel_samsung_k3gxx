@@ -231,7 +231,11 @@ struct nand_oobfree {
  */
 struct nand_ecclayout_user {
 	__u32 eccbytes;
+<<<<<<< HEAD
 	__u32 eccpos[MTD_MAX_ECCPOS_ENTRIES];
+=======
+	__u32 eccpos[256];
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	__u32 oobavail;
 	struct nand_oobfree oobfree[MTD_MAX_OOBFREE_ENTRIES];
 };

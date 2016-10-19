@@ -193,6 +193,7 @@ extern int _cond_resched(void);
 		(__x < 0) ? -__x : __x;		\
 	})
 
+<<<<<<< HEAD
 #ifdef CONFIG_PROVE_LOCKING
 void might_fault(void);
 #else
@@ -200,6 +201,12 @@ static inline void might_fault(void)
 {
 	might_sleep();
 }
+=======
+#if defined(CONFIG_PROVE_LOCKING) || defined(CONFIG_DEBUG_ATOMIC_SLEEP)
+void might_fault(void);
+#else
+static inline void might_fault(void) { }
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif
 
 extern struct atomic_notifier_head panic_notifier_list;
@@ -551,7 +558,11 @@ do {									\
 	__trace_printk_check_format(fmt, ##args);			\
 									\
 	if (__builtin_constant_p(fmt))					\
+<<<<<<< HEAD
 		__trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);	\
+=======
+		__trace_printk(_THIS_IP_, trace_printk_fmt, ##args);	\
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	else								\
 		__trace_printk(_THIS_IP_, fmt, ##args);			\
 } while (0)

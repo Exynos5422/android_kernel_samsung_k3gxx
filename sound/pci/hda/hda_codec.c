@@ -2517,9 +2517,12 @@ int snd_hda_codec_reset(struct hda_codec *codec)
 	cancel_delayed_work_sync(&codec->jackpoll_work);
 #ifdef CONFIG_PM
 	cancel_delayed_work_sync(&codec->power_work);
+<<<<<<< HEAD
 	codec->power_on = 0;
 	codec->power_transition = 0;
 	codec->power_jiffies = jiffies;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	flush_workqueue(bus->workq);
 #endif
 	snd_hda_ctls_clear(codec);
@@ -3927,6 +3930,13 @@ static void hda_call_codec_resume(struct hda_codec *codec)
 	 * in the resume / power-save sequence
 	 */
 	hda_keep_power_on(codec);
+<<<<<<< HEAD
+=======
+	if (codec->pm_down_notified) {
+		codec->pm_down_notified = 0;
+		hda_call_pm_notify(codec->bus, true);
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	hda_set_power_state(codec, AC_PWRST_D0);
 	restore_shutup_pins(codec);
 	hda_exec_init_verbs(codec);
@@ -4789,8 +4799,13 @@ static void hda_power_work(struct work_struct *work)
 	spin_unlock(&codec->power_lock);
 
 	state = hda_call_codec_suspend(codec, true);
+<<<<<<< HEAD
 	codec->pm_down_notified = 0;
 	if (!bus->power_keep_link_on && (state & AC_PWRST_CLK_STOP_OK)) {
+=======
+	if (!codec->pm_down_notified &&
+	    !bus->power_keep_link_on && (state & AC_PWRST_CLK_STOP_OK)) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		codec->pm_down_notified = 1;
 		hda_call_pm_notify(bus, false);
 	}

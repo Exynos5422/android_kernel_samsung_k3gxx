@@ -81,7 +81,11 @@ void free_ipcs(struct ipc_namespace *ns, struct ipc_ids *ids,
 	int next_id;
 	int total, in_use;
 
+<<<<<<< HEAD
 	down_write(&ids->rw_mutex);
+=======
+	down_write(&ids->rwsem);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	in_use = ids->in_use;
 
@@ -89,11 +93,20 @@ void free_ipcs(struct ipc_namespace *ns, struct ipc_ids *ids,
 		perm = idr_find(&ids->ipcs_idr, next_id);
 		if (perm == NULL)
 			continue;
+<<<<<<< HEAD
 		ipc_lock_by_ptr(perm);
 		free(ns, perm);
 		total++;
 	}
 	up_write(&ids->rw_mutex);
+=======
+		rcu_read_lock();
+		ipc_lock_object(perm);
+		free(ns, perm);
+		total++;
+	}
+	up_write(&ids->rwsem);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static void free_ipc_ns(struct ipc_namespace *ns)

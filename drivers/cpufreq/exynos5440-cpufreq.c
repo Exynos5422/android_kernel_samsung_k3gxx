@@ -20,7 +20,11 @@
 #include <linux/module.h>
 #include <linux/of_address.h>
 #include <linux/of_irq.h>
+<<<<<<< HEAD
 #include <linux/opp.h>
+=======
+#include <linux/pm_opp.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <linux/platform_device.h>
 #include <linux/slab.h>
 
@@ -123,7 +127,11 @@ static int init_div_table(void)
 	rcu_read_lock();
 	for (i = 0; freq_tbl[i].frequency != CPUFREQ_TABLE_END; i++) {
 
+<<<<<<< HEAD
 		opp = opp_find_freq_exact(dvfs_info->dev,
+=======
+		opp = dev_pm_opp_find_freq_exact(dvfs_info->dev,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 					freq_tbl[i].frequency * 1000, true);
 		if (IS_ERR(opp)) {
 			rcu_read_unlock();
@@ -142,7 +150,11 @@ static int init_div_table(void)
 					<< P0_7_CSCLKDEV_SHIFT;
 
 		/* Calculate EMA */
+<<<<<<< HEAD
 		volt_id = opp_get_voltage(opp);
+=======
+		volt_id = dev_pm_opp_get_voltage(opp);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		volt_id = (MAX_VOLTAGE - volt_id) / VOLTAGE_STEP;
 		if (volt_id < PMIC_HIGH_VOLT) {
 			ema_div = (CPUEMA_HIGH << P0_7_CPUEMA_SHIFT) |
@@ -339,7 +351,11 @@ static int exynos_cpufreq_cpu_init(struct cpufreq_policy *policy)
 }
 
 static struct cpufreq_driver exynos_driver = {
+<<<<<<< HEAD
 	.flags		= CPUFREQ_STICKY,
+=======
+	.flags		= CPUFREQ_STICKY | CPUFREQ_ASYNC_NOTIFICATION,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	.verify		= exynos_verify_speed,
 	.target		= exynos_target,
 	.get		= exynos_getspeed,
@@ -396,13 +412,22 @@ static int exynos_cpufreq_probe(struct platform_device *pdev)
 		goto err_put_node;
 	}
 
+<<<<<<< HEAD
 	ret = opp_init_cpufreq_table(dvfs_info->dev, &dvfs_info->freq_table);
+=======
+	ret = dev_pm_opp_init_cpufreq_table(dvfs_info->dev,
+					    &dvfs_info->freq_table);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (ret) {
 		dev_err(dvfs_info->dev,
 			"failed to init cpufreq table: %d\n", ret);
 		goto err_put_node;
 	}
+<<<<<<< HEAD
 	dvfs_info->freq_count = opp_get_opp_count(dvfs_info->dev);
+=======
+	dvfs_info->freq_count = dev_pm_opp_get_opp_count(dvfs_info->dev);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	exynos_sort_descend_freq_table();
 
 	if (of_property_read_u32(np, "clock-latency", &dvfs_info->latency))
@@ -451,7 +476,11 @@ static int exynos_cpufreq_probe(struct platform_device *pdev)
 	return 0;
 
 err_free_table:
+<<<<<<< HEAD
 	opp_free_cpufreq_table(dvfs_info->dev, &dvfs_info->freq_table);
+=======
+	dev_pm_opp_free_cpufreq_table(dvfs_info->dev, &dvfs_info->freq_table);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 err_put_node:
 	of_node_put(np);
 	dev_err(dvfs_info->dev, "%s: failed initialization\n", __func__);
@@ -461,7 +490,11 @@ err_put_node:
 static int exynos_cpufreq_remove(struct platform_device *pdev)
 {
 	cpufreq_unregister_driver(&exynos_driver);
+<<<<<<< HEAD
 	opp_free_cpufreq_table(dvfs_info->dev, &dvfs_info->freq_table);
+=======
+	dev_pm_opp_free_cpufreq_table(dvfs_info->dev, &dvfs_info->freq_table);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 

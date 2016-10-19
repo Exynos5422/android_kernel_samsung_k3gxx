@@ -360,8 +360,15 @@ static int ext4_valid_extent(struct inode *inode, struct ext4_extent *ext)
 {
 	ext4_fsblk_t block = ext4_ext_pblock(ext);
 	int len = ext4_ext_get_actual_len(ext);
+<<<<<<< HEAD
 
 	if (len == 0)
+=======
+	ext4_lblk_t lblock = le32_to_cpu(ext->ee_block);
+	ext4_lblk_t last = lblock + len - 1;
+
+	if (lblock > last)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return 0;
 	return ext4_data_block_valid(EXT4_SB(inode->i_sb), block, len);
 }
@@ -387,11 +394,34 @@ static int ext4_valid_extent_entries(struct inode *inode,
 	if (depth == 0) {
 		/* leaf entries */
 		struct ext4_extent *ext = EXT_FIRST_EXTENT(eh);
+<<<<<<< HEAD
 		while (entries) {
 			if (!ext4_valid_extent(inode, ext))
 				return 0;
 			ext++;
 			entries--;
+=======
+		struct ext4_super_block *es = EXT4_SB(inode->i_sb)->s_es;
+		ext4_fsblk_t pblock = 0;
+		ext4_lblk_t lblock = 0;
+		ext4_lblk_t prev = 0;
+		int len = 0;
+		while (entries) {
+			if (!ext4_valid_extent(inode, ext))
+				return 0;
+
+			/* Check for overlapping extents */
+			lblock = le32_to_cpu(ext->ee_block);
+			len = ext4_ext_get_actual_len(ext);
+			if ((lblock <= prev) && prev) {
+				pblock = ext4_ext_pblock(ext);
+				es->s_last_error_block = cpu_to_le64(pblock);
+				return 0;
+			}
+			ext++;
+			entries--;
+			prev = lblock + len - 1;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		}
 	} else {
 		struct ext4_extent_idx *ext_idx = EXT_FIRST_INDEX(eh);
@@ -405,6 +435,7 @@ static int ext4_valid_extent_entries(struct inode *inode,
 	return 1;
 }
 
+<<<<<<< HEAD
 /* for debugging if ext4_extent is not valid */
 static void
 ext4_ext_show_eh(struct inode *inode, struct ext4_extent_header *eh)
@@ -447,6 +478,8 @@ ext4_ext_show_eh(struct inode *inode, struct ext4_extent_header *eh)
 	}
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int __ext4_ext_check(const char *function, unsigned int line,
 			    struct inode *inode, struct ext4_extent_header *eh,
 			    int depth)
@@ -488,9 +521,12 @@ static int __ext4_ext_check(const char *function, unsigned int line,
 	return 0;
 
 corrupted:
+<<<<<<< HEAD
 	printk(KERN_ERR "Print invalid extent entries\n");
 	ext4_ext_show_eh(inode, eh);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ext4_error_inode(inode, function, line, 0,
 			"bad header/extent: %s - magic %x, "
 			"entries %u, max %u(%u), depth %u(%u)",
@@ -1800,8 +1836,12 @@ static unsigned int ext4_ext_check_overlap(struct ext4_sb_info *sbi,
 	depth = ext_depth(inode);
 	if (!path[depth].p_ext)
 		goto out;
+<<<<<<< HEAD
 	b2 = le32_to_cpu(path[depth].p_ext->ee_block);
 	b2 &= ~(sbi->s_cluster_ratio - 1);
+=======
+	b2 = EXT4_LBLK_CMASK(sbi, le32_to_cpu(path[depth].p_ext->ee_block));
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/*
 	 * get the next allocated block if the extent in the path
@@ -1811,7 +1851,11 @@ static unsigned int ext4_ext_check_overlap(struct ext4_sb_info *sbi,
 		b2 = ext4_ext_next_allocated_block(path);
 		if (b2 == EXT_MAX_BLOCKS)
 			goto out;
+<<<<<<< HEAD
 		b2 &= ~(sbi->s_cluster_ratio - 1);
+=======
+		b2 = EXT4_LBLK_CMASK(sbi, b2);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	/* check for wrap through zero on extent logical start block*/
@@ -2472,7 +2516,11 @@ static int ext4_remove_blocks(handle_t *handle, struct inode *inode,
 		 * truncate operation has removed all of the blocks in
 		 * the cluster.
 		 */
+<<<<<<< HEAD
 		if (pblk & (sbi->s_cluster_ratio - 1) &&
+=======
+		if (EXT4_PBLK_COFF(sbi, pblk) &&
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		    (ee_len == num))
 			*partial_cluster = EXT4_B2C(sbi, pblk);
 		else
@@ -2540,6 +2588,30 @@ ext4_ext_rm_leaf(handle_t *handle, struct inode *inode,
 	ex_ee_block = le32_to_cpu(ex->ee_block);
 	ex_ee_len = ext4_ext_get_actual_len(ex);
 
+<<<<<<< HEAD
+=======
+	/*
+	 * If we're starting with an extent other than the last one in the
+	 * node, we need to see if it shares a cluster with the extent to
+	 * the right (towards the end of the file). If its leftmost cluster
+	 * is this extent's rightmost cluster and it is not cluster aligned,
+	 * we'll mark it as a partial that is not to be deallocated.
+	 */
+
+	if (ex != EXT_LAST_EXTENT(eh)) {
+		ext4_fsblk_t current_pblk, right_pblk;
+		long long current_cluster, right_cluster;
+
+		current_pblk = ext4_ext_pblock(ex) + ex_ee_len - 1;
+		current_cluster = (long long)EXT4_B2C(sbi, current_pblk);
+		right_pblk = ext4_ext_pblock(ex + 1);
+		right_cluster = (long long)EXT4_B2C(sbi, right_pblk);
+		if (current_cluster == right_cluster &&
+			EXT4_PBLK_COFF(sbi, right_pblk))
+			*partial_cluster = -right_cluster;
+	}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	trace_ext4_ext_rm_leaf(inode, start, ex, *partial_cluster);
 
 	while (ex >= EXT_FIRST_EXTENT(eh) &&
@@ -3703,7 +3775,11 @@ int ext4_find_delalloc_cluster(struct inode *inode, ext4_lblk_t lblk)
 {
 	struct ext4_sb_info *sbi = EXT4_SB(inode->i_sb);
 	ext4_lblk_t lblk_start, lblk_end;
+<<<<<<< HEAD
 	lblk_start = lblk & (~(sbi->s_cluster_ratio - 1));
+=======
+	lblk_start = EXT4_LBLK_CMASK(sbi, lblk);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	lblk_end = lblk_start + sbi->s_cluster_ratio - 1;
 
 	return ext4_find_delalloc_range(inode, lblk_start, lblk_end);
@@ -3762,9 +3838,15 @@ get_reserved_cluster_alloc(struct inode *inode, ext4_lblk_t lblk_start,
 	trace_ext4_get_reserved_cluster_alloc(inode, lblk_start, num_blks);
 
 	/* Check towards left side */
+<<<<<<< HEAD
 	c_offset = lblk_start & (sbi->s_cluster_ratio - 1);
 	if (c_offset) {
 		lblk_from = lblk_start & (~(sbi->s_cluster_ratio - 1));
+=======
+	c_offset = EXT4_LBLK_COFF(sbi, lblk_start);
+	if (c_offset) {
+		lblk_from = EXT4_LBLK_CMASK(sbi, lblk_start);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		lblk_to = lblk_from + c_offset - 1;
 
 		if (ext4_find_delalloc_range(inode, lblk_from, lblk_to))
@@ -3772,7 +3854,11 @@ get_reserved_cluster_alloc(struct inode *inode, ext4_lblk_t lblk_start,
 	}
 
 	/* Now check towards right. */
+<<<<<<< HEAD
 	c_offset = (lblk_start + num_blks) & (sbi->s_cluster_ratio - 1);
+=======
+	c_offset = EXT4_LBLK_COFF(sbi, lblk_start + num_blks);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (allocated_clusters && c_offset) {
 		lblk_from = lblk_start + num_blks;
 		lblk_to = lblk_from + (sbi->s_cluster_ratio - c_offset) - 1;
@@ -3980,7 +4066,11 @@ static int get_implied_cluster_alloc(struct super_block *sb,
 				     struct ext4_ext_path *path)
 {
 	struct ext4_sb_info *sbi = EXT4_SB(sb);
+<<<<<<< HEAD
 	ext4_lblk_t c_offset = map->m_lblk & (sbi->s_cluster_ratio-1);
+=======
+	ext4_lblk_t c_offset = EXT4_LBLK_COFF(sbi, map->m_lblk);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ext4_lblk_t ex_cluster_start, ex_cluster_end;
 	ext4_lblk_t rr_cluster_start;
 	ext4_lblk_t ee_block = le32_to_cpu(ex->ee_block);
@@ -3998,8 +4088,12 @@ static int get_implied_cluster_alloc(struct super_block *sb,
 	    (rr_cluster_start == ex_cluster_start)) {
 		if (rr_cluster_start == ex_cluster_end)
 			ee_start += ee_len - 1;
+<<<<<<< HEAD
 		map->m_pblk = (ee_start & ~(sbi->s_cluster_ratio - 1)) +
 			c_offset;
+=======
+		map->m_pblk = EXT4_PBLK_CMASK(sbi, ee_start) + c_offset;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		map->m_len = min(map->m_len,
 				 (unsigned) sbi->s_cluster_ratio - c_offset);
 		/*
@@ -4062,7 +4156,11 @@ int ext4_ext_map_blocks(handle_t *handle, struct inode *inode,
 	struct ext4_extent newex, *ex, *ex2;
 	struct ext4_sb_info *sbi = EXT4_SB(inode->i_sb);
 	ext4_fsblk_t newblock = 0;
+<<<<<<< HEAD
 	int free_on_err = 0, err = 0, depth;
+=======
+	int free_on_err = 0, err = 0, depth, ret;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	unsigned int allocated = 0, offset = 0;
 	unsigned int allocated_clusters = 0;
 	struct ext4_allocation_request ar;
@@ -4123,9 +4221,19 @@ int ext4_ext_map_blocks(handle_t *handle, struct inode *inode,
 			if (!ext4_ext_is_uninitialized(ex))
 				goto out;
 
+<<<<<<< HEAD
 			allocated = ext4_ext_handle_uninitialized_extents(
 				handle, inode, map, path, flags,
 				allocated, newblock);
+=======
+			ret = ext4_ext_handle_uninitialized_extents(
+				handle, inode, map, path, flags,
+				allocated, newblock);
+			if (ret < 0)
+				err = ret;
+			else
+				allocated = ret;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			goto out3;
 		}
 	}
@@ -4153,7 +4261,11 @@ int ext4_ext_map_blocks(handle_t *handle, struct inode *inode,
 	 */
 	map->m_flags &= ~EXT4_MAP_FROM_CLUSTER;
 	newex.ee_block = cpu_to_le32(map->m_lblk);
+<<<<<<< HEAD
 	cluster_offset = map->m_lblk & (sbi->s_cluster_ratio-1);
+=======
+	cluster_offset = EXT4_LBLK_COFF(sbi, map->m_lblk);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/*
 	 * If we are doing bigalloc, check to see if the extent returned
@@ -4221,7 +4333,11 @@ int ext4_ext_map_blocks(handle_t *handle, struct inode *inode,
 	 * needed so that future calls to get_implied_cluster_alloc()
 	 * work correctly.
 	 */
+<<<<<<< HEAD
 	offset = map->m_lblk & (sbi->s_cluster_ratio - 1);
+=======
+	offset = EXT4_LBLK_COFF(sbi, map->m_lblk);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ar.len = EXT4_NUM_B2C(sbi, offset+allocated);
 	ar.goal -= offset;
 	ar.logical -= offset;

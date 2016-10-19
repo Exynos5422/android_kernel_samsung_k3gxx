@@ -129,6 +129,12 @@ struct md_rdev {
 enum flag_bits {
 	Faulty,			/* device is known to have a fault */
 	In_sync,		/* device is in_sync with rest of array */
+<<<<<<< HEAD
+=======
+	Bitmap_sync,		/* ..actually, not quite In_sync.  Need a
+				 * bitmap-based recovery to get fully in sync
+				 */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	Unmerged,		/* device is being added to array and should
 				 * be considerred for bvec_merge_fn but not
 				 * yet for actual IO

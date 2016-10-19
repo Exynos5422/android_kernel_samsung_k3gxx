@@ -481,7 +481,11 @@ static int s3c_rtc_probe(struct platform_device *pdev)
 	if (IS_ERR(s3c_rtc_base))
 		return PTR_ERR(s3c_rtc_base);
 
+<<<<<<< HEAD
 	rtc_clk = devm_clk_get(&pdev->dev, "gate_rtc");
+=======
+	rtc_clk = devm_clk_get(&pdev->dev, "rtc");
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (IS_ERR(rtc_clk)) {
 		dev_err(&pdev->dev, "failed to find rtc clock source\n");
 		ret = PTR_ERR(rtc_clk);

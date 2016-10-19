@@ -29,9 +29,13 @@ int ucv2_verify_speed(struct cpufreq_policy *policy)
 	if (policy->cpu)
 		return -EINVAL;
 
+<<<<<<< HEAD
 	cpufreq_verify_within_limits(policy,
 			policy->cpuinfo.min_freq, policy->cpuinfo.max_freq);
 
+=======
+	cpufreq_verify_within_cpu_limits(policy);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 

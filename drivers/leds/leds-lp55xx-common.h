@@ -20,6 +20,7 @@ enum lp55xx_engine_index {
 	LP55XX_ENGINE_1,
 	LP55XX_ENGINE_2,
 	LP55XX_ENGINE_3,
+<<<<<<< HEAD
 	LP55XX_ENGINE_MAX = LP55XX_ENGINE_3,
 };
 
@@ -76,6 +77,10 @@ static ssize_t store_engine##nr##_load(struct device *dev,		\
 	return store_engine_load(dev, attr, buf, len, nr);		\
 }
 
+=======
+};
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 struct lp55xx_led;
 struct lp55xx_chip;
 
@@ -126,6 +131,7 @@ struct lp55xx_device_config {
 };
 
 /*
+<<<<<<< HEAD
  * struct lp55xx_engine
  * @mode       : Engine mode
  * @led_mux    : Mux bits for LED selection. Only used in LP5523
@@ -136,6 +142,8 @@ struct lp55xx_engine {
 };
 
 /*
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  * struct lp55xx_chip
  * @cl         : I2C communication for access registers
  * @pdata      : Platform specific data
@@ -143,7 +151,10 @@ struct lp55xx_engine {
  * @num_leds   : Number of registered LEDs
  * @cfg        : Device specific configuration data
  * @engine_idx : Selected engine number
+<<<<<<< HEAD
  * @engines    : Engine structure for the device attribute R/W interface
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  * @fw         : Firmware data for running a LED pattern
  */
 struct lp55xx_chip {
@@ -154,7 +165,10 @@ struct lp55xx_chip {
 	int num_leds;
 	struct lp55xx_device_config *cfg;
 	enum lp55xx_engine_index engine_idx;
+<<<<<<< HEAD
 	struct lp55xx_engine engines[LP55XX_ENGINE_MAX];
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	const struct firmware *fw;
 };
 
@@ -201,8 +215,11 @@ extern void lp55xx_unregister_leds(struct lp55xx_led *led,
 extern int lp55xx_register_sysfs(struct lp55xx_chip *chip);
 extern void lp55xx_unregister_sysfs(struct lp55xx_chip *chip);
 
+<<<<<<< HEAD
 /* common device tree population function */
 extern int lp55xx_of_populate_pdata(struct device *dev,
 				    struct device_node *np);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif /* _LEDS_LP55XX_COMMON_H */

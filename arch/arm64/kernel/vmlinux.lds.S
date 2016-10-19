@@ -8,6 +8,7 @@
 #include <asm/thread_info.h>
 #include <asm/memory.h>
 #include <asm/page.h>
+<<<<<<< HEAD
 
 #define ARM_EXIT_KEEP(x)
 #define ARM_EXIT_DISCARD(x)	x
@@ -17,6 +18,38 @@ ENTRY(stext)
 
 jiffies = jiffies_64;
 
+=======
+#ifdef CONFIG_STRICT_MEMORY_RWX
+#include <asm/pgtable.h>
+#endif
+
+#if (!defined(CONFIG_DEBUG_SPINLOCK)) || defined(CONFIG_GENERIC_BUG)
+#define ARM_EXIT_KEEP(x)	x
+#define ARM_EXIT_DISCARD(x)
+#else
+#define ARM_EXIT_KEEP(x)
+#define ARM_EXIT_DISCARD(x)	x
+#endif
+
+OUTPUT_ARCH(aarch64)
+ENTRY(_text)
+
+jiffies = jiffies_64;
+
+#define HYPERVISOR_TEXT					\
+	/*						\
+	 * Force the alignment to be compatible with	\
+	 * the vectors requirements			\
+	 */						\
+	. = ALIGN(2048);				\
+	VMLINUX_SYMBOL(__hyp_idmap_text_start) = .;	\
+	*(.hyp.idmap.text)				\
+	VMLINUX_SYMBOL(__hyp_idmap_text_end) = .;	\
+	VMLINUX_SYMBOL(__hyp_text_start) = .;		\
+	*(.hyp.text)					\
+	VMLINUX_SYMBOL(__hyp_text_end) = .;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 SECTIONS
 {
 	/*
@@ -39,9 +72,18 @@ SECTIONS
 		_text = .;
 		HEAD_TEXT
 	}
+<<<<<<< HEAD
 	.text : {			/* Real text segment		*/
 		_stext = .;		/* Text and read-only data	*/
 			*(.smp.pen.text)
+=======
+#ifdef CONFIG_STRICT_MEMORY_RWX
+	. = ALIGN(1<<SECTION_SHIFT);
+#endif
+	.text : {			/* Real text segment		*/
+		_stext = .;		/* Text and read-only data	*/
+			*(.latehead.text)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			__exception_text_start = .;
 			*(.exception.text)
 			__exception_text_end = .;
@@ -49,24 +91,53 @@ SECTIONS
 			TEXT_TEXT
 			SCHED_TEXT
 			LOCK_TEXT
+<<<<<<< HEAD
+=======
+			HYPERVISOR_TEXT
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			*(.fixup)
 			*(.gnu.warning)
 		. = ALIGN(16);
 		*(.got)			/* Global offset table		*/
 	}
 
+<<<<<<< HEAD
 	RO_DATA(PAGE_SIZE)
 
 	_etext = .;			/* End of text and rodata section */
 
 	. = ALIGN(PAGE_SIZE);
+=======
+#ifdef CONFIG_STRICT_MEMORY_RWX
+	. = ALIGN(1<<SECTION_SHIFT);
+#endif
+	RO_DATA(PAGE_SIZE)
+	EXCEPTION_TABLE(8)
+	NOTES
+	_etext = .;			/* End of text and rodata section */
+
+#ifdef CONFIG_STRICT_MEMORY_RWX
+	. = ALIGN(1<<SECTION_SHIFT);
+#else
+	. = ALIGN(PAGE_SIZE);
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	__init_begin = .;
 
 	INIT_TEXT_SECTION(8)
 	.exit.text : {
 		ARM_EXIT_KEEP(EXIT_TEXT)
 	}
+<<<<<<< HEAD
 	. = ALIGN(16);
+=======
+#ifdef CONFIG_STRICT_MEMORY_RWX
+	. = ALIGN(1<<SECTION_SHIFT);
+	__init_data_begin = .;
+#else
+	. = ALIGN(16);
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	.init.data : {
 		INIT_DATA
 		INIT_SETUP(16)
@@ -82,6 +153,7 @@ SECTIONS
 	PERCPU_SECTION(64)
 
 	__init_end = .;
+<<<<<<< HEAD
 	. = ALIGN(THREAD_SIZE);
 	__data_loc = .;
 
@@ -117,10 +189,28 @@ SECTIONS
 	_edata_loc = __data_loc + SIZEOF(.data);
 
 	NOTES
+=======
+
+	. = ALIGN(PAGE_SIZE);
+	_data = .;
+	_sdata = .;
+	RW_DATA_SECTION(64, PAGE_SIZE, THREAD_SIZE)
+	_edata = .;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	BSS_SECTION(0, 0, 0)
 	_end = .;
 
 	STABS_DEBUG
+<<<<<<< HEAD
 	.comment 0 : { *(.comment) }
 }
+=======
+}
+
+/*
+ * The HYP init code can't be more than a page long.
+ */
+ASSERT(((__hyp_idmap_text_start + PAGE_SIZE) > __hyp_idmap_text_end),
+       "HYP init code too big")
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

@@ -19,10 +19,15 @@
 #include <linux/ktime.h>
 #include <linux/hrtimer.h>
 #include <linux/module.h>
+<<<<<<< HEAD
 #include <trace/events/power.h>
 
 #include "cpuidle.h"
 #include <mach/exynos-ss.h>
+=======
+
+#include "cpuidle.h"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 DEFINE_PER_CPU(struct cpuidle_device *, cpuidle_devices);
 DEFINE_PER_CPU(struct cpuidle_device, cpuidle_dev);
@@ -82,14 +87,20 @@ int cpuidle_enter_state(struct cpuidle_device *dev, struct cpuidle_driver *drv,
 	ktime_t time_start, time_end;
 	s64 diff;
 
+<<<<<<< HEAD
 	exynos_ss_cpuidle(index, 0, 0, ESS_FLAG_IN);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	time_start = ktime_get();
 
 	entered_state = target_state->enter(dev, drv, index);
 
 	time_end = ktime_get();
+<<<<<<< HEAD
 	exynos_ss_cpuidle(index, entered_state,
 		(int)ktime_to_us(ktime_sub(time_end, time_start)), ESS_FLAG_OUT);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	local_irq_enable();
 
@@ -148,6 +159,7 @@ int cpuidle_idle_call(void)
 		return 0;
 	}
 
+<<<<<<< HEAD
 	trace_cpu_idle_rcuidle(next_state, dev->cpu);
 
 	if (need_resched()) {
@@ -157,6 +169,8 @@ int cpuidle_idle_call(void)
 		goto exit;
 	}
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (drv->states[next_state].flags & CPUIDLE_FLAG_TIMER_STOP)
 		clockevents_notify(CLOCK_EVT_NOTIFY_BROADCAST_ENTER,
 				   &dev->cpu);
@@ -171,9 +185,12 @@ int cpuidle_idle_call(void)
 		clockevents_notify(CLOCK_EVT_NOTIFY_BROADCAST_EXIT,
 				   &dev->cpu);
 
+<<<<<<< HEAD
 exit:
 	trace_cpu_idle_rcuidle(PWR_EVENT_EXIT, dev->cpu);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* give the governor an opportunity to reflect on the outcome */
 	if (cpuidle_curr_governor->reflect)
 		cpuidle_curr_governor->reflect(dev, entered_state);
@@ -553,7 +570,18 @@ static void smp_callback(void *v)
 static int cpuidle_latency_notify(struct notifier_block *b,
 		unsigned long l, void *v)
 {
+<<<<<<< HEAD
 	smp_call_function(smp_callback, NULL, 1);
+=======
+	const struct cpumask *cpus;
+
+	cpus = v ?: cpu_online_mask;
+
+	preempt_disable();
+	smp_call_function_many(cpus, smp_callback, NULL, 1);
+	preempt_enable();
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return NOTIFY_OK;
 }
 

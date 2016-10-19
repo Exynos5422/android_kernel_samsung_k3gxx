@@ -220,6 +220,10 @@ static void ipt_ulog_packet(struct net *net,
 	ub->qlen++;
 
 	pm = nlmsg_data(nlh);
+<<<<<<< HEAD
+=======
+	memset(pm, 0, sizeof(*pm));
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/* We might not have a timestamp, get one */
 	if (skb->tstamp.tv64 == 0)
@@ -238,8 +242,11 @@ static void ipt_ulog_packet(struct net *net,
 	}
 	else if (loginfo->prefix[0] != '\0')
 		strncpy(pm->prefix, loginfo->prefix, sizeof(pm->prefix));
+<<<<<<< HEAD
 	else
 		*(pm->prefix) = '\0';
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (in && in->hard_header_len > 0 &&
 	    skb->mac_header != skb->network_header &&
@@ -251,6 +258,7 @@ static void ipt_ulog_packet(struct net *net,
 
 	if (in)
 		strncpy(pm->indev_name, in->name, sizeof(pm->indev_name));
+<<<<<<< HEAD
 	else
 		pm->indev_name[0] = '\0';
 
@@ -258,6 +266,11 @@ static void ipt_ulog_packet(struct net *net,
 		strncpy(pm->outdev_name, out->name, sizeof(pm->outdev_name));
 	else
 		pm->outdev_name[0] = '\0';
+=======
+
+	if (out)
+		strncpy(pm->outdev_name, out->name, sizeof(pm->outdev_name));
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/* copy_len <= skb->len, so can't fail. */
 	if (skb_copy_bits(skb, 0, pm->payload, copy_len) < 0)

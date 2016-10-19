@@ -95,6 +95,7 @@ static void __always_unused ____ftrace_check_##name(void)		\
 #undef __array
 #define __array(type, item, len)					\
 	do {								\
+<<<<<<< HEAD
 		BUILD_BUG_ON(len > MAX_FILTER_STR_VAL);			\
 		mutex_lock(&event_storage_mutex);			\
 		snprintf(event_storage, sizeof(event_storage),		\
@@ -104,6 +105,14 @@ static void __always_unused ____ftrace_check_##name(void)		\
 				 sizeof(field.item),			\
 				 is_signed_type(type), filter_type);	\
 		mutex_unlock(&event_storage_mutex);			\
+=======
+		char *type_str = #type"["__stringify(len)"]";		\
+		BUILD_BUG_ON(len > MAX_FILTER_STR_VAL);			\
+		ret = trace_define_field(event_call, type_str, #item,	\
+				 offsetof(typeof(field), item),		\
+				 sizeof(field.item),			\
+				 is_signed_type(type), filter_type);	\
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (ret)						\
 			return ret;					\
 	} while (0);

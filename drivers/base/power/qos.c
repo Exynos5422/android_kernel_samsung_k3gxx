@@ -141,7 +141,11 @@ static int apply_constraint(struct dev_pm_qos_request *req,
 
 	switch(req->type) {
 	case DEV_PM_QOS_LATENCY:
+<<<<<<< HEAD
 		ret = pm_qos_update_target(&qos->latency, &req->data.pnode,
+=======
+		ret = pm_qos_update_target(&qos->latency, &req->data.lat,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 					   action, value);
 		if (ret) {
 			value = pm_qos_read_value(&qos->latency);
@@ -237,7 +241,11 @@ void dev_pm_qos_constraints_destroy(struct device *dev)
 
 	/* Flush the constraints lists for the device. */
 	c = &qos->latency;
+<<<<<<< HEAD
 	plist_for_each_entry_safe(req, tmp, &c->list, data.pnode) {
+=======
+	plist_for_each_entry_safe(req, tmp, &c->list, data.lat.node) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		/*
 		 * Update constraints list and call the notification
 		 * callbacks if needed
@@ -340,7 +348,11 @@ static int __dev_pm_qos_update_request(struct dev_pm_qos_request *req,
 
 	switch(req->type) {
 	case DEV_PM_QOS_LATENCY:
+<<<<<<< HEAD
 		curr_value = req->data.pnode.prio;
+=======
+		curr_value = req->data.lat.node.prio;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		break;
 	case DEV_PM_QOS_FLAGS:
 		curr_value = req->data.flr.flags;

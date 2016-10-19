@@ -123,3 +123,12 @@ static inline void pinconf_generic_dump_config(struct pinctrl_dev *pctldev,
 	return;
 }
 #endif
+<<<<<<< HEAD
+=======
+
+#if defined(CONFIG_GENERIC_PINCONF) && defined(CONFIG_OF)
+int pinconf_generic_parse_dt_config(struct device_node *np,
+				    unsigned long **configs,
+				    unsigned int *nconfigs);
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

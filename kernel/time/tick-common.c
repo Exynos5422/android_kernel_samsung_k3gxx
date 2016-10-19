@@ -18,6 +18,10 @@
 #include <linux/percpu.h>
 #include <linux/profile.h>
 #include <linux/sched.h>
+<<<<<<< HEAD
+=======
+#include <linux/module.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #include <asm/irq_regs.h>
 
@@ -206,6 +210,7 @@ static void tick_setup_device(struct tick_device *td,
 		tick_setup_oneshot(newdev, handler, next_event);
 }
 
+<<<<<<< HEAD
 /*
  * Check, if the new registered device should be used.
  */
@@ -214,6 +219,52 @@ static int tick_check_new_device(struct clock_event_device *newdev)
 	struct clock_event_device *curdev;
 	struct tick_device *td;
 	int cpu, ret = NOTIFY_OK;
+=======
+static bool tick_check_percpu(struct clock_event_device *curdev,
+			      struct clock_event_device *newdev, int cpu)
+{
+	if (!cpumask_test_cpu(cpu, newdev->cpumask))
+		return false;
+	if (cpumask_equal(newdev->cpumask, cpumask_of(cpu)))
+		return true;
+	/* Check if irq affinity can be set */
+	if (newdev->irq >= 0 && !irq_can_set_affinity(newdev->irq))
+		return false;
+	/* Prefer an existing cpu local device */
+	if (curdev && cpumask_equal(curdev->cpumask, cpumask_of(cpu)))
+		return false;
+	return true;
+}
+
+static bool tick_check_preferred(struct clock_event_device *curdev,
+				 struct clock_event_device *newdev)
+{
+	/* Prefer oneshot capable device */
+	if (!(newdev->features & CLOCK_EVT_FEAT_ONESHOT)) {
+		if (curdev && (curdev->features & CLOCK_EVT_FEAT_ONESHOT))
+			return false;
+		if (tick_oneshot_mode_active())
+			return false;
+	}
+
+	/*
+	 * Use the higher rated one, but prefer a CPU local device with a lower
+	 * rating than a non-CPU local device
+	 */
+	return !curdev ||
+		newdev->rating > curdev->rating ||
+	       !cpumask_equal(curdev->cpumask, newdev->cpumask);
+}
+
+/*
+ * Check, if the new registered device should be used.
+ */
+void tick_check_new_device(struct clock_event_device *newdev)
+{
+	struct clock_event_device *curdev;
+	struct tick_device *td;
+	int cpu;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	unsigned long flags;
 
 	raw_spin_lock_irqsave(&tick_device_lock, flags);
@@ -226,6 +277,7 @@ static int tick_check_new_device(struct clock_event_device *newdev)
 	curdev = td->evtdev;
 
 	/* cpu local device ? */
+<<<<<<< HEAD
 	if (!cpumask_equal(newdev->cpumask, cpumask_of(cpu))) {
 
 		/*
@@ -260,6 +312,17 @@ static int tick_check_new_device(struct clock_event_device *newdev)
 		if (curdev->rating >= newdev->rating)
 			goto out_bc;
 	}
+=======
+	if (!tick_check_percpu(curdev, newdev, cpu))
+		goto out_bc;
+
+	/* Preference decision */
+	if (!tick_check_preferred(curdev, newdev))
+		goto out_bc;
+
+	if (!try_module_get(newdev->owner))
+		return;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/*
 	 * Replace the eventually existing device by the new
@@ -276,18 +339,27 @@ static int tick_check_new_device(struct clock_event_device *newdev)
 		tick_oneshot_notify();
 
 	raw_spin_unlock_irqrestore(&tick_device_lock, flags);
+<<<<<<< HEAD
 	return NOTIFY_STOP;
+=======
+	return;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 out_bc:
 	/*
 	 * Can the new device be used as a broadcast device ?
 	 */
+<<<<<<< HEAD
 	if (tick_check_broadcast_device(newdev))
 		ret = NOTIFY_STOP;
 
 	raw_spin_unlock_irqrestore(&tick_device_lock, flags);
 
 	return ret;
+=======
+	tick_install_broadcast_device(newdev);
+	raw_spin_unlock_irqrestore(&tick_device_lock, flags);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 /*
@@ -295,7 +367,11 @@ out_bc:
  *
  * Called with interrupts disabled.
  */
+<<<<<<< HEAD
 static void tick_handover_do_timer(int *cpup)
+=======
+void tick_handover_do_timer(int *cpup)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	if (*cpup == tick_do_timer_cpu) {
 		int cpu = cpumask_first(cpu_online_mask);
@@ -312,7 +388,11 @@ static void tick_handover_do_timer(int *cpup)
  * access the hardware device itself.
  * We just set the mode and remove it from the lists.
  */
+<<<<<<< HEAD
 static void tick_shutdown(unsigned int *cpup)
+=======
+void tick_shutdown(unsigned int *cpup)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	struct tick_device *td = &per_cpu(tick_cpu_device, *cpup);
 	struct clock_event_device *dev = td->evtdev;
@@ -333,7 +413,11 @@ static void tick_shutdown(unsigned int *cpup)
 	raw_spin_unlock_irqrestore(&tick_device_lock, flags);
 }
 
+<<<<<<< HEAD
 static void tick_suspend(void)
+=======
+void tick_suspend(void)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	struct tick_device *td = &__get_cpu_var(tick_cpu_device);
 	unsigned long flags;
@@ -343,7 +427,11 @@ static void tick_suspend(void)
 	raw_spin_unlock_irqrestore(&tick_device_lock, flags);
 }
 
+<<<<<<< HEAD
 static void tick_resume(void)
+=======
+void tick_resume(void)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	struct tick_device *td = &__get_cpu_var(tick_cpu_device);
 	unsigned long flags;
@@ -361,6 +449,7 @@ static void tick_resume(void)
 	raw_spin_unlock_irqrestore(&tick_device_lock, flags);
 }
 
+<<<<<<< HEAD
 /*
  * Notification about clock event devices
  */
@@ -421,5 +510,12 @@ static struct notifier_block tick_notifier = {
 void __init tick_init(void)
 {
 	clockevents_register_notifier(&tick_notifier);
+=======
+/**
+ * tick_init - initialize the tick control
+ */
+void __init tick_init(void)
+{
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	tick_broadcast_init();
 }

@@ -457,13 +457,31 @@ static void fixup_phandle_references(struct check *c, struct node *dt,
 				     struct node *node, struct property *prop)
 {
 	struct marker *m = prop->val.markers;
+<<<<<<< HEAD
 	struct node *refnode;
 	cell_t phandle;
+=======
+	struct fixup *f, **fp;
+	struct fixup_entry *fe, **fep;
+	struct node *refnode;
+	cell_t phandle;
+	int has_phandle_refs;
+
+	has_phandle_refs = 0;
+	for_each_marker_of_type(m, REF_PHANDLE) {
+		has_phandle_refs = 1;
+		break;
+	}
+
+	if (!has_phandle_refs)
+		return;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	for_each_marker_of_type(m, REF_PHANDLE) {
 		assert(m->offset + sizeof(cell_t) <= prop->val.len);
 
 		refnode = get_node_by_ref(dt, m->ref);
+<<<<<<< HEAD
 		if (! refnode) {
 			FAIL(c, "Reference to non-existent node or label \"%s\"\n",
 			     m->ref);
@@ -473,6 +491,76 @@ static void fixup_phandle_references(struct check *c, struct node *dt,
 		phandle = get_node_phandle(dt, refnode);
 		*((cell_t *)(prop->val.val + m->offset)) = cpu_to_fdt32(phandle);
 	}
+=======
+		if (!refnode && !symbol_fixup_support) {
+			FAIL(c, "Reference to non-existent node or label \"%s\"\n",
+				m->ref);
+			continue;
+		}
+
+		if (!refnode) {
+			/* allocate fixup entry */
+			fe = xmalloc(sizeof(*fe));
+
+			fe->node = node;
+			fe->prop = prop;
+			fe->offset = m->offset;
+			fe->next = NULL;
+
+			/* search for an already existing fixup */
+			for_each_fixup(dt, f)
+				if (strcmp(f->ref, m->ref) == 0)
+					break;
+
+			/* no fixup found, add new */
+			if (f == NULL) {
+				f = xmalloc(sizeof(*f));
+				f->ref = m->ref;
+				f->entries = NULL;
+				f->next = NULL;
+
+				/* add it to the tree */
+				fp = &dt->fixups;
+				while (*fp)
+					fp = &(*fp)->next;
+				*fp = f;
+			}
+
+			/* and now append fixup entry */
+			fep = &f->entries;
+			while (*fep)
+				fep = &(*fep)->next;
+			*fep = fe;
+
+			/* mark the entry as unresolved */
+			phandle = 0xdeadbeef;
+		} else {
+			phandle = get_node_phandle(dt, refnode);
+
+			/* if it's a plugin, we need to record it */
+			if (symbol_fixup_support && dt->is_plugin) {
+
+				/* allocate a new local fixup entry */
+				fe = xmalloc(sizeof(*fe));
+
+				fe->node = node;
+				fe->prop = prop;
+				fe->offset = m->offset;
+				fe->next = NULL;
+
+				/* append it to the local fixups */
+				fep = &dt->local_fixups;
+				while (*fep)
+					fep = &(*fep)->next;
+				*fep = fe;
+			}
+		}
+
+		*((cell_t *)(prop->val.val + m->offset)) =
+			cpu_to_fdt32(phandle);
+	}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 ERROR(phandle_references, NULL, NULL, fixup_phandle_references, NULL,
       &duplicate_node_names, &explicit_phandles);
@@ -651,6 +739,48 @@ static void check_obsolete_chosen_interrupt_controller(struct check *c,
 }
 TREE_WARNING(obsolete_chosen_interrupt_controller, NULL);
 
+<<<<<<< HEAD
+=======
+static void check_auto_label_phandles(struct check *c, struct node *dt,
+				       struct node *node)
+{
+	struct label *l;
+	struct symbol *s, **sp;
+	int has_label;
+
+	if (!symbol_fixup_support)
+		return;
+
+	has_label = 0;
+	for_each_label(node->labels, l) {
+		has_label = 1;
+		break;
+	}
+
+	if (!has_label)
+		return;
+
+	/* force allocation of a phandle for this node */
+	(void)get_node_phandle(dt, node);
+
+	/* add the symbol */
+	for_each_label(node->labels, l) {
+
+		s = xmalloc(sizeof(*s));
+		s->label = l;
+		s->node = node;
+		s->next = NULL;
+
+		/* add it to the symbols list */
+		sp = &dt->symbols;
+		while (*sp)
+			sp = &((*sp)->next);
+		*sp = s;
+	}
+}
+NODE_WARNING(auto_label_phandles, NULL);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static struct check *check_table[] = {
 	&duplicate_node_names, &duplicate_property_names,
 	&node_name_chars, &node_name_format, &property_name_chars,
@@ -669,6 +799,11 @@ static struct check *check_table[] = {
 	&avoid_default_addr_size,
 	&obsolete_chosen_interrupt_controller,
 
+<<<<<<< HEAD
+=======
+	&auto_label_phandles,
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	&always_fail,
 };
 

@@ -18,19 +18,33 @@
 #define _CPUFREQ_GOVERNOR_H
 
 #include <linux/cpufreq.h>
+<<<<<<< HEAD
 #include <linux/kobject.h>
 #include <linux/mutex.h>
 #include <linux/workqueue.h>
 #include <linux/sysfs.h>
+=======
+#include <linux/kernel_stat.h>
+#include <linux/module.h>
+#include <linux/mutex.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /*
  * The polling frequency depends on the capability of the processor. Default
  * polling frequency is 1000 times the transition latency of the processor. The
+<<<<<<< HEAD
  * governor will work on any processor with transition latency <= 10mS, using
  * appropriate sampling rate.
  *
  * For CPUs with transition latency > 10mS (mostly drivers with CPUFREQ_ETERNAL)
  * this governor will not work. All times here are in uS.
+=======
+ * governor will work on any processor with transition latency <= 10ms, using
+ * appropriate sampling rate.
+ *
+ * For CPUs with transition latency > 10ms (mostly drivers with CPUFREQ_ETERNAL)
+ * this governor will not work. All times here are in us (micro seconds).
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  */
 #define MIN_SAMPLING_RATE_RATIO			(2)
 #define LATENCY_MULTIPLIER			(1000)
@@ -81,7 +95,11 @@ static ssize_t show_##file_name##_gov_sys				\
 	return sprintf(buf, "%u\n", tuners->file_name);			\
 }									\
 									\
+<<<<<<< HEAD
 static ssize_t show_##file_name##_gov_pol					\
+=======
+static ssize_t show_##file_name##_gov_pol				\
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 (struct cpufreq_policy *policy, char *buf)				\
 {									\
 	struct dbs_data *dbs_data = policy->governor_data;		\
@@ -91,7 +109,11 @@ static ssize_t show_##file_name##_gov_pol					\
 
 #define store_one(_gov, file_name)					\
 static ssize_t store_##file_name##_gov_sys				\
+<<<<<<< HEAD
 (struct kobject *kobj, struct attribute *attr, const char *buf, size_t count)	\
+=======
+(struct kobject *kobj, struct attribute *attr, const char *buf, size_t count) \
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {									\
 	struct dbs_data *dbs_data = _gov##_dbs_cdata.gdbs_data;		\
 	return store_##file_name(dbs_data, buf, count);			\
@@ -163,13 +185,20 @@ struct cs_cpu_dbs_info_s {
 	unsigned int enable:1;
 };
 
+<<<<<<< HEAD
 /* Per policy Governers sysfs tunables */
+=======
+/* Per policy Governors sysfs tunables */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 struct od_dbs_tuners {
 	unsigned int ignore_nice_load;
 	unsigned int sampling_rate;
 	unsigned int sampling_down_factor;
 	unsigned int up_threshold;
+<<<<<<< HEAD
 	unsigned int adj_up_threshold;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	unsigned int powersave_bias;
 	unsigned int io_is_busy;
 };
@@ -183,7 +212,11 @@ struct cs_dbs_tuners {
 	unsigned int freq_step;
 };
 
+<<<<<<< HEAD
 /* Common Governer data across policies */
+=======
+/* Common Governor data across policies */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 struct dbs_data;
 struct common_dbs_data {
 	/* Common across governors */
@@ -193,7 +226,14 @@ struct common_dbs_data {
 	struct attribute_group *attr_group_gov_sys; /* one governor - system */
 	struct attribute_group *attr_group_gov_pol; /* one governor - policy */
 
+<<<<<<< HEAD
 	/* Common data for platforms that don't set have_governor_per_policy */
+=======
+	/*
+	 * Common data for platforms that don't set
+	 * CPUFREQ_HAVE_GOVERNOR_PER_POLICY
+	 */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct dbs_data *gdbs_data;
 
 	struct cpu_dbs_common_info *(*get_cpu_cdbs)(int cpu);
@@ -207,7 +247,11 @@ struct common_dbs_data {
 	void *gov_ops;
 };
 
+<<<<<<< HEAD
 /* Governer Per policy data */
+=======
+/* Governor Per policy data */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 struct dbs_data {
 	struct common_dbs_data *cdata;
 	unsigned int min_sampling_rate;
@@ -223,7 +267,11 @@ struct od_ops {
 	void (*powersave_bias_init_cpu)(int cpu);
 	unsigned int (*powersave_bias_target)(struct cpufreq_policy *policy,
 			unsigned int freq_next, unsigned int relation);
+<<<<<<< HEAD
 	void (*freq_increase)(struct cpufreq_policy *p, unsigned int freq);
+=======
+	void (*freq_increase)(struct cpufreq_policy *policy, unsigned int freq);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 struct cs_ops {
@@ -256,7 +304,10 @@ static ssize_t show_sampling_rate_min_gov_pol				\
 	return sprintf(buf, "%u\n", dbs_data->min_sampling_rate);	\
 }
 
+<<<<<<< HEAD
 u64 get_cpu_idle_time(unsigned int cpu, u64 *wall, int io_busy);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 void dbs_check_cpu(struct dbs_data *dbs_data, int cpu);
 bool need_load_eval(struct cpu_dbs_common_info *cdbs,
 		unsigned int sampling_rate);

@@ -155,6 +155,10 @@ static struct usb_device_id id_table_combined [] = {
 	{ USB_DEVICE(FTDI_VID, FTDI_CANUSB_PID) },
 	{ USB_DEVICE(FTDI_VID, FTDI_CANDAPTER_PID) },
 	{ USB_DEVICE(FTDI_VID, FTDI_NXTCAM_PID) },
+<<<<<<< HEAD
+=======
+	{ USB_DEVICE(FTDI_VID, FTDI_EV3CON_PID) },
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	{ USB_DEVICE(FTDI_VID, FTDI_SCS_DEVICE_0_PID) },
 	{ USB_DEVICE(FTDI_VID, FTDI_SCS_DEVICE_1_PID) },
 	{ USB_DEVICE(FTDI_VID, FTDI_SCS_DEVICE_2_PID) },
@@ -194,6 +198,11 @@ static struct usb_device_id id_table_combined [] = {
 	{ USB_DEVICE(INTERBIOMETRICS_VID, INTERBIOMETRICS_IOBOARD_PID) },
 	{ USB_DEVICE(INTERBIOMETRICS_VID, INTERBIOMETRICS_MINI_IOBOARD_PID) },
 	{ USB_DEVICE(FTDI_VID, FTDI_SPROG_II) },
+<<<<<<< HEAD
+=======
+	{ USB_DEVICE(FTDI_VID, FTDI_TAGSYS_LP101_PID) },
+	{ USB_DEVICE(FTDI_VID, FTDI_TAGSYS_P200X_PID) },
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	{ USB_DEVICE(FTDI_VID, FTDI_LENZ_LIUSB_PID) },
 	{ USB_DEVICE(FTDI_VID, FTDI_XF_632_PID) },
 	{ USB_DEVICE(FTDI_VID, FTDI_XF_634_PID) },
@@ -580,6 +589,11 @@ static struct usb_device_id id_table_combined [] = {
 	{ USB_DEVICE(FTDI_VID, FTDI_TAVIR_STK500_PID) },
 	{ USB_DEVICE(FTDI_VID, FTDI_TIAO_UMPA_PID),
 		.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
+<<<<<<< HEAD
+=======
+	{ USB_DEVICE(FTDI_VID, FTDI_NT_ORIONLXM_PID),
+		.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/*
 	 * ELV devices:
 	 */
@@ -718,7 +732,12 @@ static struct usb_device_id id_table_combined [] = {
 	{ USB_DEVICE(FTDI_VID, FTDI_ACG_HFDUAL_PID) },
 	{ USB_DEVICE(FTDI_VID, FTDI_YEI_SERVOCENTER31_PID) },
 	{ USB_DEVICE(FTDI_VID, FTDI_THORLABS_PID) },
+<<<<<<< HEAD
 	{ USB_DEVICE(TESTO_VID, TESTO_USB_INTERFACE_PID) },
+=======
+	{ USB_DEVICE(TESTO_VID, TESTO_1_PID) },
+	{ USB_DEVICE(TESTO_VID, TESTO_3_PID) },
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	{ USB_DEVICE(FTDI_VID, FTDI_GAMMA_SCOUT_PID) },
 	{ USB_DEVICE(FTDI_VID, FTDI_TACTRIX_OPENPORT_13M_PID) },
 	{ USB_DEVICE(FTDI_VID, FTDI_TACTRIX_OPENPORT_13S_PID) },
@@ -906,6 +925,47 @@ static struct usb_device_id id_table_combined [] = {
 	{ USB_DEVICE(FTDI_VID, FTDI_LUMEL_PD12_PID) },
 	/* Crucible Devices */
 	{ USB_DEVICE(FTDI_VID, FTDI_CT_COMET_PID) },
+<<<<<<< HEAD
+=======
+	{ USB_DEVICE(FTDI_VID, FTDI_Z3X_PID) },
+	/* Cressi Devices */
+	{ USB_DEVICE(FTDI_VID, FTDI_CRESSI_PID) },
+	/* Brainboxes Devices */
+	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_VX_001_PID) },
+	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_VX_012_PID) },
+	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_VX_023_PID) },
+	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_VX_034_PID) },
+	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_101_PID) },
+	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_160_1_PID) },
+	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_160_2_PID) },
+	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_160_3_PID) },
+	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_160_4_PID) },
+	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_160_5_PID) },
+	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_160_6_PID) },
+	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_160_7_PID) },
+	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_160_8_PID) },
+	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_257_PID) },
+	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_279_1_PID) },
+	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_279_2_PID) },
+	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_279_3_PID) },
+	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_279_4_PID) },
+	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_313_PID) },
+	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_324_PID) },
+	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_346_1_PID) },
+	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_346_2_PID) },
+	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_357_PID) },
+	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_606_1_PID) },
+	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_606_2_PID) },
+	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_606_3_PID) },
+	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_701_1_PID) },
+	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_701_2_PID) },
+	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_842_1_PID) },
+	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_842_2_PID) },
+	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_842_3_PID) },
+	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_842_4_PID) },
+	/* Infineon Devices */
+	{ USB_DEVICE_INTERFACE_NUMBER(INFINEON_VID, INFINEON_TRIBOARD_PID, 1) },
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	{ },					/* Optional parameter entry */
 	{ }					/* Terminating entry */
 };
@@ -1536,14 +1596,27 @@ static void ftdi_set_max_packet_size(struct usb_serial_port *port)
 	struct usb_device *udev = serial->dev;
 
 	struct usb_interface *interface = serial->interface;
+<<<<<<< HEAD
 	struct usb_endpoint_descriptor *ep_desc = &interface->cur_altsetting->endpoint[1].desc;
 
 	unsigned num_endpoints;
 	int i;
+=======
+	struct usb_endpoint_descriptor *ep_desc;
+
+	unsigned num_endpoints;
+	unsigned i;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	num_endpoints = interface->cur_altsetting->desc.bNumEndpoints;
 	dev_info(&udev->dev, "Number of endpoints %d\n", num_endpoints);
 
+<<<<<<< HEAD
+=======
+	if (!num_endpoints)
+		return;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* NOTE: some customers have programmed FT232R/FT245R devices
 	 * with an endpoint size of 0 - not good.  In this case, we
 	 * want to override the endpoint descriptor setting and use a
@@ -2130,6 +2203,33 @@ static void ftdi_set_termios(struct tty_struct *tty,
 		termios->c_cflag |= CRTSCTS;
 	}
 
+<<<<<<< HEAD
+=======
+	/*
+	 * All FTDI UART chips are limited to CS7/8. We shouldn't pretend to
+	 * support CS5/6 and revert the CSIZE setting instead.
+	 *
+	 * CS5 however is used to control some smartcard readers which abuse
+	 * this limitation to switch modes. Original FTDI chips fall back to
+	 * eight data bits.
+	 *
+	 * TODO: Implement a quirk to only allow this with mentioned
+	 *       readers. One I know of (Argolis Smartreader V1)
+	 *       returns "USB smartcard server" as iInterface string.
+	 *       The vendor didn't bother with a custom VID/PID of
+	 *       course.
+	 */
+	if (C_CSIZE(tty) == CS6) {
+		dev_warn(ddev, "requested CSIZE setting not supported\n");
+
+		termios->c_cflag &= ~CSIZE;
+		if (old_termios)
+			termios->c_cflag |= old_termios->c_cflag & CSIZE;
+		else
+			termios->c_cflag |= CS8;
+	}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	cflag = termios->c_cflag;
 
 	if (!old_termios)
@@ -2166,6 +2266,7 @@ no_skip:
 	} else {
 		urb_value |= FTDI_SIO_SET_DATA_PARITY_NONE;
 	}
+<<<<<<< HEAD
 	if (cflag & CSIZE) {
 		switch (cflag & CSIZE) {
 		case CS7:
@@ -2179,6 +2280,21 @@ no_skip:
 		default:
 			dev_err(ddev, "CSIZE was set but not CS7-CS8\n");
 		}
+=======
+	switch (cflag & CSIZE) {
+	case CS5:
+		dev_dbg(ddev, "Setting CS5 quirk\n");
+		break;
+	case CS7:
+		urb_value |= 7;
+		dev_dbg(ddev, "Setting CS7\n");
+		break;
+	default:
+	case CS8:
+		urb_value |= 8;
+		dev_dbg(ddev, "Setting CS8\n");
+		break;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	/* This is needed by the break command since it uses the same command

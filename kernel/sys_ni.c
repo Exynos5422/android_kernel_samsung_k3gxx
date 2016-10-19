@@ -211,4 +211,8 @@ cond_syscall(compat_sys_open_by_handle_at);
 cond_syscall(sys_kcmp);
 
 /* operate on Secure Computing state */
+<<<<<<< HEAD
 cond_syscall(sys_seccomp);
+=======
+cond_syscall(sys_seccomp);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

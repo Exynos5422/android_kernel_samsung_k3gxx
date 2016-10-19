@@ -10,7 +10,11 @@
 */
 
 /dts-v1/;
+<<<<<<< HEAD
 #include "exynos5250.dtsi"
+=======
+/include/ "exynos5250.dtsi"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 / {
 	model = "Insignal Arndale evaluation board based on EXYNOS5250";
@@ -263,6 +267,10 @@
 					regulator-name = "vdd_g3d";
 					regulator-min-microvolt = <1000000>;
 					regulator-max-microvolt = <1000000>;
+<<<<<<< HEAD
+=======
+					regulator-always-on;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 					regulator-boot-on;
 					op_mode = <1>;
 				};
@@ -449,6 +457,7 @@
 			clock-frequency = <24000000>;
 		};
 	};
+<<<<<<< HEAD
 
 	dp-controller {
 		samsung,color-space = <0>;
@@ -480,4 +489,6 @@
 	rtc {
 		status = "okay";
 	};
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };

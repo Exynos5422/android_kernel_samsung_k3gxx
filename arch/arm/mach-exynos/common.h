@@ -12,6 +12,10 @@
 #ifndef __ARCH_ARM_MACH_EXYNOS_COMMON_H
 #define __ARCH_ARM_MACH_EXYNOS_COMMON_H
 
+<<<<<<< HEAD
+=======
+#include <linux/reboot.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <linux/of.h>
 
 void mct_init(void __iomem *base, int irq_g0, int irq_l0, int irq_l1);
@@ -22,8 +26,13 @@ struct map_desc;
 void exynos_init_io(struct map_desc *mach_desc, int size);
 void exynos4_init_irq(void);
 void exynos5_init_irq(void);
+<<<<<<< HEAD
 void exynos4_restart(char mode, const char *cmd);
 void exynos5_restart(char mode, const char *cmd);
+=======
+void exynos4_restart(enum reboot_mode mode, const char *cmd);
+void exynos5_restart(enum reboot_mode mode, const char *cmd);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 void exynos_init_late(void);
 
 /* ToDo: remove these after migrating legacy exynos4 platforms to dt */
@@ -72,6 +81,7 @@ void exynos4212_register_clocks(void);
 #define exynos4212_register_clocks()
 #endif
 
+<<<<<<< HEAD
 #if defined(CONFIG_SOC_EXYNOS5430)
 int exynos5430_pmu_init(void);
 #else
@@ -90,11 +100,14 @@ int exynos5422_pmu_init(void);
 #define exynos5422_pmu_init()
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 struct device_node;
 void combiner_init(void __iomem *combiner_base, struct device_node *np,
 			unsigned int max_nr, int irq_base);
 
 extern struct smp_operations exynos_smp_ops;
+<<<<<<< HEAD
 extern void exynos_cpu_die(unsigned int cpu);
 
 extern void set_boot_flag(unsigned int cpu, unsigned int mode);
@@ -111,5 +124,29 @@ struct exynos_cpu_power_ops {
 };
 
 extern struct exynos_cpu_power_ops exynos_cpu;
+=======
+
+extern void exynos_cpu_die(unsigned int cpu);
+
+/* PMU(Power Management Unit) support */
+
+#define PMU_TABLE_END	NULL
+
+enum sys_powerdown {
+	SYS_AFTR,
+	SYS_LPA,
+	SYS_SLEEP,
+	NUM_SYS_POWERDOWN,
+};
+
+extern unsigned long l2x0_regs_phys;
+struct exynos_pmu_conf {
+	void __iomem *reg;
+	unsigned int val[NUM_SYS_POWERDOWN];
+};
+
+extern void exynos_sys_powerdown_conf(enum sys_powerdown mode);
+extern void s3c_cpu_resume(void);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #endif /* __ARCH_ARM_MACH_EXYNOS_COMMON_H */

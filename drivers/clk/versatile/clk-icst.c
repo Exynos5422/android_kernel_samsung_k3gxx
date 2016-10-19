@@ -107,7 +107,11 @@ static int icst_set_rate(struct clk_hw *hw, unsigned long rate,
 
 	vco = icst_hz_to_vco(icst->params, rate);
 	icst->rate = icst_hz(icst->params, vco);
+<<<<<<< HEAD
 	vco_set(icst->vcoreg, icst->lockreg, vco);
+=======
+	vco_set(icst->lockreg, icst->vcoreg, vco);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 

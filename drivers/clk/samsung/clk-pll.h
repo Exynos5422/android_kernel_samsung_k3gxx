@@ -12,6 +12,7 @@
 #ifndef __SAMSUNG_CLK_PLL_H
 #define __SAMSUNG_CLK_PLL_H
 
+<<<<<<< HEAD
 #define PLL_35XX_RATE(_rate, _m, _p, _s)			\
 	{							\
 		.rate	=	(_rate),				\
@@ -39,6 +40,8 @@ struct samsung_pll_rate_table {
 	unsigned int kdiv;
 };
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 enum pll45xx_type {
 	pll_4500,
 	pll_4502,
@@ -52,6 +55,7 @@ enum pll46xx_type {
 };
 
 extern struct clk * __init samsung_clk_register_pll35xx(const char *name,
+<<<<<<< HEAD
 			const char *pname, void __iomem *lock_reg,
 			void __iomem *con_reg,
 			const struct samsung_pll_rate_table *rate_table,
@@ -61,6 +65,11 @@ extern struct clk * __init samsung_clk_register_pll36xx(const char *name,
 			void __iomem *con_reg,
 			const struct samsung_pll_rate_table *rate_table,
 			const unsigned int rate_count);
+=======
+			const char *pname, const void __iomem *con_reg);
+extern struct clk * __init samsung_clk_register_pll36xx(const char *name,
+			const char *pname, const void __iomem *con_reg);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 extern struct clk * __init samsung_clk_register_pll45xx(const char *name,
 			const char *pname, const void __iomem *con_reg,
 			enum pll45xx_type type);
@@ -71,6 +80,7 @@ extern struct clk * __init samsung_clk_register_pll2550x(const char *name,
 			const char *pname, const void __iomem *reg_base,
 			const unsigned long offset);
 
+<<<<<<< HEAD
 enum pll_ops_kind {
 	SIMPLE_PLL_OPS,
 	NORMAL_PLL_OPS,
@@ -90,4 +100,6 @@ struct samsung_clk_pll {
 
 extern int set_pll35xx_ops(struct clk *clk, unsigned int ops_type);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif /* __SAMSUNG_CLK_PLL_H */

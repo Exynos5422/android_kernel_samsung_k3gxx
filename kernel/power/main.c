@@ -40,11 +40,15 @@ EXPORT_SYMBOL_GPL(unregister_pm_notifier);
 
 int pm_notifier_call_chain(unsigned long val)
 {
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_DEBUG_AUX_SUSPEND
 	int ret = blocking_notifier_call_chain(&pm_chain_head, val, (void *)0xFFEDCBA9);
 #else
 	int ret = blocking_notifier_call_chain(&pm_chain_head, val, NULL);
 #endif
+=======
+	int ret = blocking_notifier_call_chain(&pm_chain_head, val, NULL);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return notifier_to_errno(ret);
 }
@@ -642,10 +646,13 @@ static int __init pm_init(void)
 	if (error)
 		return error;
 	pm_print_times_init();
+<<<<<<< HEAD
 
 #if defined(CONFIG_SOC_EXYNOS5422) && !defined(CONFIG_SOC_EXYNOS5422_REV_0)
 	pm_wake_lock("aa");
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return pm_autosleep_init();
 }
 

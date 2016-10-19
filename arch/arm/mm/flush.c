@@ -22,8 +22,11 @@
 
 #ifdef CONFIG_CPU_CACHE_VIPT
 
+<<<<<<< HEAD
 extern int boot_mode_security;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static void flush_pfn_alias(unsigned long pfn, unsigned long vaddr)
 {
 	unsigned long to = FLUSH_ALIAS_START + (CACHE_COLOUR(vaddr) << PAGE_SHIFT);
@@ -374,6 +377,7 @@ void __flush_anon_page(struct vm_area_struct *vma, struct page *page, unsigned l
 	 */
 	__cpuc_flush_dcache_area(page_address(page), PAGE_SIZE);
 }
+<<<<<<< HEAD
 
 #ifdef CONFIG_TIMA_RKP_LAZY_MMU
 /* Added here for TIMA lazy MMU. */
@@ -394,3 +398,5 @@ void flush_tlb_l2_page(pmd_t *pmd)
 	}
 }
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

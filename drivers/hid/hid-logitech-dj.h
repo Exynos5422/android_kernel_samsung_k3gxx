@@ -101,6 +101,10 @@ struct dj_receiver_dev {
 	struct work_struct work;
 	struct kfifo notif_fifo;
 	spinlock_t lock;
+<<<<<<< HEAD
+=======
+	bool querying_devices;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 struct dj_device {

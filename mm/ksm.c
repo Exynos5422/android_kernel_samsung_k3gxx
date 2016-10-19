@@ -37,6 +37,10 @@
 #include <linux/freezer.h>
 #include <linux/oom.h>
 #include <linux/numa.h>
+<<<<<<< HEAD
+=======
+#include <linux/show_mem_notifier.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #include <asm/tlbflush.h>
 #include "internal.h"
@@ -223,6 +227,12 @@ static unsigned int ksm_thread_pages_to_scan = 100;
 /* Milliseconds ksmd should sleep between batches */
 static unsigned int ksm_thread_sleep_millisecs = 20;
 
+<<<<<<< HEAD
+=======
+/* Boolean to indicate whether to use deferred timer or not */
+static bool use_deferred_timer;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifdef CONFIG_NUMA
 /* Zeroed when merging across nodes is not allowed */
 static unsigned int ksm_merge_across_nodes = 1;
@@ -236,7 +246,11 @@ static int ksm_nr_node_ids = 1;
 #define KSM_RUN_MERGE	1
 #define KSM_RUN_UNMERGE	2
 #define KSM_RUN_OFFLINE	4
+<<<<<<< HEAD
 static unsigned long ksm_run = KSM_RUN_STOP;
+=======
+static unsigned long ksm_run = KSM_RUN_MERGE;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static void wait_while_offlining(void);
 
 static DECLARE_WAIT_QUEUE_HEAD(ksm_thread_wait);
@@ -247,6 +261,23 @@ static DEFINE_SPINLOCK(ksm_mmlist_lock);
 		sizeof(struct __struct), __alignof__(struct __struct),\
 		(__flags), NULL)
 
+<<<<<<< HEAD
+=======
+static int ksm_show_mem_notifier(struct notifier_block *nb,
+				unsigned long action,
+				void *data)
+{
+	pr_info("ksm_pages_sharing: %lu\n", ksm_pages_sharing);
+	pr_info("ksm_pages_shared: %lu\n", ksm_pages_shared);
+
+	return 0;
+}
+
+static struct notifier_block ksm_show_mem_notifier_block = {
+	.notifier_call = ksm_show_mem_notifier,
+};
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int __init ksm_slab_init(void)
 {
 	rmap_item_cache = KSM_KMEM_CACHE(rmap_item, 0);
@@ -1706,6 +1737,44 @@ static void ksm_do_scan(unsigned int scan_npages)
 	}
 }
 
+<<<<<<< HEAD
+=======
+static void process_timeout(unsigned long __data)
+{
+	wake_up_process((struct task_struct *)__data);
+}
+
+static signed long __sched deferred_schedule_timeout(signed long timeout)
+{
+	struct timer_list timer;
+	unsigned long expire;
+
+	__set_current_state(TASK_INTERRUPTIBLE);
+	if (timeout < 0) {
+		pr_err("schedule_timeout: wrong timeout value %lx\n",
+							timeout);
+		__set_current_state(TASK_RUNNING);
+		goto out;
+	}
+
+	expire = timeout + jiffies;
+
+	setup_deferrable_timer_on_stack(&timer, process_timeout,
+			(unsigned long)current);
+	mod_timer(&timer, expire);
+	schedule();
+	del_singleshot_timer_sync(&timer);
+
+	/* Remove the timer from the object tracker */
+	destroy_timer_on_stack(&timer);
+
+	timeout = expire - jiffies;
+
+out:
+	return timeout < 0 ? 0 : timeout;
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int ksmd_should_run(void)
 {
 	return (ksm_run & KSM_RUN_MERGE) && !list_empty(&ksm_mm_head.mm_list);
@@ -1726,7 +1795,15 @@ static int ksm_scan_thread(void *nothing)
 		try_to_freeze();
 
 		if (ksmd_should_run()) {
+<<<<<<< HEAD
 			schedule_timeout_interruptible(
+=======
+			if (use_deferred_timer)
+				deferred_schedule_timeout(
+				msecs_to_jiffies(ksm_thread_sleep_millisecs));
+			else
+				schedule_timeout_interruptible(
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				msecs_to_jiffies(ksm_thread_sleep_millisecs));
 		} else {
 			wait_event_freezable(ksm_thread_wait,
@@ -1946,7 +2023,12 @@ out:
 	return referenced;
 }
 
+<<<<<<< HEAD
 int try_to_unmap_ksm(struct page *page, enum ttu_flags flags)
+=======
+int try_to_unmap_ksm(struct page *page, enum ttu_flags flags,
+			struct vm_area_struct *target_vma)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	struct stable_node *stable_node;
 	struct rmap_item *rmap_item;
@@ -1959,6 +2041,15 @@ int try_to_unmap_ksm(struct page *page, enum ttu_flags flags)
 	stable_node = page_stable_node(page);
 	if (!stable_node)
 		return SWAP_FAIL;
+<<<<<<< HEAD
+=======
+
+	if (target_vma) {
+		unsigned long address = vma_address(page, target_vma);
+		ret = try_to_unmap_one(page, target_vma, address, flags);
+		goto out;
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 again:
 	hlist_for_each_entry(rmap_item, &stable_node->hlist, hlist) {
 		struct anon_vma *anon_vma = rmap_item->anon_vma;
@@ -2275,6 +2366,29 @@ static ssize_t run_store(struct kobject *kobj, struct kobj_attribute *attr,
 }
 KSM_ATTR(run);
 
+<<<<<<< HEAD
+=======
+static ssize_t deferred_timer_show(struct kobject *kobj,
+				    struct kobj_attribute *attr, char *buf)
+{
+	return snprintf(buf, 8, "%d\n", use_deferred_timer);
+}
+
+static ssize_t deferred_timer_store(struct kobject *kobj,
+				     struct kobj_attribute *attr,
+				     const char *buf, size_t count)
+{
+	unsigned long enable;
+	int err;
+
+	err = kstrtoul(buf, 10, &enable);
+	use_deferred_timer = enable;
+
+	return count;
+}
+KSM_ATTR(deferred_timer);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifdef CONFIG_NUMA
 static ssize_t merge_across_nodes_show(struct kobject *kobj,
 				struct kobj_attribute *attr, char *buf)
@@ -2387,6 +2501,10 @@ static struct attribute *ksm_attrs[] = {
 	&pages_unshared_attr.attr,
 	&pages_volatile_attr.attr,
 	&full_scans_attr.attr,
+<<<<<<< HEAD
+=======
+	&deferred_timer_attr.attr,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifdef CONFIG_NUMA
 	&merge_across_nodes_attr.attr,
 #endif
@@ -2431,6 +2549,11 @@ static int __init ksm_init(void)
 	/* There is no significance to this priority 100 */
 	hotplug_memory_notifier(ksm_memory_callback, 100);
 #endif
+<<<<<<< HEAD
+=======
+
+	show_mem_notifier_register(&ksm_show_mem_notifier_block);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 
 out_free:

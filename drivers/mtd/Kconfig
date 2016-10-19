@@ -308,6 +308,20 @@ config MTD_SWAP
 	  The driver provides wear leveling by storing erase counter into the
 	  OOB.
 
+<<<<<<< HEAD
+=======
+config MTD_LAZYECCSTATS
+	bool "MTD Lazy ECC Stats collection support"
+	default y
+	help
+	  Normally bad block counts for ECC stats are collected at boot time.
+	  This option delays the badblock stats collection until ECCGETSTATS
+	  ioctl is invoked on the partition.
+
+	  This can significantly decrease boot times depending on the size of
+	  the partition.  If unsure, say 'N'.
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 source "drivers/mtd/chips/Kconfig"
 
 source "drivers/mtd/maps/Kconfig"

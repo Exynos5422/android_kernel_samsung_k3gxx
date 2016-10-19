@@ -494,6 +494,7 @@ irqreturn_t sja1000_interrupt(int irq, void *dev_id)
 	uint8_t isrc, status;
 	int n = 0;
 
+<<<<<<< HEAD
 	/* Shared interrupts and IRQ off? */
 	if (priv->read_reg(priv, SJA1000_IER) == IRQ_OFF)
 		return IRQ_NONE;
@@ -508,6 +509,22 @@ irqreturn_t sja1000_interrupt(int irq, void *dev_id)
 		/* check for absent controller due to hw unplug */
 		if (status == 0xFF && sja1000_is_absent(priv))
 			return IRQ_NONE;
+=======
+	if (priv->pre_irq)
+		priv->pre_irq(priv);
+
+	/* Shared interrupts and IRQ off? */
+	if (priv->read_reg(priv, SJA1000_IER) == IRQ_OFF)
+		goto out;
+
+	while ((isrc = priv->read_reg(priv, SJA1000_IR)) &&
+	       (n < SJA1000_MAX_IRQ)) {
+
+		status = priv->read_reg(priv, SJA1000_SR);
+		/* check for absent controller due to hw unplug */
+		if (status == 0xFF && sja1000_is_absent(priv))
+			goto out;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 		if (isrc & IRQ_WUI)
 			netdev_warn(dev, "wakeup interrupt\n");
@@ -535,7 +552,11 @@ irqreturn_t sja1000_interrupt(int irq, void *dev_id)
 				status = priv->read_reg(priv, SJA1000_SR);
 				/* check for absent controller */
 				if (status == 0xFF && sja1000_is_absent(priv))
+<<<<<<< HEAD
 					return IRQ_NONE;
+=======
+					goto out;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			}
 		}
 		if (isrc & (IRQ_DOI | IRQ_EI | IRQ_BEI | IRQ_EPI | IRQ_ALI)) {
@@ -543,8 +564,14 @@ irqreturn_t sja1000_interrupt(int irq, void *dev_id)
 			if (sja1000_err(dev, isrc, status))
 				break;
 		}
+<<<<<<< HEAD
 	}
 
+=======
+		n++;
+	}
+out:
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (priv->post_irq)
 		priv->post_irq(priv);
 

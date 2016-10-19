@@ -75,7 +75,10 @@ config I2C_HELPER_AUTO
 
 config I2C_SMBUS
 	tristate "SMBus-specific protocols" if !I2C_HELPER_AUTO
+<<<<<<< HEAD
 	depends on GENERIC_HARDIRQS
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	help
 	  Say Y here if you want support for SMBus extensions to the I2C
 	  specification. At the moment, the only supported extension is

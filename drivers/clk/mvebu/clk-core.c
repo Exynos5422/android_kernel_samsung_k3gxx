@@ -126,8 +126,13 @@ static void __init mvebu_clk_core_setup(struct device_node *np,
 #define	    SARH_AXP_FAB_FREQ_OPT_SHIFT	    4
 
 static const u32 __initconst armada_370_tclk_frequencies[] = {
+<<<<<<< HEAD
 	16600000,
 	20000000,
+=======
+	166000000,
+	200000000,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 static u32 __init armada_370_get_tclk_freq(void __iomem *sar)

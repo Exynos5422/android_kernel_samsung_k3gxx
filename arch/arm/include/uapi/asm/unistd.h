@@ -406,9 +406,15 @@
 #define __NR_process_vm_writev		(__NR_SYSCALL_BASE+377)
 #define __NR_kcmp			(__NR_SYSCALL_BASE+378)
 #define __NR_finit_module		(__NR_SYSCALL_BASE+379)
+<<<<<<< HEAD
 /* Reserve for later
 #define __NR_sched_setattr		(__NR_SYSCALL_BASE+380)
 #define __NR_sched_getattr		(__NR_SYSCALL_BASE+381)
+=======
+#define __NR_sched_setattr		(__NR_SYSCALL_BASE+380)
+#define __NR_sched_getattr		(__NR_SYSCALL_BASE+381)
+/* Reserve for later
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define __NR_renameat2			(__NR_SYSCALL_BASE+382)
 */
 #define __NR_seccomp			(__NR_SYSCALL_BASE+383)

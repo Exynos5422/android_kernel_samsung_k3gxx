@@ -14,8 +14,11 @@
 struct exynos4_ohci_platdata {
 	int (*phy_init)(struct platform_device *pdev, int type);
 	int (*phy_exit)(struct platform_device *pdev, int type);
+<<<<<<< HEAD
 	int (*phy_suspend)(struct platform_device *pdev, int type);
 	int (*phy_resume)(struct platform_device *pdev, int type);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 extern void exynos4_ohci_set_platdata(struct exynos4_ohci_platdata *pd);

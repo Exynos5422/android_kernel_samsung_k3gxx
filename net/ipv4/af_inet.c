@@ -154,12 +154,20 @@ void inet_sock_destruct(struct sock *sk)
 	sk_mem_reclaim(sk);
 
 	if (sk->sk_type == SOCK_STREAM && sk->sk_state != TCP_CLOSE) {
+<<<<<<< HEAD
 		pr_err("Attempt to release TCP socket in state %d %p\n",
+=======
+		WARN(1, "Attempt to release TCP socket in state %d %p\n",
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		       sk->sk_state, sk);
 		return;
 	}
 	if (!sock_flag(sk, SOCK_DEAD)) {
+<<<<<<< HEAD
 		pr_err("Attempt to release alive inet socket %p\n", sk);
+=======
+		WARN(1, "Attempt to release alive inet socket %p\n", sk);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return;
 	}
 
@@ -276,10 +284,15 @@ void build_ehash_secret(void)
 		get_random_bytes(&rnd, sizeof(rnd));
 	} while (rnd == 0);
 
+<<<<<<< HEAD
 	if (cmpxchg(&inet_ehash_secret, 0, rnd) == 0) {
 		get_random_bytes(&ipv6_hash_secret, sizeof(ipv6_hash_secret));
 		net_secret_init();
 	}
+=======
+	if (cmpxchg(&inet_ehash_secret, 0, rnd) == 0)
+		get_random_bytes(&ipv6_hash_secret, sizeof(ipv6_hash_secret));
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 EXPORT_SYMBOL(build_ehash_secret);
 
@@ -299,9 +312,12 @@ static int inet_create(struct net *net, struct socket *sock, int protocol,
 	int try_loading_module = 0;
 	int err;
 
+<<<<<<< HEAD
 	if (protocol < 0 || protocol >= IPPROTO_MAX)
 		return -EINVAL;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (!current_has_network())
 		return -EACCES;
 

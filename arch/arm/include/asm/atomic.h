@@ -134,6 +134,7 @@ static inline int atomic_cmpxchg(atomic_t *ptr, int old, int new)
 	return oldval;
 }
 
+<<<<<<< HEAD
 static inline void atomic_clear_mask(unsigned long mask, unsigned long *addr)
 {
 	unsigned long tmp, tmp2;
@@ -192,6 +193,8 @@ static inline int atomic_pop(atomic_t *v, int width)
 	return result & ((1 << width) - 1);
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #else /* ARM_ARCH_6 */
 
 #ifdef CONFIG_SMP
@@ -240,6 +243,7 @@ static inline int atomic_cmpxchg(atomic_t *v, int old, int new)
 	return ret;
 }
 
+<<<<<<< HEAD
 static inline void atomic_clear_mask(unsigned long mask, unsigned long *addr)
 {
 	unsigned long flags;
@@ -271,6 +275,8 @@ static inline int atomic_pop(atomic_t *v, int width)
 	return result & ((1 << width) - 1);
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif /* __LINUX_ARM_ARCH__ */
 
 #define atomic_xchg(v, new) (xchg(&((v)->counter), new))
@@ -296,11 +302,14 @@ static inline int __atomic_add_unless(atomic_t *v, int a, int u)
 
 #define atomic_add_negative(i,v) (atomic_add_return(i, v) < 0)
 
+<<<<<<< HEAD
 #define smp_mb__before_atomic_dec()	smp_mb()
 #define smp_mb__after_atomic_dec()	smp_mb()
 #define smp_mb__before_atomic_inc()	smp_mb()
 #define smp_mb__after_atomic_inc()	smp_mb()
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifndef CONFIG_GENERIC_ATOMIC64
 typedef struct {
 	u64 __aligned(8) counter;

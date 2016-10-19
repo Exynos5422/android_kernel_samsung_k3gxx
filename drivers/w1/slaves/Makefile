@@ -14,6 +14,9 @@ obj-$(CONFIG_W1_SLAVE_DS2780)	+= w1_ds2780.o
 obj-$(CONFIG_W1_SLAVE_DS2781)	+= w1_ds2781.o
 obj-$(CONFIG_W1_SLAVE_BQ27000)	+= w1_bq27000.o
 obj-$(CONFIG_W1_SLAVE_DS28E04)	+= w1_ds28e04.o
+<<<<<<< HEAD
 obj-$(CONFIG_W1_SLAVE_DS28EL15)	+= w1_ds28el15.o w1_ds28el15_sha256.o
 obj-$(CONFIG_W1_SLAVE_DS28EL35)	+= w1_ds28el35.o
 obj-$(CONFIG_DS28EL35_ECDSA)	+= w1_ds28el35/
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

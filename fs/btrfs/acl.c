@@ -229,7 +229,11 @@ int btrfs_init_acl(struct btrfs_trans_handle *trans,
 		if (ret > 0) {
 			/* we need an acl */
 			ret = btrfs_set_acl(trans, inode, acl, ACL_TYPE_ACCESS);
+<<<<<<< HEAD
 		} else {
+=======
+		} else if (ret < 0) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			cache_no_acl(inode);
 		}
 	} else {

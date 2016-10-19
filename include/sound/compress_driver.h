@@ -32,6 +32,10 @@
 #include <sound/pcm.h>
 
 struct snd_compr_ops;
+<<<<<<< HEAD
+=======
+struct snd_pcm_substream;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /**
  * struct snd_compr_runtime: runtime stream description
@@ -59,6 +63,10 @@ struct snd_compr_runtime {
 	u64 total_bytes_available;
 	u64 total_bytes_transferred;
 	wait_queue_head_t sleep;
+<<<<<<< HEAD
+=======
+	struct snd_pcm_substream *fe_substream;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	void *private_data;
 };
 
@@ -82,6 +90,10 @@ struct snd_compr_stream {
 	bool metadata_set;
 	bool next_track;
 	void *private_data;
+<<<<<<< HEAD
+=======
+	struct snd_soc_pcm_runtime *be;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 /**
@@ -157,6 +169,10 @@ int snd_compress_register(struct snd_compr *device);
 int snd_compress_deregister(struct snd_compr *device);
 int snd_compress_new(struct snd_card *card, int device,
 			int type, struct snd_compr *compr);
+<<<<<<< HEAD
+=======
+void snd_compress_free(struct snd_card *card, struct snd_compr *compr);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /* dsp driver callback apis
  * For playback: driver should call snd_compress_fragment_elapsed() to let the

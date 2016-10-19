@@ -21,6 +21,10 @@
 #endif
 
 #include <asm/ptrace.h>
+<<<<<<< HEAD
+=======
+#include <asm/thread_info.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /*
  * Stack pushing/popping (register pairs only). Equivalent to store decrement
@@ -68,6 +72,7 @@
 	msr	daifclr, #8
 	.endm
 
+<<<<<<< HEAD
 	.macro	disable_step, tmp
 	mrs	\tmp, mdscr_el1
 	bic	\tmp, \tmp, #1
@@ -85,6 +90,33 @@
 	tbnz	\tmp, #0, 9990f
 	enable_dbg
 9990:
+=======
+	.macro	disable_step_tsk, flgs, tmp
+	tbz	\flgs, #TIF_SINGLESTEP, 9990f
+	mrs	\tmp, mdscr_el1
+	bic	\tmp, \tmp, #1
+	msr	mdscr_el1, \tmp
+	isb	// Synchronise with enable_dbg
+9990:
+	.endm
+
+	.macro	enable_step_tsk, flgs, tmp
+	tbz	\flgs, #TIF_SINGLESTEP, 9990f
+	disable_dbg
+	mrs	\tmp, mdscr_el1
+	orr	\tmp, \tmp, #1
+	msr	mdscr_el1, \tmp
+9990:
+	.endm
+
+/*
+ * Enable both debug exceptions and interrupts. This is likely to be
+ * faster than two daifclr operations, since writes to this register
+ * are self-synchronising.
+ */
+	.macro	enable_dbg_and_irq
+	msr	daifclr, #(8 | 2)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	.endm
 
 /*
@@ -115,3 +147,37 @@ lr	.req	x30		// link register
 	.align	7
 	b	\label
 	.endm
+<<<<<<< HEAD
+=======
+
+/*
+ * Select code when configured for BE.
+ */
+#ifdef CONFIG_CPU_BIG_ENDIAN
+#define CPU_BE(code...) code
+#else
+#define CPU_BE(code...)
+#endif
+
+/*
+ * Select code when configured for LE.
+ */
+#ifdef CONFIG_CPU_BIG_ENDIAN
+#define CPU_LE(code...)
+#else
+#define CPU_LE(code...) code
+#endif
+
+/*
+ * Define a macro that constructs a 64-bit value by concatenating two
+ * 32-bit registers. Note that on big endian systems the order of the
+ * registers is swapped.
+ */
+#ifndef CONFIG_CPU_BIG_ENDIAN
+	.macro	regs_to_64, rd, lbits, hbits
+#else
+	.macro	regs_to_64, rd, hbits, lbits
+#endif
+	orr	\rd, \lbits, \hbits, lsl #32
+	.endm
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

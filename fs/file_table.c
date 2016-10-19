@@ -211,10 +211,17 @@ static void drop_file_write_access(struct file *file)
 	struct dentry *dentry = file->f_path.dentry;
 	struct inode *inode = dentry->d_inode;
 
+<<<<<<< HEAD
 	put_write_access(inode);
 
 	if (special_file(inode->i_mode))
 		return;
+=======
+	if (special_file(inode->i_mode))
+		return;
+
+	put_write_access(inode);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (file_check_writeable(file) != 0)
 		return;
 	__mnt_drop_write(mnt);

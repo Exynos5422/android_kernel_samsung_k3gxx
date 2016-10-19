@@ -24,6 +24,12 @@
 #include <asm/memory.h>
 #include <asm/pgtable-hwdef.h>
 
+<<<<<<< HEAD
+=======
+
+#include <asm/tlbflush.h>
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifdef CONFIG_ARM_LPAE
 #include <asm/pgtable-3level.h>
 #else
@@ -117,18 +123,42 @@ extern pgprot_t		pgprot_s2_device;
 	__pgprot_modify(prot, L_PTE_MT_MASK, L_PTE_MT_BUFFERABLE)
 
 #define pgprot_stronglyordered(prot) \
+<<<<<<< HEAD
 	__pgprot_modify(prot, L_PTE_MT_MASK, L_PTE_MT_UNCACHED)
+=======
+	__pgprot_modify(prot, L_PTE_MT_MASK, L_PTE_MT_UNCACHED | L_PTE_XN)
+
+#define pgprot_device(prot) \
+	__pgprot_modify(prot, L_PTE_MT_MASK, L_PTE_MT_DEV_NONSHARED)
+
+#define pgprot_writethroughcache(prot) \
+	__pgprot_modify(prot, L_PTE_MT_MASK, L_PTE_MT_WRITETHROUGH)
+
+#define pgprot_writebackcache(prot) \
+	__pgprot_modify(prot, L_PTE_MT_MASK, L_PTE_MT_WRITEBACK)
+
+#define pgprot_writebackwacache(prot) \
+	__pgprot_modify(prot, L_PTE_MT_MASK, L_PTE_MT_WRITEALLOC)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #ifdef CONFIG_ARM_DMA_MEM_BUFFERABLE
 #define pgprot_dmacoherent(prot) \
 	__pgprot_modify(prot, L_PTE_MT_MASK, L_PTE_MT_BUFFERABLE | L_PTE_XN)
 #define __HAVE_PHYS_MEM_ACCESS_PROT
+<<<<<<< HEAD
+=======
+#define COHERENT_IS_NORMAL 1
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 struct file;
 extern pgprot_t phys_mem_access_prot(struct file *file, unsigned long pfn,
 				     unsigned long size, pgprot_t vma_prot);
 #else
 #define pgprot_dmacoherent(prot) \
 	__pgprot_modify(prot, L_PTE_MT_MASK, L_PTE_MT_UNCACHED | L_PTE_XN)
+<<<<<<< HEAD
+=======
+#define COHERENT_IS_NORMAL 0
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif
 
 #endif /* __ASSEMBLY__ */
@@ -251,7 +281,12 @@ PTE_BIT_FUNC(mkclean,   &= ~L_PTE_DIRTY);
 PTE_BIT_FUNC(mkdirty,   |= L_PTE_DIRTY);
 PTE_BIT_FUNC(mkold,     &= ~L_PTE_YOUNG);
 PTE_BIT_FUNC(mkyoung,   |= L_PTE_YOUNG);
+<<<<<<< HEAD
 PTE_BIT_FUNC(mknoexec,	|= L_PTE_XN);
+=======
+PTE_BIT_FUNC(mkexec,   &= ~L_PTE_XN);
+PTE_BIT_FUNC(mknexec,   |= L_PTE_XN);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 static inline pte_t pte_mkspecial(pte_t pte) { return pte; }
 
@@ -319,6 +354,7 @@ static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
 #define HAVE_ARCH_UNMAPPED_AREA
 #define HAVE_ARCH_UNMAPPED_AREA_TOPDOWN
 
+<<<<<<< HEAD
 /*
  * remap a physical page `pfn' of size `size' with page protection `prot'
  * into virtual address `from'
@@ -326,6 +362,8 @@ static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
 #define io_remap_pfn_range(vma,from,pfn,size,prot) \
 		remap_pfn_range(vma, from, pfn, size, prot)
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define pgtable_cache_init() do { } while (0)
 
 #endif /* !__ASSEMBLY__ */

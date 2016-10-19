@@ -203,6 +203,10 @@ extern rwlock_t ip6_ra_lock;
  */
 
 struct ipv6_txoptions {
+<<<<<<< HEAD
+=======
+	atomic_t		refcnt;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* Length of this structure */
 	int			tot_len;
 
@@ -215,7 +219,11 @@ struct ipv6_txoptions {
 	struct ipv6_opt_hdr	*dst0opt;
 	struct ipv6_rt_hdr	*srcrt;	/* Routing Header */
 	struct ipv6_opt_hdr	*dst1opt;
+<<<<<<< HEAD
 
+=======
+	struct rcu_head		rcu;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* Option buffer, as read by IPV6_PKTOPTIONS, starts here. */
 };
 
@@ -246,6 +254,27 @@ struct ipv6_fl_socklist {
 	struct rcu_head			rcu;
 };
 
+<<<<<<< HEAD
+=======
+static inline struct ipv6_txoptions *txopt_get(const struct ipv6_pinfo *np)
+{
+	struct ipv6_txoptions *opt;
+
+	rcu_read_lock();
+	opt = rcu_dereference(np->opt);
+	if (opt && !atomic_inc_not_zero(&opt->refcnt))
+		opt = NULL;
+	rcu_read_unlock();
+	return opt;
+}
+
+static inline void txopt_put(struct ipv6_txoptions *opt)
+{
+	if (opt && atomic_dec_and_test(&opt->refcnt))
+		kfree_rcu(opt, rcu);
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 extern struct ip6_flowlabel	*fl6_sock_lookup(struct sock *sk, __be32 label);
 extern struct ipv6_txoptions	*fl6_merge_options(struct ipv6_txoptions * opt_space,
 						   struct ip6_flowlabel * fl,
@@ -260,10 +289,21 @@ static inline void fl6_sock_release(struct ip6_flowlabel *fl)
 	if (fl)
 		atomic_dec(&fl->users);
 }
+<<<<<<< HEAD
 int icmpv6_push_pending_frames(struct sock *sk, struct flowi6 *fl6,
 			       struct icmp6hdr *thdr, int len);
 
 extern void icmpv6_notify(struct sk_buff *skb, u8 type, u8 code, __be32 info);
+=======
+
+extern void icmpv6_notify(struct sk_buff *skb, u8 type, u8 code, __be32 info);
+
+int icmpv6_push_pending_frames(struct sock *sk, struct flowi6 *fl6,
+			       struct icmp6hdr *thdr, int len);
+
+struct dst_entry *icmpv6_route_lookup(struct net *net, struct sk_buff *skb,
+				      struct sock *sk, struct flowi6 *fl6);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 extern int 			ip6_ra_control(struct sock *sk, int sel);
 
@@ -798,8 +838,15 @@ extern int			compat_ipv6_getsockopt(struct sock *sk,
 extern int			ip6_datagram_connect(struct sock *sk, 
 						     struct sockaddr *addr, int addr_len);
 
+<<<<<<< HEAD
 extern int 			ipv6_recv_error(struct sock *sk, struct msghdr *msg, int len);
 extern int 			ipv6_recv_rxpmtu(struct sock *sk, struct msghdr *msg, int len);
+=======
+extern int 			ipv6_recv_error(struct sock *sk, struct msghdr *msg, int len,
+						int *addr_len);
+extern int 			ipv6_recv_rxpmtu(struct sock *sk, struct msghdr *msg, int len,
+						 int *addr_len);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 extern void			ipv6_icmp_error(struct sock *sk, struct sk_buff *skb, int err, __be16 port,
 						u32 info, u8 *payload);
 extern void			ipv6_local_error(struct sock *sk, int err, struct flowi6 *fl6, u32 info);

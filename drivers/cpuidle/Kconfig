@@ -31,6 +31,7 @@ config CPU_IDLE_GOV_MENU
 config ARCH_NEEDS_CPU_IDLE_COUPLED
 	def_bool n
 
+<<<<<<< HEAD
 config EXYNOS_CPUIDLE_C2
 	bool "EXYNOS CPUIDLE C2"
 	depends on CPU_IDLE
@@ -57,6 +58,8 @@ config EXYNOS_IDLE_CLOCK_DOWN
 	help
 	  Enable core idle clock down
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 if CPU_IDLE
 
 config CPU_IDLE_CALXEDA

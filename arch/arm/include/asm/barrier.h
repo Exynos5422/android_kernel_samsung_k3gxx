@@ -14,6 +14,7 @@
 #endif
 
 #if __LINUX_ARM_ARCH__ >= 7
+<<<<<<< HEAD
 #define isb() __asm__ __volatile__ ("isb" : : : "memory")
 #define dsb() __asm__ __volatile__ ("dsb" : : : "memory")
 #define dmb() __asm__ __volatile__ ("dmb" : : : "memory")
@@ -35,6 +36,29 @@
 #define dsb() __asm__ __volatile__ ("mcr p15, 0, %0, c7, c10, 4" \
 				    : : "r" (0) : "memory")
 #define dmb() __asm__ __volatile__ ("" : : : "memory")
+=======
+#define isb(option) __asm__ __volatile__ ("isb " #option : : : "memory")
+#define dsb(option) __asm__ __volatile__ ("dsb " #option : : : "memory")
+#define dmb(option) __asm__ __volatile__ ("dmb " #option : : : "memory")
+#elif defined(CONFIG_CPU_XSC3) || __LINUX_ARM_ARCH__ == 6
+#define isb(x) __asm__ __volatile__ ("mcr p15, 0, %0, c7, c5, 4" \
+				    : : "r" (0) : "memory")
+#define dsb(x) __asm__ __volatile__ ("mcr p15, 0, %0, c7, c10, 4" \
+				    : : "r" (0) : "memory")
+#define dmb(x) __asm__ __volatile__ ("mcr p15, 0, %0, c7, c10, 5" \
+				    : : "r" (0) : "memory")
+#elif defined(CONFIG_CPU_FA526)
+#define isb(x) __asm__ __volatile__ ("mcr p15, 0, %0, c7, c5, 4" \
+				    : : "r" (0) : "memory")
+#define dsb(x) __asm__ __volatile__ ("mcr p15, 0, %0, c7, c10, 4" \
+				    : : "r" (0) : "memory")
+#define dmb(x) __asm__ __volatile__ ("" : : : "memory")
+#else
+#define isb(x) __asm__ __volatile__ ("" : : : "memory")
+#define dsb(x) __asm__ __volatile__ ("mcr p15, 0, %0, c7, c10, 4" \
+				    : : "r" (0) : "memory")
+#define dmb(x) __asm__ __volatile__ ("" : : : "memory")
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif
 
 #ifdef CONFIG_ARCH_HAS_BARRIERS
@@ -42,7 +66,11 @@
 #elif defined(CONFIG_ARM_DMA_MEM_BUFFERABLE) || defined(CONFIG_SMP)
 #define mb()		do { dsb(); outer_sync(); } while (0)
 #define rmb()		dsb()
+<<<<<<< HEAD
 #define wmb()		mb()
+=======
+#define wmb()		do { dsb(st); outer_sync(); } while (0)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #else
 #define mb()		barrier()
 #define rmb()		barrier()
@@ -54,9 +82,15 @@
 #define smp_rmb()	barrier()
 #define smp_wmb()	barrier()
 #else
+<<<<<<< HEAD
 #define smp_mb()	dmb()
 #define smp_rmb()	dmb()
 #define smp_wmb()	dmb()
+=======
+#define smp_mb()	dmb(ish)
+#define smp_rmb()	smp_mb()
+#define smp_wmb()	dmb(ishst)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif
 
 #define smp_store_release(p, v)						\
@@ -79,5 +113,11 @@ do {									\
 
 #define set_mb(var, value)	do { var = value; smp_mb(); } while (0)
 
+<<<<<<< HEAD
+=======
+#define smp_mb__before_atomic()	smp_mb()
+#define smp_mb__after_atomic()	smp_mb()
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif /* !__ASSEMBLY__ */
 #endif /* __ASM_BARRIER_H */

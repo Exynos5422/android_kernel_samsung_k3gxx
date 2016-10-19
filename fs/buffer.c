@@ -77,12 +77,53 @@ EXPORT_SYMBOL(__lock_buffer);
 void unlock_buffer(struct buffer_head *bh)
 {
 	clear_bit_unlock(BH_Lock, &bh->b_state);
+<<<<<<< HEAD
 	smp_mb__after_clear_bit();
+=======
+	smp_mb__after_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	wake_up_bit(&bh->b_state, BH_Lock);
 }
 EXPORT_SYMBOL(unlock_buffer);
 
 /*
+<<<<<<< HEAD
+=======
+ * Returns if the page has dirty or writeback buffers. If all the buffers
+ * are unlocked and clean then the PageDirty information is stale. If
+ * any of the pages are locked, it is assumed they are locked for IO.
+ */
+void buffer_check_dirty_writeback(struct page *page,
+				     bool *dirty, bool *writeback)
+{
+	struct buffer_head *head, *bh;
+	*dirty = false;
+	*writeback = false;
+
+	BUG_ON(!PageLocked(page));
+
+	if (!page_has_buffers(page))
+		return;
+
+	if (PageWriteback(page))
+		*writeback = true;
+
+	head = page_buffers(page);
+	bh = head;
+	do {
+		if (buffer_locked(bh))
+			*writeback = true;
+
+		if (buffer_dirty(bh))
+			*dirty = true;
+
+		bh = bh->b_this_page;
+	} while (bh != head);
+}
+EXPORT_SYMBOL(buffer_check_dirty_writeback);
+
+/*
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  * Block until a buffer comes unlocked.  This doesn't stop it
  * from becoming locked again - you have to lock it yourself
  * if you want to preserve its state.
@@ -610,6 +651,7 @@ void mark_buffer_dirty_inode(struct buffer_head *bh, struct inode *inode)
 }
 EXPORT_SYMBOL(mark_buffer_dirty_inode);
 
+<<<<<<< HEAD
 void mark_buffer_dirty_inode_sync(struct buffer_head *bh, struct inode *inode)
 {
 	set_buffer_sync_flush(bh);
@@ -617,6 +659,8 @@ void mark_buffer_dirty_inode_sync(struct buffer_head *bh, struct inode *inode)
 }
 EXPORT_SYMBOL(mark_buffer_dirty_inode_sync);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * Mark the page dirty, and set it dirty in the radix tree, and mark the inode
  * dirty.
@@ -627,14 +671,27 @@ EXPORT_SYMBOL(mark_buffer_dirty_inode_sync);
 static void __set_page_dirty(struct page *page,
 		struct address_space *mapping, int warn)
 {
+<<<<<<< HEAD
 	spin_lock_irq(&mapping->tree_lock);
+=======
+	unsigned long flags;
+
+	spin_lock_irqsave(&mapping->tree_lock, flags);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (page->mapping) {	/* Race with truncate? */
 		WARN_ON_ONCE(warn && !PageUptodate(page));
 		account_page_dirtied(page, mapping);
 		radix_tree_tag_set(&mapping->page_tree,
 				page_index(page), PAGECACHE_TAG_DIRTY);
+<<<<<<< HEAD
 	}
 	spin_unlock_irq(&mapping->tree_lock);
+=======
+		/* Save the task that is dirtying this page */
+		page->tsk_dirty = current;
+	}
+	spin_unlock_irqrestore(&mapping->tree_lock, flags);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	__mark_inode_dirty(mapping->host, I_DIRTY_PAGES);
 }
 
@@ -1151,6 +1208,7 @@ void mark_buffer_dirty(struct buffer_head *bh)
 }
 EXPORT_SYMBOL(mark_buffer_dirty);
 
+<<<<<<< HEAD
 void mark_buffer_dirty_sync(struct buffer_head *bh)
 {
 	WARN_ON_ONCE(!buffer_uptodate(bh));
@@ -1179,6 +1237,8 @@ void mark_buffer_dirty_sync(struct buffer_head *bh)
 }
 EXPORT_SYMBOL(mark_buffer_dirty_sync);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * Decrement a buffer_head's reference count.  If all buffers against a page
  * have zero reference count, are clean and unlocked, and if the page is clean
@@ -1448,12 +1508,55 @@ static bool has_bh_in_lru(int cpu, void *dummy)
 	return 0;
 }
 
+<<<<<<< HEAD
+=======
+static void __evict_bh_lru(void *arg)
+{
+	struct bh_lru *b = &get_cpu_var(bh_lrus);
+	struct buffer_head *bh = arg;
+	int i;
+
+	for (i = 0; i < BH_LRU_SIZE; i++) {
+		if (b->bhs[i] == bh) {
+			brelse(b->bhs[i]);
+			b->bhs[i] = NULL;
+			goto out;
+		}
+	}
+out:
+	put_cpu_var(bh_lrus);
+}
+
+static bool bh_exists_in_lru(int cpu, void *arg)
+{
+	struct bh_lru *b = per_cpu_ptr(&bh_lrus, cpu);
+	struct buffer_head *bh = arg;
+	int i;
+
+	for (i = 0; i < BH_LRU_SIZE; i++) {
+		if (b->bhs[i] == bh)
+			return 1;
+	}
+
+	return 0;
+
+}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 void invalidate_bh_lrus(void)
 {
 	on_each_cpu_cond(has_bh_in_lru, invalidate_bh_lru, NULL, 1, GFP_KERNEL);
 }
 EXPORT_SYMBOL_GPL(invalidate_bh_lrus);
 
+<<<<<<< HEAD
+=======
+void evict_bh_lrus(struct buffer_head *bh)
+{
+	on_each_cpu_cond(bh_exists_in_lru, __evict_bh_lru, bh, 1, GFP_ATOMIC);
+}
+EXPORT_SYMBOL_GPL(evict_bh_lrus);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 void set_bh_page(struct buffer_head *bh,
 		struct page *page, unsigned long offset)
 {
@@ -3026,11 +3129,14 @@ int _submit_bh(int rw, struct buffer_head *bh, unsigned long bio_flags)
 	if (buffer_prio(bh))
 		rw |= REQ_PRIO;
 
+<<<<<<< HEAD
 	if(buffer_sync_flush(bh)) {
 		rw |= REQ_SYNC;
 		clear_buffer_sync_flush(bh);
 	}
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	bio_get(bio);
 	submit_bio(rw, bio);
 
@@ -3182,8 +3288,20 @@ drop_buffers(struct page *page, struct buffer_head **buffers_to_free)
 	do {
 		if (buffer_write_io_error(bh) && page->mapping)
 			set_bit(AS_EIO, &page->mapping->flags);
+<<<<<<< HEAD
 		if (buffer_busy(bh))
 			goto failed;
+=======
+		if (buffer_busy(bh)) {
+			/*
+			 * Check if the busy failure was due to an
+			 * outstanding LRU reference
+			 */
+			evict_bh_lrus(bh);
+			if (buffer_busy(bh))
+				goto failed;
+		}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		bh = bh->b_this_page;
 	} while (bh != head);
 

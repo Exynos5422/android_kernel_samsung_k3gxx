@@ -42,6 +42,10 @@
 
 #define ARM_CPU_IMP_ARM			0x41
 #define ARM_CPU_IMP_INTEL		0x69
+<<<<<<< HEAD
+=======
+#define ARM_CPU_IMP_QUALCOMM		0x51
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define ARM_CPU_PART_ARM1136		0xB360
 #define ARM_CPU_PART_ARM1156		0xB560

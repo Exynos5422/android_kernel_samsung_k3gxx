@@ -19,8 +19,14 @@
 #include <linux/debugfs.h>
 #include <linux/bitops.h>
 #include <linux/termios.h>
+<<<<<<< HEAD
 #include <mach/usb_bridge.h>
 #include <mach/usb_gadget_xport.h>
+=======
+#include <linux/usb/usb_bridge.h>
+
+#include "usb_gadget_xport.h"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /* from cdc-acm.h */
 #define ACM_CTRL_RTS		(1 << 1)	/* unused with full duplex */
@@ -85,7 +91,11 @@ static int ghsic_ctrl_receive(void *dev, void *buf, size_t actual)
 	struct gctrl_port	*port = dev;
 	int retval = 0;
 
+<<<<<<< HEAD
 	pr_debug_ratelimited("%s: read complete bytes read: %d\n",
+=======
+	pr_debug_ratelimited("%s: read complete bytes read: %zu\n",
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			__func__, actual);
 
 	/* send it to USB here */
@@ -96,7 +106,11 @@ static int ghsic_ctrl_receive(void *dev, void *buf, size_t actual)
 
 	return retval;
 }
+<<<<<<< HEAD
 #if 0
+=======
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int
 ghsic_send_cpkt_tomodem(u8 portno, void *buf, size_t len)
 {
@@ -132,7 +146,11 @@ ghsic_send_cpkt_tomodem(u8 portno, void *buf, size_t len)
 		return 0;
 	}
 
+<<<<<<< HEAD
 	pr_debug("%s: ctrl_pkt:%d bytes\n", __func__, len);
+=======
+	pr_debug("%s: ctrl_pkt:%zu bytes\n", __func__, len);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	ctrl_bridge_write(port->brdg.ch_id, cbuf, len);
 
@@ -140,7 +158,11 @@ ghsic_send_cpkt_tomodem(u8 portno, void *buf, size_t len)
 
 	return 0;
 }
+<<<<<<< HEAD
 #endif
+=======
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static void
 ghsic_send_cbits_tomodem(void *gptr, u8 portno, int cbits)
 {
@@ -173,7 +195,11 @@ ghsic_send_cbits_tomodem(void *gptr, u8 portno, int cbits)
 static void ghsic_ctrl_connect_w(struct work_struct *w)
 {
 	struct gserial		*gser = NULL;
+<<<<<<< HEAD
 //	struct grmnet		*gr = NULL;
+=======
+	struct grmnet		*gr = NULL;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct gctrl_port	*port =
 			container_of(w, struct gctrl_port, connect_w);
 	unsigned long		flags;
@@ -207,11 +233,16 @@ static void ghsic_ctrl_connect_w(struct work_struct *w)
 	cbits = ctrl_bridge_get_cbits_tohost(port->brdg.ch_id);
 
 	if (port->gtype == USB_GADGET_SERIAL && (cbits & ACM_CTRL_DCD)) {
+<<<<<<< HEAD
 		gser = (struct gserial *)(port->port_usb);
+=======
+		gser = port->port_usb;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (gser && gser->connect)
 			gser->connect(gser);
 		return;
 	}
+<<<<<<< HEAD
 #if 0
 	if (port->gtype == USB_GADGET_RMNET) {
 		gr =(struct grmnet*) (port->port_usb);
@@ -219,13 +250,25 @@ static void ghsic_ctrl_connect_w(struct work_struct *w)
 			gr->connect(gr);
 	}
 #endif	
+=======
+
+	if (port->gtype == USB_GADGET_RMNET) {
+		gr = port->port_usb;
+		if (gr && gr->connect)
+			gr->connect(gr);
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 int ghsic_ctrl_connect(void *gptr, int port_num)
 {
 	struct gctrl_port	*port;
 	struct gserial		*gser;
+<<<<<<< HEAD
 //	struct grmnet		*gr;
+=======
+	struct grmnet		*gr;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	unsigned long		flags;
 
 	pr_debug("%s: port#%d\n", __func__, port_num);
@@ -246,14 +289,24 @@ int ghsic_ctrl_connect(void *gptr, int port_num)
 		gser = gptr;
 		gser->notify_modem = ghsic_send_cbits_tomodem;
 	}
+<<<<<<< HEAD
 #if 0
 	if (port->gtype == USB_GADGET_RMNET) {
 		gr = (struct grmnet	*)gptr;
+=======
+
+	if (port->gtype == USB_GADGET_RMNET) {
+		gr = gptr;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		port->send_cpkt_response = gr->send_cpkt_response;
 		gr->send_encap_cmd = ghsic_send_cpkt_tomodem;
 		gr->notify_modem = ghsic_send_cbits_tomodem;
 	}
+<<<<<<< HEAD
 #endif
+=======
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	port->port_usb = gptr;
 	port->to_host = 0;
 	port->to_modem = 0;
@@ -282,7 +335,11 @@ void ghsic_ctrl_disconnect(void *gptr, int port_num)
 {
 	struct gctrl_port	*port;
 	struct gserial		*gser = NULL;
+<<<<<<< HEAD
 //	struct grmnet		*gr = NULL;
+=======
+	struct grmnet		*gr = NULL;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	unsigned long		flags;
 
 	pr_debug("%s: port#%d\n", __func__, port_num);
@@ -300,6 +357,7 @@ void ghsic_ctrl_disconnect(void *gptr, int port_num)
 	}
 
 	if (port->gtype == USB_GADGET_SERIAL)
+<<<<<<< HEAD
 		gser = (struct gserial *)gptr;
 #if 0
 	 else
@@ -307,11 +365,22 @@ void ghsic_ctrl_disconnect(void *gptr, int port_num)
 #endif
 	spin_lock_irqsave(&port->port_lock, flags);
 #if 0
+=======
+		gser = gptr;
+	 else
+		gr = gptr;
+
+	spin_lock_irqsave(&port->port_lock, flags);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (gr) {
 		gr->send_encap_cmd = 0;
 		gr->notify_modem = 0;
 	}
+<<<<<<< HEAD
 #endif
+=======
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (gser)
 		gser->notify_modem = 0;
 	port->cbits_tomodem = 0;
@@ -387,7 +456,11 @@ static int ghsic_ctrl_remove(struct platform_device *pdev)
 {
 	struct gctrl_port	*port;
 	struct gserial		*gser = NULL;
+<<<<<<< HEAD
 	//struct grmnet		*gr = NULL;
+=======
+	struct grmnet		*gr = NULL;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	unsigned long		flags;
 	int			id;
 
@@ -409,6 +482,7 @@ static int ghsic_ctrl_remove(struct platform_device *pdev)
 
 	if (port->gtype == USB_GADGET_SERIAL)
 		gser = port->port_usb;
+<<<<<<< HEAD
 #if 0	
 	else
 		gr = port->port_usb;
@@ -419,6 +493,17 @@ static int ghsic_ctrl_remove(struct platform_device *pdev)
 	if (gr && gr->disconnect)
 		gr->disconnect(gr);
 #endif
+=======
+	else
+		gr = port->port_usb;
+
+	port->cbits_tohost = 0;
+	spin_unlock_irqrestore(&port->port_lock, flags);
+
+	if (gr && gr->disconnect)
+		gr->disconnect(gr);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (gser && gser->disconnect)
 		gser->disconnect(gser);
 

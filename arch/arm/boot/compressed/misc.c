@@ -127,6 +127,21 @@ asmlinkage void __div0(void)
 	error("Attempting division by 0!");
 }
 
+<<<<<<< HEAD
+=======
+unsigned long __stack_chk_guard;
+
+void __stack_chk_guard_setup(void)
+{
+	__stack_chk_guard = 0x000a0dff;
+}
+
+void __stack_chk_fail(void)
+{
+	error("stack-protector: Kernel stack is corrupted\n");
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 extern int do_decompress(u8 *input, int len, u8 *output, void (*error)(char *x));
 
 
@@ -137,6 +152,11 @@ decompress_kernel(unsigned long output_start, unsigned long free_mem_ptr_p,
 {
 	int ret;
 
+<<<<<<< HEAD
+=======
+	__stack_chk_guard_setup();
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	output_data		= (unsigned char *)output_start;
 	free_mem_ptr		= free_mem_ptr_p;
 	free_mem_end_ptr	= free_mem_ptr_end_p;

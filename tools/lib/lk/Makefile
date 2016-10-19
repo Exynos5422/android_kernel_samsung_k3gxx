@@ -1,5 +1,11 @@
 include ../../scripts/Makefile.include
 
+<<<<<<< HEAD
+=======
+CC = $(CROSS_COMPILE)gcc
+AR = $(CROSS_COMPILE)ar
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 # guard against environment variables
 LIB_H=
 LIB_OBJS=

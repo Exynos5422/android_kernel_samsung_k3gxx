@@ -178,7 +178,10 @@ static int irq_work_cpu_notify(struct notifier_block *self,
 
 	switch (action) {
 	case CPU_DYING:
+<<<<<<< HEAD
 	case CPU_DYING_FROZEN:
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		/* Called from stop_machine */
 		if (WARN_ON_ONCE(cpu != smp_processor_id()))
 			break;
@@ -199,6 +202,10 @@ static __init int irq_work_init_cpu_notifier(void)
 	register_cpu_notifier(&cpu_notify);
 	return 0;
 }
+<<<<<<< HEAD
 device_initcall(irq_work_init_cpu_notifier);
+=======
+early_initcall(irq_work_init_cpu_notifier);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #endif /* CONFIG_HOTPLUG_CPU */

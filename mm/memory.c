@@ -49,6 +49,10 @@
 #include <linux/rmap.h>
 #include <linux/export.h>
 #include <linux/delayacct.h>
+<<<<<<< HEAD
+=======
+#include <linux/delay.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <linux/init.h>
 #include <linux/writeback.h>
 #include <linux/memcontrol.h>
@@ -59,6 +63,10 @@
 #include <linux/gfp.h>
 #include <linux/migrate.h>
 #include <linux/string.h>
+<<<<<<< HEAD
+=======
+#include <linux/bug.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #include <asm/io.h>
 #include <asm/pgalloc.h>
@@ -710,6 +718,12 @@ static void print_bad_pte(struct vm_area_struct *vma, unsigned long addr,
 	if (vma->vm_file && vma->vm_file->f_op)
 		printk(KERN_ALERT "vma->vm_file->f_op->mmap: %pSR\n",
 		       vma->vm_file->f_op->mmap);
+<<<<<<< HEAD
+=======
+
+	BUG_ON(PANIC_CORRUPTION);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	dump_stack();
 	add_taint(TAINT_BAD_PAGE, LOCKDEP_NOW_UNRELIABLE);
 }
@@ -850,6 +864,7 @@ copy_one_pte(struct mm_struct *dst_mm, struct mm_struct *src_mm,
 			else if (is_migration_entry(entry)) {
 				page = migration_entry_to_page(entry);
 
+<<<<<<< HEAD
 				if (PageAnon(page)) {
 					rss[MM_ANONPAGES]++;
 #ifdef CONFIG_ZOOM_KILLER
@@ -863,6 +878,12 @@ copy_one_pte(struct mm_struct *dst_mm, struct mm_struct *src_mm,
 						rss[MM_LOW_FILEPAGES]++;
 #endif
 				}
+=======
+				if (PageAnon(page))
+					rss[MM_ANONPAGES]++;
+				else
+					rss[MM_FILEPAGES]++;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 				if (is_write_migration_entry(entry) &&
 				    is_cow_mapping(vm_flags)) {
@@ -900,6 +921,7 @@ copy_one_pte(struct mm_struct *dst_mm, struct mm_struct *src_mm,
 	if (page) {
 		get_page(page);
 		page_dup_rmap(page);
+<<<<<<< HEAD
 		if (PageAnon(page)) {
 			rss[MM_ANONPAGES]++;
 #ifdef CONFIG_ZOOM_KILLER
@@ -913,6 +935,12 @@ copy_one_pte(struct mm_struct *dst_mm, struct mm_struct *src_mm,
 				rss[MM_LOW_FILEPAGES]++;
 #endif
 		}
+=======
+		if (PageAnon(page))
+			rss[MM_ANONPAGES]++;
+		else
+			rss[MM_FILEPAGES]++;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 out_set_pte:
@@ -1162,6 +1190,7 @@ again:
 						addr) != page->index)
 				set_pte_at(mm, addr, pte,
 					   pgoff_to_pte(page->index));
+<<<<<<< HEAD
 			if (PageAnon(page)) {
 				rss[MM_ANONPAGES]--;
 #ifdef CONFIG_ZOOM_KILLER
@@ -1169,16 +1198,24 @@ again:
 					rss[MM_LOW_ANONPAGES]--;
 #endif
 			} else {
+=======
+			if (PageAnon(page))
+				rss[MM_ANONPAGES]--;
+			else {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				if (pte_dirty(ptent))
 					set_page_dirty(page);
 				if (pte_young(ptent) &&
 				    likely(!VM_SequentialReadHint(vma)))
 					mark_page_accessed(page);
 				rss[MM_FILEPAGES]--;
+<<<<<<< HEAD
 #ifdef CONFIG_ZOOM_KILLER
 				if (!PageHighMem(page))
 					rss[MM_LOW_FILEPAGES]--;
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			}
 			page_remove_rmap(page);
 			if (unlikely(page_mapcount(page) < 0))
@@ -1207,6 +1244,7 @@ again:
 
 				page = migration_entry_to_page(entry);
 
+<<<<<<< HEAD
 				if (PageAnon(page)) {
 					rss[MM_ANONPAGES]--;
 #ifdef CONFIG_ZOOM_KILLER
@@ -1220,6 +1258,12 @@ again:
 						rss[MM_LOW_FILEPAGES]--;
 #endif
 				}
+=======
+				if (PageAnon(page))
+					rss[MM_ANONPAGES]--;
+				else
+					rss[MM_FILEPAGES]--;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			}
 			if (unlikely(!free_swap_and_cache(entry)))
 				print_bad_pte(vma, addr, ptent, NULL);
@@ -1823,6 +1867,22 @@ long __get_user_pages(struct task_struct *tsk, struct mm_struct *mm,
 			goto next_page;
 		}
 
+<<<<<<< HEAD
+=======
+		if (use_user_accessible_timers()) {
+			if (!vma && in_user_timers_area(mm, start)) {
+				int goto_next_page = 0;
+				int user_timer_ret = get_user_timer_page(vma,
+					mm, start, gup_flags, pages, i,
+					&goto_next_page);
+				if (goto_next_page)
+					goto next_page;
+				else
+					return user_timer_ret;
+			}
+		}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (!vma ||
 		    (vma->vm_flags & (VM_IO | VM_PFNMAP)) ||
 		    !(vm_flags & vma->vm_flags))
@@ -1972,12 +2032,23 @@ int fixup_user_fault(struct task_struct *tsk, struct mm_struct *mm,
 		     unsigned long address, unsigned int fault_flags)
 {
 	struct vm_area_struct *vma;
+<<<<<<< HEAD
+=======
+	vm_flags_t vm_flags;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	int ret;
 
 	vma = find_extend_vma(mm, address);
 	if (!vma || address < vma->vm_start)
 		return -EFAULT;
 
+<<<<<<< HEAD
+=======
+	vm_flags = (fault_flags & FAULT_FLAG_WRITE) ? VM_WRITE : VM_READ;
+	if (!(vm_flags & vma->vm_flags))
+		return -EFAULT;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ret = handle_mm_fault(mm, vma, address, fault_flags);
 	if (ret & VM_FAULT_ERROR) {
 		if (ret & VM_FAULT_OOM)
@@ -2140,10 +2211,13 @@ static int insert_page(struct vm_area_struct *vma, unsigned long addr,
 	/* Ok, finally just insert the thing.. */
 	get_page(page);
 	inc_mm_counter_fast(mm, MM_FILEPAGES);
+<<<<<<< HEAD
 #ifdef CONFIG_ZOOM_KILLER
 	if (!PageHighMem(page))
 		inc_mm_counter_fast(mm, MM_LOW_FILEPAGES);
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	page_add_file_rmap(page);
 	set_pte_at(mm, addr, pte, mk_pte(page, prot));
 
@@ -2851,6 +2925,7 @@ gotten:
 			if (!PageAnon(old_page)) {
 				dec_mm_counter_fast(mm, MM_FILEPAGES);
 				inc_mm_counter_fast(mm, MM_ANONPAGES);
+<<<<<<< HEAD
 #ifdef CONFIG_ZOOM_KILLER
 				if (!PageHighMem(old_page))
 					dec_mm_counter_fast(mm, MM_LOW_FILEPAGES);
@@ -2870,6 +2945,11 @@ gotten:
 				inc_mm_counter_fast(mm, MM_LOW_ANONPAGES);
 #endif
 		}
+=======
+			}
+		} else
+			inc_mm_counter_fast(mm, MM_ANONPAGES);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		flush_cache_page(vma, address, pte_pfn(orig_pte));
 		entry = mk_pte(new_page, vma->vm_page_prot);
 		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
@@ -3071,6 +3151,19 @@ static int do_swap_page(struct mm_struct *mm, struct vm_area_struct *vma,
 	entry = pte_to_swp_entry(orig_pte);
 	if (unlikely(non_swap_entry(entry))) {
 		if (is_migration_entry(entry)) {
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_CMA
+			/*
+			 * FIXME: mszyprow: cruel, brute-force method for
+			 * letting cma/migration to finish it's job without
+			 * stealing the lock migration_entry_wait() and creating
+			 * a live-lock on the faulted page
+			 * (page->_count == 2 migration failure issue)
+			 */
+			mdelay(10);
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			migration_entry_wait(mm, pmd, address);
 		} else if (is_hwpoison_entry(entry)) {
 			ret = VM_FAULT_HWPOISON;
@@ -3169,10 +3262,13 @@ static int do_swap_page(struct mm_struct *mm, struct vm_area_struct *vma,
 	 */
 
 	inc_mm_counter_fast(mm, MM_ANONPAGES);
+<<<<<<< HEAD
 #ifdef CONFIG_ZOOM_KILLER
 	if (!PageHighMem(page))
 		inc_mm_counter_fast(mm, MM_LOW_ANONPAGES);
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	dec_mm_counter_fast(mm, MM_SWAPENTS);
 	pte = mk_pte(page, vma->vm_page_prot);
 	if ((flags & FAULT_FLAG_WRITE) && reuse_swap_page(page)) {
@@ -3322,10 +3418,13 @@ static int do_anonymous_page(struct mm_struct *mm, struct vm_area_struct *vma,
 		goto release;
 
 	inc_mm_counter_fast(mm, MM_ANONPAGES);
+<<<<<<< HEAD
 #ifdef CONFIG_ZOOM_KILLER
 	if (!PageHighMem(page))
 		inc_mm_counter_fast(mm, MM_LOW_ANONPAGES);
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	page_add_new_anon_rmap(page, vma, address);
 setpte:
 	set_pte_at(mm, address, page_table, entry);
@@ -3481,6 +3580,7 @@ static int __do_fault(struct mm_struct *mm, struct vm_area_struct *vma,
 			entry = maybe_mkwrite(pte_mkdirty(entry), vma);
 		if (anon) {
 			inc_mm_counter_fast(mm, MM_ANONPAGES);
+<<<<<<< HEAD
 #ifdef CONFIG_ZOOM_KILLER
 			if (!PageHighMem(page))
 				inc_mm_counter_fast(mm, MM_LOW_ANONPAGES);
@@ -3492,6 +3592,11 @@ static int __do_fault(struct mm_struct *mm, struct vm_area_struct *vma,
 			if (!PageHighMem(page))
 				inc_mm_counter_fast(mm, MM_LOW_FILEPAGES);
 #endif
+=======
+			page_add_new_anon_rmap(page, vma, address);
+		} else {
+			inc_mm_counter_fast(mm, MM_FILEPAGES);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			page_add_file_rmap(page);
 			if (flags & FAULT_FLAG_WRITE) {
 				dirty_page = page;
@@ -3596,12 +3701,20 @@ static int do_nonlinear_fault(struct mm_struct *mm, struct vm_area_struct *vma,
 }
 
 int numa_migrate_prep(struct page *page, struct vm_area_struct *vma,
+<<<<<<< HEAD
 				unsigned long addr, int current_nid)
+=======
+				unsigned long addr, int page_nid)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	get_page(page);
 
 	count_vm_numa_event(NUMA_HINT_FAULTS);
+<<<<<<< HEAD
 	if (current_nid == numa_node_id())
+=======
+	if (page_nid == numa_node_id())
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		count_vm_numa_event(NUMA_HINT_FAULTS_LOCAL);
 
 	return mpol_misplaced(page, vma, addr);
@@ -3612,7 +3725,11 @@ int do_numa_page(struct mm_struct *mm, struct vm_area_struct *vma,
 {
 	struct page *page = NULL;
 	spinlock_t *ptl;
+<<<<<<< HEAD
 	int current_nid = -1;
+=======
+	int page_nid = -1;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	int target_nid;
 	bool migrated = false;
 
@@ -3642,6 +3759,7 @@ int do_numa_page(struct mm_struct *mm, struct vm_area_struct *vma,
 		return 0;
 	}
 
+<<<<<<< HEAD
 	current_nid = page_to_nid(page);
 	target_nid = numa_migrate_prep(page, vma, addr, current_nid);
 	pte_unmap_unlock(ptep, ptl);
@@ -3651,6 +3769,12 @@ int do_numa_page(struct mm_struct *mm, struct vm_area_struct *vma,
 		 * being replaced regardless of where the page is located.
 		 */
 		current_nid = numa_node_id();
+=======
+	page_nid = page_to_nid(page);
+	target_nid = numa_migrate_prep(page, vma, addr, page_nid);
+	pte_unmap_unlock(ptep, ptl);
+	if (target_nid == -1) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		put_page(page);
 		goto out;
 	}
@@ -3658,11 +3782,19 @@ int do_numa_page(struct mm_struct *mm, struct vm_area_struct *vma,
 	/* Migrate to the requested node */
 	migrated = migrate_misplaced_page(page, target_nid);
 	if (migrated)
+<<<<<<< HEAD
 		current_nid = target_nid;
 
 out:
 	if (current_nid != -1)
 		task_numa_fault(current_nid, 1, migrated);
+=======
+		page_nid = target_nid;
+
+out:
+	if (page_nid != -1)
+		task_numa_fault(page_nid, 1, migrated);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 
@@ -3677,7 +3809,10 @@ static int do_pmd_numa_page(struct mm_struct *mm, struct vm_area_struct *vma,
 	unsigned long offset;
 	spinlock_t *ptl;
 	bool numa = false;
+<<<<<<< HEAD
 	int local_nid = numa_node_id();
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	spin_lock(&mm->page_table_lock);
 	pmd = *pmdp;
@@ -3700,9 +3835,16 @@ static int do_pmd_numa_page(struct mm_struct *mm, struct vm_area_struct *vma,
 	for (addr = _addr + offset; addr < _addr + PMD_SIZE; pte++, addr += PAGE_SIZE) {
 		pte_t pteval = *pte;
 		struct page *page;
+<<<<<<< HEAD
 		int curr_nid = local_nid;
 		int target_nid;
 		bool migrated;
+=======
+		int page_nid = -1;
+		int target_nid;
+		bool migrated = false;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (!pte_present(pteval))
 			continue;
 		if (!pte_numa(pteval))
@@ -3724,6 +3866,7 @@ static int do_pmd_numa_page(struct mm_struct *mm, struct vm_area_struct *vma,
 		if (unlikely(page_mapcount(page) != 1))
 			continue;
 
+<<<<<<< HEAD
 		/*
 		 * Note that the NUMA fault is later accounted to either
 		 * the node that is currently running or where the page is
@@ -3743,6 +3886,21 @@ static int do_pmd_numa_page(struct mm_struct *mm, struct vm_area_struct *vma,
 		if (migrated)
 			curr_nid = target_nid;
 		task_numa_fault(curr_nid, 1, migrated);
+=======
+		page_nid = page_to_nid(page);
+		target_nid = numa_migrate_prep(page, vma, addr, page_nid);
+		pte_unmap_unlock(pte, ptl);
+		if (target_nid != -1) {
+			migrated = migrate_misplaced_page(page, target_nid);
+			if (migrated)
+				page_nid = target_nid;
+		} else {
+			put_page(page);
+		}
+
+		if (page_nid != -1)
+			task_numa_fault(page_nid, 1, migrated);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 		pte = pte_offset_map_lock(mm, pmdp, addr, &ptl);
 	}
@@ -4145,6 +4303,10 @@ int generic_access_phys(struct vm_area_struct *vma, unsigned long addr,
 
 	return len;
 }
+<<<<<<< HEAD
+=======
+EXPORT_SYMBOL_GPL(generic_access_phys);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif
 
 /*
@@ -4281,7 +4443,11 @@ void print_vma_addr(char *prefix, unsigned long ip)
 	up_read(&mm->mmap_sem);
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_PROVE_LOCKING
+=======
+#if defined(CONFIG_PROVE_LOCKING) || defined(CONFIG_DEBUG_ATOMIC_SLEEP)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 void might_fault(void)
 {
 	/*
@@ -4293,13 +4459,25 @@ void might_fault(void)
 	if (segment_eq(get_fs(), KERNEL_DS))
 		return;
 
+<<<<<<< HEAD
 	might_sleep();
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/*
 	 * it would be nicer only to annotate paths which are not under
 	 * pagefault_disable, however that requires a larger audit and
 	 * providing helpers like get_user_atomic.
 	 */
+<<<<<<< HEAD
 	if (!in_atomic() && current->mm)
+=======
+	if (in_atomic())
+		return;
+
+	__might_sleep(__FILE__, __LINE__, 0);
+
+	if (current->mm)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		might_lock_read(&current->mm->mmap_sem);
 }
 EXPORT_SYMBOL(might_fault);

@@ -146,6 +146,10 @@ struct sbp2_logical_unit {
 	 */
 	int generation;
 	int retries;
+<<<<<<< HEAD
+=======
+	work_func_t workfn;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct delayed_work work;
 	bool has_sdev;
 	bool blocked;
@@ -864,7 +868,11 @@ static void sbp2_login(struct work_struct *work)
 	/* set appropriate retry limit(s) in BUSY_TIMEOUT register */
 	sbp2_set_busy_timeout(lu);
 
+<<<<<<< HEAD
 	PREPARE_DELAYED_WORK(&lu->work, sbp2_reconnect);
+=======
+	lu->workfn = sbp2_reconnect;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	sbp2_agent_reset(lu);
 
 	/* This was a re-login. */
@@ -918,7 +926,11 @@ static void sbp2_login(struct work_struct *work)
 	 * If a bus reset happened, sbp2_update will have requeued
 	 * lu->work already.  Reset the work from reconnect to login.
 	 */
+<<<<<<< HEAD
 	PREPARE_DELAYED_WORK(&lu->work, sbp2_login);
+=======
+	lu->workfn = sbp2_login;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static void sbp2_reconnect(struct work_struct *work)
@@ -952,7 +964,11 @@ static void sbp2_reconnect(struct work_struct *work)
 		    lu->retries++ >= 5) {
 			dev_err(tgt_dev(tgt), "failed to reconnect\n");
 			lu->retries = 0;
+<<<<<<< HEAD
 			PREPARE_DELAYED_WORK(&lu->work, sbp2_login);
+=======
+			lu->workfn = sbp2_login;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		}
 		sbp2_queue_work(lu, DIV_ROUND_UP(HZ, 5));
 
@@ -972,6 +988,16 @@ static void sbp2_reconnect(struct work_struct *work)
 	sbp2_conditionally_unblock(lu);
 }
 
+<<<<<<< HEAD
+=======
+static void sbp2_lu_workfn(struct work_struct *work)
+{
+	struct sbp2_logical_unit *lu = container_of(to_delayed_work(work),
+						struct sbp2_logical_unit, work);
+	lu->workfn(work);
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int sbp2_add_logical_unit(struct sbp2_target *tgt, int lun_entry)
 {
 	struct sbp2_logical_unit *lu;
@@ -998,7 +1024,12 @@ static int sbp2_add_logical_unit(struct sbp2_target *tgt, int lun_entry)
 	lu->blocked  = false;
 	++tgt->dont_block;
 	INIT_LIST_HEAD(&lu->orb_list);
+<<<<<<< HEAD
 	INIT_DELAYED_WORK(&lu->work, sbp2_login);
+=======
+	lu->workfn = sbp2_login;
+	INIT_DELAYED_WORK(&lu->work, sbp2_lu_workfn);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	list_add_tail(&lu->link, &tgt->lu_list);
 	return 0;

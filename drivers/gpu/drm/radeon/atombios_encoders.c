@@ -1281,7 +1281,11 @@ atombios_dig_transmitter_setup(struct drm_encoder *encoder, int action, uint8_t 
 			}
 			if (is_dp)
 				args.v5.ucLaneNum = dp_lane_count;
+<<<<<<< HEAD
 			else if (radeon_encoder->pixel_clock > 165000)
+=======
+			else if (radeon_dig_monitor_is_duallink(encoder, radeon_encoder->pixel_clock))
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				args.v5.ucLaneNum = 8;
 			else
 				args.v5.ucLaneNum = 4;
@@ -1636,8 +1640,17 @@ radeon_atom_encoder_dpms_dig(struct drm_encoder *encoder, int mode)
 			atombios_dig_encoder_setup(encoder, ATOM_ENABLE, 0);
 			atombios_dig_transmitter_setup(encoder, ATOM_TRANSMITTER_ACTION_SETUP, 0, 0);
 			atombios_dig_transmitter_setup(encoder, ATOM_TRANSMITTER_ACTION_ENABLE, 0, 0);
+<<<<<<< HEAD
 			/* some early dce3.2 boards have a bug in their transmitter control table */
 			if ((rdev->family != CHIP_RV710) && (rdev->family != CHIP_RV730))
+=======
+			/* some dce3.x boards have a bug in their transmitter control table.
+			 * ACTION_ENABLE_OUTPUT can probably be dropped since ACTION_ENABLE
+			 * does the same thing and more.
+			 */
+			if ((rdev->family != CHIP_RV710) && (rdev->family != CHIP_RV730) &&
+			    (rdev->family != CHIP_RS780) && (rdev->family != CHIP_RS880))
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				atombios_dig_transmitter_setup(encoder, ATOM_TRANSMITTER_ACTION_ENABLE_OUTPUT, 0, 0);
 		}
 		if (ENCODER_MODE_IS_DP(atombios_get_encoder_mode(encoder)) && connector) {
@@ -1873,8 +1886,16 @@ atombios_set_encoder_crtc_source(struct drm_encoder *encoder)
 					args.v2.ucEncodeMode = ATOM_ENCODER_MODE_CRT;
 				else
 					args.v2.ucEncodeMode = atombios_get_encoder_mode(encoder);
+<<<<<<< HEAD
 			} else
 				args.v2.ucEncodeMode = atombios_get_encoder_mode(encoder);
+=======
+			} else if (radeon_encoder->devices & (ATOM_DEVICE_LCD_SUPPORT)) {
+				args.v2.ucEncodeMode = ATOM_ENCODER_MODE_LVDS;
+			} else {
+				args.v2.ucEncodeMode = atombios_get_encoder_mode(encoder);
+			}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			switch (radeon_encoder->encoder_id) {
 			case ENCODER_OBJECT_ID_INTERNAL_UNIPHY:
 			case ENCODER_OBJECT_ID_INTERNAL_UNIPHY1:

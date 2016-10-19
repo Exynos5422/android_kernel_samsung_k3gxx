@@ -201,12 +201,20 @@ static noinline void key_gc_unused_keys(struct list_head *keys)
 		if (test_bit(KEY_FLAG_INSTANTIATED, &key->flags))
 			atomic_dec(&key->user->nikeys);
 
+<<<<<<< HEAD
+=======
+		key_user_put(key->user);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		/* now throw away the key memory */
 		if (key->type->destroy)
 			key->type->destroy(key);
 
+<<<<<<< HEAD
 		key_user_put(key->user);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		kfree(key->description);
 
 #ifdef KEY_DEBUGGING

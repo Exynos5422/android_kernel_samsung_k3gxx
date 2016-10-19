@@ -285,7 +285,11 @@ static inline int s3c_cpufreq_addfreq(struct cpufreq_frequency_table *table,
 		s3c_freq_dbg("%s: { %d = %u kHz }\n",
 			     __func__, index, freq);
 
+<<<<<<< HEAD
 		table[index].index = index;
+=======
+		table[index].driver_data = index;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		table[index].frequency = freq;
 	}
 

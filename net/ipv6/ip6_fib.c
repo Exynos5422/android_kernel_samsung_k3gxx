@@ -825,9 +825,15 @@ int fib6_add(struct fib6_node *root, struct rt6_info *rt, struct nl_info *info)
 	fn = fib6_add_1(root, &rt->rt6i_dst.addr, sizeof(struct in6_addr),
 			rt->rt6i_dst.plen, offsetof(struct rt6_info, rt6i_dst),
 			allow_create, replace_required);
+<<<<<<< HEAD
 
 	if (IS_ERR(fn)) {
 		err = PTR_ERR(fn);
+=======
+	if (IS_ERR(fn)) {
+		err = PTR_ERR(fn);
+		fn = NULL;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		goto out;
 	}
 
@@ -993,6 +999,7 @@ static struct fib6_node * fib6_lookup_1(struct fib6_node *root,
 
 			if (ipv6_prefix_equal(&key->addr, args->addr, key->plen)) {
 #ifdef CONFIG_IPV6_SUBTREES
+<<<<<<< HEAD
 				if (fn->subtree)
 					fn = fib6_lookup_1(fn->subtree, args + 1);
 #endif
@@ -1001,6 +1008,24 @@ static struct fib6_node * fib6_lookup_1(struct fib6_node *root,
 			}
 		}
 
+=======
+				if (fn->subtree) {
+					struct fib6_node *sfn;
+					sfn = fib6_lookup_1(fn->subtree,
+							    args + 1);
+					if (!sfn)
+						goto backtrack;
+					fn = sfn;
+				}
+#endif
+				if (fn->fn_flags & RTN_RTINFO)
+					return fn;
+			}
+		}
+#ifdef CONFIG_IPV6_SUBTREES
+backtrack:
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (fn->fn_flags & RTN_ROOT)
 			break;
 
@@ -1410,7 +1435,11 @@ static int fib6_walk_continue(struct fib6_walker_t *w)
 
 				if (w->skip) {
 					w->skip--;
+<<<<<<< HEAD
 					continue;
+=======
+					goto skip;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				}
 
 				err = w->func(w);
@@ -1420,6 +1449,10 @@ static int fib6_walk_continue(struct fib6_walker_t *w)
 				w->count++;
 				continue;
 			}
+<<<<<<< HEAD
+=======
+skip:
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			w->state = FWS_U;
 		case FWS_U:
 			if (fn == w->root)

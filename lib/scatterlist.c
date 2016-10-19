@@ -247,13 +247,23 @@ int __sg_alloc_table(struct sg_table *table, unsigned int nents,
 	struct scatterlist *sg, *prv;
 	unsigned int left;
 
+<<<<<<< HEAD
+=======
+	memset(table, 0, sizeof(*table));
+
+	if (nents == 0)
+		return -EINVAL;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifndef ARCH_HAS_SG_CHAIN
 	if (WARN_ON_ONCE(nents > max_ents))
 		return -EINVAL;
 #endif
 
+<<<<<<< HEAD
 	memset(table, 0, sizeof(*table));
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	left = nents;
 	prv = NULL;
 	do {
@@ -529,7 +539,12 @@ void sg_miter_stop(struct sg_mapping_iter *miter)
 		miter->__offset += miter->consumed;
 		miter->__remaining -= miter->consumed;
 
+<<<<<<< HEAD
 		if (miter->__flags & SG_MITER_TO_SG)
+=======
+		if ((miter->__flags & SG_MITER_TO_SG) &&
+		    !PageSlab(miter->page))
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			flush_kernel_dcache_page(miter->page);
 
 		if (miter->__flags & SG_MITER_ATOMIC) {

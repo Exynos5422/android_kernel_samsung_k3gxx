@@ -55,7 +55,11 @@ config TCG_NSC
 
 config TCG_ATMEL
 	tristate "Atmel TPM Interface"
+<<<<<<< HEAD
 	depends on PPC64 || HAS_IOPORT
+=======
+	depends on PPC64 || HAS_IOPORT_MAP
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	---help---
 	  If you have a TPM security chip from Atmel say Yes and it 
 	  will be accessible from within Linux.  To compile this driver 
@@ -91,4 +95,13 @@ config TCG_ST33_I2C
         To compile this driver as a module, choose M here; the module will be
         called tpm_stm_st33_i2c.
 
+<<<<<<< HEAD
+=======
+config TCG_TPMD_DEV
+	tristate "tpmd_dev TPM Emulator driver"
+	default n
+	---help---
+	  Enables the TPM emulator driver
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 endif # TCG_TPM

@@ -9,6 +9,11 @@
 #ifndef _UAPI__LINUX_USB_CDC_WDM_H
 #define _UAPI__LINUX_USB_CDC_WDM_H
 
+<<<<<<< HEAD
+=======
+#include <linux/types.h>
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * This IOCTL is used to retrieve the wMaxCommand for the device,
  * defining the message limit for both reading and writing.

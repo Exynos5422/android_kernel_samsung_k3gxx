@@ -1590,6 +1590,10 @@ static const struct address_space_operations def_blk_aops = {
 	.writepages	= generic_writepages,
 	.releasepage	= blkdev_releasepage,
 	.direct_IO	= blkdev_direct_IO,
+<<<<<<< HEAD
+=======
+	.is_dirty_writeback = buffer_check_dirty_writeback,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 const struct file_operations def_blk_fops = {

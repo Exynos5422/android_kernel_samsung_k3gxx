@@ -83,6 +83,7 @@ static int wiphy_uevent(struct device *dev, struct kobj_uevent_env *env)
 	return 0;
 }
 
+<<<<<<< HEAD
 static void cfg80211_leave_all(struct cfg80211_registered_device *rdev)
 {
 	struct wireless_dev *wdev;
@@ -91,6 +92,8 @@ static void cfg80211_leave_all(struct cfg80211_registered_device *rdev)
 		cfg80211_leave(rdev, wdev);
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int wiphy_suspend(struct device *dev, pm_message_t state)
 {
 	struct cfg80211_registered_device *rdev = dev_to_rdev(dev);
@@ -98,6 +101,7 @@ static int wiphy_suspend(struct device *dev, pm_message_t state)
 
 	rdev->suspend_at = get_seconds();
 
+<<<<<<< HEAD
 	rtnl_lock();
 	if (rdev->wiphy.registered) {
 		if (!rdev->wowlan && !rdev->wiphy.wowlan.flags)
@@ -111,6 +115,14 @@ static int wiphy_suspend(struct device *dev, pm_message_t state)
 		}
 	}
 	rtnl_unlock();
+=======
+	if (rdev->ops->suspend) {
+		rtnl_lock();
+		if (rdev->wiphy.registered)
+			ret = rdev_suspend(rdev);
+		rtnl_unlock();
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return ret;
 }

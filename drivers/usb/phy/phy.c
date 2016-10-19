@@ -82,6 +82,7 @@ static int devm_usb_phy_match(struct device *dev, void *res, void *match_data)
 }
 
 /**
+<<<<<<< HEAD
  * usb_phy_check_op - check all USB PHYs operation
  *
  * Returns true if at least one PHY is active.
@@ -119,6 +120,8 @@ bool usb_phy_check_op(void)
 EXPORT_SYMBOL_GPL(usb_phy_check_op);
 
 /**
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  * devm_usb_get_phy - find the USB PHY
  * @dev - device that requests this phy
  * @type - the type of the phy the controller requires

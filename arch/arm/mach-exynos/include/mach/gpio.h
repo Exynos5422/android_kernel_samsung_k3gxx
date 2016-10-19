@@ -12,6 +12,7 @@
 #ifndef __ASM_ARCH_GPIO_H
 #define __ASM_ARCH_GPIO_H __FILE__
 
+<<<<<<< HEAD
 #if defined(CONFIG_MACH_S3G) || defined(CONFIG_MACH_SLTE)
 #include <linux/types.h>
 #include <linux/err.h>
@@ -20,6 +21,8 @@
 #include <plat/cpu.h>
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /* Macro for EXYNOS GPIO numbering */
 
 #define EXYNOS_GPIO_NEXT(__gpio) \

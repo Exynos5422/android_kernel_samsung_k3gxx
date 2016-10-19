@@ -38,8 +38,12 @@
  */
 	.macro	dcache_line_size, reg, tmp
 	mrs	\tmp, ctr_el0			// read CTR
+<<<<<<< HEAD
 	lsr	\tmp, \tmp, #16
 	and	\tmp, \tmp, #0xf		// cache line size encoding
+=======
+	ubfm	\tmp, \tmp, #16, #19		// cache line size encoding
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	mov	\reg, #4			// bytes per word
 	lsl	\reg, \reg, \tmp		// actual cache line size
 	.endm

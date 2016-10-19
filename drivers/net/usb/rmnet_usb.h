@@ -88,6 +88,12 @@ struct rmnet_ctrl_udev {
 	unsigned int		zlp_cnt;
 	unsigned int		invalid_mux_id_cnt;
 	unsigned int		ignore_encap_work;
+<<<<<<< HEAD
+=======
+	bool			autosuspend_disabled;
+	unsigned int		autosuspend_en_cnt;
+	unsigned int		autosuspend_dis_cnt;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 struct rmnet_ctrl_dev {

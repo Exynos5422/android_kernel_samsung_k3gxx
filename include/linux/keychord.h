@@ -18,6 +18,7 @@
 #ifndef __LINUX_KEYCHORD_H_
 #define __LINUX_KEYCHORD_H_
 
+<<<<<<< HEAD
 #include <linux/input.h>
 
 #define KEYCHORD_VERSION		1
@@ -48,5 +49,8 @@ struct input_keychord {
 	/* variable length array of keycodes */
 	__u16 keycodes[];
 };
+=======
+#include <uapi/linux/keychord.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #endif	/* __LINUX_KEYCHORD_H_ */

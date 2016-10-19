@@ -14,6 +14,10 @@
 #include <linux/sched.h>
 #include <linux/kernel.h>
 #include <linux/mm.h>
+<<<<<<< HEAD
+=======
+#include <linux/vmalloc.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <linux/stddef.h>
 #include <linux/unistd.h>
 #include <linux/user.h>
@@ -40,8 +44,12 @@
 #include <asm/thread_notify.h>
 #include <asm/stacktrace.h>
 #include <asm/mach/time.h>
+<<<<<<< HEAD
 
 #include <mach/exynos-ss.h>
+=======
+#include <asm/tls.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #ifdef CONFIG_CC_STACKPROTECTOR
 #include <linux/stackprotector.h>
@@ -152,7 +160,11 @@ void soft_restart(unsigned long addr)
 	BUG();
 }
 
+<<<<<<< HEAD
 static void null_restart(char mode, const char *cmd)
+=======
+static void null_restart(enum reboot_mode reboot_mode, const char *cmd)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 }
 
@@ -162,7 +174,11 @@ static void null_restart(char mode, const char *cmd)
 void (*pm_power_off)(void);
 EXPORT_SYMBOL(pm_power_off);
 
+<<<<<<< HEAD
 void (*arm_pm_restart)(char str, const char *cmd) = null_restart;
+=======
+void (*arm_pm_restart)(enum reboot_mode reboot_mode, const char *cmd) = null_restart;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 EXPORT_SYMBOL_GPL(arm_pm_restart);
 
 /*
@@ -216,6 +232,7 @@ void arch_cpu_idle(void)
 		default_idle();
 }
 
+<<<<<<< HEAD
 static char reboot_mode = 'h';
 
 int __init reboot_setup(char *str)
@@ -224,6 +241,16 @@ int __init reboot_setup(char *str)
 	return 1;
 }
 
+=======
+enum reboot_mode reboot_mode = REBOOT_HARD;
+
+static int __init reboot_setup(char *str)
+{
+	if ('s' == str[0])
+		reboot_mode = REBOOT_SOFT;
+	return 1;
+}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 __setup("reboot=", reboot_setup);
 
 /*
@@ -257,7 +284,11 @@ void machine_shutdown(void)
  */
 void machine_halt(void)
 {
+<<<<<<< HEAD
 	local_irq_disable();
+=======
+	preempt_disable();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	smp_send_stop();
 
 	local_irq_disable();
@@ -272,7 +303,11 @@ void machine_halt(void)
  */
 void machine_power_off(void)
 {
+<<<<<<< HEAD
 	local_irq_disable();
+=======
+	preempt_disable();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	smp_send_stop();
 
 	if (pm_power_off)
@@ -292,7 +327,11 @@ void machine_power_off(void)
  */
 void machine_restart(char *cmd)
 {
+<<<<<<< HEAD
 	local_irq_disable();
+=======
+	preempt_disable();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	smp_send_stop();
 
 	/* Flush the console to make sure all the relevant messages make it
@@ -345,6 +384,7 @@ static void show_data(unsigned long addr, int nbytes, const char *name)
 		printk("%04lx ", (unsigned long)p & 0xffff);
 		for (j = 0; j < 8; j++) {
 			u32	data;
+<<<<<<< HEAD
 			if (probe_kernel_address(p, data)) {
 				printk(" ********");
 			} else {
@@ -353,15 +393,33 @@ static void show_data(unsigned long addr, int nbytes, const char *name)
 			++p;
 		}
 		printk("\n");
+=======
+			/*
+			 * vmalloc addresses may point to
+			 * memory-mapped peripherals
+			 */
+			if (!virt_addr_valid(p) ||
+			    probe_kernel_address(p, data)) {
+				printk(" ********");
+			} else {
+				printk(KERN_CONT " %08x", data);
+			}
+			++p;
+		}
+		printk(KERN_CONT "\n");
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 }
 
 static void show_extra_register_data(struct pt_regs *regs, int nbytes)
 {
+<<<<<<< HEAD
 	mm_segment_t fs;
 
 	fs = get_fs();
 	set_fs(KERNEL_DS);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	show_data(regs->ARM_pc - nbytes, nbytes * 2, "PC");
 	show_data(regs->ARM_lr - nbytes, nbytes * 2, "LR");
 	show_data(regs->ARM_sp - nbytes, nbytes * 2, "SP");
@@ -378,14 +436,21 @@ static void show_extra_register_data(struct pt_regs *regs, int nbytes)
 	show_data(regs->ARM_r8 - nbytes, nbytes * 2, "R8");
 	show_data(regs->ARM_r9 - nbytes, nbytes * 2, "R9");
 	show_data(regs->ARM_r10 - nbytes, nbytes * 2, "R10");
+<<<<<<< HEAD
 	set_fs(fs);
 }
 
 void __show_regs_without_extra(struct pt_regs *regs)
+=======
+}
+
+void __show_regs(struct pt_regs *regs)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	unsigned long flags;
 	char buf[64];
 
+<<<<<<< HEAD
 	exynos_ss_save_context(regs);
 	/*
 	 *  If you want to see more kernel events after panic,
@@ -394,6 +459,8 @@ void __show_regs_without_extra(struct pt_regs *regs)
 	 */
 	exynos_ss_set_enable("log_kevents", false);
 	exynos_ss_early_dump();
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	show_regs_print_info(KERN_DEFAULT);
 
 	print_symbol("PC is at %s\n", instruction_pointer(regs));
@@ -437,7 +504,11 @@ void __show_regs_without_extra(struct pt_regs *regs)
 			    "mrc p15, 0, %1, c3, c0\n"
 			    : "=r" (transbase), "=r" (dac));
 			snprintf(buf, sizeof(buf), "  Table: %08x  DAC: %08x",
+<<<<<<< HEAD
 				transbase, dac);
+=======
+			  	transbase, dac);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		}
 #endif
 		asm("mrc p15, 0, %0, c1, c0\n" : "=r" (ctrl));
@@ -445,6 +516,7 @@ void __show_regs_without_extra(struct pt_regs *regs)
 		printk("Control: %08x%s\n", ctrl, buf);
 	}
 #endif
+<<<<<<< HEAD
 
 #ifdef CONFIG_CPU_CP15
 	{
@@ -486,6 +558,10 @@ void __show_regs(struct pt_regs *regs)
 #endif
 	__show_regs_without_extra(regs);
 	show_extra_register_data(regs, nbytes);
+=======
+	if (get_fs() == get_ds())
+		show_extra_register_data(regs, 128);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 void show_regs(struct pt_regs * regs)
@@ -553,7 +629,12 @@ copy_thread(unsigned long clone_flags, unsigned long stack_start,
 	clear_ptrace_hw_breakpoint(p);
 
 	if (clone_flags & CLONE_SETTLS)
+<<<<<<< HEAD
 		thread->tp_value = childregs->ARM_r3;
+=======
+		thread->tp_value[0] = childregs->ARM_r3;
+	thread->tp_value[1] = get_tpuser();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	thread_notify(THREAD_NOTIFY_COPY, thread);
 
@@ -655,9 +736,20 @@ int in_gate_area_no_mm(unsigned long addr)
 
 const char *arch_vma_name(struct vm_area_struct *vma)
 {
+<<<<<<< HEAD
 	return is_gate_vma(vma) ? "[vectors]" :
 		(vma->vm_mm && vma->vm_start == vma->vm_mm->context.sigpage) ?
 		 "[sigpage]" : NULL;
+=======
+	if (is_gate_vma(vma))
+		return "[vectors]";
+	else if (vma->vm_mm && vma->vm_start == vma->vm_mm->context.sigpage)
+		return "[sigpage]";
+	else if (vma == get_user_timers_vma(NULL))
+		return "[timers]";
+	else
+		return NULL;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static struct page *signal_page;

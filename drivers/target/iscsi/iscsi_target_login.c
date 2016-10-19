@@ -250,6 +250,31 @@ static void iscsi_login_set_conn_values(
 	mutex_unlock(&auth_id_lock);
 }
 
+<<<<<<< HEAD
+=======
+static __printf(2, 3) int iscsi_change_param_sprintf(
+	struct iscsi_conn *conn,
+	const char *fmt, ...)
+{
+	va_list args;
+	unsigned char buf[64];
+
+	memset(buf, 0, sizeof buf);
+
+	va_start(args, fmt);
+	vsnprintf(buf, sizeof buf, fmt, args);
+	va_end(args);
+
+	if (iscsi_change_param_value(buf, conn->param_list, 0) < 0) {
+		iscsit_tx_login_rsp(conn, ISCSI_STATUS_CLS_TARGET_ERR,
+				ISCSI_LOGIN_STATUS_NO_RESOURCES);
+		return -1;
+	}
+
+	return 0;
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  *	This is the leading connection of a new session,
  *	or session reinstatement.
@@ -339,7 +364,10 @@ static int iscsi_login_zero_tsih_s2(
 {
 	struct iscsi_node_attrib *na;
 	struct iscsi_session *sess = conn->sess;
+<<<<<<< HEAD
 	unsigned char buf[32];
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	bool iser = false;
 
 	sess->tpg = conn->tpg;
@@ -380,6 +408,7 @@ static int iscsi_login_zero_tsih_s2(
 	 *
 	 * In our case, we have already located the struct iscsi_tiqn at this point.
 	 */
+<<<<<<< HEAD
 	memset(buf, 0, 32);
 	sprintf(buf, "TargetPortalGroupTag=%hu", ISCSI_TPG_S(sess)->tpgt);
 	if (iscsi_change_param_value(buf, conn->param_list, 0) < 0) {
@@ -387,12 +416,17 @@ static int iscsi_login_zero_tsih_s2(
 				ISCSI_LOGIN_STATUS_NO_RESOURCES);
 		return -1;
 	}
+=======
+	if (iscsi_change_param_sprintf(conn, "TargetPortalGroupTag=%hu", sess->tpg->tpgt))
+		return -1;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/*
 	 * Workaround for Initiators that have broken connection recovery logic.
 	 *
 	 * "We would really like to get rid of this." Linux-iSCSI.org team
 	 */
+<<<<<<< HEAD
 	memset(buf, 0, 32);
 	sprintf(buf, "ErrorRecoveryLevel=%d", na->default_erl);
 	if (iscsi_change_param_value(buf, conn->param_list, 0) < 0) {
@@ -400,6 +434,10 @@ static int iscsi_login_zero_tsih_s2(
 				ISCSI_LOGIN_STATUS_NO_RESOURCES);
 		return -1;
 	}
+=======
+	if (iscsi_change_param_sprintf(conn, "ErrorRecoveryLevel=%d", na->default_erl))
+		return -1;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (iscsi_login_disable_FIM_keys(conn->param_list, conn) < 0)
 		return -1;
@@ -411,12 +449,18 @@ static int iscsi_login_zero_tsih_s2(
 		unsigned long mrdsl, off;
 		int rc;
 
+<<<<<<< HEAD
 		sprintf(buf, "RDMAExtensions=Yes");
 		if (iscsi_change_param_value(buf, conn->param_list, 0) < 0) {
 			iscsit_tx_login_rsp(conn, ISCSI_STATUS_CLS_TARGET_ERR,
 				ISCSI_LOGIN_STATUS_NO_RESOURCES);
 			return -1;
 		}
+=======
+		if (iscsi_change_param_sprintf(conn, "RDMAExtensions=Yes"))
+			return -1;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		/*
 		 * Make MaxRecvDataSegmentLength PAGE_SIZE aligned for
 		 * Immediate Data + Unsolicitied Data-OUT if necessary..
@@ -446,12 +490,17 @@ static int iscsi_login_zero_tsih_s2(
 		pr_warn("Aligning ISER MaxRecvDataSegmentLength: %lu down"
 			" to PAGE_SIZE\n", mrdsl);
 
+<<<<<<< HEAD
 		sprintf(buf, "MaxRecvDataSegmentLength=%lu\n", mrdsl);
 		if (iscsi_change_param_value(buf, conn->param_list, 0) < 0) {
 			iscsit_tx_login_rsp(conn, ISCSI_STATUS_CLS_TARGET_ERR,
 				ISCSI_LOGIN_STATUS_NO_RESOURCES);
 			return -1;
 		}
+=======
+		if (iscsi_change_param_sprintf(conn, "MaxRecvDataSegmentLength=%lu\n", mrdsl))
+			return -1;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	return 0;
@@ -593,6 +642,7 @@ static int iscsi_login_non_zero_tsih_s2(
 	 *
 	 * In our case, we have already located the struct iscsi_tiqn at this point.
 	 */
+<<<<<<< HEAD
 	memset(buf, 0, 32);
 	sprintf(buf, "TargetPortalGroupTag=%hu", ISCSI_TPG_S(sess)->tpgt);
 	if (iscsi_change_param_value(buf, conn->param_list, 0) < 0) {
@@ -600,6 +650,10 @@ static int iscsi_login_non_zero_tsih_s2(
 				ISCSI_LOGIN_STATUS_NO_RESOURCES);
 		return -1;
 	}
+=======
+	if (iscsi_change_param_sprintf(conn, "TargetPortalGroupTag=%hu", sess->tpg->tpgt))
+		return -1;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return iscsi_login_disable_FIM_keys(conn->param_list, conn);
 }
@@ -984,6 +1038,10 @@ int iscsi_target_setup_login_socket(
 	}
 
 	np->np_transport = t;
+<<<<<<< HEAD
+=======
+	np->enabled = true;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 
@@ -1163,12 +1221,20 @@ static int __iscsi_target_login_thread(struct iscsi_np *np)
 		if (np->np_thread_state == ISCSI_NP_THREAD_RESET) {
 			spin_unlock_bh(&np->np_thread_lock);
 			complete(&np->np_restart_comp);
+<<<<<<< HEAD
 			if (ret == -ENODEV) {
 				iscsit_put_transport(conn->conn_transport);
 				kfree(conn);
 				conn = NULL;
 				goto out;
 			}
+=======
+			iscsit_put_transport(conn->conn_transport);
+			kfree(conn);
+			conn = NULL;
+			if (ret == -ENODEV)
+				goto out;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			/* Get another socket */
 			return 1;
 		}

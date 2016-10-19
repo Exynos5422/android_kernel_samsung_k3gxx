@@ -29,49 +29,94 @@ static inline unsigned long __xchg(unsigned long x, volatile void *ptr, int size
 	switch (size) {
 	case 1:
 		asm volatile("//	__xchg1\n"
+<<<<<<< HEAD
 		"1:	ldaxrb	%w0, %2\n"
+=======
+		"1:	ldxrb	%w0, %2\n"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		"	stlxrb	%w1, %w3, %2\n"
 		"	cbnz	%w1, 1b\n"
 			: "=&r" (ret), "=&r" (tmp), "+Q" (*(u8 *)ptr)
 			: "r" (x)
+<<<<<<< HEAD
 			: "cc", "memory");
 		break;
 	case 2:
 		asm volatile("//	__xchg2\n"
 		"1:	ldaxrh	%w0, %2\n"
+=======
+			: "memory");
+		break;
+	case 2:
+		asm volatile("//	__xchg2\n"
+		"1:	ldxrh	%w0, %2\n"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		"	stlxrh	%w1, %w3, %2\n"
 		"	cbnz	%w1, 1b\n"
 			: "=&r" (ret), "=&r" (tmp), "+Q" (*(u16 *)ptr)
 			: "r" (x)
+<<<<<<< HEAD
 			: "cc", "memory");
 		break;
 	case 4:
 		asm volatile("//	__xchg4\n"
 		"1:	ldaxr	%w0, %2\n"
+=======
+			: "memory");
+		break;
+	case 4:
+		asm volatile("//	__xchg4\n"
+		"1:	ldxr	%w0, %2\n"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		"	stlxr	%w1, %w3, %2\n"
 		"	cbnz	%w1, 1b\n"
 			: "=&r" (ret), "=&r" (tmp), "+Q" (*(u32 *)ptr)
 			: "r" (x)
+<<<<<<< HEAD
 			: "cc", "memory");
 		break;
 	case 8:
 		asm volatile("//	__xchg8\n"
 		"1:	ldaxr	%0, %2\n"
+=======
+			: "memory");
+		break;
+	case 8:
+		asm volatile("//	__xchg8\n"
+		"1:	ldxr	%0, %2\n"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		"	stlxr	%w1, %3, %2\n"
 		"	cbnz	%w1, 1b\n"
 			: "=&r" (ret), "=&r" (tmp), "+Q" (*(u64 *)ptr)
 			: "r" (x)
+<<<<<<< HEAD
 			: "cc", "memory");
+=======
+			: "memory");
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		break;
 	default:
 		BUILD_BUG();
 	}
 
+<<<<<<< HEAD
+=======
+	smp_mb();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return ret;
 }
 
 #define xchg(ptr,x) \
+<<<<<<< HEAD
 	((__typeof__(*(ptr)))__xchg((unsigned long)(x),(ptr),sizeof(*(ptr))))
+=======
+({ \
+	__typeof__(*(ptr)) __ret; \
+	__ret = (__typeof__(*(ptr))) \
+		__xchg((unsigned long)(x), (ptr), sizeof(*(ptr))); \
+	__ret; \
+})
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 static inline unsigned long __cmpxchg(volatile void *ptr, unsigned long old,
 				      unsigned long new, int size)
@@ -158,6 +203,7 @@ static inline unsigned long __cmpxchg_mb(volatile void *ptr, unsigned long old,
 	return ret;
 }
 
+<<<<<<< HEAD
 #define cmpxchg(ptr,o,n)						\
 	((__typeof__(*(ptr)))__cmpxchg_mb((ptr),			\
 					  (unsigned long)(o),		\
@@ -169,8 +215,32 @@ static inline unsigned long __cmpxchg_mb(volatile void *ptr, unsigned long old,
 				       (unsigned long)(o),		\
 				       (unsigned long)(n),		\
 				       sizeof(*(ptr))))
+=======
+#define cmpxchg(ptr, o, n) \
+({ \
+	__typeof__(*(ptr)) __ret; \
+	__ret = (__typeof__(*(ptr))) \
+		__cmpxchg_mb((ptr), (unsigned long)(o), (unsigned long)(n), \
+			     sizeof(*(ptr))); \
+	__ret; \
+})
+
+#define cmpxchg_local(ptr, o, n) \
+({ \
+	__typeof__(*(ptr)) __ret; \
+	__ret = (__typeof__(*(ptr))) \
+		__cmpxchg((ptr), (unsigned long)(o), \
+			  (unsigned long)(n), sizeof(*(ptr))); \
+	__ret; \
+})
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define cmpxchg64(ptr,o,n)		cmpxchg((ptr),(o),(n))
 #define cmpxchg64_local(ptr,o,n)	cmpxchg_local((ptr),(o),(n))
 
+<<<<<<< HEAD
+=======
+#define cmpxchg64_relaxed(ptr,o,n)	cmpxchg_local((ptr),(o),(n))
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif	/* __ASM_CMPXCHG_H */

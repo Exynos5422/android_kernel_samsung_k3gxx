@@ -151,7 +151,12 @@ int bch_journal_read(struct cache_set *c, struct list_head *list,
 		bitmap_zero(bitmap, SB_JOURNAL_BUCKETS);
 		pr_debug("%u journal buckets", ca->sb.njournal_buckets);
 
+<<<<<<< HEAD
 		/* Read journal buckets ordered by golden ratio hash to quickly
+=======
+		/*
+		 * Read journal buckets ordered by golden ratio hash to quickly
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		 * find a sequence of buckets with valid journal entries
 		 */
 		for (i = 0; i < ca->sb.njournal_buckets; i++) {
@@ -164,11 +169,17 @@ int bch_journal_read(struct cache_set *c, struct list_head *list,
 				goto bsearch;
 		}
 
+<<<<<<< HEAD
 		/* If that fails, check all the buckets we haven't checked
+=======
+		/*
+		 * If that fails, check all the buckets we haven't checked
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		 * already
 		 */
 		pr_debug("falling back to linear search");
 
+<<<<<<< HEAD
 		for (l = 0; l < ca->sb.njournal_buckets; l++) {
 			if (test_bit(l, bitmap))
 				continue;
@@ -176,6 +187,16 @@ int bch_journal_read(struct cache_set *c, struct list_head *list,
 			if (read_bucket(l))
 				goto bsearch;
 		}
+=======
+		for (l = find_first_zero_bit(bitmap, ca->sb.njournal_buckets);
+		     l < ca->sb.njournal_buckets;
+		     l = find_next_zero_bit(bitmap, ca->sb.njournal_buckets, l + 1))
+			if (read_bucket(l))
+				goto bsearch;
+
+		if (list_empty(list))
+			continue;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 bsearch:
 		/* Binary search */
 		m = r = find_next_bit(bitmap, ca->sb.njournal_buckets, l + 1);
@@ -195,10 +216,19 @@ bsearch:
 				r = m;
 		}
 
+<<<<<<< HEAD
 		/* Read buckets in reverse order until we stop finding more
 		 * journal entries
 		 */
 		pr_debug("finishing up");
+=======
+		/*
+		 * Read buckets in reverse order until we stop finding more
+		 * journal entries
+		 */
+		pr_debug("finishing up: m %u njournal_buckets %u",
+			 m, ca->sb.njournal_buckets);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		l = m;
 
 		while (1) {
@@ -226,9 +256,16 @@ bsearch:
 			}
 	}
 
+<<<<<<< HEAD
 	c->journal.seq = list_entry(list->prev,
 				    struct journal_replay,
 				    list)->j.seq;
+=======
+	if (!list_empty(list))
+		c->journal.seq = list_entry(list->prev,
+					    struct journal_replay,
+					    list)->j.seq;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return 0;
 #undef read_bucket
@@ -425,7 +462,11 @@ static void do_journal_discard(struct cache *ca)
 		return;
 	}
 
+<<<<<<< HEAD
 	switch (atomic_read(&ja->discard_in_flight) == DISCARD_IN_FLIGHT) {
+=======
+	switch (atomic_read(&ja->discard_in_flight)) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	case DISCARD_IN_FLIGHT:
 		return;
 
@@ -622,7 +663,11 @@ static void journal_write_unlocked(struct closure *cl)
 		bio_reset(bio);
 		bio->bi_sector	= PTR_OFFSET(k, i);
 		bio->bi_bdev	= ca->bdev;
+<<<<<<< HEAD
 		bio->bi_rw	= REQ_WRITE|REQ_SYNC|REQ_META|REQ_FLUSH;
+=======
+		bio->bi_rw	= REQ_WRITE|REQ_SYNC|REQ_META|REQ_FLUSH|REQ_FUA;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		bio->bi_size	= sectors << 9;
 
 		bio->bi_end_io	= journal_write_endio;
@@ -686,6 +731,10 @@ void bch_journal_meta(struct cache_set *c, struct closure *cl)
 		if (cl)
 			BUG_ON(!closure_wait(&w->wait, cl));
 
+<<<<<<< HEAD
+=======
+		closure_flush(&c->journal.io);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		__journal_try_write(c, true);
 	}
 }

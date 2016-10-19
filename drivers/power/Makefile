@@ -50,9 +50,33 @@ obj-$(CONFIG_CHARGER_MANAGER)	+= charger-manager.o
 obj-$(CONFIG_CHARGER_MAX8997)	+= max8997_charger.o
 obj-$(CONFIG_CHARGER_MAX8998)	+= max8998_charger.o
 obj-$(CONFIG_CHARGER_BQ2415X)	+= bq2415x_charger.o
+<<<<<<< HEAD
 obj-$(CONFIG_CHARGER_BQ24160)	+= bq24160_charger.o
 obj-$(CONFIG_FUELGAUGE_S2MG001)	+= s2mg001_fuelgauge.o sec_fuelgauge.o
 obj-$(CONFIG_POWER_AVS)		+= avs/
 obj-$(CONFIG_CHARGER_SMB347)	+= smb347-charger.o
 obj-$(CONFIG_CHARGER_TPS65090)	+= tps65090-charger.o
 obj-$(CONFIG_POWER_RESET)	+= reset/
+=======
+obj-$(CONFIG_POWER_AVS)		+= avs/
+obj-$(CONFIG_SMB349_USB_CHARGER)   += smb349-charger.o
+obj-$(CONFIG_SMB350_CHARGER)   += smb350_charger.o
+obj-$(CONFIG_SMB135X_CHARGER)   += smb135x-charger.o
+obj-$(CONFIG_SMB1360_CHARGER_FG) += smb1360-charger-fg.o
+obj-$(CONFIG_SMB358_CHARGER)	+= smb358-charger.o
+obj-$(CONFIG_BATTERY_BQ28400)	+= bq28400_battery.o
+obj-$(CONFIG_SMB137C_CHARGER)	+= smb137c-charger.o
+obj-$(CONFIG_QPNP_BMS)		+= qpnp-bms.o batterydata-lib.o
+obj-$(CONFIG_QPNP_VM_BMS)	+= qpnp-vm-bms.o batterydata-lib.o batterydata-interface.o
+obj-$(CONFIG_QPNP_FG)		+= qpnp-fg.o
+obj-$(CONFIG_QPNP_CHARGER)	+= qpnp-charger.o
+obj-$(CONFIG_QPNP_LINEAR_CHARGER)	+= qpnp-linear-charger.o
+obj-$(CONFIG_QPNP_SMBCHARGER)	+= qpnp-smbcharger.o
+obj-$(CONFIG_CHARGER_SMB347)	+= smb347-charger.o
+obj-$(CONFIG_CHARGER_TPS65090)	+= tps65090-charger.o
+obj-$(CONFIG_BATTERY_BCL)	+= battery_current_limit.o
+obj-$(CONFIG_MSM_BCL_CTL)	+= msm_bcl.o
+obj-$(CONFIG_MSM_BCL_PERIPHERAL_CTL) += bcl_peripheral.o
+obj-$(CONFIG_POWER_RESET)	+= reset/
+obj-y				+= qcom/
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

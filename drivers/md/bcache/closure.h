@@ -627,7 +627,11 @@ static inline void set_closure_fn(struct closure *cl, closure_fn *fn,
 	cl->fn = fn;
 	cl->wq = wq;
 	/* between atomic_dec() in closure_put() */
+<<<<<<< HEAD
 	smp_mb__before_atomic_dec();
+=======
+	smp_mb__before_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 #define continue_at(_cl, _fn, _wq)					\

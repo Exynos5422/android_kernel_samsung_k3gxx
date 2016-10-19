@@ -129,6 +129,10 @@ struct elantech_data {
 	bool paritycheck;
 	bool jumpy_cursor;
 	bool reports_pressure;
+<<<<<<< HEAD
+=======
+	bool set_hw_resolution;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	unsigned char hw_version;
 	unsigned int fw_version;
 	unsigned int single_finger_reports;

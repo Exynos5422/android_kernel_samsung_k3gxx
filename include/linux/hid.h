@@ -485,7 +485,10 @@ struct hid_device {							/* device report descriptor */
 
 	struct list_head inputs;					/* The list of inputs */
 	void *hiddev;							/* The hiddev structure */
+<<<<<<< HEAD
 	void *hidovr;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	void *hidraw;
 	int minor;							/* Hiddev minor number */
 
@@ -650,7 +653,11 @@ struct hid_driver {
 	int (*input_mapped)(struct hid_device *hdev,
 			struct hid_input *hidinput, struct hid_field *field,
 			struct hid_usage *usage, unsigned long **bit, int *max);
+<<<<<<< HEAD
 	void (*input_configured)(struct hid_device *hdev,
+=======
+	int (*input_configured)(struct hid_device *hdev,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				struct hid_input *hidinput);
 	void (*feature_mapping)(struct hid_device *hdev,
 			struct hid_field *field,
@@ -747,6 +754,10 @@ struct hid_field *hidinput_get_led_field(struct hid_device *hid);
 unsigned int hidinput_count_leds(struct hid_device *hid);
 __s32 hidinput_calc_abs_res(const struct hid_field *field, __u16 code);
 void hid_output_report(struct hid_report *report, __u8 *data);
+<<<<<<< HEAD
+=======
+u8 *hid_alloc_report_buf(struct hid_report *report, gfp_t flags);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 struct hid_device *hid_allocate_device(void);
 struct hid_report *hid_register_report(struct hid_device *device, unsigned type, unsigned id);
 int hid_parse_report(struct hid_device *hid, __u8 *start, unsigned size);

@@ -782,7 +782,15 @@ static struct dma_pte *pfn_to_dma_pte(struct dmar_domain *domain,
 	int offset;
 
 	BUG_ON(!domain->pgd);
+<<<<<<< HEAD
 	BUG_ON(addr_width < BITS_PER_LONG && pfn >> addr_width);
+=======
+
+	if (addr_width < BITS_PER_LONG && pfn >> addr_width)
+		/* Address beyond IOMMU's addressing capabilities. */
+		return NULL;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	parent = domain->pgd;
 
 	while (level > 0) {
@@ -890,23 +898,63 @@ static int dma_pte_clear_range(struct dmar_domain *domain,
 	return order;
 }
 
+<<<<<<< HEAD
+=======
+static void dma_pte_free_level(struct dmar_domain *domain, int level,
+			       struct dma_pte *pte, unsigned long pfn,
+			       unsigned long start_pfn, unsigned long last_pfn)
+{
+	pfn = max(start_pfn, pfn);
+	pte = &pte[pfn_level_offset(pfn, level)];
+
+	do {
+		unsigned long level_pfn;
+		struct dma_pte *level_pte;
+
+		if (!dma_pte_present(pte) || dma_pte_superpage(pte))
+			goto next;
+
+		level_pfn = pfn & level_mask(level - 1);
+		level_pte = phys_to_virt(dma_pte_addr(pte));
+
+		if (level > 2)
+			dma_pte_free_level(domain, level - 1, level_pte,
+					   level_pfn, start_pfn, last_pfn);
+
+		/* If range covers entire pagetable, free it */
+		if (!(start_pfn > level_pfn ||
+		      last_pfn < level_pfn + level_size(level) - 1)) {
+			dma_clear_pte(pte);
+			domain_flush_cache(domain, pte, sizeof(*pte));
+			free_pgtable_page(level_pte);
+		}
+next:
+		pfn += level_size(level);
+	} while (!first_pte_in_page(++pte) && pfn <= last_pfn);
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /* free page table pages. last level pte should already be cleared */
 static void dma_pte_free_pagetable(struct dmar_domain *domain,
 				   unsigned long start_pfn,
 				   unsigned long last_pfn)
 {
 	int addr_width = agaw_to_width(domain->agaw) - VTD_PAGE_SHIFT;
+<<<<<<< HEAD
 	struct dma_pte *first_pte, *pte;
 	int total = agaw_to_level(domain->agaw);
 	int level;
 	unsigned long tmp;
 	int large_page = 2;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	BUG_ON(addr_width < BITS_PER_LONG && start_pfn >> addr_width);
 	BUG_ON(addr_width < BITS_PER_LONG && last_pfn >> addr_width);
 	BUG_ON(start_pfn > last_pfn);
 
 	/* We don't need lock here; nobody else touches the iova range */
+<<<<<<< HEAD
 	level = 2;
 	while (level <= total) {
 		tmp = align_to_level(start_pfn, level);
@@ -940,6 +988,11 @@ static void dma_pte_free_pagetable(struct dmar_domain *domain,
 		} while (tmp && tmp + level_size(level) - 1 <= last_pfn);
 		level++;
 	}
+=======
+	dma_pte_free_level(domain, agaw_to_level(domain->agaw),
+			   domain->pgd, 0, start_pfn, last_pfn);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* free pgd */
 	if (start_pfn == 0 && last_pfn == DOMAIN_MAX_PFN(domain->gaw)) {
 		free_pgtable_page(domain->pgd);

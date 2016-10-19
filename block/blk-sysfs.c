@@ -287,7 +287,11 @@ static ssize_t
 queue_rq_affinity_store(struct request_queue *q, const char *page, size_t count)
 {
 	ssize_t ret = -EINVAL;
+<<<<<<< HEAD
 #if defined(CONFIG_USE_GENERIC_SMP_HELPERS)
+=======
+#ifdef CONFIG_SMP
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	unsigned long val;
 
 	ret = queue_var_store(&val, page, count);

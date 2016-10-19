@@ -690,7 +690,13 @@ void __jbd2_journal_drop_transaction(journal_t *journal, transaction_t *transact
 	J_ASSERT(transaction->t_state == T_FINISHED);
 	J_ASSERT(transaction->t_buffers == NULL);
 	J_ASSERT(transaction->t_forget == NULL);
+<<<<<<< HEAD
 	J_ASSERT(transaction->t_shadow_list == NULL);
+=======
+	J_ASSERT(transaction->t_iobuf_list == NULL);
+	J_ASSERT(transaction->t_shadow_list == NULL);
+	J_ASSERT(transaction->t_log_list == NULL);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	J_ASSERT(transaction->t_checkpoint_list == NULL);
 	J_ASSERT(transaction->t_checkpoint_io_list == NULL);
 	J_ASSERT(atomic_read(&transaction->t_updates) == 0);

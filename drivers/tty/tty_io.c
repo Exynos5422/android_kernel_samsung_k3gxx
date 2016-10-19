@@ -603,7 +603,11 @@ static int tty_signal_session_leader(struct tty_struct *tty, int exit_session)
  *		BTM
  *		  redirect lock for undoing redirection
  *		  file list lock for manipulating list of ttys
+<<<<<<< HEAD
  *		  tty_ldisc_lock from called functions
+=======
+ *		  tty_ldiscs_lock from called functions
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  *		  termios_mutex resetting termios data
  *		  tasklist_lock to walk task list for hangup event
  *		    ->siglock to protect ->signal/->sighand
@@ -850,7 +854,12 @@ void disassociate_ctty(int on_exit)
 			struct pid *tty_pgrp = tty_get_pgrp(tty);
 			if (tty_pgrp) {
 				kill_pgrp(tty_pgrp, SIGHUP, on_exit);
+<<<<<<< HEAD
 				kill_pgrp(tty_pgrp, SIGCONT, on_exit);
+=======
+				if (!on_exit)
+					kill_pgrp(tty_pgrp, SIGCONT, on_exit);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				put_pid(tty_pgrp);
 			}
 		}
@@ -1266,12 +1275,22 @@ static void pty_line_name(struct tty_driver *driver, int index, char *p)
  *
  *	Locking: None
  */
+<<<<<<< HEAD
 static void tty_line_name(struct tty_driver *driver, int index, char *p)
 {
 	if (driver->flags & TTY_DRIVER_UNNUMBERED_NODE)
 		strcpy(p, driver->name);
 	else
 		sprintf(p, "%s%d", driver->name, index + driver->name_base);
+=======
+static ssize_t tty_line_name(struct tty_driver *driver, int index, char *p)
+{
+	if (driver->flags & TTY_DRIVER_UNNUMBERED_NODE)
+		return sprintf(p, "%s", driver->name);
+	else
+		return sprintf(p, "%s%d", driver->name,
+			       index + driver->name_base);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 /**
@@ -1388,8 +1407,12 @@ static int tty_reopen(struct tty_struct *tty)
 	struct tty_driver *driver = tty->driver;
 
 	if (test_bit(TTY_CLOSING, &tty->flags) ||
+<<<<<<< HEAD
 			test_bit(TTY_HUPPING, &tty->flags) ||
 			test_bit(TTY_LDISC_CHANGING, &tty->flags))
+=======
+			test_bit(TTY_HUPPING, &tty->flags))
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return -EIO;
 
 	if (driver->type == TTY_DRIVER_TYPE_PTY &&
@@ -1405,7 +1428,11 @@ static int tty_reopen(struct tty_struct *tty)
 	}
 	tty->count++;
 
+<<<<<<< HEAD
 	WARN_ON(!test_bit(TTY_LDISC, &tty->flags));
+=======
+	WARN_ON(!tty->ldisc);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return 0;
 }
@@ -2201,7 +2228,11 @@ static int tty_fasync(int fd, struct file *filp, int on)
  *	FIXME: does not honour flow control ??
  *
  *	Locking:
+<<<<<<< HEAD
  *		Called functions take tty_ldisc_lock
+=======
+ *		Called functions take tty_ldiscs_lock
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  *		current->signal->tty check is safe without locks
  *
  *	FIXME: may race normal receive processing
@@ -2692,8 +2723,16 @@ static int tty_tiocmset(struct tty_struct *tty, unsigned int cmd,
 		clear = ~val;
 		break;
 	}
+<<<<<<< HEAD
 	set &= TIOCM_DTR|TIOCM_RTS|TIOCM_OUT1|TIOCM_OUT2|TIOCM_LOOP;
 	clear &= TIOCM_DTR|TIOCM_RTS|TIOCM_OUT1|TIOCM_OUT2|TIOCM_LOOP;
+=======
+
+	set &= TIOCM_DTR|TIOCM_RTS|TIOCM_OUT1|TIOCM_OUT2|TIOCM_LOOP|TIOCM_CD|
+		TIOCM_RI|TIOCM_DSR|TIOCM_CTS;
+	clear &= TIOCM_DTR|TIOCM_RTS|TIOCM_OUT1|TIOCM_OUT2|TIOCM_LOOP|TIOCM_CD|
+		TIOCM_RI|TIOCM_DSR|TIOCM_CTS;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return tty->ops->tiocmset(tty, set, clear);
 }
 
@@ -3038,7 +3077,11 @@ void initialize_tty_struct(struct tty_struct *tty,
 	tty->pgrp = NULL;
 	mutex_init(&tty->legacy_mutex);
 	mutex_init(&tty->termios_mutex);
+<<<<<<< HEAD
 	mutex_init(&tty->ldisc_mutex);
+=======
+	init_ldsem(&tty->ldisc_sem);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	init_waitqueue_head(&tty->write_wait);
 	init_waitqueue_head(&tty->read_wait);
 	INIT_WORK(&tty->hangup_work, do_tty_hangup);
@@ -3559,9 +3602,25 @@ static ssize_t show_cons_active(struct device *dev,
 		if (i >= ARRAY_SIZE(cs))
 			break;
 	}
+<<<<<<< HEAD
 	while (i--)
 		count += sprintf(buf + count, "%s%d%c",
 				 cs[i]->name, cs[i]->index, i ? ' ':'\n');
+=======
+	while (i--) {
+		int index = cs[i]->index;
+		struct tty_driver *drv = cs[i]->device(cs[i], &index);
+
+		/* don't resolve tty0 as some programs depend on it */
+		if (drv && (cs[i]->index > 0 || drv->major != TTY_MAJOR))
+			count += tty_line_name(drv, index, buf + count);
+		else
+			count += sprintf(buf + count, "%s%d",
+					 cs[i]->name, cs[i]->index);
+
+		count += sprintf(buf + count, "%c", i ? ' ':'\n');
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	console_unlock();
 
 	return count;

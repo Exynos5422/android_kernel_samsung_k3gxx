@@ -97,6 +97,10 @@ enum acpi_hotplug_mode {
 struct acpi_hotplug_profile {
 	struct kobject kobj;
 	bool enabled:1;
+<<<<<<< HEAD
+=======
+	bool ignore:1;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	enum acpi_hotplug_mode mode;
 };
 
@@ -455,7 +459,15 @@ struct acpi_pci_root {
 };
 
 /* helper */
+<<<<<<< HEAD
 acpi_handle acpi_get_child(acpi_handle, u64);
+=======
+acpi_handle acpi_find_child(acpi_handle, u64, bool);
+static inline acpi_handle acpi_get_child(acpi_handle handle, u64 addr)
+{
+	return acpi_find_child(handle, addr, false);
+}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 int acpi_is_root_bridge(acpi_handle);
 struct acpi_pci_root *acpi_pci_find_root(acpi_handle handle);
 #define DEVICE_ACPI_HANDLE(dev) ((acpi_handle)ACPI_HANDLE(dev))

@@ -942,6 +942,13 @@ static int check_fmt(struct file *file, enum v4l2_buf_type type)
 		if (is_vbi && is_tx && ops->vidioc_g_fmt_sliced_vbi_out)
 			return 0;
 		break;
+<<<<<<< HEAD
+=======
+	case V4L2_BUF_TYPE_PRIVATE:
+		if (ops->vidioc_g_fmt_type_private)
+			return 0;
+		break;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	default:
 		break;
 	}

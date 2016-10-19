@@ -230,6 +230,10 @@ static int send_argument(const char *key)
 
 static int read_smc(u8 cmd, const char *key, u8 *buffer, u8 len)
 {
+<<<<<<< HEAD
+=======
+	u8 status, data = 0;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	int i;
 
 	if (send_command(cmd) || send_argument(key)) {
@@ -237,6 +241,10 @@ static int read_smc(u8 cmd, const char *key, u8 *buffer, u8 len)
 		return -EIO;
 	}
 
+<<<<<<< HEAD
+=======
+	/* This has no effect on newer (2012) SMCs */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (send_byte(len, APPLESMC_DATA_PORT)) {
 		pr_warn("%.4s: read len fail\n", key);
 		return -EIO;
@@ -250,6 +258,20 @@ static int read_smc(u8 cmd, const char *key, u8 *buffer, u8 len)
 		buffer[i] = inb(APPLESMC_DATA_PORT);
 	}
 
+<<<<<<< HEAD
+=======
+	/* Read the data port until bit0 is cleared */
+	for (i = 0; i < 16; i++) {
+		udelay(APPLESMC_MIN_WAIT);
+		status = inb(APPLESMC_CMD_PORT);
+		if (!(status & 0x01))
+			break;
+		data = inb(APPLESMC_DATA_PORT);
+	}
+	if (i)
+		pr_warn("flushed %d bytes, last value is: %d\n", i, data);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 
@@ -525,16 +547,35 @@ static int applesmc_init_smcreg_try(void)
 {
 	struct applesmc_registers *s = &smcreg;
 	bool left_light_sensor, right_light_sensor;
+<<<<<<< HEAD
+=======
+	unsigned int count;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	u8 tmp[1];
 	int ret;
 
 	if (s->init_complete)
 		return 0;
 
+<<<<<<< HEAD
 	ret = read_register_count(&s->key_count);
 	if (ret)
 		return ret;
 
+=======
+	ret = read_register_count(&count);
+	if (ret)
+		return ret;
+
+	if (s->cache && s->key_count != count) {
+		pr_warn("key count changed from %d to %d\n",
+			s->key_count, count);
+		kfree(s->cache);
+		s->cache = NULL;
+	}
+	s->key_count = count;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (!s->cache)
 		s->cache = kcalloc(s->key_count, sizeof(*s->cache), GFP_KERNEL);
 	if (!s->cache)

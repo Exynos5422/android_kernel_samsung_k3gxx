@@ -50,7 +50,10 @@
 #include "xattr.h"
 #include "acl.h"
 #include "mballoc.h"
+<<<<<<< HEAD
 #include "../mount.h"
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define CREATE_TRACE_POINTS
 #include <trace/events/ext4.h>
@@ -306,6 +309,11 @@ static void __save_error_info(struct super_block *sb, const char *func,
 	struct ext4_super_block *es = EXT4_SB(sb)->s_es;
 
 	EXT4_SB(sb)->s_mount_state |= EXT4_ERROR_FS;
+<<<<<<< HEAD
+=======
+	if (bdev_read_only(sb->s_bdev))
+		return;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	es->s_state |= cpu_to_le16(EXT4_ERROR_FS);
 	es->s_last_error_time = cpu_to_le32(get_seconds());
 	strncpy(es->s_last_error_func, func, sizeof(es->s_last_error_func));
@@ -330,9 +338,12 @@ static void __save_error_info(struct super_block *sb, const char *func,
 static void save_error_info(struct super_block *sb, const char *func,
 			    unsigned int line)
 {
+<<<<<<< HEAD
 	if (sb->s_flags & MS_RDONLY)
 		return;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	__save_error_info(sb, func, line);
 	ext4_commit_super(sb, 1);
 }
@@ -388,7 +399,11 @@ static void ext4_journal_commit_callback(journal_t *journal, transaction_t *txn)
  * that error until we've noted it down and cleared it.
  */
 
+<<<<<<< HEAD
 static void ext4_handle_error(struct super_block *sb, char* buf)
+=======
+static void ext4_handle_error(struct super_block *sb)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	if (sb->s_flags & MS_RDONLY)
 		return;
@@ -405,8 +420,13 @@ static void ext4_handle_error(struct super_block *sb, char* buf)
 		sb->s_flags |= MS_RDONLY;
 	}
 	if (test_opt(sb, ERRORS_PANIC))
+<<<<<<< HEAD
 		panic("EXT4-fs (device %s): panic! %s\n",
 			sb->s_id, buf?buf:"no message");
+=======
+		panic("EXT4-fs (device %s): panic forced after error\n",
+			sb->s_id);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 void __ext4_error(struct super_block *sb, const char *function,
@@ -414,13 +434,17 @@ void __ext4_error(struct super_block *sb, const char *function,
 {
 	struct va_format vaf;
 	va_list args;
+<<<<<<< HEAD
 	char *page_buf;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	va_start(args, fmt);
 	vaf.fmt = fmt;
 	vaf.va = &args;
 	printk(KERN_CRIT "EXT4-fs error (device %s): %s:%d: comm %s: %pV\n",
 	       sb->s_id, function, line, current->comm, &vaf);
+<<<<<<< HEAD
 	page_buf = (char *)__get_free_page(GFP_ATOMIC);
 	if (page_buf)
 		sprintf(page_buf, "%s %s:%u: %pV",
@@ -433,6 +457,12 @@ void __ext4_error(struct super_block *sb, const char *function,
 	ext4_handle_error(sb, page_buf);
 	if (page_buf)
 		free_page((unsigned long)page_buf);
+=======
+	va_end(args);
+	save_error_info(sb, function, line);
+
+	ext4_handle_error(sb);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 void ext4_error_inode(struct inode *inode, const char *function,
@@ -442,7 +472,10 @@ void ext4_error_inode(struct inode *inode, const char *function,
 	va_list args;
 	struct va_format vaf;
 	struct ext4_super_block *es = EXT4_SB(inode->i_sb)->s_es;
+<<<<<<< HEAD
 	char *page_buf;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	es->s_last_error_ino = cpu_to_le32(inode->i_ino);
 	es->s_last_error_block = cpu_to_le64(block);
@@ -451,11 +484,17 @@ void ext4_error_inode(struct inode *inode, const char *function,
 	vaf.fmt = fmt;
 	vaf.va = &args;
 	if (block)
+<<<<<<< HEAD
 		printk(KERN_CRIT "EXT4-fs error (device %s): %s:%d: "
+=======
+		printk_ratelimited(
+			KERN_CRIT "EXT4-fs error (device %s): %s:%d: "
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		       "inode #%lu: block %llu: comm %s: %pV\n",
 		       inode->i_sb->s_id, function, line, inode->i_ino,
 		       block, current->comm, &vaf);
 	else
+<<<<<<< HEAD
 		printk(KERN_CRIT "EXT4-fs error (device %s): %s:%d: "
 		       "inode #%lu: comm %s: %pV\n",
 		       inode->i_sb->s_id, function, line, inode->i_ino,
@@ -471,6 +510,16 @@ void ext4_error_inode(struct inode *inode, const char *function,
 	ext4_handle_error(inode->i_sb, page_buf);
 	if (page_buf)
 		free_page((unsigned long)page_buf);
+=======
+		printk_ratelimited(
+			KERN_CRIT "EXT4-fs error (device %s): %s:%d: "
+		       "inode #%lu: comm %s: %pV\n",
+		       inode->i_sb->s_id, function, line, inode->i_ino,
+		       current->comm, &vaf);
+	va_end(args);
+
+	ext4_handle_error(inode->i_sb);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 void ext4_error_file(struct file *file, const char *function,
@@ -482,7 +531,10 @@ void ext4_error_file(struct file *file, const char *function,
 	struct ext4_super_block *es;
 	struct inode *inode = file_inode(file);
 	char pathname[80], *path;
+<<<<<<< HEAD
 	char *page_buf;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	es = EXT4_SB(inode->i_sb)->s_es;
 	es->s_last_error_ino = cpu_to_le32(inode->i_ino);
@@ -505,6 +557,7 @@ void ext4_error_file(struct file *file, const char *function,
 		       "comm %s: path %s: %pV\n",
 		       inode->i_sb->s_id, function, line, inode->i_ino,
 		       current->comm, path, &vaf);
+<<<<<<< HEAD
 	page_buf = (char *)__get_free_page(GFP_ATOMIC);
 	if (page_buf)
 		sprintf(page_buf, "%s %s:%u: %pV",
@@ -516,6 +569,11 @@ void ext4_error_file(struct file *file, const char *function,
 	ext4_handle_error(inode->i_sb, page_buf);
 	if (page_buf)
 		free_page((unsigned long)page_buf);
+=======
+	va_end(args);
+
+	ext4_handle_error(inode->i_sb);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 const char *ext4_decode_error(struct super_block *sb, int errno,
@@ -560,7 +618,10 @@ void __ext4_std_error(struct super_block *sb, const char *function,
 {
 	char nbuf[16];
 	const char *errstr;
+<<<<<<< HEAD
 	char *page_buf;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/* Special case: if the error is EROFS, and we're not already
 	 * inside a transaction, then there's really no point in logging
@@ -574,6 +635,7 @@ void __ext4_std_error(struct super_block *sb, const char *function,
 	       sb->s_id, function, line, errstr);
 	save_error_info(sb, function, line);
 
+<<<<<<< HEAD
 	page_buf = (char *)__get_free_page(GFP_ATOMIC);
 	if (page_buf)
 		sprintf(page_buf, "%s:%u: <%s>",
@@ -584,6 +646,9 @@ void __ext4_std_error(struct super_block *sb, const char *function,
 	ext4_handle_error(sb, page_buf);
 	if (page_buf)
 		free_page((unsigned long)page_buf);
+=======
+	ext4_handle_error(sb);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 /*
@@ -629,7 +694,11 @@ void ext4_msg(struct super_block *sb, const char *prefix, const char *fmt, ...)
 	va_start(args, fmt);
 	vaf.fmt = fmt;
 	vaf.va = &args;
+<<<<<<< HEAD
 	printk("%sEXT4-fs (%s): %pV\n", prefix, sb->s_id, &vaf);
+=======
+	printk_ratelimited("%sEXT4-fs (%s): %pV\n", prefix, sb->s_id, &vaf);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	va_end(args);
 }
 
@@ -657,7 +726,10 @@ __acquires(bitlock)
 	struct va_format vaf;
 	va_list args;
 	struct ext4_super_block *es = EXT4_SB(sb)->s_es;
+<<<<<<< HEAD
 	char *page_buf;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	es->s_last_error_ino = cpu_to_le32(ino);
 	es->s_last_error_block = cpu_to_le64(block);
@@ -674,12 +746,15 @@ __acquires(bitlock)
 	if (block)
 		printk(KERN_CONT "block %llu:", (unsigned long long) block);
 	printk(KERN_CONT "%pV\n", &vaf);
+<<<<<<< HEAD
 	page_buf = (char *)__get_free_page(GFP_ATOMIC);
 	if (page_buf)
 		sprintf(page_buf, "%s %s:%u: %pV",
 					"***Keep this device after RDX, do not reboot***", function, line, &vaf);
 	else
 		printk(KERN_ERR "__ext4_error: failed to allocate page buf for panic msg\n");
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	va_end(args);
 
 	if (test_opt(sb, ERRORS_CONT)) {
@@ -688,9 +763,13 @@ __acquires(bitlock)
 	}
 
 	ext4_unlock_group(sb, grp);
+<<<<<<< HEAD
 	ext4_handle_error(sb, page_buf);
 	if (page_buf)
 		free_page((unsigned long)page_buf);
+=======
+	ext4_handle_error(sb);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/*
 	 * We only get here in the ERRORS_RO case; relocking the group
 	 * may be dangerous, but nothing bad will happen since the
@@ -1533,8 +1612,11 @@ static int handle_mount_opt(struct super_block *sb, char *opt, int token,
 			arg = JBD2_DEFAULT_MAX_COMMIT_AGE;
 		sbi->s_commit_interval = HZ * arg;
 	} else if (token == Opt_max_batch_time) {
+<<<<<<< HEAD
 		if (arg == 0)
 			arg = EXT4_DEF_MAX_BATCH_TIME;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		sbi->s_max_batch_time = arg;
 	} else if (token == Opt_min_batch_time) {
 		sbi->s_min_batch_time = arg;
@@ -2469,6 +2551,7 @@ static ssize_t lifetime_write_kbytes_show(struct ext4_attr *a,
 			  EXT4_SB(sb)->s_sectors_written_start) >> 1)));
 }
 
+<<<<<<< HEAD
 static ssize_t r_blocks_count_show(struct ext4_attr *a,
 		struct ext4_sb_info *sbi, char *buf)
 {
@@ -2488,6 +2571,8 @@ static ssize_t r_blocks_count_store(struct ext4_attr *a,
 	return count;
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static ssize_t inode_readahead_blks_store(struct ext4_attr *a,
 					  struct ext4_sb_info *sbi,
 					  const char *buf, size_t count)
@@ -2587,7 +2672,10 @@ static struct ext4_attr ext4_attr_##name = __ATTR(name, mode, show, store)
 EXT4_RO_ATTR(delayed_allocation_blocks);
 EXT4_RO_ATTR(session_write_kbytes);
 EXT4_RO_ATTR(lifetime_write_kbytes);
+<<<<<<< HEAD
 EXT4_RW_ATTR(r_blocks_count);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 EXT4_RW_ATTR(reserved_clusters);
 EXT4_ATTR_OFFSET(inode_readahead_blks, 0644, sbi_ui_show,
 		 inode_readahead_blks_store, s_inode_readahead_blks);
@@ -2606,7 +2694,10 @@ static struct attribute *ext4_attrs[] = {
 	ATTR_LIST(delayed_allocation_blocks),
 	ATTR_LIST(session_write_kbytes),
 	ATTR_LIST(lifetime_write_kbytes),
+<<<<<<< HEAD
 	ATTR_LIST(r_blocks_count),
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ATTR_LIST(reserved_clusters),
 	ATTR_LIST(inode_readahead_blks),
 	ATTR_LIST(inode_goal),
@@ -2758,10 +2849,18 @@ static void print_daily_error_info(unsigned long arg)
 	es = sbi->s_es;
 
 	if (es->s_error_count)
+<<<<<<< HEAD
 		ext4_msg(sb, KERN_NOTICE, "error count: %u",
 			 le32_to_cpu(es->s_error_count));
 	if (es->s_first_error_time) {
 		printk(KERN_NOTICE "EXT4-fs (%s): initial error at %u: %.*s:%d",
+=======
+		/* fsck newer than v1.41.13 is needed to clean this condition. */
+		ext4_msg(sb, KERN_NOTICE, "error count since last fsck: %u",
+			 le32_to_cpu(es->s_error_count));
+	if (es->s_first_error_time) {
+		printk(KERN_NOTICE "EXT4-fs (%s): initial error at time %u: %.*s:%d",
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		       sb->s_id, le32_to_cpu(es->s_first_error_time),
 		       (int) sizeof(es->s_first_error_func),
 		       es->s_first_error_func,
@@ -2775,7 +2874,11 @@ static void print_daily_error_info(unsigned long arg)
 		printk("\n");
 	}
 	if (es->s_last_error_time) {
+<<<<<<< HEAD
 		printk(KERN_NOTICE "EXT4-fs (%s): last error at %u: %.*s:%d",
+=======
+		printk(KERN_NOTICE "EXT4-fs (%s): last error at time %u: %.*s:%d",
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		       sb->s_id, le32_to_cpu(es->s_last_error_time),
 		       (int) sizeof(es->s_last_error_func),
 		       es->s_last_error_func,
@@ -3284,11 +3387,26 @@ int ext4_calculate_overhead(struct super_block *sb)
 }
 
 
+<<<<<<< HEAD
 static ext4_fsblk_t ext4_calculate_resv_clusters(struct ext4_sb_info *sbi)
+=======
+static ext4_fsblk_t ext4_calculate_resv_clusters(struct super_block *sb)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	ext4_fsblk_t resv_clusters;
 
 	/*
+<<<<<<< HEAD
+=======
+	 * There's no need to reserve anything when we aren't using extents.
+	 * The space estimates are exact, there are no unwritten extents,
+	 * hole punching doesn't need new metadata... This is needed especially
+	 * to keep ext2/3 backward compatibility.
+	 */
+	if (!EXT4_HAS_INCOMPAT_FEATURE(sb, EXT4_FEATURE_INCOMPAT_EXTENTS))
+		return 0;
+	/*
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	 * By default we reserve 2% or 4096 clusters, whichever is smaller.
 	 * This should cover the situations where we can not afford to run
 	 * out of space like for example punch hole, or converting
@@ -3296,7 +3414,12 @@ static ext4_fsblk_t ext4_calculate_resv_clusters(struct ext4_sb_info *sbi)
 	 * allocation would require 1, or 2 blocks, higher numbers are
 	 * very rare.
 	 */
+<<<<<<< HEAD
 	resv_clusters = ext4_blocks_count(sbi->s_es) >> sbi->s_cluster_bits;
+=======
+	resv_clusters = ext4_blocks_count(EXT4_SB(sb)->s_es) >>
+			EXT4_SB(sb)->s_cluster_bits;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	do_div(resv_clusters, 50);
 	resv_clusters = min_t(ext4_fsblk_t, resv_clusters, 4096);
@@ -3654,6 +3777,7 @@ static int ext4_fill_super(struct super_block *sb, void *data, int silent)
 	for (i = 0; i < 4; i++)
 		sbi->s_hash_seed[i] = le32_to_cpu(es->s_hash_seed[i]);
 	sbi->s_def_hash_version = es->s_def_hash_version;
+<<<<<<< HEAD
 	i = le32_to_cpu(es->s_flags);
 	if (i & EXT2_FLAGS_UNSIGNED_HASH)
 		sbi->s_hash_unsigned = 3;
@@ -3664,6 +3788,24 @@ static int ext4_fill_super(struct super_block *sb, void *data, int silent)
 #else
 		es->s_flags |= cpu_to_le32(EXT2_FLAGS_SIGNED_HASH);
 #endif
+=======
+	if (EXT4_HAS_COMPAT_FEATURE(sb, EXT4_FEATURE_COMPAT_DIR_INDEX)) {
+		i = le32_to_cpu(es->s_flags);
+		if (i & EXT2_FLAGS_UNSIGNED_HASH)
+			sbi->s_hash_unsigned = 3;
+		else if ((i & EXT2_FLAGS_SIGNED_HASH) == 0) {
+#ifdef __CHAR_UNSIGNED__
+			if (!(sb->s_flags & MS_RDONLY))
+				es->s_flags |=
+					cpu_to_le32(EXT2_FLAGS_UNSIGNED_HASH);
+			sbi->s_hash_unsigned = 3;
+#else
+			if (!(sb->s_flags & MS_RDONLY))
+				es->s_flags |=
+					cpu_to_le32(EXT2_FLAGS_SIGNED_HASH);
+#endif
+		}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	/* Handle clustersize */
@@ -4040,12 +4182,19 @@ no_journal:
 			 "available");
 	}
 
+<<<<<<< HEAD
 	atomic64_set(&sbi->s_r_blocks_count, ext4_r_blocks_count(es));
 
 	err = ext4_reserve_clusters(sbi, ext4_calculate_resv_clusters(sbi));
 	if (err) {
 		ext4_msg(sb, KERN_ERR, "failed to reserve %llu clusters for "
 			 "reserved pool", ext4_calculate_resv_clusters(sbi));
+=======
+	err = ext4_reserve_clusters(sbi, ext4_calculate_resv_clusters(sb));
+	if (err) {
+		ext4_msg(sb, KERN_ERR, "failed to reserve %llu clusters for "
+			 "reserved pool", ext4_calculate_resv_clusters(sb));
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		goto failed_mount4a;
 	}
 
@@ -4121,6 +4270,7 @@ no_journal:
 	return 0;
 
 cantfind_ext4:
+<<<<<<< HEAD
 
 	/* for debugging, sangwoo2.lee */
 	/* If you wanna use the flag 'MS_SILENT', call */
@@ -4132,6 +4282,10 @@ cantfind_ext4:
 	if (!silent)
 		ext4_msg(sb, KERN_ERR, "VFS: Can't find ext4 filesystem");
 
+=======
+	if (!silent)
+		ext4_msg(sb, KERN_ERR, "VFS: Can't find ext4 filesystem");
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	goto failed_mount;
 
 #ifdef CONFIG_QUOTA
@@ -4921,8 +5075,13 @@ static int ext4_statfs(struct dentry *dentry, struct kstatfs *buf)
 	/* prevent underflow in case that few free space is available */
 	buf->f_bfree = EXT4_C2B(sbi, max_t(s64, bfree, 0));
 	buf->f_bavail = buf->f_bfree -
+<<<<<<< HEAD
 			(atomic64_read(&sbi->s_r_blocks_count) + resv_blocks);
 	if (buf->f_bfree < (atomic64_read(&sbi->s_r_blocks_count) + resv_blocks))
+=======
+			(ext4_r_blocks_count(es) + resv_blocks);
+	if (buf->f_bfree < (ext4_r_blocks_count(es) + resv_blocks))
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		buf->f_bavail = 0;
 	buf->f_files = le32_to_cpu(es->s_inodes_count);
 	buf->f_ffree = percpu_counter_sum_positive(&sbi->s_freeinodes_counter);
@@ -5292,6 +5451,7 @@ out:
 }
 
 #endif
+<<<<<<< HEAD
 void print_iloc_info(struct super_block *sb, struct ext4_iloc iloc)
 {
 	/* for debugging, woojoong.lee */
@@ -5369,6 +5529,8 @@ void print_block_data(struct super_block *sb, sector_t blocknr
 		printk(KERN_ERR "---------------------------------------------------\n");
 }
 /* for debugging */
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 static struct dentry *ext4_mount(struct file_system_type *fs_type, int flags,
 		       const char *dev_name, void *data)

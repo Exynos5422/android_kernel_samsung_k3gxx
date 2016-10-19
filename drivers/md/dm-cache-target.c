@@ -151,6 +151,12 @@ struct cache {
 	atomic_t nr_migrations;
 	wait_queue_head_t migration_wait;
 
+<<<<<<< HEAD
+=======
+	wait_queue_head_t quiescing_wait;
+	atomic_t quiescing_ack;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/*
 	 * cache_size entries, dirty if set
 	 */
@@ -742,8 +748,14 @@ static void cell_defer(struct cache *cache, struct dm_bio_prison_cell *cell,
 
 static void cleanup_migration(struct dm_cache_migration *mg)
 {
+<<<<<<< HEAD
 	dec_nr_migrations(mg->cache);
 	free_migration(mg);
+=======
+	struct cache *cache = mg->cache;
+	free_migration(mg);
+	dec_nr_migrations(cache);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static void migration_failure(struct dm_cache_migration *mg)
@@ -857,12 +869,20 @@ static void issue_copy_real(struct dm_cache_migration *mg)
 	int r;
 	struct dm_io_region o_region, c_region;
 	struct cache *cache = mg->cache;
+<<<<<<< HEAD
+=======
+	sector_t cblock = from_cblock(mg->cblock);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	o_region.bdev = cache->origin_dev->bdev;
 	o_region.count = cache->sectors_per_block;
 
 	c_region.bdev = cache->cache_dev->bdev;
+<<<<<<< HEAD
 	c_region.sector = from_cblock(mg->cblock) * cache->sectors_per_block;
+=======
+	c_region.sector = cblock * cache->sectors_per_block;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	c_region.count = cache->sectors_per_block;
 
 	if (mg->writeback || mg->demote) {
@@ -1340,6 +1360,7 @@ static void writeback_some_dirty_blocks(struct cache *cache)
 /*----------------------------------------------------------------
  * Main worker loop
  *--------------------------------------------------------------*/
+<<<<<<< HEAD
 static void start_quiescing(struct cache *cache)
 {
 	unsigned long flags;
@@ -1350,10 +1371,39 @@ static void start_quiescing(struct cache *cache)
 }
 
 static void stop_quiescing(struct cache *cache)
+=======
+static bool is_quiescing(struct cache *cache)
+{
+	int r;
+	unsigned long flags;
+
+	spin_lock_irqsave(&cache->lock, flags);
+	r = cache->quiescing;
+	spin_unlock_irqrestore(&cache->lock, flags);
+
+	return r;
+}
+
+static void ack_quiescing(struct cache *cache)
+{
+	if (is_quiescing(cache)) {
+		atomic_inc(&cache->quiescing_ack);
+		wake_up(&cache->quiescing_wait);
+	}
+}
+
+static void wait_for_quiescing_ack(struct cache *cache)
+{
+	wait_event(cache->quiescing_wait, atomic_read(&cache->quiescing_ack));
+}
+
+static void start_quiescing(struct cache *cache)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	unsigned long flags;
 
 	spin_lock_irqsave(&cache->lock, flags);
+<<<<<<< HEAD
 	cache->quiescing = 0;
 	spin_unlock_irqrestore(&cache->lock, flags);
 }
@@ -1368,6 +1418,23 @@ static bool is_quiescing(struct cache *cache)
 	spin_unlock_irqrestore(&cache->lock, flags);
 
 	return r;
+=======
+	cache->quiescing = true;
+	spin_unlock_irqrestore(&cache->lock, flags);
+
+	wait_for_quiescing_ack(cache);
+}
+
+static void stop_quiescing(struct cache *cache)
+{
+	unsigned long flags;
+
+	spin_lock_irqsave(&cache->lock, flags);
+	cache->quiescing = false;
+	spin_unlock_irqrestore(&cache->lock, flags);
+
+	atomic_set(&cache->quiescing_ack, 0);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static void wait_for_migrations(struct cache *cache)
@@ -1414,16 +1481,27 @@ static void do_worker(struct work_struct *ws)
 	struct cache *cache = container_of(ws, struct cache, worker);
 
 	do {
+<<<<<<< HEAD
 		if (!is_quiescing(cache))
 			process_deferred_bios(cache);
+=======
+		if (!is_quiescing(cache)) {
+			writeback_some_dirty_blocks(cache);
+			process_deferred_writethrough_bios(cache);
+			process_deferred_bios(cache);
+		}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 		process_migrations(cache, &cache->quiesced_migrations, issue_copy);
 		process_migrations(cache, &cache->completed_migrations, complete_migration);
 
+<<<<<<< HEAD
 		writeback_some_dirty_blocks(cache);
 
 		process_deferred_writethrough_bios(cache);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (commit_if_needed(cache)) {
 			process_deferred_flush_bios(cache, false);
 
@@ -1436,6 +1514,12 @@ static void do_worker(struct work_struct *ws)
 			process_migrations(cache, &cache->need_commit_migrations,
 					   migration_success_post_commit);
 		}
+<<<<<<< HEAD
+=======
+
+		ack_quiescing(cache);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	} while (more_work(cache));
 }
 
@@ -1930,6 +2014,11 @@ static int cache_create(struct cache_args *ca, struct cache **result)
 	ti->num_discard_bios = 1;
 	ti->discards_supported = true;
 	ti->discard_zeroes_data_unsupported = true;
+<<<<<<< HEAD
+=======
+	/* Discard bios must be split on a block boundary */
+	ti->split_discard_bios = true;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	cache->features = ca->features;
 	ti->per_bio_data_size = get_per_bio_data_size(cache);
@@ -1998,6 +2087,12 @@ static int cache_create(struct cache_args *ca, struct cache **result)
 	atomic_set(&cache->nr_migrations, 0);
 	init_waitqueue_head(&cache->migration_wait);
 
+<<<<<<< HEAD
+=======
+	init_waitqueue_head(&cache->quiescing_wait);
+	atomic_set(&cache->quiescing_ack, 0);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	r = -ENOMEM;
 	cache->nr_dirty = 0;
 	cache->dirty_bitset = alloc_bitset(from_cblock(cache->cache_size));
@@ -2148,20 +2243,33 @@ static int cache_map(struct dm_target *ti, struct bio *bio)
 	bool discarded_block;
 	struct dm_bio_prison_cell *cell;
 	struct policy_result lookup_result;
+<<<<<<< HEAD
 	struct per_bio_data *pb;
 
 	if (from_oblock(block) > from_oblock(cache->origin_blocks)) {
+=======
+	struct per_bio_data *pb = init_per_bio_data(bio, pb_data_size);
+
+	if (unlikely(from_oblock(block) >= from_oblock(cache->origin_blocks))) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		/*
 		 * This can only occur if the io goes to a partial block at
 		 * the end of the origin device.  We don't cache these.
 		 * Just remap to the origin and carry on.
 		 */
+<<<<<<< HEAD
 		remap_to_origin_clear_discard(cache, bio, block);
 		return DM_MAPIO_REMAPPED;
 	}
 
 	pb = init_per_bio_data(bio, pb_data_size);
 
+=======
+		remap_to_origin(cache, bio);
+		return DM_MAPIO_REMAPPED;
+	}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (bio->bi_rw & (REQ_FLUSH | REQ_FUA | REQ_DISCARD)) {
 		defer_bio(cache, bio);
 		return DM_MAPIO_SUBMITTED;

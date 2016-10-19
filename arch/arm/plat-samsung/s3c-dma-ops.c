@@ -109,12 +109,15 @@ static inline int s3c_dma_started(unsigned ch)
 	return s3c2410_dma_ctrl(ch, S3C2410_DMAOP_STARTED);
 }
 
+<<<<<<< HEAD
 static inline int s3c_dma_getposition(unsigned ch,
 dma_addr_t *src, dma_addr_t *dst)
 {
 	return s3c2410_dma_getposition(ch, src, dst);
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static inline int s3c_dma_flush(unsigned ch)
 {
 	return s3c2410_dma_ctrl(ch, S3C2410_DMAOP_FLUSH);
@@ -132,7 +135,10 @@ static struct samsung_dma_ops s3c_dma_ops = {
 	.prepare	= s3c_dma_prepare,
 	.trigger	= s3c_dma_trigger,
 	.started	= s3c_dma_started,
+<<<<<<< HEAD
 	.getposition	= s3c_dma_getposition,
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	.flush		= s3c_dma_flush,
 	.stop		= s3c_dma_stop,
 };

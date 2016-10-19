@@ -286,6 +286,11 @@
 
 int sysctl_tcp_fin_timeout __read_mostly = TCP_FIN_TIMEOUT;
 
+<<<<<<< HEAD
+=======
+int sysctl_tcp_min_tso_segs __read_mostly = 2;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 struct percpu_counter tcp_orphan_count;
 EXPORT_SYMBOL_GPL(tcp_orphan_count);
 
@@ -797,6 +802,7 @@ static unsigned int tcp_xmit_size_goal(struct sock *sk, u32 mss_now,
 	xmit_size_goal = mss_now;
 
 	if (large_allowed && sk_can_gso(sk)) {
+<<<<<<< HEAD
 		xmit_size_goal = ((sk->sk_gso_max_size - 1) -
 				  inet_csk(sk)->icsk_af_ops->net_header_len -
 				  inet_csk(sk)->icsk_ext_hdr_len -
@@ -807,6 +813,27 @@ static unsigned int tcp_xmit_size_goal(struct sock *sk, u32 mss_now,
 		xmit_size_goal = min_t(u32, xmit_size_goal,
 				       sysctl_tcp_limit_output_bytes >> 1);
 */
+=======
+		u32 gso_size, hlen;
+
+		/* Maybe we should/could use sk->sk_prot->max_header here ? */
+		hlen = inet_csk(sk)->icsk_af_ops->net_header_len +
+		       inet_csk(sk)->icsk_ext_hdr_len +
+		       tp->tcp_header_len;
+
+		/* Goal is to send at least one packet per ms,
+		 * not one big TSO packet every 100 ms.
+		 * This preserves ACK clocking and is consistent
+		 * with tcp_tso_should_defer() heuristic.
+		 */
+		gso_size = sk->sk_pacing_rate / (2 * MSEC_PER_SEC);
+		gso_size = max_t(u32, gso_size,
+				 sysctl_tcp_min_tso_segs * mss_now);
+
+		xmit_size_goal = min_t(u32, gso_size,
+				       sk->sk_gso_max_size - 1 - hlen);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		xmit_size_goal = tcp_bound_to_half_wnd(tp, xmit_size_goal);
 
 		/* We try hard to avoid divides here */
@@ -1001,7 +1028,12 @@ void tcp_free_fastopen_req(struct tcp_sock *tp)
 	}
 }
 
+<<<<<<< HEAD
 static int tcp_sendmsg_fastopen(struct sock *sk, struct msghdr *msg, int *size)
+=======
+static int tcp_sendmsg_fastopen(struct sock *sk, struct msghdr *msg,
+				int *copied, size_t size)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	struct tcp_sock *tp = tcp_sk(sk);
 	int err, flags;
@@ -1016,11 +1048,19 @@ static int tcp_sendmsg_fastopen(struct sock *sk, struct msghdr *msg, int *size)
 	if (unlikely(tp->fastopen_req == NULL))
 		return -ENOBUFS;
 	tp->fastopen_req->data = msg;
+<<<<<<< HEAD
+=======
+	tp->fastopen_req->size = size;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	flags = (msg->msg_flags & MSG_DONTWAIT) ? O_NONBLOCK : 0;
 	err = __inet_stream_connect(sk->sk_socket, msg->msg_name,
 				    msg->msg_namelen, flags);
+<<<<<<< HEAD
 	*size = tp->fastopen_req->copied;
+=======
+	*copied = tp->fastopen_req->copied;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	tcp_free_fastopen_req(tp);
 	return err;
 }
@@ -1040,7 +1080,11 @@ int tcp_sendmsg(struct kiocb *iocb, struct sock *sk, struct msghdr *msg,
 
 	flags = msg->msg_flags;
 	if (flags & MSG_FASTOPEN) {
+<<<<<<< HEAD
 		err = tcp_sendmsg_fastopen(sk, msg, &copied_syn);
+=======
+		err = tcp_sendmsg_fastopen(sk, msg, &copied_syn, size);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (err == -EINPROGRESS && copied_syn > 0)
 			goto out;
 		else if (err)
@@ -1130,6 +1174,16 @@ new_segment:
 					goto wait_for_memory;
 
 				/*
+<<<<<<< HEAD
+=======
+				 * All packets are restored as if they have
+				 * already been sent.
+				 */
+				if (tp->repair)
+					TCP_SKB_CB(skb)->when = tcp_time_stamp;
+
+				/*
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				 * Check whether we can use HW checksum.
 				 */
 				if (sk->sk_route_caps & NETIF_F_ALL_CSUM)
@@ -1981,11 +2035,17 @@ void tcp_set_state(struct sock *sk, int state)
 			TCP_INC_STATS(sock_net(sk), TCP_MIB_ESTABRESETS);
 
 		sk->sk_prot->unhash(sk);
+<<<<<<< HEAD
 		local_bh_disable();
 		if (inet_csk(sk)->icsk_bind_hash &&
 		    !(sk->sk_userlocks & SOCK_BINDPORT_LOCK))
 			inet_put_port(sk);
 		local_bh_enable();
+=======
+		if (inet_csk(sk)->icsk_bind_hash &&
+		    !(sk->sk_userlocks & SOCK_BINDPORT_LOCK))
+			inet_put_port(sk);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		/* fall through */
 	default:
 		if (oldstate == TCP_ESTABLISHED)
@@ -2466,10 +2526,18 @@ static int do_tcp_setsockopt(struct sock *sk, int level,
 	case TCP_THIN_DUPACK:
 		if (val < 0 || val > 1)
 			err = -EINVAL;
+<<<<<<< HEAD
 		else
 			tp->thin_dupack = val;
 			if (tp->thin_dupack)
 				tcp_disable_early_retrans(tp);
+=======
+		else {
+			tp->thin_dupack = val;
+			if (tp->thin_dupack)
+				tcp_disable_early_retrans(tp);
+		}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		break;
 
 	case TCP_REPAIR:
@@ -2748,6 +2816,15 @@ void tcp_get_info(const struct sock *sk, struct tcp_info *info)
 	info->tcpi_rcv_space = tp->rcvq_space.space;
 
 	info->tcpi_total_retrans = tp->total_retrans;
+<<<<<<< HEAD
+=======
+
+	if (sk->sk_socket) {
+		struct file *filep = sk->sk_socket->file;
+		if (filep)
+			info->tcpi_count = file_count(filep);
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 EXPORT_SYMBOL_GPL(tcp_get_info);
 
@@ -2905,6 +2982,10 @@ struct sk_buff *tcp_tso_segment(struct sk_buff *skb,
 	netdev_features_t features)
 {
 	struct sk_buff *segs = ERR_PTR(-EINVAL);
+<<<<<<< HEAD
+=======
+	unsigned int sum_truesize = 0;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct tcphdr *th;
 	unsigned int thlen;
 	unsigned int seq;
@@ -2988,6 +3069,7 @@ struct sk_buff *tcp_tso_segment(struct sk_buff *skb,
 		if (copy_destructor) {
 			skb->destructor = gso_skb->destructor;
 			skb->sk = gso_skb->sk;
+<<<<<<< HEAD
 			/* {tcp|sock}_wfree() use exact truesize accounting :
 			 * sum(skb->truesize) MUST be exactly be gso_skb->truesize
 			 * So we account mss bytes of 'true size' for each segment.
@@ -2995,6 +3077,9 @@ struct sk_buff *tcp_tso_segment(struct sk_buff *skb,
 			 */
 			skb->truesize = mss;
 			gso_skb->truesize -= mss;
+=======
+			sum_truesize += skb->truesize;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		}
 		skb = skb->next;
 		th = tcp_hdr(skb);
@@ -3011,7 +3096,13 @@ struct sk_buff *tcp_tso_segment(struct sk_buff *skb,
 	if (copy_destructor) {
 		swap(gso_skb->sk, skb->sk);
 		swap(gso_skb->destructor, skb->destructor);
+<<<<<<< HEAD
 		swap(gso_skb->truesize, skb->truesize);
+=======
+		sum_truesize += skb->truesize;
+		atomic_add(sum_truesize - gso_skb->truesize,
+			   &skb->sk->sk_wmem_alloc);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	delta = htonl(oldlen + (skb->tail - skb->transport_header) +
@@ -3478,6 +3569,7 @@ void __init tcp_init(void)
 static int tcp_is_local(struct net *net, __be32 addr) {
 	struct rtable *rt;
 	struct flowi4 fl4 = { .daddr = addr };
+<<<<<<< HEAD
 	int res = 0;
 	rt = ip_route_output_key(net, &fl4);
 	if (IS_ERR_OR_NULL(rt))
@@ -3488,6 +3580,12 @@ static int tcp_is_local(struct net *net, __be32 addr) {
 	So dst_release() is needed to release undestroy dst_entry */
 	dst_release(&rt->dst);
 	return res;
+=======
+	rt = ip_route_output_key(net, &fl4);
+	if (IS_ERR_OR_NULL(rt))
+		return 0;
+	return rt->dst.dev && (rt->dst.dev->flags & IFF_LOOPBACK);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 #if defined(CONFIG_IPV6) || defined(CONFIG_IPV6_MODULE)

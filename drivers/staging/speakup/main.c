@@ -2219,6 +2219,10 @@ static void __exit speakup_exit(void)
 	unregister_keyboard_notifier(&keyboard_notifier_block);
 	unregister_vt_notifier(&vt_notifier_block);
 	speakup_unregister_devsynth();
+<<<<<<< HEAD
+=======
+	speakup_cancel_paste();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	del_timer(&cursor_timer);
 	kthread_stop(speakup_task);
 	speakup_task = NULL;

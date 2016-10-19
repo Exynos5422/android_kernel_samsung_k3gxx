@@ -39,6 +39,20 @@ struct fpsimd_state {
 	};
 };
 
+<<<<<<< HEAD
+=======
+/*
+ * Struct for stacking the bottom 'n' FP/SIMD registers.
+ */
+struct fpsimd_partial_state {
+	u32		fpsr;
+	u32		fpcr;
+	u32		num_regs;
+	__uint128_t	vregs[32];
+};
+
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #if defined(__KERNEL__) && defined(CONFIG_COMPAT)
 /* Masks for extracting the FPSR and FPCR from the FPSCR */
 #define VFP_FPSCR_STAT_MASK	0xf800009f
@@ -58,6 +72,16 @@ extern void fpsimd_load_state(struct fpsimd_state *state);
 extern void fpsimd_thread_switch(struct task_struct *next);
 extern void fpsimd_flush_thread(void);
 
+<<<<<<< HEAD
+=======
+extern void fpsimd_preserve_current_state(void);
+extern void fpsimd_update_current_state(struct fpsimd_state *state);
+
+extern void fpsimd_save_partial_state(struct fpsimd_partial_state *state,
+				      u32 num_regs);
+extern void fpsimd_load_partial_state(struct fpsimd_partial_state *state);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif
 
 #endif

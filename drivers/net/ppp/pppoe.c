@@ -979,8 +979,11 @@ static int pppoe_recvmsg(struct kiocb *iocb, struct socket *sock,
 	if (error < 0)
 		goto end;
 
+<<<<<<< HEAD
 	m->msg_namelen = 0;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (skb) {
 		total_len = min_t(size_t, total_len, skb->len);
 		error = skb_copy_datagram_iovec(skb, 0, m->msg_iov, total_len);

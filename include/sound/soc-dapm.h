@@ -294,7 +294,14 @@ struct device;
 	.get = snd_soc_dapm_get_pin_switch, \
 	.put = snd_soc_dapm_put_pin_switch, \
 	.private_value = (unsigned long)xname }
+<<<<<<< HEAD
 
+=======
+#define SND_SOC_DAPM_MICBIAS_E(wname, wreg, wshift, winvert, wevent, wflags) \
+{	.id = snd_soc_dapm_micbias, .name = wname, .reg = wreg, .shift = wshift, \
+	.invert = winvert, .kcontrol_news = NULL, .num_kcontrols = 0, \
+	.event = wevent, .event_flags = wflags}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /* dapm stream operations */
 #define SND_SOC_DAPM_STREAM_NOP			0x0
 #define SND_SOC_DAPM_STREAM_START		0x1

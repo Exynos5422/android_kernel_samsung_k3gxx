@@ -543,7 +543,11 @@ static void rb_wake_up_waiters(struct irq_work *work)
  * as data is added to any of the @buffer's cpu buffers. Otherwise
  * it will wait for data to be added to a specific cpu buffer.
  */
+<<<<<<< HEAD
 void ring_buffer_wait(struct ring_buffer *buffer, int cpu)
+=======
+int ring_buffer_wait(struct ring_buffer *buffer, int cpu)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	struct ring_buffer_per_cpu *cpu_buffer;
 	DEFINE_WAIT(wait);
@@ -557,6 +561,11 @@ void ring_buffer_wait(struct ring_buffer *buffer, int cpu)
 	if (cpu == RING_BUFFER_ALL_CPUS)
 		work = &buffer->irq_work;
 	else {
+<<<<<<< HEAD
+=======
+		if (!cpumask_test_cpu(cpu, buffer->cpumask))
+			return -ENODEV;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		cpu_buffer = buffer->buffers[cpu];
 		work = &cpu_buffer->irq_work;
 	}
@@ -591,6 +600,10 @@ void ring_buffer_wait(struct ring_buffer *buffer, int cpu)
 		schedule();
 
 	finish_wait(&work->waiters, &wait);
+<<<<<<< HEAD
+=======
+	return 0;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 /**
@@ -1301,7 +1314,11 @@ struct ring_buffer *__ring_buffer_alloc(unsigned long size, unsigned flags,
 	 * In that off case, we need to allocate for all possible cpus.
 	 */
 #ifdef CONFIG_HOTPLUG_CPU
+<<<<<<< HEAD
 	get_online_cpus();
+=======
+	cpu_notifier_register_begin();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	cpumask_copy(buffer->cpumask, cpu_online_mask);
 #else
 	cpumask_copy(buffer->cpumask, cpu_possible_mask);
@@ -1324,10 +1341,17 @@ struct ring_buffer *__ring_buffer_alloc(unsigned long size, unsigned flags,
 #ifdef CONFIG_HOTPLUG_CPU
 	buffer->cpu_notify.notifier_call = rb_cpu_notify;
 	buffer->cpu_notify.priority = 0;
+<<<<<<< HEAD
 	register_cpu_notifier(&buffer->cpu_notify);
 #endif
 
 	put_online_cpus();
+=======
+	__register_cpu_notifier(&buffer->cpu_notify);
+	cpu_notifier_register_done();
+#endif
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	mutex_init(&buffer->mutex);
 
 	return buffer;
@@ -1341,7 +1365,13 @@ struct ring_buffer *__ring_buffer_alloc(unsigned long size, unsigned flags,
 
  fail_free_cpumask:
 	free_cpumask_var(buffer->cpumask);
+<<<<<<< HEAD
 	put_online_cpus();
+=======
+#ifdef CONFIG_HOTPLUG_CPU
+	cpu_notifier_register_done();
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
  fail_free_buffer:
 	kfree(buffer);
@@ -1358,16 +1388,28 @@ ring_buffer_free(struct ring_buffer *buffer)
 {
 	int cpu;
 
+<<<<<<< HEAD
 	get_online_cpus();
 
 #ifdef CONFIG_HOTPLUG_CPU
 	unregister_cpu_notifier(&buffer->cpu_notify);
+=======
+#ifdef CONFIG_HOTPLUG_CPU
+	cpu_notifier_register_begin();
+	__unregister_cpu_notifier(&buffer->cpu_notify);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif
 
 	for_each_buffer_cpu(buffer, cpu)
 		rb_free_cpu_buffer(buffer->buffers[cpu]);
 
+<<<<<<< HEAD
 	put_online_cpus();
+=======
+#ifdef CONFIG_HOTPLUG_CPU
+	cpu_notifier_register_done();
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	kfree(buffer->buffers);
 	free_cpumask_var(buffer->cpumask);
@@ -2396,6 +2438,16 @@ __rb_reserve_next(struct ring_buffer_per_cpu *cpu_buffer,
 	write &= RB_WRITE_MASK;
 	tail = write - length;
 
+<<<<<<< HEAD
+=======
+	/*
+	 * If this is the first commit on the page, then it has the same
+	 * timestamp as the page itself.
+	 */
+	if (!tail)
+		delta = 0;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* See if we shot pass the end of this buffer page */
 	if (unlikely(write > BUF_PAGE_SIZE))
 		return rb_move_tail(cpu_buffer, length, tail,

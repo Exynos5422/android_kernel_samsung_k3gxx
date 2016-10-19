@@ -620,7 +620,11 @@ static netdev_tx_t ip6gre_xmit2(struct sk_buff *skb,
 	struct ip6_tnl *tunnel = netdev_priv(dev);
 	struct net_device *tdev;    /* Device to other host */
 	struct ipv6hdr  *ipv6h;     /* Our new IP header */
+<<<<<<< HEAD
 	unsigned int max_headroom;  /* The extra header space needed */
+=======
+	unsigned int max_headroom = 0; /* The extra header space needed */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	int    gre_hlen;
 	struct ipv6_tel_txoption opt;
 	int    mtu;
@@ -693,7 +697,11 @@ static netdev_tx_t ip6gre_xmit2(struct sk_buff *skb,
 			tunnel->err_count = 0;
 	}
 
+<<<<<<< HEAD
 	max_headroom = LL_RESERVED_SPACE(tdev) + gre_hlen + dst->header_len;
+=======
+	max_headroom += LL_RESERVED_SPACE(tdev) + gre_hlen + dst->header_len;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (skb_headroom(skb) < max_headroom || skb_shared(skb) ||
 	    (skb_cloned(skb) && !skb_clone_writable(skb, 0))) {
@@ -1549,6 +1557,18 @@ static int ip6gre_changelink(struct net_device *dev, struct nlattr *tb[],
 	return 0;
 }
 
+<<<<<<< HEAD
+=======
+static void ip6gre_dellink(struct net_device *dev, struct list_head *head)
+{
+	struct net *net = dev_net(dev);
+	struct ip6gre_net *ign = net_generic(net, ip6gre_net_id);
+
+	if (dev != ign->fb_tunnel_dev)
+		unregister_netdevice_queue(dev, head);
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static size_t ip6gre_get_size(const struct net_device *dev)
 {
 	return
@@ -1626,6 +1646,10 @@ static struct rtnl_link_ops ip6gre_link_ops __read_mostly = {
 	.validate	= ip6gre_tunnel_validate,
 	.newlink	= ip6gre_newlink,
 	.changelink	= ip6gre_changelink,
+<<<<<<< HEAD
+=======
+	.dellink	= ip6gre_dellink,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	.get_size	= ip6gre_get_size,
 	.fill_info	= ip6gre_fill_info,
 };

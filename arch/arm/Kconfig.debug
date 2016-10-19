@@ -2,6 +2,21 @@ menu "Kernel hacking"
 
 source "lib/Kconfig.debug"
 
+<<<<<<< HEAD
+=======
+config ARM_PTDUMP
+	bool "Export kernel pagetable layout to userspace via debugfs"
+	depends on DEBUG_KERNEL
+	select DEBUG_FS
+	---help---
+	  Say Y here if you want to show the kernel pagetable layout in a
+	  debugfs file. This information is only useful for kernel developers
+	  who are working in architecture specific areas of the kernel.
+	  It is probably not a good idea to enable this feature in a production
+	  kernel.
+	  If in doubt, say "N"
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 config STRICT_DEVMEM
 	bool "Filter access to /dev/mem"
 	depends on MMU
@@ -63,6 +78,7 @@ config DEBUG_USER
 	      8 - SIGSEGV faults
 	     16 - SIGBUS faults
 
+<<<<<<< HEAD
 config DEBUG_RODATA
 	bool "Write protect kernel text section"
 	default n
@@ -83,6 +99,43 @@ config DEBUG_RODATA_TEST
 	  This option enables a testcase for the DEBUG_RODATA
 	  feature.
 	  If in doubt, say "N"
+=======
+config FORCE_PAGES
+	bool "Force lowmem to be mapped with 4K pages"
+        help
+          There are some advanced debug features that can only be done when
+          memory is mapped with pages instead of sections. Enable this option
+          to always map lowmem pages with pages. This may have a performance
+          cost due to increased TLB pressure.
+
+          If unsure say N.
+
+config FREE_PAGES_RDONLY
+	bool "Set pages as read only while on the buddy list"
+	select FORCE_PAGES
+	select DEBUG_PAGEALLOC
+	help
+          Pages are always mapped in the kernel. This means that anyone
+          can write to the page if they have the address. Enable this option
+          to mark pages as read only to trigger a fault if any code attempts
+          to write to a page on the buddy list. This may have a performance
+          impact.
+
+          If unsure, say N.
+
+config KERNEL_TEXT_RDONLY
+	bool "Set kernel text section pages as read only"
+	depends on FREE_PAGES_RDONLY
+	help
+	  The kernel text pages are always mapped in the kernel.
+	  This means that anyone can write to the page if they have
+	  the address. Enable this option to mark the kernel text pages
+	  as read only to trigger a fault if any code attempts to write
+	  to a page part of the kernel text section. This may have a
+	  performance impact.
+
+	  If unsure, say N.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 # These options are only for real kernel hackers who want to get their hands dirty.
 config DEBUG_LL
@@ -286,6 +339,7 @@ choice
 		  Say Y here if you want kernel low-level debugging support
 		  on MMP UART3.
 
+<<<<<<< HEAD
 	config DEBUG_MSM_UART1
 		bool "Kernel low-level debugging messages via MSM UART1"
 		depends on ARCH_MSM7X00A || ARCH_MSM7X30 || ARCH_QSD8X50
@@ -323,6 +377,8 @@ choice
 		  Say Y here if you want the debug print routines to direct
 		  their output to the serial port on MSM 8960 devices.
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	config DEBUG_MVEBU_UART
 		bool "Kernel low-level debugging messages via MVEBU UART"
 		depends on ARCH_MVEBU
@@ -690,6 +746,17 @@ config EARLY_PRINTK
 	  kernel low-level debugging functions. Add earlyprintk to your
 	  kernel parameters to enable this console.
 
+<<<<<<< HEAD
+=======
+config EARLY_PRINTK_DIRECT
+	bool "Early printk direct"
+	depends on DEBUG_LL
+	help
+	  Say Y here if you want to have an early console using the
+	  kernel low-level debugging functions and EARLY_PRINTK is
+	  not early enough.
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 config OC_ETM
 	bool "On-chip ETM and ETB"
 	depends on ARM_AMBA
@@ -713,6 +780,7 @@ config PID_IN_CONTEXTIDR
 	  additional instructions during context switch. Say Y here only if you
 	  are planning to use hardware trace tools with this kernel.
 
+<<<<<<< HEAD
 comment "Samsung Rooting Restriction Feature"
 config SEC_RESTRICT_ROOTING
 	bool "Samsung Rooting Restriction Feature"
@@ -746,5 +814,17 @@ config SEC_RESTRICT_ROOTING_LOG
 	   Say Y here if you want to see result of restricting SETUID or FORK. It will
 	   be displayed by kernel error log. Saying N will not be displayed anything.
 
+=======
+config DEBUG_SET_MODULE_RONX
+	bool "Set loadable kernel module data as NX and text as RO"
+	depends on MODULES
+	---help---
+	  This option helps catch unintended modifications to loadable
+	  kernel module's text and read-only data. It also prevents execution
+	  of module data. Such protection may interfere with run-time code
+	  patching and dynamic kernel tracing - and they might also protect
+	  against certain classes of kernel exploits.
+	  If in doubt, say "N".
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 endmenu

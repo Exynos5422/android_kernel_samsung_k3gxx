@@ -387,7 +387,11 @@ static int raw_send_hdrinc(struct sock *sk, struct flowi4 *fl4,
 		iph->check   = 0;
 		iph->tot_len = htons(length);
 		if (!iph->id)
+<<<<<<< HEAD
 			ip_select_ident(iph, &rt->dst, NULL);
+=======
+			ip_select_ident(skb, &rt->dst, NULL);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 		iph->check = ip_fast_csum((unsigned char *)iph, iph->ihl);
 	}
@@ -571,7 +575,12 @@ static int raw_sendmsg(struct kiocb *iocb, struct sock *sk, struct msghdr *msg,
 	flowi4_init_output(&fl4, ipc.oif, sk->sk_mark, tos,
 			   RT_SCOPE_UNIVERSE,
 			   inet->hdrincl ? IPPROTO_RAW : sk->sk_protocol,
+<<<<<<< HEAD
 			   inet_sk_flowi_flags(sk) | FLOWI_FLAG_CAN_SLEEP,
+=======
+			   inet_sk_flowi_flags(sk) | FLOWI_FLAG_CAN_SLEEP |
+			    (inet->hdrincl ? FLOWI_FLAG_KNOWN_NH : 0),
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			   daddr, saddr, 0, 0,
 			   sock_i_uid(sk));
 
@@ -692,11 +701,16 @@ static int raw_recvmsg(struct kiocb *iocb, struct sock *sk, struct msghdr *msg,
 	if (flags & MSG_OOB)
 		goto out;
 
+<<<<<<< HEAD
 	if (addr_len)
 		*addr_len = sizeof(*sin);
 
 	if (flags & MSG_ERRQUEUE) {
 		err = ip_recv_error(sk, msg, len);
+=======
+	if (flags & MSG_ERRQUEUE) {
+		err = ip_recv_error(sk, msg, len, addr_len);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		goto out;
 	}
 
@@ -722,6 +736,10 @@ static int raw_recvmsg(struct kiocb *iocb, struct sock *sk, struct msghdr *msg,
 		sin->sin_addr.s_addr = ip_hdr(skb)->saddr;
 		sin->sin_port = 0;
 		memset(&sin->sin_zero, 0, sizeof(sin->sin_zero));
+<<<<<<< HEAD
+=======
+		*addr_len = sizeof(*sin);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 	if (inet->cmsg_flags)
 		ip_cmsg_recv(msg, skb);

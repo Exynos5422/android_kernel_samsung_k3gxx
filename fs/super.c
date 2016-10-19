@@ -717,7 +717,10 @@ int do_remount_sb(struct super_block *sb, int flags, void *data, int force)
 	if (flags & MS_RDONLY)
 		acct_auto_close(sb);
 	shrink_dcache_sb(sb);
+<<<<<<< HEAD
 	sync_filesystem(sb);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	remount_ro = (flags & MS_RDONLY) && !(sb->s_flags & MS_RDONLY);
 
@@ -733,6 +736,11 @@ int do_remount_sb(struct super_block *sb, int flags, void *data, int force)
 		}
 	}
 
+<<<<<<< HEAD
+=======
+	sync_filesystem(sb);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (sb->s_op->remount_fs) {
 		retval = sb->s_op->remount_fs(sb, &flags, data);
 		if (retval) {

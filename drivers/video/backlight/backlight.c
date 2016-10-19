@@ -370,6 +370,7 @@ void backlight_device_unregister(struct backlight_device *bd)
 }
 EXPORT_SYMBOL(backlight_device_unregister);
 
+<<<<<<< HEAD
 static void devm_backlight_device_release(struct device *dev, void *res)
 {
 	struct backlight_device *backlight = *(struct backlight_device **)res;
@@ -445,6 +446,8 @@ void devm_backlight_device_unregister(struct device *dev,
 }
 EXPORT_SYMBOL(devm_backlight_device_unregister);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifdef CONFIG_OF
 static int of_parent_match(struct device *dev, const void *data)
 {

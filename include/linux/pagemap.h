@@ -25,9 +25,12 @@ enum mapping_flags {
 	AS_MM_ALL_LOCKS	= __GFP_BITS_SHIFT + 2,	/* under mm_take_all_locks() */
 	AS_UNEVICTABLE	= __GFP_BITS_SHIFT + 3,	/* e.g., ramdisk, SHM_LOCK */
 	AS_BALLOON_MAP  = __GFP_BITS_SHIFT + 4, /* balloon page special map */
+<<<<<<< HEAD
 #ifdef CONFIG_SDP
 	AS_SENSITIVE = __GFP_BITS_SHIFT + 5, /* Group of sensitive pages to be cleaned up */
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 static inline void mapping_set_error(struct address_space *mapping, int error)
@@ -87,6 +90,7 @@ static inline void mapping_set_gfp_mask(struct address_space *m, gfp_t mask)
 				(__force unsigned long)mask;
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_SDP
 static inline void mapping_set_sensitive(struct address_space *mapping)
 {
@@ -106,6 +110,8 @@ static inline int mapping_sensitive(struct address_space *mapping)
 }
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * The page cache can done in larger chunks than
  * one page, because it allows for more efficient
@@ -243,7 +249,20 @@ extern struct page *__page_cache_alloc(gfp_t gfp);
 #else
 static inline struct page *__page_cache_alloc(gfp_t gfp)
 {
+<<<<<<< HEAD
 	return alloc_pages(gfp, 0);
+=======
+	struct page *page;
+
+	page = alloc_pages(gfp, 0);
+
+	if (page && is_cma_pageblock(page)) {
+		__free_page(page);
+		page = alloc_pages(gfp & ~__GFP_MOVABLE, 0);
+	}
+
+	return page;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 #endif
 

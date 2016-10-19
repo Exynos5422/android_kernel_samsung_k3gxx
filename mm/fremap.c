@@ -41,10 +41,13 @@ static void zap_pte(struct mm_struct *mm, struct vm_area_struct *vma,
 			page_cache_release(page);
 			update_hiwater_rss(mm);
 			dec_mm_counter(mm, MM_FILEPAGES);
+<<<<<<< HEAD
 #ifdef CONFIG_ZOOM_KILLER
 			if (!PageHighMem(page))
 				dec_mm_counter(mm, MM_LOW_FILEPAGES);
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		}
 	} else {
 		if (!pte_file(pte))
@@ -207,9 +210,16 @@ get_write_lock:
 		if (mapping_cap_account_dirty(mapping)) {
 			unsigned long addr;
 			struct file *file = get_file(vma->vm_file);
+<<<<<<< HEAD
 
 			addr = mmap_region(file, start, size,
 					vma->vm_flags, pgoff);
+=======
+			/* mmap_region may free vma; grab the info now */
+			vm_flags = vma->vm_flags;
+
+			addr = mmap_region(file, start, size, vm_flags, pgoff);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			fput(file);
 			if (IS_ERR_VALUE(addr)) {
 				err = addr;
@@ -217,7 +227,11 @@ get_write_lock:
 				BUG_ON(addr != start);
 				err = 0;
 			}
+<<<<<<< HEAD
 			goto out;
+=======
+			goto out_freed;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		}
 		mutex_lock(&mapping->i_mmap_mutex);
 		flush_dcache_mmap_lock(mapping);
@@ -252,6 +266,10 @@ get_write_lock:
 out:
 	if (vma)
 		vm_flags = vma->vm_flags;
+<<<<<<< HEAD
+=======
+out_freed:
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (likely(!has_write_lock))
 		up_read(&mm->mmap_sem);
 	else

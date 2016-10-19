@@ -1622,7 +1622,11 @@ int mwifiex_ret_802_11_scan(struct mwifiex_private *priv,
 		const u8 *ie_buf;
 		size_t ie_len;
 		u16 channel = 0;
+<<<<<<< HEAD
 		u64 fw_tsf = 0;
+=======
+		__le64 fw_tsf = 0;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		u16 beacon_size = 0;
 		u32 curr_bcn_bytes;
 		u32 freq;
@@ -1749,7 +1753,11 @@ int mwifiex_ret_802_11_scan(struct mwifiex_private *priv,
 					      ie_buf, ie_len, rssi, GFP_KERNEL);
 				bss_priv = (struct mwifiex_bss_priv *)bss->priv;
 				bss_priv->band = band;
+<<<<<<< HEAD
 				bss_priv->fw_tsf = fw_tsf;
+=======
+				bss_priv->fw_tsf = le64_to_cpu(fw_tsf);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				if (priv->media_connected &&
 				    !memcmp(bssid,
 					    priv->curr_bss_params.bss_descriptor
@@ -2040,12 +2048,21 @@ mwifiex_save_curr_bcn(struct mwifiex_private *priv)
 			 curr_bss->ht_info_offset);
 
 	if (curr_bss->bcn_vht_cap)
+<<<<<<< HEAD
 		curr_bss->bcn_ht_cap = (void *)(curr_bss->beacon_buf +
 						curr_bss->vht_cap_offset);
 
 	if (curr_bss->bcn_vht_oper)
 		curr_bss->bcn_ht_oper = (void *)(curr_bss->beacon_buf +
 						 curr_bss->vht_info_offset);
+=======
+		curr_bss->bcn_vht_cap = (void *)(curr_bss->beacon_buf +
+						 curr_bss->vht_cap_offset);
+
+	if (curr_bss->bcn_vht_oper)
+		curr_bss->bcn_vht_oper = (void *)(curr_bss->beacon_buf +
+						  curr_bss->vht_info_offset);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (curr_bss->bcn_bss_co_2040)
 		curr_bss->bcn_bss_co_2040 =

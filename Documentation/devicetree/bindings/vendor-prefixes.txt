@@ -11,37 +11,76 @@ amcc	Applied Micro Circuits Corporation (APM, formally AMCC)
 apm	Applied Micro Circuits Corporation (APM)
 arm	ARM Ltd.
 atmel	Atmel Corporation
+<<<<<<< HEAD
 bosch	Bosch Sensortec GmbH
 brcm	Broadcom Corporation
+=======
+avago	Avago Technologies
+awinic	AWINIC Technology Co.Ltd
+bosch	Bosch Sensortec GmbH
+brcm	Broadcom Corporation
+capella	Capella Microsystems, Inc.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 cavium	Cavium, Inc.
 chrp	Common Hardware Reference Platform
 cirrus	Cirrus Logic, Inc.
 cortina	Cortina Systems, Inc.
 dallas	Maxim Integrated Products (formerly Dallas Semiconductor)
 denx	Denx Software Engineering
+<<<<<<< HEAD
 emmicro	EM Microelectronic
 epson	Seiko Epson Corp.
 est	ESTeem Wireless Modems
 fsl	Freescale Semiconductor
 GEFanuc	GE Fanuc Intelligent Platforms Embedded Systems, Inc.
+=======
+di	Dyna Image Corporation
+emmicro	EM Microelectronic
+epson	Seiko Epson Corp.
+est	ESTeem Wireless Modems
+fairchild	Fairchild Semiconductor International, Inc.
+focaltech Focaltech systems
+fsl	Freescale Semiconductor
+GEFanuc	GE Fanuc Intelligent Platforms Embedded Systems, Inc.
+goodix	Goodix. Ltd.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 gef	GE Fanuc Intelligent Platforms Embedded Systems, Inc.
 hp	Hewlett Packard
 ibm	International Business Machines (IBM)
 idt	Integrated Device Technologies, Inc.
 img	Imagination Technologies Ltd.
 intercontrol	Inter Control Group
+<<<<<<< HEAD
 linux	Linux-specific binding
 marvell	Marvell Technology Group Ltd.
 maxim	Maxim Integrated Products
+=======
+invn	InvenSense Inc.
+jdi     Japan Display Inc.
+lattice	Lattice Semiconductor.
+linux	Linux-specific binding
+liteon	Lite-On Technology Corporation
+kionix	Kionix Inc.
+marvell	Marvell Technology Group Ltd.
+maxim	Maxim Integrated Products
+memsic	MEMSIC, Inc
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 mosaixtech	Mosaix Technologies, Inc.
 national	National Semiconductor
 nintendo	Nintendo
 nvidia	NVIDIA
 nxp	NXP Semiconductors
 onnn	ON Semiconductor Corp.
+<<<<<<< HEAD
 picochip	Picochip Ltd
 powervr	PowerVR (deprecated, use img)
 qcom	Qualcomm, Inc.
+=======
+ovti	OmniVision Technologies, Inc.
+picochip	Picochip Ltd
+powervr	PowerVR (deprecated, use img)
+qcom	Qualcomm Technologies, Inc
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 ralink	Mediatek/Ralink Technology Corp.
 ramtron	Ramtron International
 realtek Realtek Semiconductor Corp.
@@ -49,14 +88,28 @@ renesas	Renesas Electronics Corporation
 samsung	Samsung Semiconductor
 sbs	Smart Battery System
 schindler	Schindler
+<<<<<<< HEAD
+=======
+smartv SmartV Ltd
+stk	Sensortek Technology Corporation.(formerly Sitronix Technology Co., Ltd.)
+shinetech	Shine Tech Corporation, Ltd.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 sil	Silicon Image
 silabs	Silicon Laboratories
 simtek
 sirf	SiRF Technology, Inc.
+<<<<<<< HEAD
+=======
+sne	Sony
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 snps 	Synopsys, Inc.
 st	STMicroelectronics
 ste	ST-Ericsson
 stericsson	ST-Ericsson
+<<<<<<< HEAD
+=======
+synaptics	Synaptics Inc.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 ti	Texas Instruments
 toshiba	Toshiba Corporation
 via	VIA Technologies, Inc.

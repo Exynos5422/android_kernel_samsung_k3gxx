@@ -8,6 +8,10 @@
 #include <linux/spinlock.h>
 #include <linux/rbtree.h>
 #include <linux/rwsem.h>
+<<<<<<< HEAD
+=======
+#include <linux/stacktrace.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <linux/completion.h>
 #include <linux/cpumask.h>
 #include <linux/page-debug-flags.h>
@@ -38,6 +42,7 @@ struct address_space;
  * allows the use of atomic double word operations on the flags/mapping
  * and lru list pointers also.
  */
+<<<<<<< HEAD
 
 #ifdef CONFIG_PTRACK_DEBUG
 #define PTRACK_ADDRS_COUNT 16
@@ -57,6 +62,8 @@ enum ptrack_item {
 	PTRACK_ITEM_NUM};
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 struct page {
 	/* First double word block */
 	unsigned long flags;		/* Atomic flags, some possibly
@@ -184,6 +191,10 @@ struct page {
 #ifdef CONFIG_WANT_PAGE_DEBUG_FLAGS
 	unsigned long debug_flags;	/* Use atomic bitops on this */
 #endif
+<<<<<<< HEAD
+=======
+	struct task_struct *tsk_dirty;	/* task that sets this page dirty */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #ifdef CONFIG_KMEMCHECK
 	/*
@@ -196,12 +207,20 @@ struct page {
 #ifdef LAST_NID_NOT_IN_PAGE_FLAGS
 	int _last_nid;
 #endif
+<<<<<<< HEAD
 
 #ifdef CONFIG_PTRACK_DEBUG
 	struct ptrack * ptrack;
 #ifdef CONFIG_BUFFERED_PTRACK
 	int ptrack_curr[PTRACK_ITEM_NUM];
 #endif
+=======
+#ifdef CONFIG_PAGE_OWNER
+	int order;
+	gfp_t gfp_mask;
+	struct stack_trace trace;
+	unsigned long trace_entries[8];
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif
 }
 /*
@@ -337,10 +356,13 @@ enum {
 	MM_FILEPAGES,
 	MM_ANONPAGES,
 	MM_SWAPENTS,
+<<<<<<< HEAD
 #ifdef CONFIG_ZOOM_KILLER
 	MM_LOW_FILEPAGES,
 	MM_LOW_ANONPAGES,
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	NR_MM_COUNTERS
 };
 
@@ -365,12 +387,19 @@ struct mm_struct {
 	unsigned long (*get_unmapped_area) (struct file *filp,
 				unsigned long addr, unsigned long len,
 				unsigned long pgoff, unsigned long flags);
+<<<<<<< HEAD
 	void (*unmap_area) (struct mm_struct *mm, unsigned long addr);
 #endif
 	unsigned long mmap_base;		/* base of mmap area */
 	unsigned long task_size;		/* size of task vm space */
 	unsigned long cached_hole_size; 	/* if non-zero, the largest hole below free_area_cache */
 	unsigned long free_area_cache;		/* first hole of size cached_hole_size or larger */
+=======
+#endif
+	unsigned long mmap_base;		/* base of mmap area */
+	unsigned long mmap_legacy_base;         /* base of mmap area in bottom-up allocations */
+	unsigned long task_size;		/* size of task vm space */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	unsigned long highest_vm_end;		/* highest vma end address */
 	pgd_t * pgd;
 	atomic_t mm_users;			/* How many users with user space? */
@@ -471,6 +500,17 @@ struct mm_struct {
 	 */
 	int first_nid;
 #endif
+<<<<<<< HEAD
+=======
+#if defined(CONFIG_NUMA_BALANCING) || defined(CONFIG_COMPACTION)
+	/*
+	 * An operation with batched TLB flushing is going on. Anything that
+	 * can move process memory needs to flush the TLB when moving a
+	 * PROT_NONE or PROT_NUMA mapped page.
+	 */
+	bool tlb_flush_pending;
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct uprobes_state uprobes_state;
 };
 
@@ -491,6 +531,49 @@ static inline cpumask_t *mm_cpumask(struct mm_struct *mm)
 	return mm->cpu_vm_mask_var;
 }
 
+<<<<<<< HEAD
+=======
+#if defined(CONFIG_NUMA_BALANCING) || defined(CONFIG_COMPACTION)
+/*
+ * Memory barriers to keep this state in sync are graciously provided by
+ * the page table locks, outside of which no page table modifications happen.
+ * The barriers below prevent the compiler from re-ordering the instructions
+ * around the memory barriers that are already present in the code.
+ */
+static inline bool mm_tlb_flush_pending(struct mm_struct *mm)
+{
+	barrier();
+	return mm->tlb_flush_pending;
+}
+static inline void set_tlb_flush_pending(struct mm_struct *mm)
+{
+	mm->tlb_flush_pending = true;
+
+	/*
+	 * Guarantee that the tlb_flush_pending store does not leak into the
+	 * critical section updating the page tables
+	 */
+	smp_mb__before_spinlock();
+}
+/* Clearing is done after a TLB flush, which also provides a barrier. */
+static inline void clear_tlb_flush_pending(struct mm_struct *mm)
+{
+	barrier();
+	mm->tlb_flush_pending = false;
+}
+#else
+static inline bool mm_tlb_flush_pending(struct mm_struct *mm)
+{
+	return false;
+}
+static inline void set_tlb_flush_pending(struct mm_struct *mm)
+{
+}
+static inline void clear_tlb_flush_pending(struct mm_struct *mm)
+{
+}
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /* Return the name for an anonymous mapping or NULL for a file-backed mapping */
 static inline const char __user *vma_get_anon_name(struct vm_area_struct *vma)

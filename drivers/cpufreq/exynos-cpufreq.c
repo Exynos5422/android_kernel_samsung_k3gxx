@@ -20,7 +20,11 @@
 
 #include <plat/cpu.h>
 
+<<<<<<< HEAD
 #include <mach/cpufreq.h>
+=======
+#include "exynos-cpufreq.h"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 static struct exynos_dvfs_info *exynos_info;
 
@@ -283,7 +287,11 @@ static int __init exynos_cpufreq_init(void)
 {
 	int ret = -EINVAL;
 
+<<<<<<< HEAD
 	exynos_info = kzalloc(sizeof(struct exynos_dvfs_info), GFP_KERNEL);
+=======
+	exynos_info = kzalloc(sizeof(*exynos_info), GFP_KERNEL);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (!exynos_info)
 		return -ENOMEM;
 

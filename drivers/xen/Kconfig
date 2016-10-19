@@ -140,7 +140,10 @@ config XEN_GRANT_DEV_ALLOC
 
 config SWIOTLB_XEN
 	def_bool y
+<<<<<<< HEAD
 	depends on PCI && X86
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	select SWIOTLB
 
 config XEN_TMEM

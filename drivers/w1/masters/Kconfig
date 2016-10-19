@@ -42,7 +42,11 @@ config W1_MASTER_MXC
 
 config W1_MASTER_DS1WM
 	tristate "Maxim DS1WM 1-wire busmaster"
+<<<<<<< HEAD
 	depends on W1 && GENERIC_HARDIRQS
+=======
+	depends on W1
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	help
 	  Say Y here to enable the DS1WM 1-wire driver, such as that
 	  in HP iPAQ devices like h5xxx, h2200, and ASIC3-based like
@@ -65,6 +69,7 @@ config HDQ_MASTER_OMAP
 	  Say Y here if you want support for the 1-wire or HDQ Interface
 	  on an OMAP processor.
 
+<<<<<<< HEAD
 config W1_MASTER_GPIO_EXYNOS
 	tristate "GPIO 1-wire busmaster for exynos AP"
 	default n
@@ -85,5 +90,7 @@ config W1_MASTER_GPIO_EXYNOS5433
 	help
 	  Say Y here if you want to communicate with your 1-wire devices using
 	  GPIO pins in Exynos AP.
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 endmenu
 

@@ -1,6 +1,10 @@
 /* ehci-msm.c - HSUSB Host Controller Driver Implementation
  *
+<<<<<<< HEAD
  * Copyright (c) 2008-2011, Code Aurora Forum. All rights reserved.
+=======
+ * Copyright (c) 2008-2014, The Linux Foundation. All rights reserved.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  *
  * Partly derived from ehci-fsl.c and ehci-hcd.c
  * Copyright (c) 2000-2004 by David Brownell
@@ -29,7 +33,14 @@
 #include <linux/module.h>
 #include <linux/platform_device.h>
 #include <linux/pm_runtime.h>
+<<<<<<< HEAD
 #include <linux/usb/otg.h>
+=======
+#include <linux/dma-mapping.h>
+
+#include <linux/usb/otg.h>
+#include <linux/usb/msm_hsusb.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <linux/usb/msm_hsusb_hw.h>
 #include <linux/usb.h>
 #include <linux/usb/hcd.h>
@@ -41,7 +52,11 @@
 #define DRIVER_DESC "Qualcomm On-Chip EHCI Host Controller"
 
 static const char hcd_name[] = "ehci-msm";
+<<<<<<< HEAD
 static struct hc_driver __read_mostly msm_hc_driver;
+=======
+static struct hc_driver __read_mostly ehci_msm_hc_driver;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static struct usb_phy *phy;
 
 static int ehci_msm_reset(struct usb_hcd *hcd)
@@ -51,12 +66,17 @@ static int ehci_msm_reset(struct usb_hcd *hcd)
 
 	ehci->caps = USB_CAPLENGTH;
 	hcd->has_tt = 1;
+<<<<<<< HEAD
+=======
+	ehci->no_testmode_suspend = true;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	retval = ehci_setup(hcd);
 	if (retval)
 		return retval;
 
 	/* bursts of unspecified length. */
+<<<<<<< HEAD
 	writel(0, USB_AHBBURST);
 	/* Use the AHB transactor */
 	writel(0, USB_AHBMODE);
@@ -66,6 +86,31 @@ static int ehci_msm_reset(struct usb_hcd *hcd)
 	return 0;
 }
 
+=======
+	writel_relaxed(0, USB_AHBBURST);
+	/* Use the AHB transactor */
+	writel_relaxed(0x08, USB_AHBMODE);
+	/* Disable streaming mode and select host mode */
+	writel_relaxed(0x13, USB_USBMODE);
+
+	if (hcd->phy->flags & ENABLE_SECONDARY_PHY) {
+		ehci_dbg(ehci, "using secondary hsphy\n");
+		writel_relaxed(readl_relaxed(USB_PHY_CTRL2) | (1<<16),
+							USB_PHY_CTRL2);
+	}
+
+	/* Disable ULPI_TX_PKT_EN_CLR_FIX which is valid only for HSIC */
+	writel_relaxed(readl_relaxed(USB_GENCONFIG2) & ~(1<<19),
+					USB_GENCONFIG2);
+	return 0;
+}
+
+static const struct ehci_driver_overrides ehci_msm_overrides __initdata = {
+	.reset = ehci_msm_reset,
+};
+
+static u64 msm_ehci_dma_mask = DMA_BIT_MASK(32);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int ehci_msm_probe(struct platform_device *pdev)
 {
 	struct usb_hcd *hcd;
@@ -74,12 +119,27 @@ static int ehci_msm_probe(struct platform_device *pdev)
 
 	dev_dbg(&pdev->dev, "ehci_msm proble\n");
 
+<<<<<<< HEAD
 	hcd = usb_create_hcd(&msm_hc_driver, &pdev->dev, dev_name(&pdev->dev));
+=======
+	if (!pdev->dev.dma_mask)
+		pdev->dev.dma_mask = &msm_ehci_dma_mask;
+	if (!pdev->dev.coherent_dma_mask)
+		pdev->dev.coherent_dma_mask = DMA_BIT_MASK(32);
+
+	hcd = usb_create_hcd(&ehci_msm_hc_driver, &pdev->dev,
+			     dev_name(&pdev->dev));
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (!hcd) {
 		dev_err(&pdev->dev, "Unable to create HCD\n");
 		return  -ENOMEM;
 	}
 
+<<<<<<< HEAD
+=======
+	hcd_to_bus(hcd)->skip_resume = true;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	hcd->irq = platform_get_irq(pdev, 0);
 	if (hcd->irq < 0) {
 		dev_err(&pdev->dev, "Unable to get IRQ resource\n");
@@ -109,7 +169,11 @@ static int ehci_msm_probe(struct platform_device *pdev)
 	 * management.
 	 */
 	phy = devm_usb_get_phy(&pdev->dev, USB_PHY_TYPE_USB2);
+<<<<<<< HEAD
 	if (IS_ERR(phy)) {
+=======
+	if (IS_ERR_OR_NULL(phy)) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		dev_err(&pdev->dev, "unable to find transceiver\n");
 		ret = -ENODEV;
 		goto put_hcd;
@@ -121,6 +185,7 @@ static int ehci_msm_probe(struct platform_device *pdev)
 		goto put_hcd;
 	}
 
+<<<<<<< HEAD
 	device_init_wakeup(&pdev->dev, 1);
 	/*
 	 * OTG device parent of HCD takes care of putting
@@ -130,6 +195,13 @@ static int ehci_msm_probe(struct platform_device *pdev)
 	pm_runtime_enable(&pdev->dev);
 
 	/* FIXME: need to call usb_add_hcd() here? */
+=======
+	hcd->phy = phy;
+	device_init_wakeup(&pdev->dev, 1);
+	pm_runtime_enable(&pdev->dev);
+
+	msm_bam_set_usb_host_dev(&pdev->dev);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return 0;
 
@@ -147,6 +219,10 @@ static int ehci_msm_remove(struct platform_device *pdev)
 	pm_runtime_disable(&pdev->dev);
 	pm_runtime_set_suspended(&pdev->dev);
 
+<<<<<<< HEAD
+=======
+	hcd->phy = NULL;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	otg_set_host(phy->otg, NULL);
 
 	/* FIXME: need to call usb_remove_hcd() here? */
@@ -156,6 +232,7 @@ static int ehci_msm_remove(struct platform_device *pdev)
 	return 0;
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_PM
 static int ehci_msm_pm_suspend(struct device *dev)
 {
@@ -165,11 +242,62 @@ static int ehci_msm_pm_suspend(struct device *dev)
 	dev_dbg(dev, "ehci-msm PM suspend\n");
 
 	return ehci_suspend(hcd, do_wakeup);
+=======
+#ifdef CONFIG_PM_RUNTIME
+static int ehci_msm_runtime_idle(struct device *dev)
+{
+	dev_dbg(dev, "ehci runtime idle\n");
+	return 0;
+}
+
+static int ehci_msm_runtime_suspend(struct device *dev)
+{
+	dev_dbg(dev, "ehci runtime suspend\n");
+	/*
+	 * Notify OTG about suspend.  It takes care of
+	 * putting the hardware in LPM.
+	 */
+	return usb_phy_set_suspend(phy, 1);
+}
+
+static int ehci_msm_runtime_resume(struct device *dev)
+{
+	struct usb_hcd *hcd = dev_get_drvdata(dev);
+	int ret;
+	u32 portsc;
+
+	dev_dbg(dev, "ehci runtime resume\n");
+	ret = usb_phy_set_suspend(phy, 0);
+	if (ret)
+		return ret;
+
+	portsc = readl_relaxed(USB_PORTSC);
+	portsc &= ~PORT_RWC_BITS;
+	portsc |= PORT_RESUME;
+	writel_relaxed(portsc, USB_PORTSC);
+
+	return ret;
+}
+#endif
+
+#ifdef CONFIG_PM_SLEEP
+static int ehci_msm_pm_suspend(struct device *dev)
+{
+	struct usb_hcd *hcd = dev_get_drvdata(dev);
+
+	dev_dbg(dev, "ehci-msm PM suspend\n");
+
+	if (!hcd->rh_registered)
+		return 0;
+
+	return usb_phy_set_suspend(phy, 1);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static int ehci_msm_pm_resume(struct device *dev)
 {
 	struct usb_hcd *hcd = dev_get_drvdata(dev);
+<<<<<<< HEAD
 
 	dev_dbg(dev, "ehci-msm PM resume\n");
 	ehci_resume(hcd, false);
@@ -184,6 +312,36 @@ static int ehci_msm_pm_resume(struct device *dev)
 static const struct dev_pm_ops ehci_msm_dev_pm_ops = {
 	.suspend         = ehci_msm_pm_suspend,
 	.resume          = ehci_msm_pm_resume,
+=======
+	int ret;
+	u32 portsc;
+
+	dev_dbg(dev, "ehci-msm PM resume\n");
+	if (!hcd->rh_registered)
+		return 0;
+
+	/* Notify OTG to bring hw out of LPM before restoring wakeup flags */
+	ret = usb_phy_set_suspend(phy, 0);
+	if (ret)
+		return ret;
+
+	ehci_resume(hcd, false);
+	portsc = readl_relaxed(USB_PORTSC);
+	portsc &= ~PORT_RWC_BITS;
+	portsc |= PORT_RESUME;
+	writel_relaxed(portsc, USB_PORTSC);
+	/* Resume root-hub to handle USB event if any else initiate LPM again */
+	usb_hcd_resume_root_hub(hcd);
+
+	return ret;
+}
+#endif
+
+static const struct dev_pm_ops ehci_msm_dev_pm_ops = {
+	SET_SYSTEM_SLEEP_PM_OPS(ehci_msm_pm_suspend, ehci_msm_pm_resume)
+	SET_RUNTIME_PM_OPS(ehci_msm_runtime_suspend, ehci_msm_runtime_resume,
+				ehci_msm_runtime_idle)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 static struct platform_driver ehci_msm_driver = {
@@ -195,17 +353,24 @@ static struct platform_driver ehci_msm_driver = {
 	},
 };
 
+<<<<<<< HEAD
 static const struct ehci_driver_overrides msm_overrides __initdata = {
 	.reset = ehci_msm_reset,
 };
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int __init ehci_msm_init(void)
 {
 	if (usb_disabled())
 		return -ENODEV;
 
 	pr_info("%s: " DRIVER_DESC "\n", hcd_name);
+<<<<<<< HEAD
 	ehci_init_driver(&msm_hc_driver, &msm_overrides);
+=======
+	ehci_init_driver(&ehci_msm_hc_driver, &ehci_msm_overrides);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return platform_driver_register(&ehci_msm_driver);
 }
 module_init(ehci_msm_init);

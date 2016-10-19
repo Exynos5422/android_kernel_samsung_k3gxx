@@ -57,6 +57,10 @@
 #include <linux/skbuff.h>
 #include <linux/can.h>
 #include <linux/can/core.h>
+<<<<<<< HEAD
+=======
+#include <linux/can/skb.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <linux/ratelimit.h>
 #include <net/net_namespace.h>
 #include <net/sock.h>
@@ -290,7 +294,11 @@ int can_send(struct sk_buff *skb, int loop)
 				return -ENOMEM;
 			}
 
+<<<<<<< HEAD
 			newskb->sk = skb->sk;
+=======
+			can_skb_set_owner(newskb, skb->sk);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			newskb->ip_summed = CHECKSUM_UNNECESSARY;
 			newskb->pkt_type = PACKET_BROADCAST;
 		}

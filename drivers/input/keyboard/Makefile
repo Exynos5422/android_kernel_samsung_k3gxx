@@ -4,8 +4,11 @@
 
 # Each configuration option enables a list of files.
 
+<<<<<<< HEAD
 obj-$(CONFIG_KEYBOARD_ABOV_TOUCH)	+= abov_touchkey.o
 obj-$(CONFIG_KEYBOARD_ABOV_TOUCH_A8)	+= abov_touchkey_a8.o
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 obj-$(CONFIG_KEYBOARD_ADP5520)		+= adp5520-keys.o
 obj-$(CONFIG_KEYBOARD_ADP5588)		+= adp5588-keys.o
 obj-$(CONFIG_KEYBOARD_ADP5589)		+= adp5589-keys.o
@@ -42,6 +45,10 @@ obj-$(CONFIG_KEYBOARD_OMAP)		+= omap-keypad.o
 obj-$(CONFIG_KEYBOARD_OMAP4)		+= omap4-keypad.o
 obj-$(CONFIG_KEYBOARD_OPENCORES)	+= opencores-kbd.o
 obj-$(CONFIG_KEYBOARD_PMIC8XXX)		+= pmic8xxx-keypad.o
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_KEYBOARD_QPNP)		+= qpnp-keypad.o
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 obj-$(CONFIG_KEYBOARD_PXA27x)		+= pxa27x_keypad.o
 obj-$(CONFIG_KEYBOARD_PXA930_ROTARY)	+= pxa930_rotary.o
 obj-$(CONFIG_KEYBOARD_QT1070)           += qt1070.o
@@ -58,8 +65,11 @@ obj-$(CONFIG_KEYBOARD_TNETV107X)	+= tnetv107x-keypad.o
 obj-$(CONFIG_KEYBOARD_TWL4030)		+= twl4030_keypad.o
 obj-$(CONFIG_KEYBOARD_XTKBD)		+= xtkbd.o
 obj-$(CONFIG_KEYBOARD_W90P910)		+= w90p910_keypad.o
+<<<<<<< HEAD
 obj-$(CONFIG_KEYBOARD_TC300K)		+= tc300k.o
 obj-$(CONFIG_KEYBOARD_CYPRESS_TOUCH)	+= cypress/
 obj-$(CONFIG_KEYBOARD_CYPRESS_TOUCH_20055)	+= cypress_20055/
 obj-$(CONFIG_KEYBOARD_CYPRESS_TOUCH_20075)	+= cypress_20075/
 obj-$(CONFIG_KEYBOARD_CYPRESS_TOUCH_MBR31X5)	+= cypress_20075/
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

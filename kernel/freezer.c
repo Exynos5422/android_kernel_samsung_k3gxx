@@ -19,6 +19,15 @@ EXPORT_SYMBOL(system_freezing_cnt);
 bool pm_freezing;
 bool pm_nosig_freezing;
 
+<<<<<<< HEAD
+=======
+/*
+ * Temporary export for the deadlock workaround in ata_scsi_hotplug().
+ * Remove once the hack becomes unnecessary.
+ */
+EXPORT_SYMBOL_GPL(pm_freezing);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /* protects freezing and frozen transitions */
 static DEFINE_SPINLOCK(freezer_lock);
 

@@ -111,8 +111,12 @@ static struct pcc_cpu __percpu *pcc_cpu_info;
 
 static int pcc_cpufreq_verify(struct cpufreq_policy *policy)
 {
+<<<<<<< HEAD
 	cpufreq_verify_within_limits(policy, policy->cpuinfo.min_freq,
 				     policy->cpuinfo.max_freq);
+=======
+	cpufreq_verify_within_cpu_limits(policy);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 
@@ -585,7 +589,10 @@ static struct cpufreq_driver pcc_cpufreq_driver = {
 	.init = pcc_cpufreq_cpu_init,
 	.exit = pcc_cpufreq_cpu_exit,
 	.name = "pcc-cpufreq",
+<<<<<<< HEAD
 	.owner = THIS_MODULE,
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 static int __init pcc_cpufreq_init(void)

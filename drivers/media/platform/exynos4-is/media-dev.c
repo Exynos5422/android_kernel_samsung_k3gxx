@@ -1441,9 +1441,15 @@ static int fimc_md_probe(struct platform_device *pdev)
 err_unlock:
 	mutex_unlock(&fmd->media_dev.graph_mutex);
 err_clk:
+<<<<<<< HEAD
 	media_device_unregister(&fmd->media_dev);
 	fimc_md_put_clocks(fmd);
 	fimc_md_unregister_entities(fmd);
+=======
+	fimc_md_put_clocks(fmd);
+	fimc_md_unregister_entities(fmd);
+	media_device_unregister(&fmd->media_dev);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 err_md:
 	v4l2_device_unregister(&fmd->v4l2_dev);
 	return ret;

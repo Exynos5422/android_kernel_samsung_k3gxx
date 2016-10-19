@@ -325,16 +325,23 @@ enum {
 	FILTER_TRACE_FN,
 };
 
+<<<<<<< HEAD
 #define EVENT_STORAGE_SIZE 128
 extern struct mutex event_storage_mutex;
 extern char event_storage[EVENT_STORAGE_SIZE];
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 extern int trace_event_raw_init(struct ftrace_event_call *call);
 extern int trace_define_field(struct ftrace_event_call *call, const char *type,
 			      const char *name, int offset, int size,
 			      int is_signed, int filter_type);
 extern int trace_add_event_call(struct ftrace_event_call *call);
+<<<<<<< HEAD
 extern void trace_remove_event_call(struct ftrace_event_call *call);
+=======
+extern int trace_remove_event_call(struct ftrace_event_call *call);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define is_signed_type(type)	(((type)(-1)) < (type)1)
 
@@ -383,4 +390,10 @@ perf_trace_buf_submit(void *raw_data, int size, int rctx, u64 addr,
 }
 #endif
 
+<<<<<<< HEAD
+=======
+#define FTRACE_EVENT_ENABLED(name)					\
+	((event_##name).flags & (1 << (TRACE_EVENT_FL_WAS_ENABLED_BIT)))\
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif /* _LINUX_FTRACE_EVENT_H */

@@ -1402,6 +1402,7 @@ call_refreshresult(struct rpc_task *task)
 	task->tk_action = call_refresh;
 	switch (status) {
 	case 0:
+<<<<<<< HEAD
 		if (rpcauth_uptodatecred(task))
 			task->tk_action = call_allocate;
 		return;
@@ -1410,6 +1411,20 @@ call_refreshresult(struct rpc_task *task)
 	case -EKEYEXPIRED:
 	case -EAGAIN:
 		status = -EACCES;
+=======
+		if (rpcauth_uptodatecred(task)) {
+			task->tk_action = call_allocate;
+			return;
+		}
+		/* Use rate-limiting and a max number of retries if refresh
+		 * had status 0 but failed to update the cred.
+		 */
+	case -ETIMEDOUT:
+		rpc_delay(task, 3*HZ);
+	case -EAGAIN:
+		status = -EACCES;
+	case -EKEYEXPIRED:
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (!task->tk_cred_retry)
 			break;
 		task->tk_cred_retry--;

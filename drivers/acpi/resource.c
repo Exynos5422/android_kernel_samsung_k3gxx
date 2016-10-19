@@ -77,18 +77,33 @@ bool acpi_dev_resource_memory(struct acpi_resource *ares, struct resource *res)
 	switch (ares->type) {
 	case ACPI_RESOURCE_TYPE_MEMORY24:
 		memory24 = &ares->data.memory24;
+<<<<<<< HEAD
+=======
+		if (!memory24->minimum && !memory24->address_length)
+			return false;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		acpi_dev_get_memresource(res, memory24->minimum,
 					 memory24->address_length,
 					 memory24->write_protect);
 		break;
 	case ACPI_RESOURCE_TYPE_MEMORY32:
 		memory32 = &ares->data.memory32;
+<<<<<<< HEAD
+=======
+		if (!memory32->minimum && !memory32->address_length)
+			return false;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		acpi_dev_get_memresource(res, memory32->minimum,
 					 memory32->address_length,
 					 memory32->write_protect);
 		break;
 	case ACPI_RESOURCE_TYPE_FIXED_MEMORY32:
 		fixed_memory32 = &ares->data.fixed_memory32;
+<<<<<<< HEAD
+=======
+		if (!fixed_memory32->address && !fixed_memory32->address_length)
+			return false;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		acpi_dev_get_memresource(res, fixed_memory32->address,
 					 fixed_memory32->address_length,
 					 fixed_memory32->write_protect);
@@ -144,12 +159,22 @@ bool acpi_dev_resource_io(struct acpi_resource *ares, struct resource *res)
 	switch (ares->type) {
 	case ACPI_RESOURCE_TYPE_IO:
 		io = &ares->data.io;
+<<<<<<< HEAD
+=======
+		if (!io->minimum && !io->address_length)
+			return false;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		acpi_dev_get_ioresource(res, io->minimum,
 					io->address_length,
 					io->io_decode);
 		break;
 	case ACPI_RESOURCE_TYPE_FIXED_IO:
 		fixed_io = &ares->data.fixed_io;
+<<<<<<< HEAD
+=======
+		if (!fixed_io->address && !fixed_io->address_length)
+			return false;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		acpi_dev_get_ioresource(res, fixed_io->address,
 					fixed_io->address_length,
 					ACPI_DECODE_10);

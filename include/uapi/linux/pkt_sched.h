@@ -73,9 +73,23 @@ struct tc_estimator {
 #define TC_H_ROOT	(0xFFFFFFFFU)
 #define TC_H_INGRESS    (0xFFFFFFF1U)
 
+<<<<<<< HEAD
 struct tc_ratespec {
 	unsigned char	cell_log;
 	unsigned char	__reserved;
+=======
+/* Need to corrospond to iproute2 tc/tc_core.h "enum link_layer" */
+enum tc_link_layer {
+	TC_LINKLAYER_UNAWARE, /* Indicate unaware old iproute2 util */
+	TC_LINKLAYER_ETHERNET,
+	TC_LINKLAYER_ATM,
+};
+#define TC_LINKLAYER_MASK 0x0F /* limit use to lower 4 bits */
+
+struct tc_ratespec {
+	unsigned char	cell_log;
+	__u8		linklayer; /* lower 4 bits */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	unsigned short	overhead;
 	short		cell_align;
 	unsigned short	mpu;
@@ -118,6 +132,10 @@ struct tc_fifo_qopt {
 struct tc_prio_qopt {
 	int	bands;			/* Number of bands */
 	__u8	priomap[TC_PRIO_MAX+1];	/* Map: logical priority -> PRIO band */
+<<<<<<< HEAD
+=======
+	__u8	enable_flow;		/* Enable dequeue */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 /* MULTIQ section */

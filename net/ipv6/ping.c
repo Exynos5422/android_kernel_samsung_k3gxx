@@ -18,7 +18,10 @@
  *
  */
 
+<<<<<<< HEAD
 #include <linux/export.h>
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <net/addrconf.h>
 #include <net/ipv6.h>
 #include <net/ip6_route.h>
@@ -58,11 +61,20 @@ static struct inet_protosw pingv6_protosw = {
 
 
 /* Compatibility glue so we can support IPv6 when it's compiled as a module */
+<<<<<<< HEAD
 int dummy_ipv6_recv_error(struct sock *sk, struct msghdr *msg, int len)
 {
 	return -EAFNOSUPPORT;
 }
 int dummy_datagram_recv_ctl(struct sock *sk, struct msghdr *msg,
+=======
+int dummy_ipv6_recv_error(struct sock *sk, struct msghdr *msg, int len,
+			  int *addr_len)
+{
+	return -EAFNOSUPPORT;
+}
+int dummy_ip6_datagram_recv_ctl(struct sock *sk, struct msghdr *msg,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				 struct sk_buff *skb)
 {
 	return -EAFNOSUPPORT;
@@ -95,7 +107,11 @@ int __init pingv6_init(void)
 void pingv6_exit(void)
 {
 	pingv6_ops.ipv6_recv_error = dummy_ipv6_recv_error;
+<<<<<<< HEAD
 	pingv6_ops.ip6_datagram_recv_ctl = dummy_datagram_recv_ctl;
+=======
+	pingv6_ops.ip6_datagram_recv_ctl = dummy_ip6_datagram_recv_ctl;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	pingv6_ops.icmpv6_err_convert = dummy_icmpv6_err_convert;
 	pingv6_ops.ipv6_icmp_error = dummy_ipv6_icmp_error;
 	pingv6_ops.ipv6_chk_addr = dummy_ipv6_chk_addr;
@@ -160,6 +176,10 @@ int ping_v6_sendmsg(struct kiocb *iocb, struct sock *sk, struct msghdr *msg,
 	fl6.flowi6_proto = IPPROTO_ICMPV6;
 	fl6.saddr = np->saddr;
 	fl6.daddr = *daddr;
+<<<<<<< HEAD
+=======
+	fl6.flowi6_mark = sk->sk_mark;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	fl6.flowi6_uid = sock_i_uid(sk);
 	fl6.fl6_icmp_type = user_icmph.icmp6_type;
 	fl6.fl6_icmp_code = user_icmph.icmp6_code;

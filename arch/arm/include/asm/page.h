@@ -160,6 +160,14 @@ typedef struct page *pgtable_t;
 extern int pfn_valid(unsigned long);
 #endif
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_MEMORY_HOTPLUG_SPARSE
+extern int _early_pfn_valid(unsigned long);
+#define early_pfn_valid(pfn) (_early_pfn_valid(pfn))
+#endif
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <asm/memory.h>
 
 #endif /* !__ASSEMBLY__ */

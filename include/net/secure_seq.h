@@ -3,7 +3,10 @@
 
 #include <linux/types.h>
 
+<<<<<<< HEAD
 extern void net_secret_init(void);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 extern __u32 secure_ip_id(__be32 daddr);
 extern __u32 secure_ipv6_id(const __be32 daddr[4]);
 extern u32 secure_ipv4_port_ephemeral(__be32 saddr, __be32 daddr, __be16 dport);

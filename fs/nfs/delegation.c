@@ -656,16 +656,30 @@ int nfs_async_inode_return_delegation(struct inode *inode,
 
 	rcu_read_lock();
 	delegation = rcu_dereference(NFS_I(inode)->delegation);
+<<<<<<< HEAD
 
 	if (!clp->cl_mvops->match_stateid(&delegation->stateid, stateid)) {
 		rcu_read_unlock();
 		return -ENOENT;
 	}
+=======
+	if (delegation == NULL)
+		goto out_enoent;
+
+	if (!clp->cl_mvops->match_stateid(&delegation->stateid, stateid))
+		goto out_enoent;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	nfs_mark_return_delegation(server, delegation);
 	rcu_read_unlock();
 
 	nfs_delegation_run_state_manager(clp);
 	return 0;
+<<<<<<< HEAD
+=======
+out_enoent:
+	rcu_read_unlock();
+	return -ENOENT;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static struct inode *

@@ -1,5 +1,12 @@
 # UAPI Header export list
 header-y += fc/
+<<<<<<< HEAD
 header-y += scsi_bsg_fc.h
+=======
+header-y += ufs/
+header-y += scsi_bsg_fc.h
+header-y += sg.h
+header-y += scsi_ioctl.h
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 header-y += scsi_netlink.h
 header-y += scsi_netlink_fc.h

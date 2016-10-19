@@ -913,7 +913,14 @@ static ssize_t lbs_debugfs_write(struct file *f, const char __user *buf,
 	char *p2;
 	struct debug_data *d = f->private_data;
 
+<<<<<<< HEAD
 	pdata = kmalloc(cnt, GFP_KERNEL);
+=======
+	if (cnt == 0)
+		return 0;
+
+	pdata = kmalloc(cnt + 1, GFP_KERNEL);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (pdata == NULL)
 		return 0;
 
@@ -922,6 +929,10 @@ static ssize_t lbs_debugfs_write(struct file *f, const char __user *buf,
 		kfree(pdata);
 		return 0;
 	}
+<<<<<<< HEAD
+=======
+	pdata[cnt] = '\0';
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	p0 = pdata;
 	for (i = 0; i < num_of_items; i++) {

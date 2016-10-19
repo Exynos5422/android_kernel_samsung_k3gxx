@@ -42,7 +42,10 @@ config USB_MUSB_DA8XX
 
 config USB_MUSB_TUSB6010
 	tristate "TUSB6010"
+<<<<<<< HEAD
 	depends on GENERIC_HARDIRQS
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 config USB_MUSB_OMAP2PLUS
 	tristate "OMAP2430 and onwards"

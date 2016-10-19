@@ -19,10 +19,20 @@ config MMC_DEBUG
 	  This is an option for use by developers; most people should
 	  say N here.  This enables MMC core and driver debugging.
 
+<<<<<<< HEAD
 config MMC_SUPPORT_STLOG
  	bool "Enable storage log"
  	depends on MMC && PROC_STLOG
  	default y
+=======
+config MMC_PERF_PROFILING
+	bool "MMC performance profiling"
+	depends on MMC != n
+	default n
+	help
+	  If you say Y here, support will be added for collecting
+	  performance numbers at the MMC Queue and Host layers.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 if MMC
 

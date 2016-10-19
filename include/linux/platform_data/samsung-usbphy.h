@@ -24,9 +24,12 @@ struct samsung_usbphy_data {
 
 extern void samsung_usbphy_set_pdata(struct samsung_usbphy_data *pd);
 
+<<<<<<< HEAD
 #if defined(CONFIG_LINK_DEVICE_HSIC) || defined(CONFIG_MDM_HSIC_PM)
 extern int phy_register_notifier(struct notifier_block *nb);
 extern int phy_unregister_notifier(struct notifier_block *nb);
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif /* __SAMSUNG_USBPHY_PLATFORM_H */

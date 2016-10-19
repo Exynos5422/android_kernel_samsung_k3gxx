@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * Copyright (c) 2012 Qualcomm Atheros, Inc.
+=======
+ * Copyright (c) 2012-2014 Qualcomm Atheros, Inc.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  * Copyright (c) 2006-2012 Wilocity .
  *
  * Permission to use, copy, modify, and/or distribute this software for any
@@ -28,7 +32,11 @@
 #define __WILOCITY_WMI_H__
 
 /* General */
+<<<<<<< HEAD
 
+=======
+#define WILOCITY_MAX_ASSOC_STA (8)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define WMI_MAC_LEN		(6)
 #define WMI_PROX_RANGE_NUM	(3)
 
@@ -179,7 +187,10 @@ enum wmi_crypto_type {
 	WMI_CRYPT_AES_GCMP		= 0x20,
 };
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 enum wmi_connect_ctrl_flag_bits {
 	WMI_CONNECT_ASSOC_POLICY_USER		= 0x0001,
 	WMI_CONNECT_SEND_REASSOC		= 0x0002,
@@ -220,6 +231,7 @@ struct wmi_disconnect_sta_cmd {
 } __packed;
 
 /*
+<<<<<<< HEAD
  * WMI_RECONNECT_CMDID
  */
 struct wmi_reconnect_cmd {
@@ -230,6 +242,8 @@ struct wmi_reconnect_cmd {
 
 
 /*
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  * WMI_SET_PMK_CMDID
  */
 
@@ -243,7 +257,10 @@ struct  wmi_set_pmk_cmd {
 	u8 pmk[WMI_PMK_LEN];
 } __packed;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * WMI_SET_PASSPHRASE_CMDID
  */
@@ -282,7 +299,10 @@ struct wmi_delete_cipher_key_cmd {
 	u8 mac[WMI_MAC_LEN];
 } __packed;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * WMI_START_SCAN_CMDID
  *
@@ -296,11 +316,21 @@ enum wmi_scan_type {
 	WMI_LONG_SCAN		= 0,
 	WMI_SHORT_SCAN		= 1,
 	WMI_PBC_SCAN		= 2,
+<<<<<<< HEAD
 };
 
 struct wmi_start_scan_cmd {
 	u8 reserved[8];
 
+=======
+	WMI_ACTIVE_SCAN		= 3,
+	WMI_DIRECT_SCAN		= 4,
+};
+
+struct wmi_start_scan_cmd {
+	u8 direct_scan_mac_addr[6];
+	u8 reserved[2];
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	__le32 home_dwell_time;	/* Max duration in the home channel(ms) */
 	__le32 force_scan_interval;	/* Time interval between scans (ms)*/
 	u8 scan_type;		/* wmi_scan_type */
@@ -357,7 +387,10 @@ struct wmi_set_appie_cmd {
 	u8 ie_info[0];
 } __packed;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * WMI_PXMT_RANGE_CFG_CMDID
  */
@@ -386,7 +419,10 @@ struct wmi_rf_mgmt_cmd {
 	__le32 rf_mgmt_type;
 } __packed;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * WMI_RF_RX_TEST_CMDID
  */
@@ -427,12 +463,19 @@ struct wmi_bcon_ctrl_cmd {
 	__le16 frag_num;
 	__le64 ss_mask;
 	u8 network_type;
+<<<<<<< HEAD
 	u8 reserved;
+=======
+	u8 pcp_max_assoc_sta;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	u8 disable_sec_offload;
 	u8 disable_sec;
 } __packed;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /******* P2P ***********/
 
 /*
@@ -450,7 +493,11 @@ enum wmi_port_role {
 struct wmi_port_allocate_cmd {
 	u8 mac[WMI_MAC_LEN];
 	u8 port_role;
+<<<<<<< HEAD
 	u8 midid;
+=======
+	u8 mid;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 } __packed;
 
 /*
@@ -467,6 +514,10 @@ struct wmi_delete_port_cmd {
 enum wmi_discovery_mode {
 	WMI_DISCOVERY_MODE_NON_OFFLOAD	= 0,
 	WMI_DISCOVERY_MODE_OFFLOAD	= 1,
+<<<<<<< HEAD
+=======
+	WMI_DISCOVERY_MODE_PEER2PEER	= 2,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 struct wmi_p2p_cfg_cmd {
@@ -493,7 +544,12 @@ struct wmi_power_mgmt_cfg_cmd {
  */
 struct wmi_pcp_start_cmd {
 	__le16 bcon_interval;
+<<<<<<< HEAD
 	u8 reserved0[10];
+=======
+	u8 pcp_max_assoc_sta;
+	u8 reserved0[9];
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	u8 network_type;
 	u8 channel;
 	u8 disable_sec_offload;
@@ -801,7 +857,10 @@ struct wmi_temp_sense_cmd {
 	__le32 measure_marlon_r_en;
 } __packed;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * WMI Events
  */
@@ -857,6 +916,10 @@ enum wmi_event_id {
 	WMI_RF_MGMT_STATUS_EVENTID		= 0x1853,
 	WMI_BF_SM_MGMT_DONE_EVENTID		= 0x1838,
 	WMI_RX_MGMT_PACKET_EVENTID		= 0x1840,
+<<<<<<< HEAD
+=======
+	WMI_TX_MGMT_PACKET_EVENTID		= 0x1841,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/* Performance monitoring events */
 	WMI_DATA_PORT_OPEN_EVENTID		= 0x1860,
@@ -890,7 +953,10 @@ enum wmi_event_id {
  * Events data structures
  */
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 enum wmi_fw_status {
 	WMI_FW_STATUS_SUCCESS,
 	WMI_FW_STATUS_FAILURE,
@@ -983,7 +1049,11 @@ struct wmi_ready_event {
  * WMI_NOTIFY_REQ_DONE_EVENTID
  */
 struct wmi_notify_req_done_event {
+<<<<<<< HEAD
 	__le32 status;
+=======
+	__le32 status; /* beamforming status, 0: fail; 1: OK; 2: retrying */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	__le64 tsf;
 	__le32 snr_val;
 	__le32 tx_tpt;
@@ -1040,16 +1110,34 @@ enum wmi_disconnect_reason {
 struct wmi_disconnect_event {
 	__le16 protocol_reason_status;	/* reason code, see 802.11 spec. */
 	u8 bssid[WMI_MAC_LEN];		/* set if known */
+<<<<<<< HEAD
 	u8 disconnect_reason;		/* see wmi_disconnect_reason_e */
 	u8 assoc_resp_len;
 	u8 assoc_info[0];
+=======
+	u8 disconnect_reason;		/* see wmi_disconnect_reason */
+	u8 assoc_resp_len;	/* not used */
+	u8 assoc_info[0];	/* not used */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 } __packed;
 
 /*
  * WMI_SCAN_COMPLETE_EVENTID
  */
+<<<<<<< HEAD
 struct wmi_scan_complete_event {
 	__le32 status;
+=======
+enum scan_status {
+	WMI_SCAN_SUCCESS	= 0,
+	WMI_SCAN_FAILED		= 1,
+	WMI_SCAN_ABORTED	= 2,
+	WMI_SCAN_REJECTED	= 3,
+};
+
+struct wmi_scan_complete_event {
+	__le32 status;	/* scan_status */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 } __packed;
 
 /*
@@ -1077,7 +1165,10 @@ struct wmi_delba_event {
 	__le16 reason;
 } __packed;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * WMI_VRING_CFG_DONE_EVENTID
  */
@@ -1143,7 +1234,10 @@ struct wmi_data_port_open_event {
 	u8 reserved[3];
 } __packed;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * WMI_GET_PCP_CHANNEL_EVENTID
  */
@@ -1152,7 +1246,10 @@ struct wmi_get_pcp_channel_event {
 	u8 reserved[3];
 } __packed;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
 * WMI_PORT_ALLOCATED_EVENTID
 */
@@ -1256,6 +1353,16 @@ struct wmi_rx_mgmt_info {
 	u8 channel;	/* From Radio MNGR */
 } __packed;
 
+<<<<<<< HEAD
+=======
+/*
+ * WMI_TX_MGMT_PACKET_EVENTID
+ */
+struct wmi_tx_mgmt_packet_event {
+	u8 payload[0];
+} __packed;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 struct wmi_rx_mgmt_packet_event {
 	struct wmi_rx_mgmt_info info;
 	u8 payload[0];

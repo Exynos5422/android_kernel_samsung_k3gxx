@@ -23,7 +23,10 @@ proc-y	+= version.o
 proc-y	+= softirqs.o
 proc-y	+= namespaces.o
 proc-y	+= self.o
+<<<<<<< HEAD
 proc-$(CONFIG_PROC_STLOG)	+= stlog.o
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 proc-$(CONFIG_PROC_SYSCTL)	+= proc_sysctl.o
 proc-$(CONFIG_NET)		+= proc_net.o
 proc-$(CONFIG_PROC_KCORE)	+= kcore.o

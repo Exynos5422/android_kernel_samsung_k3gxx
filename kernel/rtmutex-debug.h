@@ -31,3 +31,11 @@ static inline int debug_rt_mutex_detect_deadlock(struct rt_mutex_waiter *waiter,
 {
 	return (waiter != NULL);
 }
+<<<<<<< HEAD
+=======
+
+static inline void rt_mutex_print_deadlock(struct rt_mutex_waiter *w)
+{
+	debug_rt_mutex_print_deadlock(w);
+}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

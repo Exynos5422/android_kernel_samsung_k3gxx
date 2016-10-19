@@ -48,7 +48,11 @@ $(obj-vdso): %.o: %.S
 
 # Actual build commands
 quiet_cmd_vdsold = VDSOL $@
+<<<<<<< HEAD
       cmd_vdsold = $(CC) $(c_flags) -Wl,-T $^ -o $@
+=======
+      cmd_vdsold = $(CC) $(c_flags) -Wl,-n -Wl,-T $^ -o $@
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 quiet_cmd_vdsoas = VDSOA $@
       cmd_vdsoas = $(CC) $(a_flags) -c -o $@ $<
 

@@ -487,6 +487,10 @@ static int v7_fill_super(struct super_block *sb, void *data, int silent)
 	sbi->s_sb = sb;
 	sbi->s_block_base = 0;
 	sbi->s_type = FSTYPE_V7;
+<<<<<<< HEAD
+=======
+	mutex_init(&sbi->s_lock);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	sb->s_fs_info = sbi;
 	
 	sb_set_blocksize(sb, 512);

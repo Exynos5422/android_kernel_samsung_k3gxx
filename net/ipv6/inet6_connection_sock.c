@@ -78,7 +78,13 @@ struct dst_entry *inet6_csk_route_req(struct sock *sk,
 	memset(fl6, 0, sizeof(*fl6));
 	fl6->flowi6_proto = IPPROTO_TCP;
 	fl6->daddr = treq->rmt_addr;
+<<<<<<< HEAD
 	final_p = fl6_update_dst(fl6, np->opt, &final);
+=======
+	rcu_read_lock();
+	final_p = fl6_update_dst(fl6, rcu_dereference(np->opt), &final);
+	rcu_read_unlock();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	fl6->saddr = treq->loc_addr;
 	fl6->flowi6_oif = treq->iif;
 	fl6->flowi6_mark = inet_rsk(req)->ir_mark;
@@ -215,7 +221,13 @@ static struct dst_entry *inet6_csk_route_socket(struct sock *sk,
 	fl6->flowi6_uid = sock_i_uid(sk);
 	security_sk_classify_flow(sk, flowi6_to_flowi(fl6));
 
+<<<<<<< HEAD
 	final_p = fl6_update_dst(fl6, np->opt, &final);
+=======
+	rcu_read_lock();
+	final_p = fl6_update_dst(fl6, rcu_dereference(np->opt), &final);
+	rcu_read_unlock();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	dst = __inet6_csk_dst_check(sk, np->dst_cookie);
 	if (!dst) {
@@ -249,7 +261,12 @@ int inet6_csk_xmit(struct sk_buff *skb, struct flowi *fl_unused)
 	/* Restore final destination back after routing done */
 	fl6.daddr = np->daddr;
 
+<<<<<<< HEAD
 	res = ip6_xmit(sk, skb, &fl6, np->opt, np->tclass);
+=======
+	res = ip6_xmit(sk, skb, &fl6, rcu_dereference(np->opt),
+		       np->tclass);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	rcu_read_unlock();
 	return res;
 }

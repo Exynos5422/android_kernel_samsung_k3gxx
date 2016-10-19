@@ -71,7 +71,11 @@ static int samsung_exynos5_usb3phy_enable(struct samsung_usbphy *sphy)
 	u32 phyparam0;
 	u32 phyparam1;
 	u32 linksystem;
+<<<<<<< HEAD
 	u32 phyclksel;
+=======
+	u32 phybatchg;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	u32 phytest;
 	u32 phyclkrst;
 
@@ -102,6 +106,7 @@ static int samsung_exynos5_usb3phy_enable(struct samsung_usbphy *sphy)
 	phyparam1 |= PHYPARAM1_PCS_TXDEEMPH;
 	writel(phyparam1, regs + EXYNOS5_DRD_PHYPARAM1);
 
+<<<<<<< HEAD
 	if (sphy->drv_data->cpu_type == TYPE_EXYNOS5430) {
 		phyclksel = readl(regs + EXYNOS5_DRD_PHYPIPE);
 		phyclksel |= PHY_CLOCK_SEL;
@@ -111,6 +116,11 @@ static int samsung_exynos5_usb3phy_enable(struct samsung_usbphy *sphy)
 		phyclksel |= PHYBATCHG_UTMI_CLKSEL;
 		writel(phyclksel, regs + EXYNOS5_DRD_PHYBATCHG);
 	}
+=======
+	phybatchg = readl(regs + EXYNOS5_DRD_PHYBATCHG);
+	phybatchg |= PHYBATCHG_UTMI_CLKSEL;
+	writel(phybatchg, regs + EXYNOS5_DRD_PHYBATCHG);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/* PHYTEST POWERDOWN Control */
 	phytest = readl(regs + EXYNOS5_DRD_PHYTEST);
@@ -132,8 +142,11 @@ static int samsung_exynos5_usb3phy_enable(struct samsung_usbphy *sphy)
 			PHYCLKRST_SSC_EN |
 			/* Power down HS Bias and PLL blocks in suspend mode */
 			PHYCLKRST_COMMONONN;
+<<<<<<< HEAD
 	/* Disable utmi_suspend_com_n of LINK */
 	phyclkrst &= ~(PHYCLKRST_EN_UTMISUSPEND);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	writel(phyclkrst, regs + EXYNOS5_DRD_PHYCLKRST);
 
@@ -161,12 +174,17 @@ static void samsung_exynos5_usb3phy_disable(struct samsung_usbphy *sphy)
 	phyclkrst = readl(regs + EXYNOS5_DRD_PHYCLKRST);
 	phyclkrst &= ~(PHYCLKRST_REF_SSP_EN |
 			PHYCLKRST_SSC_EN |
+<<<<<<< HEAD
 			PHYCLKRST_COMMONONN |
 			PHYCLKRST_EN_UTMISUSPEND);
+=======
+			PHYCLKRST_COMMONONN);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	writel(phyclkrst, regs + EXYNOS5_DRD_PHYCLKRST);
 
 	/* Control PHYTEST to remove leakage current */
 	phytest = readl(regs + EXYNOS5_DRD_PHYTEST);
+<<<<<<< HEAD
 	phytest |= PHYTEST_POWERDOWN_SSP;
 	/*
 	 * To save power, it is supposed to be set to POWERDOWN mode.
@@ -376,6 +394,13 @@ static void samsung_usb3phy_tune(struct usb_phy *phy)
 	}
 }
 
+=======
+	phytest |= (PHYTEST_POWERDOWN_SSP |
+			PHYTEST_POWERDOWN_HSP);
+	writel(phytest, regs + EXYNOS5_DRD_PHYTEST);
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int samsung_usb3phy_init(struct usb_phy *phy)
 {
 	struct samsung_usbphy *sphy;
@@ -384,17 +409,25 @@ static int samsung_usb3phy_init(struct usb_phy *phy)
 
 	sphy = phy_to_sphy(phy);
 
+<<<<<<< HEAD
 	dev_vdbg(sphy->dev, "%s\n", __func__);
 
 	/* Enable the phy clock */
 	ret = clk_enable(sphy->clk);
 	if (ret) {
 		dev_err(sphy->dev, "%s: clk_enable failed\n", __func__);
+=======
+	/* Enable the phy clock */
+	ret = clk_prepare_enable(sphy->clk);
+	if (ret) {
+		dev_err(sphy->dev, "%s: clk_prepare_enable failed\n", __func__);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return ret;
 	}
 
 	spin_lock_irqsave(&sphy->lock, flags);
 
+<<<<<<< HEAD
 	sphy->usage_count++;
 
 	if (sphy->usage_count - 1) {
@@ -402,6 +435,8 @@ static int samsung_usb3phy_init(struct usb_phy *phy)
 		goto exit;
 	}
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* setting default phy-type for USB 3.0 */
 	samsung_usbphy_set_type(&sphy->phy, USB_PHY_TYPE_DEVICE);
 
@@ -411,6 +446,7 @@ static int samsung_usb3phy_init(struct usb_phy *phy)
 	/* Initialize usb phy registers */
 	samsung_exynos5_usb3phy_enable(sphy);
 
+<<<<<<< HEAD
 exit:
 	spin_unlock_irqrestore(&sphy->lock, flags);
 
@@ -418,10 +454,17 @@ exit:
 	clk_disable(sphy->clk);
 
 	dev_dbg(sphy->dev, "end of %s\n", __func__);
+=======
+	spin_unlock_irqrestore(&sphy->lock, flags);
+
+	/* Disable the phy clock */
+	clk_disable_unprepare(sphy->clk);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return ret;
 }
 
+<<<<<<< HEAD
 static void __samsung_usb3phy_shutdown(struct samsung_usbphy *sphy)
 {
 	/* setting default phy-type for USB 3.0 */
@@ -462,6 +505,8 @@ static void samsung_usb3phy_idle(struct samsung_usbphy *sphy)
 	clk_disable(sphy->clk);
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * The function passed to the usb driver for phy shutdown
  */
@@ -472,15 +517,21 @@ static void samsung_usb3phy_shutdown(struct usb_phy *phy)
 
 	sphy = phy_to_sphy(phy);
 
+<<<<<<< HEAD
 	dev_vdbg(sphy->dev, "%s\n", __func__);
 
 	if (clk_enable(sphy->clk)) {
 		dev_err(sphy->dev, "%s: clk_enable failed\n", __func__);
+=======
+	if (clk_prepare_enable(sphy->clk)) {
+		dev_err(sphy->dev, "%s: clk_prepare_enable failed\n", __func__);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return;
 	}
 
 	spin_lock_irqsave(&sphy->lock, flags);
 
+<<<<<<< HEAD
 	if (!sphy->usage_count) {
 		dev_vdbg(sphy->dev, "PHY is already shutdown\n");
 		goto exit;
@@ -566,6 +617,20 @@ samsung_usb3phy_lpa_event(struct notifier_block *nb,
 	}
 
 	return ret;
+=======
+	/* setting default phy-type for USB 3.0 */
+	samsung_usbphy_set_type(&sphy->phy, USB_PHY_TYPE_DEVICE);
+
+	/* De-initialize usb phy registers */
+	samsung_exynos5_usb3phy_disable(sphy);
+
+	/* Enable phy isolation */
+	samsung_usbphy_set_isolation(sphy, true);
+
+	spin_unlock_irqrestore(&sphy->lock, flags);
+
+	clk_disable_unprepare(sphy->clk);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static int samsung_usb3phy_probe(struct platform_device *pdev)
@@ -611,17 +676,23 @@ static int samsung_usb3phy_probe(struct platform_device *pdev)
 	sphy->clk		= clk;
 	sphy->phy.dev		= sphy->dev;
 	sphy->phy.label		= "samsung-usb3phy";
+<<<<<<< HEAD
 	sphy->phy.type		= USB_PHY_TYPE_USB3;
 	sphy->phy.init		= samsung_usb3phy_init;
 	sphy->phy.shutdown	= samsung_usb3phy_shutdown;
 	sphy->phy.is_active	= samsung_usb3phy_is_active;
 	sphy->phy.tune		= samsung_usb3phy_tune;
 	sphy->phy.io_ops	= &samsung_usb3phy_io_ops;
+=======
+	sphy->phy.init		= samsung_usb3phy_init;
+	sphy->phy.shutdown	= samsung_usb3phy_shutdown;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	sphy->drv_data		= samsung_usbphy_get_driver_data(pdev);
 	sphy->ref_clk_freq	= samsung_usbphy_get_refclk_freq(sphy);
 
 	spin_lock_init(&sphy->lock);
 
+<<<<<<< HEAD
 	ret = clk_prepare(sphy->clk);
 	if (ret) {
 		dev_err(dev, "clk_prepare failed\n");
@@ -650,6 +721,11 @@ err1:
 	clk_unprepare(sphy->clk);
 
 	return ret;
+=======
+	platform_set_drvdata(pdev, sphy);
+
+	return usb_add_phy(&sphy->phy, USB_PHY_TYPE_USB3);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static int samsung_usb3phy_remove(struct platform_device *pdev)
@@ -657,8 +733,11 @@ static int samsung_usb3phy_remove(struct platform_device *pdev)
 	struct samsung_usbphy *sphy = platform_get_drvdata(pdev);
 
 	usb_remove_phy(&sphy->phy);
+<<<<<<< HEAD
 	unregister_samsung_usb_lpa_notifier(&sphy->lpa_nb);
 	clk_unprepare(sphy->clk);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (sphy->pmuregs)
 		iounmap(sphy->pmuregs);
@@ -668,6 +747,7 @@ static int samsung_usb3phy_remove(struct platform_device *pdev)
 	return 0;
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_PM_SLEEP
 static int samsung_usb3phy_resume(struct device *dev)
 {
@@ -717,12 +797,18 @@ static struct samsung_usbphy_drvdata usb3phy_exynos5 = {
 	.cpu_type		= TYPE_EXYNOS5,
 	.devphy_en_mask		= EXYNOS_USBPHY_ENABLE,
 	.need_crport_tuning	= false,
+=======
+static struct samsung_usbphy_drvdata usb3phy_exynos5 = {
+	.cpu_type		= TYPE_EXYNOS5250,
+	.devphy_en_mask		= EXYNOS_USBPHY_ENABLE,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 #ifdef CONFIG_OF
 static const struct of_device_id samsung_usbphy_dt_match[] = {
 	{
 		.compatible = "samsung,exynos5250-usb3phy",
+<<<<<<< HEAD
 		.data = &usb3phy_exynos5250,
 	}, {
 		.compatible = "samsung,exynos5420-usb3phy",
@@ -733,6 +819,9 @@ static const struct of_device_id samsung_usbphy_dt_match[] = {
 	}, {
 		.compatible = "samsung,exynos5-usb3phy",
 		.data = &usb3phy_exynos5,
+=======
+		.data = &usb3phy_exynos5
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	},
 	{},
 };
@@ -742,6 +831,7 @@ MODULE_DEVICE_TABLE(of, samsung_usbphy_dt_match);
 static struct platform_device_id samsung_usbphy_driver_ids[] = {
 	{
 		.name		= "exynos5250-usb3phy",
+<<<<<<< HEAD
 		.driver_data	= (unsigned long)&usb3phy_exynos5250,
 	}, {
 		.name		= "exynos5420-usb3phy",
@@ -751,6 +841,8 @@ static struct platform_device_id samsung_usbphy_driver_ids[] = {
 		.driver_data	= (unsigned long)&usb3phy_exynos5430,
 	}, {
 		.name		= "exynos5-usb3phy",
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		.driver_data	= (unsigned long)&usb3phy_exynos5,
 	},
 	{},
@@ -766,7 +858,10 @@ static struct platform_driver samsung_usb3phy_driver = {
 		.name	= "samsung-usb3phy",
 		.owner	= THIS_MODULE,
 		.of_match_table = of_match_ptr(samsung_usbphy_dt_match),
+<<<<<<< HEAD
 		.pm	= DEV_PM_OPS,
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	},
 };
 

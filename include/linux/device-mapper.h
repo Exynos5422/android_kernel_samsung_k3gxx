@@ -405,13 +405,21 @@ int dm_noflush_suspending(struct dm_target *ti);
 union map_info *dm_get_mapinfo(struct bio *bio);
 union map_info *dm_get_rq_mapinfo(struct request *rq);
 
+<<<<<<< HEAD
+=======
+struct queue_limits *dm_get_queue_limits(struct mapped_device *md);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * Geometry functions.
  */
 int dm_get_geometry(struct mapped_device *md, struct hd_geometry *geo);
 int dm_set_geometry(struct mapped_device *md, struct hd_geometry *geo);
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*-----------------------------------------------------------------
  * Functions for manipulating device-mapper tables.
  *---------------------------------------------------------------*/
@@ -594,5 +602,9 @@ void dm_dispatch_request(struct request *rq);
 void dm_requeue_unmapped_request(struct request *rq);
 void dm_kill_unmapped_request(struct request *rq, int error);
 int dm_underlying_device_busy(struct request_queue *q);
+<<<<<<< HEAD
+=======
+void dm_end_request(struct request *clone, int error);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #endif	/* _LINUX_DEVICE_MAPPER_H */

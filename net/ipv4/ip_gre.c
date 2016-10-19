@@ -335,7 +335,12 @@ static int ipgre_rcv(struct sk_buff *skb)
 				  iph->saddr, iph->daddr, tpi.key);
 
 	if (tunnel) {
+<<<<<<< HEAD
 		ip_tunnel_rcv(tunnel, skb, &tpi, log_ecn_error);
+=======
+		skb_pop_mac_header(skb);
+		ip_tunnel_rcv(tunnel, skb, &tpi, hdr_len, log_ecn_error);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return 0;
 	}
 	icmp_send(skb, ICMP_DEST_UNREACH, ICMP_PORT_UNREACH, 0);
@@ -572,7 +577,11 @@ static int ipgre_header(struct sk_buff *skb, struct net_device *dev,
 	if (daddr)
 		memcpy(&iph->daddr, daddr, 4);
 	if (iph->daddr)
+<<<<<<< HEAD
 		return t->hlen;
+=======
+		return t->hlen + sizeof(*iph);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return -(t->hlen + sizeof(*iph));
 }
@@ -651,6 +660,10 @@ static const struct net_device_ops ipgre_netdev_ops = {
 static void ipgre_tunnel_setup(struct net_device *dev)
 {
 	dev->netdev_ops		= &ipgre_netdev_ops;
+<<<<<<< HEAD
+=======
+	dev->type		= ARPHRD_IPGRE;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ip_tunnel_setup(dev, ipgre_net_id);
 }
 
@@ -689,7 +702,10 @@ static int ipgre_tunnel_init(struct net_device *dev)
 	memcpy(dev->dev_addr, &iph->saddr, 4);
 	memcpy(dev->broadcast, &iph->daddr, 4);
 
+<<<<<<< HEAD
 	dev->type		= ARPHRD_IPGRE;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	dev->flags		= IFF_NOARP;
 	dev->priv_flags		&= ~IFF_XMIT_DST_RELEASE;
 	dev->addr_len		= 4;

@@ -136,6 +136,10 @@ Table 1-1: Process specific entries in /proc
  maps		Memory maps to executables and library files	(2.4)
  mem		Memory held by this process
  root		Link to the root directory of this process
+<<<<<<< HEAD
+=======
+ reclaim	Reclaim pages in this process
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  stat		Process status
  statm		Process memory status information
  status		Process status in human readable form
@@ -417,7 +421,10 @@ Private_Dirty:         0 kB
 Referenced:          892 kB
 Anonymous:             0 kB
 Swap:                  0 kB
+<<<<<<< HEAD
 SwapPss:               0 kB
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 KernelPageSize:        4 kB
 MMUPageSize:           4 kB
 Locked:              374 kB
@@ -428,6 +435,7 @@ the first of these lines shows the same information as is displayed for the
 mapping in /proc/PID/maps.  The remaining lines show the size of the mapping
 (size), the amount of the mapping that is currently resident in RAM (RSS), the
 process' proportional share of this mapping (PSS), the number of clean and
+<<<<<<< HEAD
 dirty private pages in the mapping.
 
 The "proportional set size" (PSS) of a process is the count of pages it has
@@ -440,12 +448,22 @@ as private and not as shared.
 "Referenced" indicates the amount of memory currently marked as referenced or
 accessed.
 
+=======
+dirty private pages in the mapping.  Note that even a page which is part of a
+MAP_SHARED mapping, but has only a single pte mapped, i.e.  is currently used
+by only one process, is accounted as private and not as shared.  "Referenced"
+indicates the amount of memory currently marked as referenced or accessed.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 "Anonymous" shows the amount of memory that does not belong to any file.  Even
 a mapping associated with a file may contain anonymous pages: when MAP_PRIVATE
 and a page is modified, the file page is replaced by a private anonymous copy.
 "Swap" shows how much would-be-anonymous memory is also used, but out on
 swap.
+<<<<<<< HEAD
 "SwapPss" shows proportional swap share of this mapping.
+=======
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 "VmFlags" field deserves a separate description. This member represents the kernel
 flags associated with the particular virtual memory area in two letter encoded
 manner. The codes are the following:
@@ -499,6 +517,32 @@ To clear the bits for the file mapped pages associated with the process
     > echo 3 > /proc/PID/clear_refs
 Any other value written to /proc/PID/clear_refs will have no effect.
 
+<<<<<<< HEAD
+=======
+To reset the peak resident set size ("high water mark") to the process's
+current value:
+    > echo 5 > /proc/PID/clear_refs
+
+The file /proc/PID/reclaim is used to reclaim pages in this process.
+To reclaim file-backed pages,
+    > echo file > /proc/PID/reclaim
+
+To reclaim anonymous pages,
+    > echo anon > /proc/PID/reclaim
+
+To reclaim all pages,
+    > echo all > /proc/PID/reclaim
+
+Also, you can specify address range of process so part of address space
+will be reclaimed. The format is following as
+    > echo addr size-byte > /proc/PID/reclaim
+
+NOTE: addr should be page-aligned.
+
+Below is example which try to reclaim 2M from 0x100000.
+    > echo 0x100000 2M > /proc/PID/reclaim
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 The /proc/pid/pagemap gives the PFN, which can be used to find the pageflags
 using /proc/kpageflags and number of times a page is mapped using
 /proc/kpagecount. For detailed explanation, see Documentation/vm/pagemap.txt.
@@ -1387,8 +1431,13 @@ may allocate from based on an estimation of its current memory and swap use.
 For example, if a task is using all allowed memory, its badness score will be
 1000.  If it is using half of its allowed memory, its score will be 500.
 
+<<<<<<< HEAD
 There is an additional factor included in the badness score: root
 processes are given 3% extra memory over other tasks.
+=======
+There is an additional factor included in the badness score: the current memory
+and swap usage is discounted by 3% for root processes.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 The amount of "allowed" memory depends on the context in which the oom killer
 was called.  If it is due to the memory assigned to the allocating task's cpuset

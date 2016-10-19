@@ -306,7 +306,11 @@ static int ioapic_deliver(struct kvm_ioapic *ioapic, int irq, bool line_status)
 		BUG_ON(ioapic->rtc_status.pending_eoi != 0);
 		ret = kvm_irq_delivery_to_apic(ioapic->kvm, NULL, &irqe,
 				ioapic->rtc_status.dest_map);
+<<<<<<< HEAD
 		ioapic->rtc_status.pending_eoi = ret;
+=======
+		ioapic->rtc_status.pending_eoi = (ret < 0 ? 0 : ret);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	} else
 		ret = kvm_irq_delivery_to_apic(ioapic->kvm, NULL, &irqe, NULL);
 

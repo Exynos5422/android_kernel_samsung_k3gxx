@@ -62,7 +62,11 @@ create_package() {
 	fi
 
 	# Create the package
+<<<<<<< HEAD
 	dpkg-gencontrol -isp $forcearch -p$pname -P"$pdir"
+=======
+	dpkg-gencontrol -isp $forcearch -Vkernel:debarch="${debarch:-$(dpkg --print-architecture)}" -p$pname -P"$pdir"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	dpkg --build "$pdir" ..
 }
 
@@ -252,15 +256,24 @@ mkdir -p "$destdir"
 (cd $objtree; tar -c -f - -T "$objtree/debian/hdrobjfiles") | (cd $destdir; tar -xf -)
 ln -sf "/usr/src/linux-headers-$version" "$kernel_headers_dir/lib/modules/$version/build"
 rm -f "$objtree/debian/hdrsrcfiles" "$objtree/debian/hdrobjfiles"
+<<<<<<< HEAD
 arch=$(dpkg --print-architecture)
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 cat <<EOF >> debian/control
 
 Package: $kernel_headers_packagename
 Provides: linux-headers, linux-headers-2.6
+<<<<<<< HEAD
 Architecture: $arch
 Description: Linux kernel headers for $KERNELRELEASE on $arch
  This package provides kernel header files for $KERNELRELEASE on $arch
+=======
+Architecture: any
+Description: Linux kernel headers for $KERNELRELEASE on \${kernel:debarch}
+ This package provides kernel header files for $KERNELRELEASE on \${kernel:debarch}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  .
  This is useful for people who need to build external modules
 EOF

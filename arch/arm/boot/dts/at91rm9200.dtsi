@@ -35,8 +35,17 @@
 		ssc2 = &ssc2;
 	};
 	cpus {
+<<<<<<< HEAD
 		cpu@0 {
 			compatible = "arm,arm920t";
+=======
+		#address-cells = <0>;
+		#size-cells = <0>;
+
+		cpu {
+			compatible = "arm,arm920t";
+			device_type = "cpu";
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		};
 	};
 

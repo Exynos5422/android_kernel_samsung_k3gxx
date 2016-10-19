@@ -24,6 +24,10 @@
 #include <linux/pci.h>
 #include <linux/slab.h>
 #include <linux/dmapool.h>
+<<<<<<< HEAD
+=======
+#include <linux/dma-mapping.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #include "xhci.h"
 
@@ -320,6 +324,26 @@ static void xhci_reinit_cached_ring(struct xhci_hcd *xhci,
 	INIT_LIST_HEAD(&ring->td_list);
 }
 
+<<<<<<< HEAD
+=======
+/* Zero an endpoint ring (except for link TRBs clear only cycle bit) and move
+ * the enqueue and dequeue pointers to the beginning of the ring.
+ */
+void xhci_reinit_xfer_ring(struct xhci_ring *ring, unsigned int cycle_state)
+{
+	struct xhci_segment	*seg = ring->first_seg;
+
+	do {
+		memset(seg->trbs, 0,
+				sizeof(union xhci_trb)*(TRBS_PER_SEGMENT - 1));
+		seg->trbs[TRBS_PER_SEGMENT - 1].link.control &= ~TRB_CYCLE;
+		seg = seg->next;
+	} while (seg != ring->first_seg);
+
+	xhci_initialize_ring_info(ring, cycle_state);
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * Expand an existing ring.
  * Look for a cached ring or allocate a new ring which has same segment numbers
@@ -1794,6 +1818,19 @@ void xhci_mem_cleanup(struct xhci_hcd *xhci)
 		kfree(cur_cd);
 	}
 
+<<<<<<< HEAD
+=======
+	num_ports = HCS_MAX_PORTS(xhci->hcs_params1);
+	for (i = 0; i < num_ports; i++) {
+		struct xhci_interval_bw_table *bwt = &xhci->rh_bw[i].bw_table;
+		for (j = 0; j < XHCI_MAX_INTERVAL; j++) {
+			struct list_head *ep = &bwt->interval_bw[j].endpoints;
+			while (!list_empty(ep))
+				list_del_init(ep->next);
+		}
+	}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	for (i = 1; i < MAX_HC_SLOTS; ++i)
 		xhci_free_virt_device(xhci, i);
 
@@ -1834,6 +1871,7 @@ void xhci_mem_cleanup(struct xhci_hcd *xhci)
 	if (!xhci->rh_bw)
 		goto no_bw;
 
+<<<<<<< HEAD
 	num_ports = HCS_MAX_PORTS(xhci->hcs_params1);
 	for (i = 0; i < num_ports; i++) {
 		struct xhci_interval_bw_table *bwt = &xhci->rh_bw[i].bw_table;
@@ -1844,6 +1882,8 @@ void xhci_mem_cleanup(struct xhci_hcd *xhci)
 		}
 	}
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	for (i = 0; i < num_ports; i++) {
 		struct xhci_tt_bw_info *tt, *n;
 		list_for_each_entry_safe(tt, n, &xhci->rh_bw[i].tts, tt_list) {

@@ -41,9 +41,12 @@
 #include <linux/scatterlist.h>
 #include <linux/mm.h>
 #include <linux/dma-mapping.h>
+<<<<<<< HEAD
 #if defined(CONFIG_LINK_DEVICE_HSIC) || defined(CONFIG_MDM_HSIC_PM)
 #include <linux/usb/quirks.h>
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #include "usb.h"
 
@@ -278,6 +281,7 @@ static int usb_dev_suspend(struct device *dev)
 
 static int usb_dev_resume(struct device *dev)
 {
+<<<<<<< HEAD
 #if !defined(CONFIG_LTE_MODEM_SHANNON) && !defined(CONFIG_SEC_MODEM_M74XX)
 #if defined(CONFIG_LINK_DEVICE_HSIC) || defined(CONFIG_MDM_HSIC_PM)
 	struct usb_device *udev = to_usb_device(dev);
@@ -291,6 +295,8 @@ static int usb_dev_resume(struct device *dev)
 		return 0;
 #endif
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return usb_resume(dev, PMSG_RESUME);
 }
 
@@ -460,6 +466,7 @@ struct usb_device *usb_alloc_dev(struct usb_device *parent,
 	INIT_LIST_HEAD(&dev->filelist);
 
 #ifdef	CONFIG_PM
+<<<<<<< HEAD
 	pm_runtime_set_autosuspend_delay(&dev->dev,
 			usb_autosuspend_delay * 1000);
 	dev->connect_time = jiffies;
@@ -467,6 +474,15 @@ struct usb_device *usb_alloc_dev(struct usb_device *parent,
 #if defined(CONFIG_LINK_DEVICE_HSIC)
 	dev->remote_wake = 0;
 #endif
+=======
+	if (usb_hcd->driver->set_autosuspend_delay)
+		usb_hcd->driver->set_autosuspend_delay(dev);
+	else
+		pm_runtime_set_autosuspend_delay(&dev->dev,
+				usb_autosuspend_delay * 1000);
+	dev->connect_time = jiffies;
+	dev->active_duration = -jiffies;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif
 	if (root_hub)	/* Root hub always ok [and always wired] */
 		dev->authorized = 1;

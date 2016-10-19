@@ -22,7 +22,11 @@
 #include <linux/of_irq.h>
 
 #include <asm/mach/time.h>
+<<<<<<< HEAD
 #include <asm/sched_clock.h>
+=======
+#include <linux/sched_clock.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 static void timer_get_base_and_rate(struct device_node *np,
 				    void __iomem **base, u32 *rate)
@@ -77,7 +81,11 @@ static void __iomem *sched_io_base;
 
 static u32 read_sched_clock(void)
 {
+<<<<<<< HEAD
 	return __raw_readl(sched_io_base);
+=======
+	return ~__raw_readl(sched_io_base);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static const struct of_device_id sptimer_ids[] __initconst = {

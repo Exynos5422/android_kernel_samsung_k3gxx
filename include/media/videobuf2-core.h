@@ -17,7 +17,12 @@
 #include <linux/poll.h>
 #include <linux/videodev2.h>
 #include <linux/dma-buf.h>
+<<<<<<< HEAD
 #include "../../drivers/staging/android/sw_sync.h"
+=======
+
+#define VB2_MAX_FRAME  64
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 struct vb2_alloc_ctx;
 struct vb2_fileio_data;
@@ -82,14 +87,22 @@ struct vb2_fileio_data;
  *				  unmap_dmabuf.
  */
 struct vb2_mem_ops {
+<<<<<<< HEAD
 	void		*(*alloc)(void *alloc_ctx, unsigned long size,
 				  int write, int plane, gfp_t gfp_flags);
+=======
+	void		*(*alloc)(void *alloc_ctx, unsigned long size, gfp_t gfp_flags);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	void		(*put)(void *buf_priv);
 	struct dma_buf *(*get_dmabuf)(void *buf_priv);
 
 	void		*(*get_userptr)(void *alloc_ctx, unsigned long vaddr,
+<<<<<<< HEAD
 					unsigned long size, int write,
 					int plane);
+=======
+					unsigned long size, int write);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	void		(*put_userptr)(void *buf_priv);
 
 	void		(*prepare)(void *buf_priv);
@@ -98,7 +111,11 @@ struct vb2_mem_ops {
 	void		*(*attach_dmabuf)(void *alloc_ctx, struct dma_buf *dbuf,
 				unsigned long size, int write);
 	void		(*detach_dmabuf)(void *buf_priv);
+<<<<<<< HEAD
 	int		(*map_dmabuf)(void *buf_priv, int plane);
+=======
+	int		(*map_dmabuf)(void *buf_priv);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	void		(*unmap_dmabuf)(void *buf_priv);
 
 	void		*(*vaddr)(void *buf_priv);
@@ -182,8 +199,11 @@ struct vb2_queue;
  * @vb2_queue:		the queue to which this driver belongs
  * @num_planes:		number of planes in the buffer
  *			on an internal driver queue
+<<<<<<< HEAD
  * @acquire_fence:	sync fence that will be signaled when the buffer's
  *			contents are available.
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  * @state:		current buffer state; do not change
  * @queued_entry:	entry on the queued buffers list, which holds all
  *			buffers queued from userspace
@@ -199,8 +219,11 @@ struct vb2_buffer {
 
 	unsigned int		num_planes;
 
+<<<<<<< HEAD
 	struct sync_fence	*acquire_fence;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /* Private: internal use only */
 	enum vb2_buffer_state	state;
 
@@ -293,7 +316,10 @@ struct v4l2_fh;
 /**
  * struct vb2_queue - a videobuf queue
  *
+<<<<<<< HEAD
  * @name:	name of the queue
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  * @type:	queue type (see V4L2_BUF_TYPE_* in linux/videodev2.h
  * @io_modes:	supported io methods (see vb2_io_modes enum)
  * @io_flags:	additional io flags (see vb2_fileio_flags enum)
@@ -329,7 +355,10 @@ struct v4l2_fh;
  * @fileio:	file io emulator internal data, used only if emulator is active
  */
 struct vb2_queue {
+<<<<<<< HEAD
 	const char			*name;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	enum v4l2_buf_type		type;
 	unsigned int			io_modes;
 	unsigned int			io_flags;
@@ -345,7 +374,11 @@ struct vb2_queue {
 
 /* private: internal use only */
 	enum v4l2_memory		memory;
+<<<<<<< HEAD
 	struct vb2_buffer		*bufs[VIDEO_MAX_FRAME];
+=======
+	struct vb2_buffer		*bufs[VB2_MAX_FRAME];
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	unsigned int			num_buffers;
 
 	struct list_head		queued_list;
@@ -361,9 +394,12 @@ struct vb2_queue {
 	unsigned int			streaming:1;
 
 	struct vb2_fileio_data		*fileio;
+<<<<<<< HEAD
 
 	struct sw_sync_timeline		*timeline;
 	u32				timeline_max;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 void *vb2_plane_vaddr(struct vb2_buffer *vb, unsigned int plane_no);

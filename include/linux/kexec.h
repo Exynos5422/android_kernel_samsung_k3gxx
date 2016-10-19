@@ -198,6 +198,12 @@ extern u32 vmcoreinfo_note[VMCOREINFO_NOTE_SIZE/4];
 extern size_t vmcoreinfo_size;
 extern size_t vmcoreinfo_max_size;
 
+<<<<<<< HEAD
+=======
+/* flag to track if kexec reboot is in progress */
+extern bool kexec_in_progress;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 int __init parse_crashkernel(char *cmdline, unsigned long long system_ram,
 		unsigned long long *crash_size, unsigned long long *crash_base);
 int parse_crashkernel_high(char *cmdline, unsigned long long system_ram,

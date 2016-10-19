@@ -64,6 +64,10 @@ obj-$(CONFIG_RC_MAP) += rc-adstech-dvb-t-pci.o \
 			rc-norwood.o \
 			rc-npgtech.o \
 			rc-pctv-sedna.o \
+<<<<<<< HEAD
+=======
+			rc-philips.o \
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			rc-pinnacle-color.o \
 			rc-pinnacle-grey.o \
 			rc-pinnacle-pctv-hd.o \
@@ -80,6 +84,10 @@ obj-$(CONFIG_RC_MAP) += rc-adstech-dvb-t-pci.o \
 			rc-real-audio-220-32-keys.o \
 			rc-reddo.o \
 			rc-snapstream-firefly.o \
+<<<<<<< HEAD
+=======
+			rc-samsung-necx.o\
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			rc-streamzap.o \
 			rc-tbs-nec.o \
 			rc-technisat-usb2.o \
@@ -93,6 +101,10 @@ obj-$(CONFIG_RC_MAP) += rc-adstech-dvb-t-pci.o \
 			rc-trekstor.o \
 			rc-tt-1500.o \
 			rc-twinhan1027.o \
+<<<<<<< HEAD
+=======
+			rc-ue-rf4ce.o \
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			rc-videomate-m1f.o \
 			rc-videomate-s350.o \
 			rc-videomate-tv-pvr.o \

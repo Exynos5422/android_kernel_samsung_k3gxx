@@ -12,7 +12,10 @@
  */
 
 #include <linux/clk.h>
+<<<<<<< HEAD
 #include <linux/notifier.h>
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <linux/of.h>
 #include <linux/platform_device.h>
 #include <linux/platform_data/usb-ohci-exynos.h>
@@ -26,28 +29,39 @@ struct exynos_ohci_hcd {
 	struct usb_phy *phy;
 	struct usb_otg *otg;
 	struct exynos4_ohci_platdata *pdata;
+<<<<<<< HEAD
 	struct notifier_block lpa_nb;
 	int power_on;
 	int retention;
 	unsigned post_lpa_resume:1;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 static void exynos_ohci_phy_enable(struct exynos_ohci_hcd *exynos_ohci)
 {
 	struct platform_device *pdev = to_platform_device(exynos_ohci->dev);
 
+<<<<<<< HEAD
 	if (exynos_ohci->phy) {
 		usb_phy_init(exynos_ohci->phy);
 		exynos_ohci->post_lpa_resume = 0;
 	} else if (exynos_ohci->pdata && exynos_ohci->pdata->phy_init) {
 		exynos_ohci->pdata->phy_init(pdev, USB_PHY_TYPE_HOST);
 	}
+=======
+	if (exynos_ohci->phy)
+		usb_phy_init(exynos_ohci->phy);
+	else if (exynos_ohci->pdata && exynos_ohci->pdata->phy_init)
+		exynos_ohci->pdata->phy_init(pdev, USB_PHY_TYPE_HOST);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static void exynos_ohci_phy_disable(struct exynos_ohci_hcd *exynos_ohci)
 {
 	struct platform_device *pdev = to_platform_device(exynos_ohci->dev);
 
+<<<<<<< HEAD
 	if (exynos_ohci->phy) {
 		/* Shutdown PHY only if it wasn't shutdown before */
 		if (!exynos_ohci->post_lpa_resume)
@@ -55,6 +69,12 @@ static void exynos_ohci_phy_disable(struct exynos_ohci_hcd *exynos_ohci)
 	} else if (exynos_ohci->pdata && exynos_ohci->pdata->phy_exit) {
 		exynos_ohci->pdata->phy_exit(pdev, USB_PHY_TYPE_HOST);
 	}
+=======
+	if (exynos_ohci->phy)
+		usb_phy_shutdown(exynos_ohci->phy);
+	else if (exynos_ohci->pdata && exynos_ohci->pdata->phy_exit)
+		exynos_ohci->pdata->phy_exit(pdev, USB_PHY_TYPE_HOST);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static int ohci_exynos_reset(struct usb_hcd *hcd)
@@ -80,6 +100,7 @@ static int ohci_exynos_start(struct usb_hcd *hcd)
 	return 0;
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_PM
 static int exynos_ohci_bus_resume(struct usb_hcd *hcd)
 {
@@ -92,6 +113,8 @@ static int exynos_ohci_bus_resume(struct usb_hcd *hcd)
 #define exynos_ohci_bus_resume	NULL
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static const struct hc_driver exynos_ohci_hc_driver = {
 	.description		= hcd_name,
 	.product_desc		= "EXYNOS OHCI Host Controller",
@@ -115,11 +138,16 @@ static const struct hc_driver exynos_ohci_hc_driver = {
 	.hub_control		= ohci_hub_control,
 #ifdef	CONFIG_PM
 	.bus_suspend		= ohci_bus_suspend,
+<<<<<<< HEAD
 	.bus_resume		= exynos_ohci_bus_resume,
+=======
+	.bus_resume		= ohci_bus_resume,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif
 	.start_port_reset	= ohci_start_port_reset,
 };
 
+<<<<<<< HEAD
 static ssize_t show_ohci_power(struct device *dev,
 			       struct device_attribute *attr,
 			       char *buf)
@@ -228,6 +256,11 @@ static int exynos_ohci_probe(struct platform_device *pdev)
 {
 	struct exynos4_ohci_platdata *pdata = pdev->dev.platform_data;
 	struct device_node *node = (&pdev->dev)->of_node;
+=======
+static int exynos_ohci_probe(struct platform_device *pdev)
+{
+	struct exynos4_ohci_platdata *pdata = pdev->dev.platform_data;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct exynos_ohci_hcd *exynos_ohci;
 	struct usb_hcd *hcd;
 	struct ohci_hcd *ohci;
@@ -255,7 +288,11 @@ static int exynos_ohci_probe(struct platform_device *pdev)
 					"samsung,exynos5440-ohci"))
 		goto skip_phy;
 
+<<<<<<< HEAD
 	phy = devm_usb_get_phy_by_phandle(&pdev->dev, "usb-phy", 0);
+=======
+	phy = devm_usb_get_phy(&pdev->dev, USB_PHY_TYPE_USB2);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (IS_ERR(phy)) {
 		/* Fallback to pdata */
 		if (!pdata) {
@@ -269,10 +306,13 @@ static int exynos_ohci_probe(struct platform_device *pdev)
 		exynos_ohci->otg = phy->otg;
 	}
 
+<<<<<<< HEAD
 	err = of_property_read_u32_index(node, "l2-retention", 0,
 						&exynos_ohci->retention);
 	if (err)
 		dev_err(&pdev->dev, " can not find l2-retention value\n");
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 skip_phy:
 
 	exynos_ohci->dev = &pdev->dev;
@@ -324,6 +364,7 @@ skip_phy:
 		exynos_ohci->otg->set_host(exynos_ohci->otg,
 					&exynos_ohci->hcd->self);
 
+<<<<<<< HEAD
 	/* Make sure PHY is initialized */
 	exynos_ohci_phy_enable(exynos_ohci);
 	if (exynos_ohci->phy)
@@ -332,6 +373,9 @@ skip_phy:
 		 * make sure PHY is active
 		 */
 		pm_runtime_get_sync(exynos_ohci->phy->dev);
+=======
+	exynos_ohci_phy_enable(exynos_ohci);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	ohci = hcd_to_ohci(hcd);
 	ohci_hcd_init(ohci);
@@ -344,6 +388,7 @@ skip_phy:
 
 	platform_set_drvdata(pdev, exynos_ohci);
 
+<<<<<<< HEAD
 	/*
 	 * OHCI root hubs are expected to handle remote wakeup.
 	 * So, wakeup flag init defaults for root hubs.
@@ -373,6 +418,11 @@ skip_phy:
 fail_add_hcd:
 	if (exynos_ohci->phy)
 		pm_runtime_put_sync(exynos_ohci->phy->dev);
+=======
+	return 0;
+
+fail_add_hcd:
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	exynos_ohci_phy_disable(exynos_ohci);
 fail_io:
 	clk_disable_unprepare(exynos_ohci->clk);
@@ -386,6 +436,7 @@ static int exynos_ohci_remove(struct platform_device *pdev)
 	struct exynos_ohci_hcd *exynos_ohci = platform_get_drvdata(pdev);
 	struct usb_hcd *hcd = exynos_ohci->hcd;
 
+<<<<<<< HEAD
 	pm_runtime_disable(&pdev->dev);
 
 	exynos_ohci->power_on = 0;
@@ -393,6 +444,8 @@ static int exynos_ohci_remove(struct platform_device *pdev)
 		unregister_samsung_usb_lpa_notifier(&exynos_ohci->lpa_nb);
 	remove_ohci_sys_file(hcd_to_ohci(hcd));
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	usb_remove_hcd(hcd);
 
 	if (exynos_ohci->otg)
@@ -413,6 +466,7 @@ static void exynos_ohci_shutdown(struct platform_device *pdev)
 	struct exynos_ohci_hcd *exynos_ohci = platform_get_drvdata(pdev);
 	struct usb_hcd *hcd = exynos_ohci->hcd;
 
+<<<<<<< HEAD
 	if (!exynos_ohci->power_on)
 		return;
 
@@ -427,10 +481,13 @@ static void exynos_ohci_shutdown(struct platform_device *pdev)
 	 */
 	pm_runtime_forbid(&pdev->dev);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (hcd->driver->shutdown)
 		hcd->driver->shutdown(hcd);
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_PM_RUNTIME
 static int exynos_ohci_runtime_suspend(struct device *dev)
 {
@@ -485,6 +542,8 @@ static int exynos_ohci_runtime_resume(struct device *dev)
 #endif
 
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifdef CONFIG_PM
 static int exynos_ohci_suspend(struct device *dev)
 {
@@ -535,6 +594,7 @@ static int exynos_ohci_resume(struct device *dev)
 					&exynos_ohci->hcd->self);
 
 	exynos_ohci_phy_enable(exynos_ohci);
+<<<<<<< HEAD
 	if (exynos_ohci->phy) {
 		/*
 		 * We are going to change runtime status to active.
@@ -551,6 +611,11 @@ static int exynos_ohci_resume(struct device *dev)
 	pm_runtime_set_active(dev);
 	pm_runtime_enable(dev);
 
+=======
+
+	ohci_resume(hcd, false);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 #else
@@ -561,15 +626,21 @@ static int exynos_ohci_resume(struct device *dev)
 static const struct dev_pm_ops exynos_ohci_pm_ops = {
 	.suspend	= exynos_ohci_suspend,
 	.resume		= exynos_ohci_resume,
+<<<<<<< HEAD
 	.runtime_suspend	= exynos_ohci_runtime_suspend,
 	.runtime_resume		= exynos_ohci_runtime_resume,
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 #ifdef CONFIG_OF
 static const struct of_device_id exynos_ohci_match[] = {
 	{ .compatible = "samsung,exynos4210-ohci" },
 	{ .compatible = "samsung,exynos5440-ohci" },
+<<<<<<< HEAD
 	{ .compatible = "samsung,exynos5-ohci" },
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	{},
 };
 MODULE_DEVICE_TABLE(of, exynos_ohci_match);

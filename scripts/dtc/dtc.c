@@ -31,6 +31,10 @@ int reservenum;		/* Number of memory reservation slots */
 int minsize;		/* Minimum blob size */
 int padsize;		/* Additional padding to blob */
 int phandle_format = PHANDLE_BOTH;	/* Use linux,phandle or phandle properties */
+<<<<<<< HEAD
+=======
+int symbol_fixup_support = 0;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 static void fill_fullpaths(struct node *tree, const char *prefix)
 {
@@ -96,6 +100,11 @@ static void  __attribute__ ((noreturn)) usage(void)
 	fprintf(stderr, "\t-W [no-]<checkname>\n");
 	fprintf(stderr, "\t-E [no-]<checkname>\n");
 	fprintf(stderr, "\t\t\tenable or disable warnings and errors\n");
+<<<<<<< HEAD
+=======
+	fprintf(stderr, "\t-@\n");
+	fprintf(stderr, "\t\tSymbols and Fixups support\n");
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	exit(3);
 }
 
@@ -118,7 +127,11 @@ int main(int argc, char *argv[])
 	minsize    = 0;
 	padsize    = 0;
 
+<<<<<<< HEAD
 	while ((opt = getopt(argc, argv, "hI:O:o:V:d:R:S:p:fqb:i:vH:sW:E:"))
+=======
+	while ((opt = getopt(argc, argv, "hI:O:o:V:d:R:S:p:fqb:i:vH:sW:E:@"))
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			!= EOF) {
 		switch (opt) {
 		case 'I':
@@ -183,7 +196,13 @@ int main(int argc, char *argv[])
 		case 'E':
 			parse_checks_option(false, true, optarg);
 			break;
+<<<<<<< HEAD
 
+=======
+		case '@':
+			symbol_fixup_support = 1;
+			break;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		case 'h':
 		default:
 			usage();

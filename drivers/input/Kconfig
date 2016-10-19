@@ -80,7 +80,11 @@ config INPUT_MATRIXKMAP
 comment "Userland interfaces"
 
 config INPUT_MOUSEDEV
+<<<<<<< HEAD
 	tristate "Mouse interface" if EXPERT
+=======
+	tristate "Mouse interface"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	default y
 	help
 	  Say Y here if you want your mouse to be accessible as char devices
@@ -177,12 +181,17 @@ config INPUT_APMPOWER
 config INPUT_KEYRESET
 	tristate "Reset key"
 	depends on INPUT
+<<<<<<< HEAD
+=======
+	select INPUT_KEYCOMBO
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	---help---
 	  Say Y here if you want to reboot when some keys are pressed;
 
 	  To compile this driver as a module, choose M here: the
 	  module will be called keyreset.
 
+<<<<<<< HEAD
 config GLOVE_TOUCH
 	tristate "Glove touch"
 	help
@@ -219,6 +228,23 @@ config INPUT_EXPANDED_ABS
 	  Say Y here if you want to use expanded ABS event.
 	  ABS_MAX change from 0x3f to 0x4f.
 	  This feature must synchronize with input framework and uinput.
+=======
+config INPUT_KEYCOMBO
+	tristate "Key combo"
+	depends on INPUT
+	---help---
+	  Say Y here if you want to take action when some keys are pressed;
+
+	  To compile this driver as a module, choose M here: the
+	  module will be called keycombo.
+
+config HALL_SENSOR
+	bool "Hall sensor"
+	depends on INPUT
+	---help---
+	 Say y here if you want to use this hall sensor driver, it
+	 is like a switch. For example, lid.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 comment "Input Device Drivers"
 
@@ -232,8 +258,11 @@ source "drivers/input/tablet/Kconfig"
 
 source "drivers/input/touchscreen/Kconfig"
 
+<<<<<<< HEAD
 source "drivers/input/wacom/Kconfig"
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 source "drivers/input/misc/Kconfig"
 
 endif

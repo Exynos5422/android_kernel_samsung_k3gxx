@@ -1,7 +1,10 @@
 /*
  *  TUN - Universal TUN/TAP device driver.
  *  Copyright (C) 1999-2002 Maxim Krasnyansky <maxk@qualcomm.com>
+<<<<<<< HEAD
  *  Copyright (c) 2015 Samsung Electronics Co., Ltd.
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -34,6 +37,7 @@
  *  Daniel Podlejski <underley@underley.eu.org>
  *    Modifications for 2.3.99-pre5 kernel.
  */
+<<<<<<< HEAD
 /*
  *  Changes:
  *  KwnagHyun Kim <kh0304.kim@samsung.com> 2015/07/08
@@ -42,6 +46,8 @@
  *    Add codes to share UID/PID information
  *
  */
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
 
@@ -77,6 +83,7 @@
 #include <net/netns/generic.h>
 #include <net/rtnetlink.h>
 #include <net/sock.h>
+<<<<<<< HEAD
 // ------------- START of KNOX_VPN ------------------//
 #include <linux/types.h>
 #include <linux/udp.h>
@@ -88,6 +95,8 @@
 #define META_MARK_BASE_UPPER 500
 
 // ------------- END of KNOX_VPN -------------------//
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #include <asm/uaccess.h>
 
@@ -120,6 +129,7 @@ do {								\
 } while (0)
 #endif
 
+<<<<<<< HEAD
 // ------------- START of KNOX_VPN ------------------//
 /* The KNOX framework marks packets intended to a VPN client for special processing differently.
  * The marked packets hit special IP table rules and are routed back to user space using the TUN driver
@@ -141,6 +151,8 @@ struct knox_meta_param {
 #define TUN_META_HDR_SZ sizeof(struct knox_meta_param)
 #define TUN_META_MARK_OFFSET offsetof(struct knox_meta_param, uid)
 // ------------- END of KNOX_VPN -------------------//
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define GOODCOPY_LEN 128
 
 #define FLT_EXACT_COUNT 8
@@ -1110,6 +1122,10 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
 	struct sk_buff *skb;
 	size_t len = total_len, align = NET_SKB_PAD, linear;
 	struct virtio_net_hdr gso = { 0 };
+<<<<<<< HEAD
+=======
+	int good_linear;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	int offset = 0;
 	int copylen;
 	bool zerocopy = false;
@@ -1117,8 +1133,14 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
 	u32 rxhash;
 
 	if (!(tun->flags & TUN_NO_PI)) {
+<<<<<<< HEAD
 		if ((len -= sizeof(pi)) > total_len)
 			return -EINVAL;
+=======
+		if (len < sizeof(pi))
+			return -EINVAL;
+		len -= sizeof(pi);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 		if (memcpy_fromiovecend((void *)&pi, iv, 0, sizeof(pi)))
 			return -EFAULT;
@@ -1126,8 +1148,14 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
 	}
 
 	if (tun->flags & TUN_VNET_HDR) {
+<<<<<<< HEAD
 		if ((len -= tun->vnet_hdr_sz) > total_len)
 			return -EINVAL;
+=======
+		if (len < tun->vnet_hdr_sz)
+			return -EINVAL;
+		len -= tun->vnet_hdr_sz;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 		if (memcpy_fromiovecend((void *)&gso, iv, offset, sizeof(gso)))
 			return -EFAULT;
@@ -1148,12 +1176,22 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
 			return -EINVAL;
 	}
 
+<<<<<<< HEAD
+=======
+	good_linear = SKB_MAX_HEAD(align);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (msg_control) {
 		/* There are 256 bytes to be copied in skb, so there is
 		 * enough room for skb expand head in case it is used.
 		 * The rest of the buffer is mapped from userspace.
 		 */
 		copylen = gso.hdr_len ? gso.hdr_len : GOODCOPY_LEN;
+<<<<<<< HEAD
+=======
+		if (copylen > good_linear)
+			copylen = good_linear;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		linear = copylen;
 		if (iov_pages(iv, offset + copylen, count) <= MAX_SKB_FRAGS)
 			zerocopy = true;
@@ -1161,7 +1199,14 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
 
 	if (!zerocopy) {
 		copylen = len;
+<<<<<<< HEAD
 		linear = gso.hdr_len;
+=======
+		if (gso.hdr_len > good_linear)
+			linear = good_linear;
+		else
+			linear = gso.hdr_len;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	skb = tun_alloc_skb(tfile, align, copylen, linear, noblock);
@@ -1295,6 +1340,7 @@ static ssize_t tun_chr_aio_write(struct kiocb *iocb, const struct iovec *iv,
 	return result;
 }
 
+<<<<<<< HEAD
 
 // ------------- START of KNOX_VPN ------------------//
 
@@ -1357,6 +1403,8 @@ static int knoxvpn_process_uidpid(struct tun_struct *tun, struct sk_buff *skb,
 
 // ------------- END of KNOX_VPN ------------------//
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /* Put packet to the user space buffer */
 static ssize_t tun_put_user(struct tun_struct *tun,
 			    struct tun_file *tfile,
@@ -1428,6 +1476,7 @@ static ssize_t tun_put_user(struct tun_struct *tun,
 		total += tun->vnet_hdr_sz;
 	}
 
+<<<<<<< HEAD
 
 // ------------- START of KNOX_VPN ------------------//
 	if (knoxvpn_process_uidpid(tun, skb, iv, &len, &total) < 0) {
@@ -1435,6 +1484,8 @@ static ssize_t tun_put_user(struct tun_struct *tun,
 	}
 // ------------- END of KNOX_VPN ------------------//
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	len = min_t(int, skb->len, len);
 
 	skb_copy_datagram_const_iovec(skb, 0, iv, total, len);
@@ -1512,6 +1563,11 @@ static ssize_t tun_chr_aio_read(struct kiocb *iocb, const struct iovec *iv,
 	ret = tun_do_read(tun, tfile, iocb, iv, len,
 			  file->f_flags & O_NONBLOCK);
 	ret = min_t(ssize_t, ret, len);
+<<<<<<< HEAD
+=======
+	if (ret > 0)
+		iocb->ki_pos = ret;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 out:
 	tun_put(tun);
 	return ret;
@@ -1639,6 +1695,7 @@ static int tun_flags(struct tun_struct *tun)
 {
 	int flags = 0;
 
+<<<<<<< HEAD
 // ------------- START of KNOX_VPN ------------------//
 	/* Checks if meta header is enabled so that
 	 * packets will be prepended with meta data(UID/PID)
@@ -1648,6 +1705,8 @@ static int tun_flags(struct tun_struct *tun)
 	}
 // ------------- END of KNOX_VPN -------------------//
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (tun->flags & TUN_TUN_DEV)
 		flags |= IFF_TUN;
 	else
@@ -1810,11 +1869,19 @@ static int tun_set_iff(struct net *net, struct file *file, struct ifreq *ifr)
 		INIT_LIST_HEAD(&tun->disabled);
 		err = tun_attach(tun, file);
 		if (err < 0)
+<<<<<<< HEAD
 			goto err_free_dev;
 
 		err = register_netdevice(tun->dev);
 		if (err < 0)
 			goto err_free_dev;
+=======
+			goto err_free_flow;
+
+		err = register_netdevice(tun->dev);
+		if (err < 0)
+			goto err_detach;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 		if (device_create_file(&tun->dev->dev, &dev_attr_tun_flags) ||
 		    device_create_file(&tun->dev->dev, &dev_attr_owner) ||
@@ -1825,6 +1892,7 @@ static int tun_set_iff(struct net *net, struct file *file, struct ifreq *ifr)
 	netif_carrier_on(tun->dev);
 
 	tun_debug(KERN_INFO, tun, "tun_set_iff\n");
+<<<<<<< HEAD
 // ------------- START of KNOX_VPN ------------------//
 	if (ifr->ifr_flags & IFF_META_HDR) {
 		tun->flags |= TUN_META_HDR;
@@ -1832,6 +1900,8 @@ static int tun_set_iff(struct net *net, struct file *file, struct ifreq *ifr)
 		tun->flags &= ~TUN_META_HDR;
 	}
 // ------------- END of KNOX_VPN -------------------//
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (ifr->ifr_flags & IFF_NO_PI)
 		tun->flags |= TUN_NO_PI;
@@ -1865,7 +1935,16 @@ static int tun_set_iff(struct net *net, struct file *file, struct ifreq *ifr)
 	strcpy(ifr->ifr_name, tun->dev->name);
 	return 0;
 
+<<<<<<< HEAD
  err_free_dev:
+=======
+err_detach:
+	tun_detach_all(dev);
+err_free_flow:
+	tun_flow_uninit(tun);
+	security_tun_dev_free_security(tun->security);
+err_free_dev:
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	free_netdev(dev);
 	return err;
 }
@@ -2006,11 +2085,14 @@ static long __tun_chr_ioctl(struct file *file, unsigned int cmd,
 	int sndbuf;
 	int vnet_hdr_sz;
 	int ret;
+<<<<<<< HEAD
 // ------------- START of KNOX_VPN ------------------//
 	int knox_flag = 0;
 	int tun_meta_param;
 	int tun_meta_value;
 // ------------- END of KNOX_VPN -------------------//
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #ifdef CONFIG_ANDROID_PARANOID_NETWORK
 	if (cmd != TUNGETIFF && !capable(CAP_NET_ADMIN)) {
@@ -2028,6 +2110,7 @@ static long __tun_chr_ioctl(struct file *file, unsigned int cmd,
 		/* Currently this just means: "what IFF flags are valid?".
 		 * This is needed because we never checked for invalid flags on
 		 * TUNSETIFF. */
+<<<<<<< HEAD
 
 // ------------- START of KNOX_VPN ------------------//
 		knox_flag |= IFF_META_HDR;
@@ -2035,6 +2118,11 @@ static long __tun_chr_ioctl(struct file *file, unsigned int cmd,
 				IFF_VNET_HDR | IFF_MULTI_QUEUE | knox_flag,
 				(unsigned int __user*)argp);
 // ------------- END of KNOX_VPN -------------------//
+=======
+		return put_user(IFF_TUN | IFF_TAP | IFF_NO_PI | IFF_ONE_QUEUE |
+				IFF_VNET_HDR | IFF_MULTI_QUEUE,
+				(unsigned int __user*)argp);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	} else if (cmd == TUNSETQUEUE)
 		return tun_set_queue(file, &ifr);
 
@@ -2201,6 +2289,7 @@ static long __tun_chr_ioctl(struct file *file, unsigned int cmd,
 		tun->vnet_hdr_sz = vnet_hdr_sz;
 		break;
 
+<<<<<<< HEAD
 // ------------- START of KNOX_VPN ------------------//
 	case TUNGETMETAPARAM:
 		if (copy_from_user(&tun_meta_param, argp,
@@ -2232,6 +2321,8 @@ static long __tun_chr_ioctl(struct file *file, unsigned int cmd,
 		break;
 // ------------- END of KNOX_VPN -------------------//
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	case TUNATTACHFILTER:
 		/* Can be set only for TAPs */
 		ret = -EINVAL;

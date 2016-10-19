@@ -24,6 +24,7 @@ config W1_CON
 		either due to automatic or requested search.
 	  2. Userspace commands. Includes read/write and search/alarm search commands.
 	  3. Replies to userspace commands.
+<<<<<<< HEAD
 choice
 	prompt "Authorization trigger type"
 	help
@@ -59,14 +60,19 @@ config W1_CF
 	default n
 	help
 	  This allows to check the node.
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 source drivers/w1/masters/Kconfig
 source drivers/w1/slaves/Kconfig
 
 endif # W1
+<<<<<<< HEAD
 
 config W1_HEALTH_COVER
 	bool "Health Cover Support"
 	default n
 	help
 	  Say Y to enable Health Cover Support.
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

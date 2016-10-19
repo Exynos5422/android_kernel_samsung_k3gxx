@@ -96,15 +96,30 @@ struct usb_phy {
 	/* to support controllers that have multiple transceivers */
 	struct list_head	head;
 
+<<<<<<< HEAD
 	/* initialize/shutdown/get status of the OTG controller */
 	int	(*init)(struct usb_phy *x);
 	void	(*shutdown)(struct usb_phy *x);
 	bool	(*is_active)(struct usb_phy *x);
 	void	(*tune)(struct usb_phy *x);
+=======
+	/* initialize/shutdown the OTG controller */
+	int	(*init)(struct usb_phy *x);
+	void	(*shutdown)(struct usb_phy *x);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/* enable/disable VBUS */
 	int	(*set_vbus)(struct usb_phy *x, int on);
 
+<<<<<<< HEAD
+=======
+	/* set additional settings parameters post-init */
+	int	(*set_params)(struct usb_phy *x);
+
+	/* do additional settings after complete initialization */
+	int	(*post_init)(struct usb_phy *x);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* effective for B devices, ignored for A-peripheral */
 	int	(*set_power)(struct usb_phy *x,
 				unsigned mA);
@@ -118,6 +133,12 @@ struct usb_phy {
 			enum usb_device_speed speed);
 	int	(*notify_disconnect)(struct usb_phy *x,
 			enum usb_device_speed speed);
+<<<<<<< HEAD
+=======
+
+	/* reset the PHY clocks */
+	int	(*reset)(struct usb_phy *x);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 /**
@@ -144,7 +165,11 @@ extern void usb_remove_phy(struct usb_phy *);
 /* helpers for direct access thru low-level io interface */
 static inline int usb_phy_io_read(struct usb_phy *x, u32 reg)
 {
+<<<<<<< HEAD
 	if (x->io_ops && x->io_ops->read)
+=======
+	if (x && x->io_ops && x->io_ops->read)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return x->io_ops->read(x, reg);
 
 	return -EINVAL;
@@ -152,7 +177,11 @@ static inline int usb_phy_io_read(struct usb_phy *x, u32 reg)
 
 static inline int usb_phy_io_write(struct usb_phy *x, u32 val, u32 reg)
 {
+<<<<<<< HEAD
 	if (x->io_ops && x->io_ops->write)
+=======
+	if (x && x->io_ops && x->io_ops->write)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return x->io_ops->write(x, val, reg);
 
 	return -EINVAL;
@@ -161,7 +190,11 @@ static inline int usb_phy_io_write(struct usb_phy *x, u32 val, u32 reg)
 static inline int
 usb_phy_init(struct usb_phy *x)
 {
+<<<<<<< HEAD
 	if (x->init)
+=======
+	if (x && x->init)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return x->init(x);
 
 	return 0;
@@ -170,6 +203,7 @@ usb_phy_init(struct usb_phy *x)
 static inline void
 usb_phy_shutdown(struct usb_phy *x)
 {
+<<<<<<< HEAD
 	if (x->shutdown)
 		x->shutdown(x);
 }
@@ -188,6 +222,16 @@ static inline int
 usb_phy_vbus_on(struct usb_phy *x)
 {
 	if (!x->set_vbus)
+=======
+	if (x && x->shutdown)
+		x->shutdown(x);
+}
+
+static inline int
+usb_phy_vbus_on(struct usb_phy *x)
+{
+	if (!x || !x->set_vbus)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return 0;
 
 	return x->set_vbus(x, true);
@@ -196,12 +240,17 @@ usb_phy_vbus_on(struct usb_phy *x)
 static inline int
 usb_phy_vbus_off(struct usb_phy *x)
 {
+<<<<<<< HEAD
 	if (!x->set_vbus)
+=======
+	if (!x || !x->set_vbus)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return 0;
 
 	return x->set_vbus(x, false);
 }
 
+<<<<<<< HEAD
 static inline void
 usb_phy_tune(struct usb_phy *x)
 {
@@ -213,6 +262,37 @@ usb_phy_tune(struct usb_phy *x)
 /* for usb host and peripheral controller drivers */
 #if IS_ENABLED(CONFIG_USB_PHY)
 extern bool usb_phy_check_op(void);
+=======
+static inline int
+usb_phy_set_params(struct usb_phy *x)
+{
+	if (x && x->set_params)
+		return x->set_params(x);
+
+	return 0;
+}
+
+static inline int
+usb_phy_post_init(struct usb_phy *x)
+{
+	if (x && x->post_init)
+		return x->post_init(x);
+
+	return 0;
+}
+
+static inline int
+usb_phy_reset(struct usb_phy *x)
+{
+	if (x && x->reset)
+		return x->reset(x);
+
+	return 0;
+}
+
+/* for usb host and peripheral controller drivers */
+#if IS_ENABLED(CONFIG_USB_PHY)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 extern struct usb_phy *usb_get_phy(enum usb_phy_type type);
 extern struct usb_phy *devm_usb_get_phy(struct device *dev,
 	enum usb_phy_type type);
@@ -225,11 +305,14 @@ extern void devm_usb_put_phy(struct device *dev, struct usb_phy *x);
 extern int usb_bind_phy(const char *dev_name, u8 index,
 				const char *phy_dev_name);
 #else
+<<<<<<< HEAD
 static inline bool usb_phy_check_op(void)
 {
 	return false;
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static inline struct usb_phy *usb_get_phy(enum usb_phy_type type)
 {
 	return ERR_PTR(-ENXIO);
@@ -284,7 +367,11 @@ usb_phy_set_power(struct usb_phy *x, unsigned mA)
 static inline int
 usb_phy_set_suspend(struct usb_phy *x, int suspend)
 {
+<<<<<<< HEAD
 	if (x->set_suspend != NULL)
+=======
+	if (x && x->set_suspend != NULL)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return x->set_suspend(x, suspend);
 	else
 		return 0;
@@ -293,7 +380,11 @@ usb_phy_set_suspend(struct usb_phy *x, int suspend)
 static inline int
 usb_phy_notify_connect(struct usb_phy *x, enum usb_device_speed speed)
 {
+<<<<<<< HEAD
 	if (x->notify_connect)
+=======
+	if (x && x->notify_connect)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return x->notify_connect(x, speed);
 	else
 		return 0;
@@ -302,7 +393,11 @@ usb_phy_notify_connect(struct usb_phy *x, enum usb_device_speed speed)
 static inline int
 usb_phy_notify_disconnect(struct usb_phy *x, enum usb_device_speed speed)
 {
+<<<<<<< HEAD
 	if (x->notify_disconnect)
+=======
+	if (x && x->notify_disconnect)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return x->notify_disconnect(x, speed);
 	else
 		return 0;

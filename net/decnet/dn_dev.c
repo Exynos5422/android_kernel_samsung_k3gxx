@@ -573,7 +573,11 @@ static int dn_nl_deladdr(struct sk_buff *skb, struct nlmsghdr *nlh)
 	struct dn_ifaddr __rcu **ifap;
 	int err = -EINVAL;
 
+<<<<<<< HEAD
 	if (!capable(CAP_NET_ADMIN))
+=======
+	if (!netlink_capable(skb, CAP_NET_ADMIN))
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return -EPERM;
 
 	if (!net_eq(net, &init_net))
@@ -617,7 +621,11 @@ static int dn_nl_newaddr(struct sk_buff *skb, struct nlmsghdr *nlh)
 	struct dn_ifaddr *ifa;
 	int err;
 
+<<<<<<< HEAD
 	if (!capable(CAP_NET_ADMIN))
+=======
+	if (!netlink_capable(skb, CAP_NET_ADMIN))
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return -EPERM;
 
 	if (!net_eq(net, &init_net))

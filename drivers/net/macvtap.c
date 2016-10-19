@@ -661,6 +661,10 @@ static ssize_t macvtap_get_user(struct macvtap_queue *q, struct msghdr *m,
 				const struct iovec *iv, unsigned long total_len,
 				size_t count, int noblock)
 {
+<<<<<<< HEAD
+=======
+	int good_linear = SKB_MAX_HEAD(NET_IP_ALIGN);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct sk_buff *skb;
 	struct macvlan_dev *vlan;
 	unsigned long len = total_len;
@@ -703,6 +707,11 @@ static ssize_t macvtap_get_user(struct macvtap_queue *q, struct msghdr *m,
 
 	if (m && m->msg_control && sock_flag(&q->sk, SOCK_ZEROCOPY)) {
 		copylen = vnet_hdr.hdr_len ? vnet_hdr.hdr_len : GOODCOPY_LEN;
+<<<<<<< HEAD
+=======
+		if (copylen > good_linear)
+			copylen = good_linear;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		linear = copylen;
 		if (iov_pages(iv, vnet_hdr_len + copylen, count)
 		    <= MAX_SKB_FRAGS)
@@ -711,7 +720,14 @@ static ssize_t macvtap_get_user(struct macvtap_queue *q, struct msghdr *m,
 
 	if (!zerocopy) {
 		copylen = len;
+<<<<<<< HEAD
 		linear = vnet_hdr.hdr_len;
+=======
+		if (vnet_hdr.hdr_len > good_linear)
+			linear = good_linear;
+		else
+			linear = vnet_hdr.hdr_len;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	skb = macvtap_alloc_skb(&q->sk, NET_IP_ALIGN, copylen,
@@ -791,11 +807,18 @@ static ssize_t macvtap_put_user(struct macvtap_queue *q,
 				const struct sk_buff *skb,
 				const struct iovec *iv, int len)
 {
+<<<<<<< HEAD
 	struct macvlan_dev *vlan;
 	int ret;
 	int vnet_hdr_len = 0;
 	int vlan_offset = 0;
 	int copied;
+=======
+	int ret;
+	int vnet_hdr_len = 0;
+	int vlan_offset = 0;
+	int copied, total;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (q->flags & IFF_VNET_HDR) {
 		struct virtio_net_hdr vnet_hdr;
@@ -810,7 +833,12 @@ static ssize_t macvtap_put_user(struct macvtap_queue *q,
 		if (memcpy_toiovecend(iv, (void *)&vnet_hdr, 0, sizeof(vnet_hdr)))
 			return -EFAULT;
 	}
+<<<<<<< HEAD
 	copied = vnet_hdr_len;
+=======
+	total = copied = vnet_hdr_len;
+	total += skb->len;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (!vlan_tx_tag_present(skb))
 		len = min_t(int, skb->len, len);
@@ -825,6 +853,10 @@ static ssize_t macvtap_put_user(struct macvtap_queue *q,
 
 		vlan_offset = offsetof(struct vlan_ethhdr, h_vlan_proto);
 		len = min_t(int, skb->len + VLAN_HLEN, len);
+<<<<<<< HEAD
+=======
+		total += VLAN_HLEN;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 		copy = min_t(int, vlan_offset, len);
 		ret = skb_copy_datagram_const_iovec(skb, 0, iv, copied, copy);
@@ -842,6 +874,7 @@ static ssize_t macvtap_put_user(struct macvtap_queue *q,
 	}
 
 	ret = skb_copy_datagram_const_iovec(skb, vlan_offset, iv, copied, len);
+<<<<<<< HEAD
 	copied += len;
 
 done:
@@ -852,6 +885,11 @@ done:
 	rcu_read_unlock_bh();
 
 	return ret ? ret : copied;
+=======
+
+done:
+	return ret ? ret : total;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static ssize_t macvtap_do_read(struct macvtap_queue *q, struct kiocb *iocb,
@@ -903,7 +941,13 @@ static ssize_t macvtap_aio_read(struct kiocb *iocb, const struct iovec *iv,
 	}
 
 	ret = macvtap_do_read(q, iocb, iv, len, file->f_flags & O_NONBLOCK);
+<<<<<<< HEAD
 	ret = min_t(ssize_t, ret, len); /* XXX copied from tun.c. Why? */
+=======
+	ret = min_t(ssize_t, ret, len);
+	if (ret > 0)
+		iocb->ki_pos = ret;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 out:
 	return ret;
 }

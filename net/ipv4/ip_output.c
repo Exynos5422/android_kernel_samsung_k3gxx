@@ -148,7 +148,11 @@ int ip_build_and_send_pkt(struct sk_buff *skb, struct sock *sk,
 	iph->daddr    = (opt && opt->opt.srr ? opt->opt.faddr : daddr);
 	iph->saddr    = saddr;
 	iph->protocol = sk->sk_protocol;
+<<<<<<< HEAD
 	ip_select_ident(iph, &rt->dst, sk);
+=======
+	ip_select_ident(skb, &rt->dst, sk);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (opt && opt->opt.optlen) {
 		iph->ihl += opt->opt.optlen>>2;
@@ -394,7 +398,11 @@ packet_routed:
 		ip_options_build(skb, &inet_opt->opt, inet->inet_daddr, rt, 0);
 	}
 
+<<<<<<< HEAD
 	ip_select_ident_more(iph, &rt->dst, sk,
+=======
+	ip_select_ident_more(skb, &rt->dst, sk,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			     (skb_shinfo(skb)->gso_segs ?: 1) - 1);
 
 	skb->priority = sk->sk_priority;
@@ -844,7 +852,11 @@ static int __ip_append_data(struct sock *sk,
 		csummode = CHECKSUM_PARTIAL;
 
 	cork->length += length;
+<<<<<<< HEAD
 	if (((length > mtu) || (skb && skb_is_gso(skb))) &&
+=======
+	if (((length > mtu) || (skb && skb_has_frags(skb))) &&
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	    (sk->sk_protocol == IPPROTO_UDP) &&
 	    (rt->dst.dev->features & NETIF_F_UFO) && !rt->dst.header_len) {
 		err = ip_ufo_append_data(sk, queue, getfrag, from, length,
@@ -1324,7 +1336,11 @@ struct sk_buff *__ip_make_skb(struct sock *sk,
 	else
 		ttl = ip_select_ttl(inet, &rt->dst);
 
+<<<<<<< HEAD
 	iph = (struct iphdr *)skb->data;
+=======
+	iph = ip_hdr(skb);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	iph->version = 4;
 	iph->ihl = 5;
 	iph->tos = inet->tos;
@@ -1332,7 +1348,11 @@ struct sk_buff *__ip_make_skb(struct sock *sk,
 	iph->ttl = ttl;
 	iph->protocol = sk->sk_protocol;
 	ip_copy_addrs(iph, fl4);
+<<<<<<< HEAD
 	ip_select_ident(iph, &rt->dst, sk);
+=======
+	ip_select_ident(skb, &rt->dst, sk);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (opt) {
 		iph->ihl += opt->optlen>>2;

@@ -346,6 +346,7 @@ static void spcp8x5_set_termios(struct tty_struct *tty,
 	}
 
 	/* Set Data Length : 00:5bit, 01:6bit, 10:7bit, 11:8bit */
+<<<<<<< HEAD
 	if (cflag & CSIZE) {
 		switch (cflag & CSIZE) {
 		case CS5:
@@ -362,6 +363,22 @@ static void spcp8x5_set_termios(struct tty_struct *tty,
 			buf[1] |= SET_UART_FORMAT_SIZE_8;
 			break;
 		}
+=======
+	switch (cflag & CSIZE) {
+	case CS5:
+		buf[1] |= SET_UART_FORMAT_SIZE_5;
+		break;
+	case CS6:
+		buf[1] |= SET_UART_FORMAT_SIZE_6;
+		break;
+	case CS7:
+		buf[1] |= SET_UART_FORMAT_SIZE_7;
+		break;
+	default:
+	case CS8:
+		buf[1] |= SET_UART_FORMAT_SIZE_8;
+		break;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	/* Set Stop bit2 : 0:1bit 1:2bit */

@@ -110,28 +110,114 @@ static u8 m88rs2000_readreg(struct m88rs2000_state *state, u8 reg)
 	return b1[0];
 }
 
+<<<<<<< HEAD
+=======
+static u32 m88rs2000_get_mclk(struct dvb_frontend *fe)
+{
+	struct m88rs2000_state *state = fe->demodulator_priv;
+	u32 mclk;
+	u8 reg;
+	/* Must not be 0x00 or 0xff */
+	reg = m88rs2000_readreg(state, 0x86);
+	if (!reg || reg == 0xff)
+		return 0;
+
+	reg /= 2;
+	reg += 1;
+
+	mclk = (u32)(reg * RS2000_FE_CRYSTAL_KHZ + 28 / 2) / 28;
+
+	return mclk;
+}
+
+static int m88rs2000_set_carrieroffset(struct dvb_frontend *fe, s16 offset)
+{
+	struct m88rs2000_state *state = fe->demodulator_priv;
+	u32 mclk;
+	s32 tmp;
+	u8 reg;
+	int ret;
+
+	mclk = m88rs2000_get_mclk(fe);
+	if (!mclk)
+		return -EINVAL;
+
+	tmp = (offset * 4096 + (s32)mclk / 2) / (s32)mclk;
+	if (tmp < 0)
+		tmp += 4096;
+
+	/* Carrier Offset */
+	ret = m88rs2000_writereg(state, 0x9c, (u8)(tmp >> 4));
+
+	reg = m88rs2000_readreg(state, 0x9d);
+	reg &= 0xf;
+	reg |= (u8)(tmp & 0xf) << 4;
+
+	ret |= m88rs2000_writereg(state, 0x9d, reg);
+
+	return ret;
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int m88rs2000_set_symbolrate(struct dvb_frontend *fe, u32 srate)
 {
 	struct m88rs2000_state *state = fe->demodulator_priv;
 	int ret;
+<<<<<<< HEAD
 	u32 temp;
+=======
+	u64 temp;
+	u32 mclk;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	u8 b[3];
 
 	if ((srate < 1000000) || (srate > 45000000))
 		return -EINVAL;
 
+<<<<<<< HEAD
 	temp = srate / 1000;
 	temp *= 11831;
 	temp /= 68;
 	temp -= 3;
+=======
+	mclk = m88rs2000_get_mclk(fe);
+	if (!mclk)
+		return -EINVAL;
+
+	temp = srate / 1000;
+	temp *= 1 << 24;
+
+	do_div(temp, mclk);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	b[0] = (u8) (temp >> 16) & 0xff;
 	b[1] = (u8) (temp >> 8) & 0xff;
 	b[2] = (u8) temp & 0xff;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ret = m88rs2000_writereg(state, 0x93, b[2]);
 	ret |= m88rs2000_writereg(state, 0x94, b[1]);
 	ret |= m88rs2000_writereg(state, 0x95, b[0]);
 
+<<<<<<< HEAD
+=======
+	if (srate > 10000000)
+		ret |= m88rs2000_writereg(state, 0xa0, 0x20);
+	else
+		ret |= m88rs2000_writereg(state, 0xa0, 0x60);
+
+	ret |= m88rs2000_writereg(state, 0xa1, 0xe0);
+
+	if (srate > 12000000)
+		ret |= m88rs2000_writereg(state, 0xa3, 0x20);
+	else if (srate > 2800000)
+		ret |= m88rs2000_writereg(state, 0xa3, 0x98);
+	else
+		ret |= m88rs2000_writereg(state, 0xa3, 0x90);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	deb_info("m88rs2000: m88rs2000_set_symbolrate\n");
 	return ret;
 }
@@ -261,8 +347,11 @@ struct inittab m88rs2000_shutdown[] = {
 
 struct inittab fe_reset[] = {
 	{DEMOD_WRITE, 0x00, 0x01},
+<<<<<<< HEAD
 	{DEMOD_WRITE, 0xf1, 0xbf},
 	{DEMOD_WRITE, 0x00, 0x01},
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	{DEMOD_WRITE, 0x20, 0x81},
 	{DEMOD_WRITE, 0x21, 0x80},
 	{DEMOD_WRITE, 0x10, 0x33},
@@ -305,9 +394,12 @@ struct inittab fe_trigger[] = {
 	{DEMOD_WRITE, 0x9b, 0x64},
 	{DEMOD_WRITE, 0x9e, 0x00},
 	{DEMOD_WRITE, 0x9f, 0xf8},
+<<<<<<< HEAD
 	{DEMOD_WRITE, 0xa0, 0x20},
 	{DEMOD_WRITE, 0xa1, 0xe0},
 	{DEMOD_WRITE, 0xa3, 0x38},
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	{DEMOD_WRITE, 0x98, 0xff},
 	{DEMOD_WRITE, 0xc0, 0x0f},
 	{DEMOD_WRITE, 0x89, 0x01},
@@ -540,9 +632,14 @@ static int m88rs2000_set_frontend(struct dvb_frontend *fe)
 	struct dtv_frontend_properties *c = &fe->dtv_property_cache;
 	fe_status_t status;
 	int i, ret = 0;
+<<<<<<< HEAD
 	s32 tmp;
 	u32 tuner_freq;
 	u16 offset = 0;
+=======
+	u32 tuner_freq;
+	s16 offset = 0;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	u8 reg;
 
 	state->no_lock_count = 0;
@@ -567,6 +664,7 @@ static int m88rs2000_set_frontend(struct dvb_frontend *fe)
 	if (ret < 0)
 		return -ENODEV;
 
+<<<<<<< HEAD
 	offset = tuner_freq - c->frequency;
 
 	/* calculate offset assuming 96000kHz*/
@@ -590,6 +688,28 @@ static int m88rs2000_set_frontend(struct dvb_frontend *fe)
 
 	/* Reset Demod */
 	ret = m88rs2000_tab_set(state, fe_reset);
+=======
+	offset = (s16)((s32)tuner_freq - c->frequency);
+
+	/* default mclk value 96.4285 * 2 * 1000 = 192857 */
+	if (((c->frequency % 192857) >= (192857 - 3000)) ||
+				(c->frequency % 192857) <= 3000)
+		ret = m88rs2000_writereg(state, 0x86, 0xc2);
+	else
+		ret = m88rs2000_writereg(state, 0x86, 0xc6);
+
+	ret |= m88rs2000_set_carrieroffset(fe, offset);
+	if (ret < 0)
+		return -ENODEV;
+
+	/* Reset demod by symbol rate */
+	if (c->symbol_rate > 27500000)
+		ret = m88rs2000_writereg(state, 0xf1, 0xa4);
+	else
+		ret = m88rs2000_writereg(state, 0xf1, 0xbf);
+
+	ret |= m88rs2000_tab_set(state, fe_reset);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (ret < 0)
 		return -ENODEV;
 
@@ -655,6 +775,25 @@ static int m88rs2000_get_frontend(struct dvb_frontend *fe)
 	return 0;
 }
 
+<<<<<<< HEAD
+=======
+static int m88rs2000_get_tune_settings(struct dvb_frontend *fe,
+	struct dvb_frontend_tune_settings *tune)
+{
+	struct dtv_frontend_properties *c = &fe->dtv_property_cache;
+
+	if (c->symbol_rate > 3000000)
+		tune->min_delay_ms = 2000;
+	else
+		tune->min_delay_ms = 3000;
+
+	tune->step_size = c->symbol_rate / 16000;
+	tune->max_drift = c->symbol_rate / 2000;
+
+	return 0;
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int m88rs2000_i2c_gate_ctrl(struct dvb_frontend *fe, int enable)
 {
 	struct m88rs2000_state *state = fe->demodulator_priv;
@@ -686,7 +825,11 @@ static struct dvb_frontend_ops m88rs2000_ops = {
 		.symbol_rate_tolerance	= 500,	/* ppm */
 		.caps = FE_CAN_FEC_1_2 | FE_CAN_FEC_2_3 | FE_CAN_FEC_3_4 |
 		      FE_CAN_FEC_5_6 | FE_CAN_FEC_7_8 |
+<<<<<<< HEAD
 		      FE_CAN_QPSK |
+=======
+		      FE_CAN_QPSK | FE_CAN_INVERSION_AUTO |
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		      FE_CAN_FEC_AUTO
 	},
 
@@ -706,6 +849,10 @@ static struct dvb_frontend_ops m88rs2000_ops = {
 
 	.set_frontend = m88rs2000_set_frontend,
 	.get_frontend = m88rs2000_get_frontend,
+<<<<<<< HEAD
+=======
+	.get_tune_settings = m88rs2000_get_tune_settings,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 struct dvb_frontend *m88rs2000_attach(const struct m88rs2000_config *config,

@@ -36,4 +36,14 @@ config EFI_VARS_PSTORE_DEFAULT_DISABLE
 	  backend for pstore by default. This setting can be overridden
 	  using the efivars module's pstore_disable parameter.
 
+<<<<<<< HEAD
+=======
+config EFI_PARAMS_FROM_FDT
+	bool
+	help
+	  Select this config option from the architecture Kconfig if
+	  the EFI runtime support gets system table address, memory
+          map address, and other parameters from the device tree.
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 endmenu

@@ -143,6 +143,11 @@ static long __media_device_enum_links(struct media_device *mdev,
 
 		for (p = 0; p < entity->num_pads; p++) {
 			struct media_pad_desc pad;
+<<<<<<< HEAD
+=======
+
+			memset(&pad, 0, sizeof(pad));
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			media_device_kpad_to_upad(&entity->pads[p], &pad);
 			if (copy_to_user(&links->pads[p], &pad, sizeof(pad)))
 				return -EFAULT;
@@ -160,6 +165,10 @@ static long __media_device_enum_links(struct media_device *mdev,
 			if (entity->links[l].source->entity != entity)
 				continue;
 
+<<<<<<< HEAD
+=======
+			memset(&link, 0, sizeof(link));
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			media_device_kpad_to_upad(entity->links[l].source,
 						  &link.source);
 			media_device_kpad_to_upad(entity->links[l].sink,

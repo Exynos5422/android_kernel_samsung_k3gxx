@@ -23,6 +23,12 @@
 #include "lgdt3305.h"
 #include "lg2160.h"
 
+<<<<<<< HEAD
+=======
+/* Max transfer size done by I2C transfer functions */
+#define MAX_XFER_SIZE  64
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 int dvb_usb_mxl111sf_debug;
 module_param_named(debug, dvb_usb_mxl111sf_debug, int, 0644);
 MODULE_PARM_DESC(debug, "set debugging level "
@@ -63,7 +69,16 @@ int mxl111sf_ctrl_msg(struct dvb_usb_device *d,
 {
 	int wo = (rbuf == NULL || rlen == 0); /* write-only */
 	int ret;
+<<<<<<< HEAD
 	u8 sndbuf[1+wlen];
+=======
+	u8 sndbuf[MAX_XFER_SIZE];
+
+	if (1 + wlen > sizeof(sndbuf)) {
+		pr_warn("%s: len=%d is too big!\n", __func__, wlen);
+		return -EOPNOTSUPP;
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	deb_adv("%s(wlen = %d, rlen = %d)\n", __func__, wlen, rlen);
 

@@ -375,12 +375,27 @@ setup_return(struct pt_regs *regs, struct ksignal *ksig,
 		 */
 		thumb = handler & 1;
 
+<<<<<<< HEAD
 		if (thumb) {
 			cpsr |= PSR_T_BIT;
 #if __LINUX_ARM_ARCH__ >= 7
 			/* clear the If-Then Thumb-2 execution state */
 			cpsr &= ~PSR_IT_MASK;
 #endif
+=======
+#if __LINUX_ARM_ARCH__ >= 7
+		/*
+		 * Clear the If-Then Thumb-2 execution state
+		 * ARM spec requires this to be all 000s in ARM mode
+		 * Snapdragon S4/Krait misbehaves on a Thumb=>ARM
+		 * signal transition without this.
+		 */
+		cpsr &= ~PSR_IT_MASK;
+#endif
+
+		if (thumb) {
+			cpsr |= PSR_T_BIT;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		} else
 			cpsr &= ~PSR_T_BIT;
 	}

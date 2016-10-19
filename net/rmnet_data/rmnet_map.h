@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * Copyright (c) 2013, The Linux Foundation. All rights reserved.
+=======
+ * Copyright (c) 2013-2014, The Linux Foundation. All rights reserved.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -17,6 +21,7 @@
 #ifndef _RMNET_MAP_H_
 #define _RMNET_MAP_H_
 
+<<<<<<< HEAD
 struct rmnet_map_header_s {
 #ifndef RMNET_USE_BIG_ENDIAN_STRUCTS
 	uint8_t  pad_len:6;
@@ -40,11 +45,25 @@ struct rmnet_map_control_command_s {
 	uint8_t  reserved:6;
 	uint8_t  cmd_type:2;
 #endif /* RMNET_USE_BIG_ENDIAN_STRUCTS */
+=======
+struct rmnet_map_control_command_s {
+	uint8_t command_name;
+#if defined(__LITTLE_ENDIAN_BITFIELD)
+	uint8_t  cmd_type:2;
+	uint8_t  reserved:6;
+#elif defined(__BIG_ENDIAN_BITFIELD)
+	uint8_t  reserved:6;
+	uint8_t  cmd_type:2;
+#else
+#error "Please fix <asm/byteorder.h>"
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	uint16_t reserved2;
 	uint32_t   transaction_id;
 	union {
 		uint8_t  data[65528];
 		struct {
+<<<<<<< HEAD
 #ifndef RMNET_USE_BIG_ENDIAN_STRUCTS
 			uint16_t  ip_family:2;
 			uint16_t  reserved:14;
@@ -52,12 +71,42 @@ struct rmnet_map_control_command_s {
 			uint16_t  reserved:14;
 			uint16_t  ip_family:2;
 #endif /* RMNET_USE_BIG_ENDIAN_STRUCTS */
+=======
+#if defined(__LITTLE_ENDIAN_BITFIELD)
+			uint16_t  ip_family:2;
+			uint16_t  reserved:14;
+#elif defined(__BIG_ENDIAN_BITFIELD)
+			uint16_t  reserved:14;
+			uint16_t  ip_family:2;
+#else
+#error "Please fix <asm/byteorder.h>"
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			uint16_t  flow_control_seq_num;
 			uint32_t  qos_id;
 		} flow_control;
 	};
 }  __aligned(1);
 
+<<<<<<< HEAD
+=======
+struct rmnet_map_dl_checksum_trailer_s {
+	unsigned char  reserved_h;
+#if defined(__LITTLE_ENDIAN_BITFIELD)
+	unsigned char  valid:1;
+	unsigned char  reserved_l:7;
+#elif defined(__BIG_ENDIAN_BITFIELD)
+	unsigned char  reserved_l:7;
+	unsigned char  valid:1;
+#else
+#error "Please fix <asm/byteorder.h>"
+#endif
+	unsigned short checksum_start_offset;
+	unsigned short checksum_length;
+	unsigned short checksum_value;
+} __aligned(1);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 enum rmnet_map_results_e {
 	RMNET_MAP_SUCCESS,
 	RMNET_MAP_CONSUMED,
@@ -80,11 +129,20 @@ enum rmnet_map_checksum_errors_e {
 	RMNET_MAP_CHECKSUM_OK,
 	RMNET_MAP_CHECKSUM_VALID_FLAG_NOT_SET,
 	RMNET_MAP_CHECKSUM_VALIDATION_FAILED,
+<<<<<<< HEAD
 	RMNET_MAP_CHECKSUM_ERROR_UNKOWN,
 	RMNET_MAP_CHECKSUM_ERROR_NOT_DATA_PACKET,
 	RMNET_MAP_CHECKSUM_ERROR_BAD_BUFFER,
 	RMNET_MAP_CHECKSUM_ERROR_UNKNOWN_IP_VERSION,
 	RMNET_MAP_CHECKSUM_ERROR_UNKNOWN_TRANSPORT,
+=======
+	RMNET_MAP_CHECKSUM_ERR_UNKOWN,
+	RMNET_MAP_CHECKSUM_ERR_NOT_DATA_PACKET,
+	RMNET_MAP_CHECKSUM_ERR_BAD_BUFFER,
+	RMNET_MAP_CHECKSUM_ERR_UNKNOWN_IP_VERSION,
+	RMNET_MAP_CHECKSUM_ERR_UNKNOWN_TRANSPORT,
+	RMNET_MAP_CHECKSUM_FRAGMENTED_PACKET,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* This should always be the last element */
 	RMNET_MAP_CHECKSUM_ENUM_LENGTH
 };
@@ -103,11 +161,14 @@ enum rmnet_map_agg_state_e {
 	RMNET_MAP_TXFER_SCHEDULED
 };
 
+<<<<<<< HEAD
 #define RMNET_MAP_P_ICMP4  0x01
 #define RMNET_MAP_P_TCP    0x06
 #define RMNET_MAP_P_UDP    0x11
 #define RMNET_MAP_P_ICMP6  0x3a
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define RMNET_MAP_COMMAND_REQUEST     0
 #define RMNET_MAP_COMMAND_ACK         1
 #define RMNET_MAP_COMMAND_UNSUPPORTED 2
@@ -117,6 +178,7 @@ uint8_t rmnet_map_demultiplex(struct sk_buff *skb);
 struct sk_buff *rmnet_map_deaggregate(struct sk_buff *skb,
 				      struct rmnet_phys_ep_conf_s *config);
 
+<<<<<<< HEAD
 #define RMNET_MAP_GET_MUX_ID(Y) (((struct rmnet_map_header_s *)Y->data)->mux_id)
 #define RMNET_MAP_GET_CD_BIT(Y) (((struct rmnet_map_header_s *)Y->data)->cd_bit)
 #define RMNET_MAP_GET_PAD(Y) (((struct rmnet_map_header_s *)Y->data)->pad_len)
@@ -125,6 +187,8 @@ struct sk_buff *rmnet_map_deaggregate(struct sk_buff *skb,
 #define RMNET_MAP_GET_LENGTH(Y) (ntohs( \
 			       ((struct rmnet_map_header_s *)Y->data)->pkt_len))
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 struct rmnet_map_header_s *rmnet_map_add_map_header(struct sk_buff *skb,
 						    int hdrlen);
 rx_handler_result_t rmnet_map_command(struct sk_buff *skb,
@@ -132,4 +196,10 @@ rx_handler_result_t rmnet_map_command(struct sk_buff *skb,
 void rmnet_map_aggregate(struct sk_buff *skb,
 			 struct rmnet_phys_ep_conf_s *config);
 
+<<<<<<< HEAD
+=======
+int rmnet_map_checksum_downlink_packet(struct sk_buff *skb);
+
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif /* _RMNET_MAP_H_ */

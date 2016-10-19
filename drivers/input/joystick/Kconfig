@@ -328,5 +328,8 @@ config JOYSTICK_MAPLE
 
 	  To compile this as a module choose M here: the module will be called
 	  maplecontrol.
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 endif

@@ -94,7 +94,11 @@ retry:
 
 int fd_statfs(int fd, struct kstatfs *st)
 {
+<<<<<<< HEAD
 	struct fd f = fdget(fd);
+=======
+	struct fd f = fdget_raw(fd);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	int error = -EBADF;
 	if (f.file) {
 		error = vfs_statfs(&f.file->f_path, st);

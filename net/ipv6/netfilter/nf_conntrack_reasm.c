@@ -621,6 +621,7 @@ ret_orig:
 	return skb;
 }
 
+<<<<<<< HEAD
 void nf_ct_frag6_output(unsigned int hooknum, struct sk_buff *skb,
 			struct net_device *in, struct net_device *out,
 			int (*okfn)(struct sk_buff *))
@@ -646,6 +647,18 @@ void nf_ct_frag6_output(unsigned int hooknum, struct sk_buff *skb,
 		s = s2;
 	}
 	nf_conntrack_put_reasm(skb);
+=======
+void nf_ct_frag6_consume_orig(struct sk_buff *skb)
+{
+	struct sk_buff *s, *s2;
+
+	for (s = NFCT_FRAG6_CB(skb)->orig; s;) {
+		s2 = s->next;
+		s->next = NULL;
+		consume_skb(s);
+		s = s2;
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static int nf_ct_net_init(struct net *net)

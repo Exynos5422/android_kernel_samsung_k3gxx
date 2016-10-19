@@ -400,7 +400,11 @@ pipe_read(struct kiocb *iocb, const struct iovec *_iov,
 			const struct pipe_buf_operations *ops = buf->ops;
 			void *addr;
 			size_t chars = buf->len, remaining;
+<<<<<<< HEAD
 			int error, atomic;
+=======
+			int error, atomic, offset;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 			if (chars > total_len)
 				chars = total_len;
@@ -414,9 +418,16 @@ pipe_read(struct kiocb *iocb, const struct iovec *_iov,
 
 			atomic = !iov_fault_in_pages_write(iov, chars);
 			remaining = chars;
+<<<<<<< HEAD
 redo:
 			addr = ops->map(pipe, buf, atomic);
 			error = pipe_iov_copy_to_user(iov, addr, &buf->offset,
+=======
+			offset = buf->offset;
+redo:
+			addr = ops->map(pipe, buf, atomic);
+			error = pipe_iov_copy_to_user(iov, addr, &offset,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 						      &remaining, atomic);
 			ops->unmap(pipe, buf, addr);
 			if (unlikely(error)) {
@@ -432,6 +443,10 @@ redo:
 				break;
 			}
 			ret += chars;
+<<<<<<< HEAD
+=======
+			buf->offset += chars;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			buf->len -= chars;
 
 			/* Was it a packet buffer? Clean up and exit */

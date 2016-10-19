@@ -125,8 +125,13 @@ static void destroy_inodecache(void)
 
 static int isofs_remount(struct super_block *sb, int *flags, char *data)
 {
+<<<<<<< HEAD
 	/* we probably want a lot more here */
 	*flags |= MS_RDONLY;
+=======
+	if (!(*flags & MS_RDONLY))
+		return -EROFS;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 
@@ -779,6 +784,7 @@ root_found:
 	 */
 	s->s_maxbytes = 0x80000000000LL;
 
+<<<<<<< HEAD
 	/*
 	 * The CDROM is read-only, has no nodes (devices) on it, and since
 	 * all of the files appear to be owned by root, we really do not want
@@ -788,6 +794,8 @@ root_found:
 
 	s->s_flags |= MS_RDONLY /* | MS_NODEV | MS_NOSUID */;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* Set this for reference. Its not currently used except on write
 	   which we don't have .. */
 
@@ -1546,6 +1554,12 @@ struct inode *isofs_iget(struct super_block *sb,
 static struct dentry *isofs_mount(struct file_system_type *fs_type,
 	int flags, const char *dev_name, void *data)
 {
+<<<<<<< HEAD
+=======
+	/* We don't support read-write mounts */
+	if (!(flags & MS_RDONLY))
+		return ERR_PTR(-EACCES);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return mount_bdev(fs_type, flags, dev_name, data, isofs_fill_super);
 }
 

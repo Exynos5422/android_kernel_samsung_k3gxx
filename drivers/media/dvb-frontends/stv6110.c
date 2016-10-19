@@ -30,6 +30,12 @@
 
 #include "stv6110.h"
 
+<<<<<<< HEAD
+=======
+/* Max transfer size done by I2C transfer functions */
+#define MAX_XFER_SIZE  64
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int debug;
 
 struct stv6110_priv {
@@ -68,7 +74,11 @@ static int stv6110_write_regs(struct dvb_frontend *fe, u8 buf[],
 {
 	struct stv6110_priv *priv = fe->tuner_priv;
 	int rc;
+<<<<<<< HEAD
 	u8 cmdbuf[len + 1];
+=======
+	u8 cmdbuf[MAX_XFER_SIZE];
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct i2c_msg msg = {
 		.addr	= priv->i2c_address,
 		.flags	= 0,
@@ -78,6 +88,16 @@ static int stv6110_write_regs(struct dvb_frontend *fe, u8 buf[],
 
 	dprintk("%s\n", __func__);
 
+<<<<<<< HEAD
+=======
+	if (1 + len > sizeof(cmdbuf)) {
+		printk(KERN_WARNING
+		       "%s: i2c wr: len=%d is too big!\n",
+		       KBUILD_MODNAME, len);
+		return -EINVAL;
+	}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (start + len > 8)
 		return -EINVAL;
 

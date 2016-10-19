@@ -908,7 +908,11 @@ static void bgmac_chip_reset(struct bgmac *bgmac)
 		struct bcma_drv_cc *cc = &bgmac->core->bus->drv_cc;
 		u8 et_swtype = 0;
 		u8 sw_type = BGMAC_CHIPCTL_1_SW_TYPE_EPHY |
+<<<<<<< HEAD
 			     BGMAC_CHIPCTL_1_IF_TYPE_RMII;
+=======
+			     BGMAC_CHIPCTL_1_IF_TYPE_MII;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		char buf[2];
 
 		if (bcm47xx_nvram_getenv("et_swtype", buf, 1) > 0) {

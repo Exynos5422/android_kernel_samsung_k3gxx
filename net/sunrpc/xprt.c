@@ -232,9 +232,15 @@ static void xprt_clear_locked(struct rpc_xprt *xprt)
 {
 	xprt->snd_task = NULL;
 	if (!test_bit(XPRT_CLOSE_WAIT, &xprt->state)) {
+<<<<<<< HEAD
 		smp_mb__before_clear_bit();
 		clear_bit(XPRT_LOCKED, &xprt->state);
 		smp_mb__after_clear_bit();
+=======
+		smp_mb__before_atomic();
+		clear_bit(XPRT_LOCKED, &xprt->state);
+		smp_mb__after_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	} else
 		queue_work(rpciod_workqueue, &xprt->task_cleanup);
 }

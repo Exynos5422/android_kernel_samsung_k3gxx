@@ -531,8 +531,11 @@ int vcc_recvmsg(struct kiocb *iocb, struct socket *sock, struct msghdr *msg,
 	struct sk_buff *skb;
 	int copied, error = -EINVAL;
 
+<<<<<<< HEAD
 	msg->msg_namelen = 0;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (sock->state != SS_CONNECTED)
 		return -ENOTCONN;
 

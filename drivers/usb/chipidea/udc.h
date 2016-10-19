@@ -19,6 +19,17 @@
 #define RX        0  /* similar to USB_DIR_OUT but can be used as an index */
 #define TX        1  /* similar to USB_DIR_IN  but can be used as an index */
 
+<<<<<<< HEAD
+=======
+/* UDC private data:
+ *  16MSb - Vendor ID | 16 LSb Vendor private data
+ */
+#define CI13XX_REQ_VENDOR_ID(id)  (id & 0xFFFF0000UL)
+
+#define MSM_ETD_TYPE			BIT(1)
+#define MSM_EP_PIPE_ID_RESET_VAL	0x1F001F
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /* DMA layout of transfer descriptors */
 struct ci13xxx_td {
 	/* 0 */
@@ -50,6 +61,10 @@ struct ci13xxx_qh {
 #define QH_MAX_PKT            (0x07FFUL << 16)
 #define QH_ZLT                BIT(29)
 #define QH_MULT               (0x0003UL << 30)
+<<<<<<< HEAD
+=======
+#define QH_MULT_SHIFT         11
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* 1 */
 	u32 curr;
 	/* 2 - 8 */
@@ -59,6 +74,16 @@ struct ci13xxx_qh {
 	struct usb_ctrlrequest   setup;
 } __attribute__ ((packed, aligned(4)));
 
+<<<<<<< HEAD
+=======
+/* cache of larger request's original attributes */
+struct ci13xxx_multi_req {
+	unsigned             len;
+	unsigned             actual;
+	void                *buf;
+};
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /**
  * struct ci13xxx_req - usb request representation
  * @req: request structure for gadget drivers
@@ -75,6 +100,10 @@ struct ci13xxx_req {
 	dma_addr_t		dma;
 	struct ci13xxx_td	*zptr;
 	dma_addr_t		zdma;
+<<<<<<< HEAD
+=======
+	struct ci13xxx_multi_req multi;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 #ifdef CONFIG_USB_CHIPIDEA_UDC

@@ -1078,7 +1078,11 @@ static void rtl88e_dm_txpower_tracking_callback_thermalmeter(struct ieee80211_hw
 				rtldm->swing_flag_ofdm = true;
 			}
 
+<<<<<<< HEAD
 			if (rtldm->swing_idx_cck != rtldm->swing_idx_cck) {
+=======
+			if (rtldm->swing_idx_cck_cur != rtldm->swing_idx_cck) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				rtldm->swing_idx_cck_cur = rtldm->swing_idx_cck;
 				rtldm->swing_flag_cck = true;
 			}

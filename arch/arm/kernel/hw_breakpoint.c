@@ -57,6 +57,7 @@ static bool has_ossr;
 /* Maximum supported watchpoint length. */
 static u8 max_watchpoint_len;
 
+<<<<<<< HEAD
 #ifdef CONFIG_SKIP_HW_BREAKPOINT
 static int skip_hw_breakpoint;
 static int __init skip_hw_breakpoint_func(char *str)
@@ -67,6 +68,8 @@ static int __init skip_hw_breakpoint_func(char *str)
 early_param("hw_breakpoint", skip_hw_breakpoint_func);
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define READ_WB_REG_CASE(OP2, M, VAL)			\
 	case ((OP2 << 4) + M):				\
 		ARM_DBG_READ(c0, c ## M, OP2, VAL);	\
@@ -237,6 +240,20 @@ static int get_num_brps(void)
 	return core_has_mismatch_brps() ? brps - 1 : brps;
 }
 
+<<<<<<< HEAD
+=======
+/* Determine if halting mode is enabled */
+static int halting_mode_enabled(void)
+{
+	u32 dscr;
+	ARM_DBG_READ(c0, c1, 0, dscr);
+	WARN_ONCE(dscr & ARM_DSCR_HDBGEN,
+		  "halting debug mode enabled. "
+		  "Unable to access hardware resources.\n");
+	return !!(dscr & ARM_DSCR_HDBGEN);
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * In order to access the breakpoint/watchpoint control registers,
  * we must be running in debug monitor mode. Unfortunately, we can
@@ -354,13 +371,21 @@ int arch_install_hw_breakpoint(struct perf_event *bp)
 		/* Breakpoint */
 		ctrl_base = ARM_BASE_BCR;
 		val_base = ARM_BASE_BVR;
+<<<<<<< HEAD
 		slots = (struct perf_event **)__get_cpu_var(bp_on_reg);
+=======
+		slots = this_cpu_ptr(bp_on_reg);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		max_slots = core_num_brps;
 	} else {
 		/* Watchpoint */
 		ctrl_base = ARM_BASE_WCR;
 		val_base = ARM_BASE_WVR;
+<<<<<<< HEAD
 		slots = (struct perf_event **)__get_cpu_var(wp_on_reg);
+=======
+		slots = this_cpu_ptr(wp_on_reg);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		max_slots = core_num_wrps;
 	}
 
@@ -406,12 +431,20 @@ void arch_uninstall_hw_breakpoint(struct perf_event *bp)
 	if (info->ctrl.type == ARM_BREAKPOINT_EXECUTE) {
 		/* Breakpoint */
 		base = ARM_BASE_BCR;
+<<<<<<< HEAD
 		slots = (struct perf_event **)__get_cpu_var(bp_on_reg);
+=======
+		slots = this_cpu_ptr(bp_on_reg);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		max_slots = core_num_brps;
 	} else {
 		/* Watchpoint */
 		base = ARM_BASE_WCR;
+<<<<<<< HEAD
 		slots = (struct perf_event **)__get_cpu_var(wp_on_reg);
+=======
+		slots = this_cpu_ptr(wp_on_reg);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		max_slots = core_num_wrps;
 	}
 
@@ -707,7 +740,11 @@ static void watchpoint_handler(unsigned long addr, unsigned int fsr,
 	struct arch_hw_breakpoint *info;
 	struct arch_hw_breakpoint_ctrl ctrl;
 
+<<<<<<< HEAD
 	slots = (struct perf_event **)__get_cpu_var(wp_on_reg);
+=======
+	slots = this_cpu_ptr(wp_on_reg);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	for (i = 0; i < core_num_wrps; ++i) {
 		rcu_read_lock();
@@ -778,7 +815,11 @@ static void watchpoint_single_step_handler(unsigned long pc)
 	struct perf_event *wp, **slots;
 	struct arch_hw_breakpoint *info;
 
+<<<<<<< HEAD
 	slots = (struct perf_event **)__get_cpu_var(wp_on_reg);
+=======
+	slots = this_cpu_ptr(wp_on_reg);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	for (i = 0; i < core_num_wrps; ++i) {
 		rcu_read_lock();
@@ -812,7 +853,11 @@ static void breakpoint_handler(unsigned long unknown, struct pt_regs *regs)
 	struct arch_hw_breakpoint *info;
 	struct arch_hw_breakpoint_ctrl ctrl;
 
+<<<<<<< HEAD
 	slots = (struct perf_event **)__get_cpu_var(bp_on_reg);
+=======
+	slots = this_cpu_ptr(bp_on_reg);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/* The exception entry code places the amended lr in the PC. */
 	addr = regs->ARM_pc;
@@ -941,6 +986,20 @@ static void reset_ctrl_regs(void *unused)
 	u32 val;
 
 	/*
+<<<<<<< HEAD
+=======
+	 * Bail out without clearing the breakpoint registers if halting
+	 * debug mode or monitor debug mode is enabled. Checking for monitor
+	 * debug mode here ensures we don't clear the breakpoint registers
+	 * across power collapse if save and restore code has already
+	 * preserved the debug register values or they weren't lost and
+	 * monitor mode was already enabled earlier.
+	 */
+	if (halting_mode_enabled() || monitor_mode_enabled())
+		return;
+
+	/*
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	 * v7 debug contains save and restore registers so that debug state
 	 * can be maintained across low-power modes without leaving the debug
 	 * logic powered up. It is IMPLEMENTATION DEFINED whether we can access
@@ -955,6 +1014,7 @@ static void reset_ctrl_regs(void *unused)
 		goto out_mdbgen;
 	case ARM_DEBUG_ARCH_V7_ECP14:
 		/*
+<<<<<<< HEAD
 		 * Unconditionally clear the OS lock by writing a value
 		 * other than CS_LAR_KEY to the access register.
 		*/
@@ -963,6 +1023,8 @@ static void reset_ctrl_regs(void *unused)
 		isb();
 		
 		/*
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		 * Ensure sticky power-down is clear (i.e. debug logic is
 		 * powered up).
 		 */
@@ -975,6 +1037,7 @@ static void reset_ctrl_regs(void *unused)
 		break;
 	case ARM_DEBUG_ARCH_V7_1:
 		/*
+<<<<<<< HEAD
 		 * Unconditionally clear the OS lock by writing a value
 		 * other than CS_LAR_KEY to the access register.
 		*/
@@ -983,6 +1046,8 @@ static void reset_ctrl_regs(void *unused)
 		isb();
 		
 		/*
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		 * Ensure the OS double lock is clear.
 		 */
 		ARM_DBG_READ(c1, c3, 4, val);
@@ -998,6 +1063,16 @@ static void reset_ctrl_regs(void *unused)
 	}
 
 	/*
+<<<<<<< HEAD
+=======
+	 * Unconditionally clear the OS lock by writing a value
+	 * other than CS_LAR_KEY to the access register.
+	 */
+	ARM_DBG_WRITE(c1, c0, 4, ~CS_LAR_KEY);
+	isb();
+
+	/*
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	 * Clear any configured vector-catch events before
 	 * enabling monitor mode.
 	 */
@@ -1085,6 +1160,7 @@ static int __init arch_hw_breakpoint_init(void)
 		return 0;
 	}
 
+<<<<<<< HEAD
 #if defined(CONFIG_SKIP_HW_BREAKPOINT)
 	if (skip_hw_breakpoint) {
 		pr_info("skip arch_hw_breakpoint init\n");
@@ -1092,12 +1168,19 @@ static int __init arch_hw_breakpoint_init(void)
 	}
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	has_ossr = core_has_os_save_restore();
 
 	/* Determine how many BRPs/WRPs are available. */
 	core_num_brps = get_num_brps();
 	core_num_wrps = get_num_wrps();
 
+<<<<<<< HEAD
+=======
+	cpu_notifier_register_begin();
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/*
 	 * We need to tread carefully here because DBGSWENABLE may be
 	 * driven low on this core and there isn't an architected way to
@@ -1114,6 +1197,10 @@ static int __init arch_hw_breakpoint_init(void)
 	if (!cpumask_empty(&debug_err_mask)) {
 		core_num_brps = 0;
 		core_num_wrps = 0;
+<<<<<<< HEAD
+=======
+		cpu_notifier_register_done();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return 0;
 	}
 
@@ -1133,7 +1220,14 @@ static int __init arch_hw_breakpoint_init(void)
 			TRAP_HWBKPT, "breakpoint debug exception");
 
 	/* Register hotplug and PM notifiers. */
+<<<<<<< HEAD
 	register_cpu_notifier(&dbg_reset_nb);
+=======
+	__register_cpu_notifier(&dbg_reset_nb);
+
+	cpu_notifier_register_done();
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	pm_init();
 	return 0;
 }

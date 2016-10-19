@@ -34,8 +34,12 @@ static ssize_t ieee80211_if_read(
 	ssize_t ret = -EINVAL;
 
 	read_lock(&dev_base_lock);
+<<<<<<< HEAD
 	if (sdata->dev->reg_state == NETREG_REGISTERED)
 		ret = (*format)(sdata, buf, sizeof(buf));
+=======
+	ret = (*format)(sdata, buf, sizeof(buf));
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	read_unlock(&dev_base_lock);
 
 	if (ret >= 0)
@@ -62,8 +66,12 @@ static ssize_t ieee80211_if_write(
 
 	ret = -ENODEV;
 	rtnl_lock();
+<<<<<<< HEAD
 	if (sdata->dev->reg_state == NETREG_REGISTERED)
 		ret = (*write)(sdata, buf, count);
+=======
+	ret = (*write)(sdata, buf, count);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	rtnl_unlock();
 
 	return ret;

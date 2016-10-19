@@ -210,9 +210,12 @@ static void intr_complete (struct urb *urb)
 		break;
 	}
 
+<<<<<<< HEAD
 	if (!netif_running (dev->net))
 		return;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	status = usb_submit_urb (urb, GFP_ATOMIC);
 	if (status != 0)
 		netif_err(dev, timer, dev->net,
@@ -446,7 +449,10 @@ static int rx_submit (struct usbnet *dev, struct urb *urb, gfp_t flags)
 {
 	struct sk_buff		*skb;
 	struct skb_data		*entry;
+<<<<<<< HEAD
 	usb_complete_t		complete_fn;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	int			retval = 0;
 	unsigned long		lockflags;
 	size_t			size = dev->rx_urb_size;
@@ -470,11 +476,14 @@ static int rx_submit (struct usbnet *dev, struct urb *urb, gfp_t flags)
 	entry->dev = dev;
 	entry->length = 0;
 
+<<<<<<< HEAD
 	if (dev->driver_info->rx_complete)
 		complete_fn = dev->driver_info->rx_complete;
 	else
 		complete_fn = rx_complete;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	usb_fill_bulk_urb (urb, dev->udev, dev->in,
 		skb->data, size, rx_complete, skb);
 
@@ -533,6 +542,7 @@ static inline void rx_process (struct usbnet *dev, struct sk_buff *skb)
 	}
 	// else network stack removes extra byte if we forced a short packet
 
+<<<<<<< HEAD
 	if (skb->len) {
 		/* all data was already cloned from skb inside the driver */
 		if (dev->driver_info->flags & FLAG_MULTI_PACKET)
@@ -544,6 +554,21 @@ static inline void rx_process (struct usbnet *dev, struct sk_buff *skb)
 
 	netif_dbg(dev, rx_err, dev->net, "drop\n");
 	dev->net->stats.rx_errors++;
+=======
+	/* all data was already cloned from skb inside the driver */
+	if (dev->driver_info->flags & FLAG_MULTI_PACKET)
+		goto done;
+
+	if (skb->len < ETH_HLEN) {
+		dev->net->stats.rx_errors++;
+		dev->net->stats.rx_length_errors++;
+		netif_dbg(dev, rx_err, dev->net, "rx length %d\n", skb->len);
+	} else {
+		usbnet_skb_return(dev, skb);
+		return;
+	}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 done:
 	skb_queue_tail(&dev->done, skb);
 }
@@ -565,6 +590,7 @@ static void rx_complete(struct urb *urb)
 	switch (urb_status) {
 	/* success */
 	case 0:
+<<<<<<< HEAD
 		if (skb->len < dev->net->hard_header_len) {
 			state = rx_cleanup;
 			dev->net->stats.rx_errors++;
@@ -572,6 +598,8 @@ static void rx_complete(struct urb *urb)
 			netif_dbg(dev, rx_err, dev->net,
 				  "rx length %d\n", skb->len);
 		}
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		break;
 
 	/* stalls need manual reset. this is rare ... except that
@@ -753,9 +781,14 @@ void usbnet_terminate_urbs(struct usbnet *dev)
 	int temp;
 
 	/* ensure there are no more active urbs */
+<<<<<<< HEAD
 	add_wait_queue(&unlink_wakeup, &wait);
 	set_current_state(TASK_UNINTERRUPTIBLE);
 	dev->wait = &unlink_wakeup;
+=======
+	add_wait_queue(&dev->wait, &wait);
+	set_current_state(TASK_UNINTERRUPTIBLE);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	temp = unlink_urbs(dev, &dev->txq) +
 		unlink_urbs(dev, &dev->rxq);
 
@@ -769,8 +802,12 @@ void usbnet_terminate_urbs(struct usbnet *dev)
 				  "waited for %d urb completions\n", temp);
 	}
 	set_current_state(TASK_RUNNING);
+<<<<<<< HEAD
 	dev->wait = NULL;
 	remove_wait_queue(&unlink_wakeup, &wait);
+=======
+	remove_wait_queue(&dev->wait, &wait);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 EXPORT_SYMBOL_GPL(usbnet_terminate_urbs);
 
@@ -778,7 +815,11 @@ int usbnet_stop (struct net_device *net)
 {
 	struct usbnet		*dev = netdev_priv(net);
 	struct driver_info	*info = dev->driver_info;
+<<<<<<< HEAD
 	int			retval;
+=======
+	int			retval, pm;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	clear_bit(EVENT_DEV_OPEN, &dev->flags);
 	netif_stop_queue (net);
@@ -788,6 +829,11 @@ int usbnet_stop (struct net_device *net)
 		   net->stats.rx_packets, net->stats.tx_packets,
 		   net->stats.rx_errors, net->stats.tx_errors);
 
+<<<<<<< HEAD
+=======
+	/* to not race resume */
+	pm = usb_autopm_get_interface(dev->intf);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* allow minidriver to stop correctly (wireless devices to turn off
 	 * radio etc) */
 	if (info->stop) {
@@ -814,6 +860,12 @@ int usbnet_stop (struct net_device *net)
 	dev->flags = 0;
 	del_timer_sync (&dev->delay);
 	cancel_work_sync(&dev->bh_w);
+<<<<<<< HEAD
+=======
+	if (!pm)
+		usb_autopm_put_interface(dev->intf);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (info->manage_power &&
 	    !test_and_clear_bit(EVENT_NO_RUNTIME_PM, &dev->flags))
 		info->manage_power(dev, 0);
@@ -1384,11 +1436,20 @@ static void usbnet_bh (unsigned long param)
 	/* restart RX again after disabling due to high error rate */
 	clear_bit(EVENT_RX_KILL, &dev->flags);
 
+<<<<<<< HEAD
 	// waiting for all pending urbs to complete?
 	if (dev->wait) {
 		if ((dev->txq.qlen + dev->rxq.qlen + dev->done.qlen) == 0) {
 			wake_up(&unlink_wakeup);
 		}
+=======
+	/* waiting for all pending urbs to complete?
+	 * only then can we forgo submitting anew
+	 */
+	if (waitqueue_active(&dev->wait)) {
+		if (dev->txq.qlen + dev->rxq.qlen + dev->done.qlen == 0)
+			wake_up_all(&unlink_wakeup);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	// or are we maybe short a few urbs?
 	} else if (netif_running (dev->net) &&
@@ -1534,6 +1595,10 @@ usbnet_probe (struct usb_interface *udev, const struct usb_device_id *prod)
 	dev->driver_name = name;
 	dev->msg_enable = netif_msg_init (msg_level, NETIF_MSG_DRV
 				| NETIF_MSG_PROBE | NETIF_MSG_LINK);
+<<<<<<< HEAD
+=======
+	init_waitqueue_head(&dev->wait);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	skb_queue_head_init (&dev->rxq);
 	skb_queue_head_init (&dev->txq);
 	skb_queue_head_init (&dev->done);
@@ -1648,6 +1713,16 @@ out3:
 	if (info->unbind)
 		info->unbind (dev, udev);
 out1:
+<<<<<<< HEAD
+=======
+	/* subdrivers must undo all they did in bind() if they
+	 * fail it, but we may fail later and a deferred kevent
+	 * may trigger an error resubmitting itself and, worse,
+	 * schedule a timer. So we kill it all just in case.
+	 */
+	cancel_work_sync(&dev->kevent);
+	del_timer_sync(&dev->delay);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	free_netdev(net);
 out:
 	return status;
@@ -1725,9 +1800,16 @@ int usbnet_resume (struct usb_interface *intf)
 		spin_unlock_irq(&dev->txq.lock);
 
 		if (test_bit(EVENT_DEV_OPEN, &dev->flags)) {
+<<<<<<< HEAD
 			/* handle remote wakeup ASAP */
 			if (!dev->wait &&
 				netif_device_present(dev->net) &&
+=======
+			/* handle remote wakeup ASAP
+			 * we cannot race against stop
+			 */
+			if (netif_device_present(dev->net) &&
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				!timer_pending(&dev->delay) &&
 				!test_bit(EVENT_RX_HALT, &dev->flags))
 					rx_alloc_submit(dev, GFP_NOIO);

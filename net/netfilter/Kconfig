@@ -608,6 +608,23 @@ config NETFILTER_XT_TARGET_IDLETIMER
 
 	  To compile it as a module, choose M here.  If unsure, say N.
 
+<<<<<<< HEAD
+=======
+config NETFILTER_XT_TARGET_HARDIDLETIMER
+	tristate  "HARDIDLETIMER target support"
+	depends on NETFILTER_ADVANCED
+	help
+
+	  This option adds the `HARDIDLETIMER' target.  Each matching packet
+	  resets the timer associated with label specified when the rule is
+	  added.  When the timer expires, it triggers a sysfs notification.
+	  The remaining time for expiration can be read via sysfs.
+          Compared to IDLETIMER HARDIDLETIMER will send notification when
+          CPU in suspend too.
+
+	  To compile it as a module, choose M here.  If unsure, say N.
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 config NETFILTER_XT_TARGET_LED
 	tristate '"LED" target support'
 	depends on LEDS_CLASS && LEDS_TRIGGERS
@@ -1313,6 +1330,9 @@ endmenu
 source "net/netfilter/ipset/Kconfig"
 
 source "net/netfilter/ipvs/Kconfig"
+<<<<<<< HEAD
 
 source "net/netfilter/interceptor/Kconfig"
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

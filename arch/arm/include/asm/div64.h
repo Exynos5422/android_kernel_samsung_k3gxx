@@ -156,7 +156,11 @@
 		/* Select the best insn combination to perform the   */	\
 		/* actual __m * __n / (__p << 64) operation.         */	\
 		if (!__c) {						\
+<<<<<<< HEAD
 			asm (	"umull	%Q0, %R0, %1, %Q2\n\t"		\
+=======
+			asm (	"umull	%Q0, %R0, %Q1, %Q2\n\t"		\
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				"mov	%Q0, #0"			\
 				: "=&r" (__res)				\
 				: "r" (__m), "r" (__n)			\

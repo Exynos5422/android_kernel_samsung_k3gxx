@@ -414,22 +414,43 @@ static int tpkbd_probe(struct hid_device *hdev,
 	ret = hid_parse(hdev);
 	if (ret) {
 		hid_err(hdev, "hid_parse failed\n");
+<<<<<<< HEAD
 		goto err_free;
+=======
+		goto err;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	ret = hid_hw_start(hdev, HID_CONNECT_DEFAULT);
 	if (ret) {
 		hid_err(hdev, "hid_hw_start failed\n");
+<<<<<<< HEAD
 		goto err_free;
+=======
+		goto err;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	uhdev = (struct usbhid_device *) hdev->driver_data;
 
+<<<<<<< HEAD
 	if (uhdev->ifnum == 1)
 		return tpkbd_probe_tp(hdev);
 
 	return 0;
 err_free:
+=======
+	if (uhdev->ifnum == 1) {
+		ret = tpkbd_probe_tp(hdev);
+		if (ret)
+			goto err_hid;
+	}
+
+	return 0;
+err_hid:
+	hid_hw_stop(hdev);
+err:
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return ret;
 }
 

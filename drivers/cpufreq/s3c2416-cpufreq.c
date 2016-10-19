@@ -231,7 +231,11 @@ static int s3c2416_cpufreq_set_target(struct cpufreq_policy *policy,
 				      unsigned int relation)
 {
 	struct s3c2416_data *s3c_freq = &s3c2416_cpufreq;
+<<<<<<< HEAD
 	struct cpufreq_freqs freqs;
+=======
+	unsigned int new_freq;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	int idx, ret, to_dvs = 0;
 	unsigned int i;
 
@@ -244,7 +248,11 @@ static int s3c2416_cpufreq_set_target(struct cpufreq_policy *policy,
 	if (ret != 0)
 		goto out;
 
+<<<<<<< HEAD
 	idx = s3c_freq->freq_table[i].index;
+=======
+	idx = s3c_freq->freq_table[i].driver_data;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (idx == SOURCE_HCLK)
 		to_dvs = 1;
@@ -256,14 +264,18 @@ static int s3c2416_cpufreq_set_target(struct cpufreq_policy *policy,
 		goto out;
 	}
 
+<<<<<<< HEAD
 	freqs.flags = 0;
 	freqs.old = s3c_freq->is_dvs ? FREQ_DVS
 				     : clk_get_rate(s3c_freq->armclk) / 1000;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* When leavin dvs mode, always switch the armdiv to the hclk rate
 	 * The S3C2416 has stability issues when switching directly to
 	 * higher frequencies.
 	 */
+<<<<<<< HEAD
 	freqs.new = (s3c_freq->is_dvs && !to_dvs)
 				? clk_get_rate(s3c_freq->hclk) / 1000
 				: s3c_freq->freq_table[i].frequency;
@@ -275,6 +287,12 @@ static int s3c2416_cpufreq_set_target(struct cpufreq_policy *policy,
 
 	cpufreq_notify_transition(policy, &freqs, CPUFREQ_PRECHANGE);
 
+=======
+	new_freq = (s3c_freq->is_dvs && !to_dvs)
+				? clk_get_rate(s3c_freq->hclk) / 1000
+				: s3c_freq->freq_table[i].frequency;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (to_dvs) {
 		pr_debug("cpufreq: enter dvs\n");
 		ret = s3c2416_cpufreq_enter_dvs(s3c_freq, idx);
@@ -282,12 +300,19 @@ static int s3c2416_cpufreq_set_target(struct cpufreq_policy *policy,
 		pr_debug("cpufreq: leave dvs\n");
 		ret = s3c2416_cpufreq_leave_dvs(s3c_freq, idx);
 	} else {
+<<<<<<< HEAD
 		pr_debug("cpufreq: change armdiv to %dkHz\n", freqs.new);
 		ret = s3c2416_cpufreq_set_armdiv(s3c_freq, freqs.new);
 	}
 
 	cpufreq_notify_transition(policy, &freqs, CPUFREQ_POSTCHANGE);
 
+=======
+		pr_debug("cpufreq: change armdiv to %dkHz\n", new_freq);
+		ret = s3c2416_cpufreq_set_armdiv(s3c_freq, new_freq);
+	}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 out:
 	mutex_unlock(&cpufreq_lock);
 
@@ -524,7 +549,10 @@ static struct freq_attr *s3c2416_cpufreq_attr[] = {
 };
 
 static struct cpufreq_driver s3c2416_cpufreq_driver = {
+<<<<<<< HEAD
 	.owner		= THIS_MODULE,
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	.flags          = 0,
 	.verify		= s3c2416_cpufreq_verify_speed,
 	.target		= s3c2416_cpufreq_set_target,

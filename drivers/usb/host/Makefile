@@ -19,6 +19,11 @@ ifneq ($(CONFIG_USB_XHCI_PLATFORM), )
 	xhci-hcd-y		+= xhci-plat.o
 endif
 
+<<<<<<< HEAD
+=======
+xhci-hcd-$(CONFIG_USB_XHCI_MSM_HSIC)	+= xhci-msm-hsic.o
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 obj-$(CONFIG_USB_WHCI_HCD)	+= whci/
 
 obj-$(CONFIG_PCI)		+= pci-quirks.o
@@ -32,7 +37,11 @@ obj-$(CONFIG_USB_EHCI_HCD_ORION)	+= ehci-orion.o
 obj-$(CONFIG_USB_EHCI_HCD_SPEAR)	+= ehci-spear.o
 obj-$(CONFIG_USB_EHCI_S5P)	+= ehci-s5p.o
 obj-$(CONFIG_USB_EHCI_HCD_AT91) += ehci-atmel.o
+<<<<<<< HEAD
 obj-$(CONFIG_USB_EHCI_MSM)	+= ehci-msm.o
+=======
+obj-$(CONFIG_USB_EHCI_MSM)	+= ehci-msm.o ehci-msm2.o
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 obj-$(CONFIG_USB_OXU210HP_HCD)	+= oxu210hp-hcd.o
 obj-$(CONFIG_USB_ISP116X_HCD)	+= isp116x-hcd.o
@@ -52,3 +61,8 @@ obj-$(CONFIG_USB_FSL_MPH_DR_OF)	+= fsl-mph-dr-of.o
 obj-$(CONFIG_USB_OCTEON2_COMMON) += octeon2-common.o
 obj-$(CONFIG_USB_HCD_BCMA)	+= bcma-hcd.o
 obj-$(CONFIG_USB_HCD_SSB)	+= ssb-hcd.o
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_USB_ICE40_HCD)	+= ice40-hcd.o
+obj-$(CONFIG_USB_EHCI_MSM_UICC)	+= ehci-msm-uicc.o
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

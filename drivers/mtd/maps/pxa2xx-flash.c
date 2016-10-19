@@ -73,7 +73,11 @@ static int pxa2xx_flash_probe(struct platform_device *pdev)
 		return -ENOMEM;
 	}
 	info->map.cached =
+<<<<<<< HEAD
 		ioremap_cached(info->map.phys, info->map.size);
+=======
+		ioremap_cache(info->map.phys, info->map.size);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (!info->map.cached)
 		printk(KERN_WARNING "Failed to ioremap cached %s\n",
 		       info->map.name);

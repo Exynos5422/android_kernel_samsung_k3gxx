@@ -52,8 +52,11 @@
 #define arch_rebalance_pgtables(addr, len)		(addr)
 #endif
 
+<<<<<<< HEAD
 extern int boot_mode_security;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static void unmap_region(struct mm_struct *mm,
 		struct vm_area_struct *vma, struct vm_area_struct *prev,
 		unsigned long start, unsigned long end);
@@ -1215,9 +1218,12 @@ unsigned long do_mmap_pgoff(struct file *file, unsigned long addr,
 
 	*populate = 0;
 
+<<<<<<< HEAD
 	while (file && (file->f_mode & FMODE_NONMAPPABLE))
 			file = file->f_op->get_lower_file(file);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/*
 	 * Does the application expect PROT_READ to imply PROT_EXEC?
 	 *
@@ -1608,6 +1614,7 @@ munmap_back:
 	vma_link(mm, vma, prev, rb_link, rb_parent);
 	file = vma->vm_file;
 
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP
 #ifdef CONFIG_TIMA_DALVIKHEAP_OPT
         if(boot_mode_security && file && (strcmp(current->comm, "zygote") == 0)){
@@ -1647,6 +1654,8 @@ munmap_back:
         }
 #endif /* CONFIG_TIMA_DALVIK_OPT */
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* Once vma denies write, undo our temporary denial count */
 	if (correct_wcount)
 		atomic_inc(&inode->i_writecount);
@@ -1904,7 +1913,11 @@ arch_get_unmapped_area(struct file *filp, unsigned long addr,
 	struct vm_area_struct *vma;
 	struct vm_unmapped_area_info info;
 
+<<<<<<< HEAD
 	if (len > TASK_SIZE)
+=======
+	if (len > TASK_SIZE - mmap_min_addr)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return -ENOMEM;
 
 	if (flags & MAP_FIXED)
@@ -1913,7 +1926,11 @@ arch_get_unmapped_area(struct file *filp, unsigned long addr,
 	if (addr) {
 		addr = PAGE_ALIGN(addr);
 		vma = find_vma(mm, addr);
+<<<<<<< HEAD
 		if (TASK_SIZE - len >= addr &&
+=======
+		if (TASK_SIZE - len >= addr && addr >= mmap_min_addr &&
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		    (!vma || addr + len <= vma->vm_start))
 			return addr;
 	}
@@ -1927,6 +1944,7 @@ arch_get_unmapped_area(struct file *filp, unsigned long addr,
 }
 #endif	
 
+<<<<<<< HEAD
 void arch_unmap_area(struct mm_struct *mm, unsigned long addr)
 {
 	/*
@@ -1936,6 +1954,8 @@ void arch_unmap_area(struct mm_struct *mm, unsigned long addr)
 		mm->free_area_cache = addr;
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * This mmap-allocator allocates new areas top-down from below the
  * stack's low limit (the base):
@@ -1952,7 +1972,11 @@ arch_get_unmapped_area_topdown(struct file *filp, const unsigned long addr0,
 	struct vm_unmapped_area_info info;
 
 	/* requested length too big for entire address space */
+<<<<<<< HEAD
 	if (len > TASK_SIZE)
+=======
+	if (len > TASK_SIZE - mmap_min_addr)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return -ENOMEM;
 
 	if (flags & MAP_FIXED)
@@ -1962,14 +1986,22 @@ arch_get_unmapped_area_topdown(struct file *filp, const unsigned long addr0,
 	if (addr) {
 		addr = PAGE_ALIGN(addr);
 		vma = find_vma(mm, addr);
+<<<<<<< HEAD
 		if (TASK_SIZE - len >= addr &&
+=======
+		if (TASK_SIZE - len >= addr && addr >= mmap_min_addr &&
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				(!vma || addr + len <= vma->vm_start))
 			return addr;
 	}
 
 	info.flags = VM_UNMAPPED_AREA_TOPDOWN;
 	info.length = len;
+<<<<<<< HEAD
 	info.low_limit = PAGE_SIZE;
+=======
+	info.low_limit = max(PAGE_SIZE, mmap_min_addr);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	info.high_limit = mm->mmap_base;
 	info.align_mask = 0;
 	addr = vm_unmapped_area(&info);
@@ -1992,6 +2024,7 @@ arch_get_unmapped_area_topdown(struct file *filp, const unsigned long addr0,
 }
 #endif
 
+<<<<<<< HEAD
 void arch_unmap_area_topdown(struct mm_struct *mm, unsigned long addr)
 {
 	/*
@@ -2005,6 +2038,8 @@ void arch_unmap_area_topdown(struct mm_struct *mm, unsigned long addr)
 		mm->free_area_cache = mm->mmap_base;
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 unsigned long
 get_unmapped_area(struct file *file, unsigned long addr, unsigned long len,
 		unsigned long pgoff, unsigned long flags)
@@ -2425,7 +2460,10 @@ detach_vmas_to_be_unmapped(struct mm_struct *mm, struct vm_area_struct *vma,
 {
 	struct vm_area_struct **insertion_point;
 	struct vm_area_struct *tail_vma = NULL;
+<<<<<<< HEAD
 	unsigned long addr;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	insertion_point = (prev ? &prev->vm_next : &mm->mmap);
 	vma->vm_prev = NULL;
@@ -2442,11 +2480,14 @@ detach_vmas_to_be_unmapped(struct mm_struct *mm, struct vm_area_struct *vma,
 	} else
 		mm->highest_vm_end = prev ? prev->vm_end : 0;
 	tail_vma->vm_next = NULL;
+<<<<<<< HEAD
 	if (mm->unmap_area == arch_unmap_area)
 		addr = prev ? prev->vm_end : mm->mmap_base;
 	else
 		addr = vma ?  vma->vm_start : mm->mmap_base;
 	mm->unmap_area(mm, addr);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	mm->mmap_cache = NULL;		/* Kill the cache. */
 }
 

@@ -614,6 +614,10 @@ struct se_dev_attrib {
 	u32		unmap_granularity;
 	u32		unmap_granularity_alignment;
 	u32		max_write_same_len;
+<<<<<<< HEAD
+=======
+	u32		max_bytes_per_io;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct se_device *da_dev;
 	struct config_group da_group;
 };

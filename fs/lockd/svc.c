@@ -235,6 +235,10 @@ out_err:
 	if (warned++ == 0)
 		printk(KERN_WARNING
 			"lockd_up: makesock failed, error=%d\n", err);
+<<<<<<< HEAD
+=======
+	svc_shutdown_net(serv, net);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return err;
 }
 

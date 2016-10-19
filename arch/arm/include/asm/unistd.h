@@ -48,6 +48,9 @@
  */
 #define __IGNORE_fadvise64_64
 #define __IGNORE_migrate_pages
+<<<<<<< HEAD
 #define __IGNORE_kcmp
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #endif /* __ASM_ARM_UNISTD_H */

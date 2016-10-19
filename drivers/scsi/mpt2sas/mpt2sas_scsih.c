@@ -8174,7 +8174,10 @@ _scsih_suspend(struct pci_dev *pdev, pm_message_t state)
 
 	mpt2sas_base_free_resources(ioc);
 	pci_save_state(pdev);
+<<<<<<< HEAD
 	pci_disable_device(pdev);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	pci_set_power_state(pdev, device_state);
 	return 0;
 }

@@ -290,11 +290,14 @@ static int magicmouse_raw_event(struct hid_device *hdev,
 		if (size < 4 || ((size - 4) % 9) != 0)
 			return 0;
 		npoints = (size - 4) / 9;
+<<<<<<< HEAD
 		if (npoints > 15) {
 			hid_warn(hdev, "invalid size value (%d) for TRACKPAD_REPORT_ID\n",
 					size);
 			return 0;
 		}
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		msc->ntouches = 0;
 		for (ii = 0; ii < npoints; ii++)
 			magicmouse_emit_touch(msc, ii, data + ii * 9 + 4);
@@ -312,11 +315,14 @@ static int magicmouse_raw_event(struct hid_device *hdev,
 		if (size < 6 || ((size - 6) % 8) != 0)
 			return 0;
 		npoints = (size - 6) / 8;
+<<<<<<< HEAD
 		if (npoints > 15) {
 			hid_warn(hdev, "invalid size value (%d) for MOUSE_REPORT_ID\n",
 					size);
 			return 0;
 		}
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		msc->ntouches = 0;
 		for (ii = 0; ii < npoints; ii++)
 			magicmouse_emit_touch(msc, ii, data + ii * 8 + 6);
@@ -471,7 +477,11 @@ static int magicmouse_input_mapping(struct hid_device *hdev,
 	return 0;
 }
 
+<<<<<<< HEAD
 static void magicmouse_input_configured(struct hid_device *hdev,
+=======
+static int magicmouse_input_configured(struct hid_device *hdev,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		struct hid_input *hi)
 
 {
@@ -483,6 +493,10 @@ static void magicmouse_input_configured(struct hid_device *hdev,
 		/* clean msc->input to notify probe() of the failure */
 		msc->input = NULL;
 	}
+<<<<<<< HEAD
+=======
+	return ret;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 

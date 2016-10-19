@@ -313,7 +313,12 @@ int iwl_mvm_scan_request(struct iwl_mvm *mvm,
 
 	iwl_mvm_scan_fill_ssids(cmd, req);
 
+<<<<<<< HEAD
 	cmd->tx_cmd.tx_flags = cpu_to_le32(TX_CMD_FLG_SEQ_CTL);
+=======
+	cmd->tx_cmd.tx_flags = cpu_to_le32(TX_CMD_FLG_SEQ_CTL |
+					   TX_CMD_FLG_BT_DIS);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	cmd->tx_cmd.sta_id = mvm->aux_sta.sta_id;
 	cmd->tx_cmd.life_time = cpu_to_le32(TX_CMD_LIFE_TIME_INFINITE);
 	cmd->tx_cmd.rate_n_flags =

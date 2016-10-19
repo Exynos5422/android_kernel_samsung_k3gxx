@@ -226,9 +226,12 @@ int iwl_mvm_add_sta(struct iwl_mvm *mvm,
 		if (vif->hw_queue[i] != IEEE80211_INVAL_HW_QUEUE)
 			mvm_sta->tfd_queue_msk |= BIT(vif->hw_queue[i]);
 
+<<<<<<< HEAD
 	if (vif->cab_queue != IEEE80211_INVAL_HW_QUEUE)
 		mvm_sta->tfd_queue_msk |= BIT(vif->cab_queue);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* for HW restart - need to reset the seq_number etc... */
 	memset(mvm_sta->tid_data, 0, sizeof(mvm_sta->tid_data));
 
@@ -1296,17 +1299,24 @@ void iwl_mvm_sta_modify_ps_wake(struct iwl_mvm *mvm,
 	struct iwl_mvm_add_sta_cmd cmd = {
 		.add_modify = STA_MODE_MODIFY,
 		.sta_id = mvmsta->sta_id,
+<<<<<<< HEAD
 		.modify_mask = STA_MODIFY_SLEEPING_STA_TX_COUNT,
 		.sleep_state_flags = cpu_to_le16(STA_SLEEP_STATE_AWAKE),
+=======
+		.station_flags_msk = cpu_to_le32(STA_FLG_PS),
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		.mac_id_n_color = cpu_to_le32(mvmsta->mac_id_n_color),
 	};
 	int ret;
 
+<<<<<<< HEAD
 	/*
 	 * Same modify mask for sleep_tx_count and sleep_state_flags but this
 	 * should be fine since if we set the STA as "awake", then
 	 * sleep_tx_count is not relevant.
 	 */
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ret = iwl_mvm_send_cmd_pdu(mvm, ADD_STA, CMD_ASYNC, sizeof(cmd), &cmd);
 	if (ret)
 		IWL_ERR(mvm, "Failed to send ADD_STA command (%d)\n", ret);

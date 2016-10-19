@@ -1,7 +1,10 @@
 /*
  * gpiolib support for Wolfson Arizona class devices
  *
+<<<<<<< HEAD
  * Copyright 2014 CirrusLogic, Inc.
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  * Copyright 2012 Wolfson Microelectronics PLC.
  *
  * Author: Mark Brown <broonie@opensource.wolfsonmicro.com>
@@ -85,6 +88,7 @@ static void arizona_gpio_set(struct gpio_chip *chip, unsigned offset, int value)
 			   ARIZONA_GPN_LVL, value);
 }
 
+<<<<<<< HEAD
 static int clearwater_gpio_direction_in(struct gpio_chip *chip, unsigned offset)
 {
 	struct arizona_gpio *arizona_gpio = to_arizona_gpio(chip);
@@ -150,6 +154,8 @@ static void clearwater_gpio_set(struct gpio_chip *chip, unsigned offset, int val
 			   CLEARWATER_GPN_LVL, value);
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static struct gpio_chip template_chip = {
 	.label			= "arizona",
 	.owner			= THIS_MODULE,
@@ -175,6 +181,7 @@ static int arizona_gpio_probe(struct platform_device *pdev)
 	arizona_gpio->arizona = arizona;
 	arizona_gpio->gpio_chip = template_chip;
 	arizona_gpio->gpio_chip.dev = &pdev->dev;
+<<<<<<< HEAD
 #ifdef CONFIG_OF_GPIO
 	arizona_gpio->gpio_chip.of_node = arizona->dev->of_node;
 #endif
@@ -203,6 +210,14 @@ static int arizona_gpio_probe(struct platform_device *pdev)
 	case CS47L24:
 		arizona_gpio->gpio_chip.ngpio = 2;
 		break;
+=======
+
+	switch (arizona->type) {
+	case WM5102:
+	case WM5110:
+		arizona_gpio->gpio_chip.ngpio = 5;
+		break;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	default:
 		dev_err(&pdev->dev, "Unknown chip variant %d\n",
 			arizona->type);

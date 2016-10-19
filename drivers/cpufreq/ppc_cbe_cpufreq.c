@@ -106,7 +106,11 @@ static int cbe_cpufreq_cpu_init(struct cpufreq_policy *policy)
 
 	/* initialize frequency table */
 	for (i=0; cbe_freqs[i].frequency!=CPUFREQ_TABLE_END; i++) {
+<<<<<<< HEAD
 		cbe_freqs[i].frequency = max_freq / cbe_freqs[i].index;
+=======
+		cbe_freqs[i].frequency = max_freq / cbe_freqs[i].driver_data;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		pr_debug("%d: %d\n", i, cbe_freqs[i].frequency);
 	}
 
@@ -165,7 +169,11 @@ static int cbe_cpufreq_target(struct cpufreq_policy *policy,
 		 "1/%d of max frequency\n",
 		 policy->cpu,
 		 cbe_freqs[cbe_pmode_new].frequency,
+<<<<<<< HEAD
 		 cbe_freqs[cbe_pmode_new].index);
+=======
+		 cbe_freqs[cbe_pmode_new].driver_data);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	rc = set_pmode(policy->cpu, cbe_pmode_new);
 
@@ -181,7 +189,10 @@ static struct cpufreq_driver cbe_cpufreq_driver = {
 	.init		= cbe_cpufreq_cpu_init,
 	.exit		= cbe_cpufreq_cpu_exit,
 	.name		= "cbe-cpufreq",
+<<<<<<< HEAD
 	.owner		= THIS_MODULE,
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	.flags		= CPUFREQ_CONST_LOOPS,
 };
 

@@ -349,6 +349,14 @@ ip6t_do_table(struct sk_buff *skb,
 	local_bh_disable();
 	addend = xt_write_recseq_begin();
 	private = table->private;
+<<<<<<< HEAD
+=======
+	/*
+	 * Ensure we load private-> members after we've fetched the base
+	 * pointer.
+	 */
+	smp_read_barrier_depends();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	cpu        = smp_processor_id();
 	table_base = private->entries[cpu];
 	jumpstack  = (struct ip6t_entry **)private->jumpstack[cpu];
@@ -1236,8 +1244,15 @@ __do_replace(struct net *net, const char *name, unsigned int valid_hooks,
 
 	xt_free_table_info(oldinfo);
 	if (copy_to_user(counters_ptr, counters,
+<<<<<<< HEAD
 			 sizeof(struct xt_counters) * num_counters) != 0)
 		ret = -EFAULT;
+=======
+			 sizeof(struct xt_counters) * num_counters) != 0) {
+		/* Silent error, can't fail, new table is already in place */
+		net_warn_ratelimited("ip6tables: counters copy to user failed while replacing table\n");
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	vfree(counters);
 	xt_table_unlock(t);
 	return ret;

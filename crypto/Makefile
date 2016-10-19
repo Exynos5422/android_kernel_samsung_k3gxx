@@ -2,10 +2,13 @@
 # Cryptographic API
 #
 
+<<<<<<< HEAD
 #Keep this on the top
 obj-$(CONFIG_CRYPTO_FIPS) += first_file.o
 obj-$(CONFIG_CRYPTO_FIPS) += fips_integrity.o
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 obj-$(CONFIG_CRYPTO) += crypto.o
 crypto-y := api.o cipher.o compress.o
 
@@ -93,7 +96,10 @@ obj-$(CONFIG_CRYPTO_842) += 842.o
 obj-$(CONFIG_CRYPTO_RNG2) += rng.o
 obj-$(CONFIG_CRYPTO_RNG2) += krng.o
 obj-$(CONFIG_CRYPTO_ANSI_CPRNG) += ansi_cprng.o
+<<<<<<< HEAD
 obj-$(CONFIG_CRYPTO_DRBG) += drbg.o
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 obj-$(CONFIG_CRYPTO_TEST) += tcrypt.o
 obj-$(CONFIG_CRYPTO_GHASH) += ghash-generic.o
 obj-$(CONFIG_CRYPTO_USER_API) += af_alg.o
@@ -107,6 +113,9 @@ obj-$(CONFIG_XOR_BLOCKS) += xor.o
 obj-$(CONFIG_ASYNC_CORE) += async_tx/
 obj-$(CONFIG_ASYMMETRIC_KEY_TYPE) += asymmetric_keys/
 obj-$(CONFIG_CRYPTO_ABLK_HELPER) += ablk_helper.o
+<<<<<<< HEAD
 
 #Keep this at the bottom
 obj-$(CONFIG_CRYPTO_FIPS) += last_file.o
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

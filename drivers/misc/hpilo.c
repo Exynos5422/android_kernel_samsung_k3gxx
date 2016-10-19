@@ -759,7 +759,11 @@ static int ilo_probe(struct pci_dev *pdev,
 
 	/* Ignore subsystem_device = 0x1979 (set by BIOS)  */
 	if (pdev->subsystem_device == 0x1979)
+<<<<<<< HEAD
 		goto out;
+=======
+		return 0;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (max_ccb > MAX_CCB)
 		max_ccb = MAX_CCB;
@@ -899,7 +903,11 @@ static void __exit ilo_exit(void)
 	class_destroy(ilo_class);
 }
 
+<<<<<<< HEAD
 MODULE_VERSION("1.4");
+=======
+MODULE_VERSION("1.4.1");
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 MODULE_ALIAS(ILO_NAME);
 MODULE_DESCRIPTION(ILO_NAME);
 MODULE_AUTHOR("David Altobelli <david.altobelli@hp.com>");

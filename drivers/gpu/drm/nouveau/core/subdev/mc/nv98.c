@@ -54,12 +54,19 @@ nv98_mc_ctor(struct nouveau_object *parent, struct nouveau_object *engine,
 	struct nv98_mc_priv *priv;
 	int ret;
 
+<<<<<<< HEAD
 	ret = nouveau_mc_create(parent, engine, oclass, &priv);
+=======
+	ret = nouveau_mc_create(parent, engine, oclass, nv98_mc_intr, &priv);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	*pobject = nv_object(priv);
 	if (ret)
 		return ret;
 
+<<<<<<< HEAD
 	priv->base.intr_map = nv98_mc_intr;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 

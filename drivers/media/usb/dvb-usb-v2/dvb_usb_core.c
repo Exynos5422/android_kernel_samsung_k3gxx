@@ -399,7 +399,11 @@ static int dvb_usb_stop_feed(struct dvb_demux_feed *dvbdmxfeed)
 
 	/* clear 'streaming' status bit */
 	clear_bit(ADAP_STREAMING, &adap->state_bits);
+<<<<<<< HEAD
 	smp_mb__after_clear_bit();
+=======
+	smp_mb__after_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	wake_up_bit(&adap->state_bits, ADAP_STREAMING);
 skip_feed_stop:
 
@@ -550,7 +554,11 @@ static int dvb_usb_fe_init(struct dvb_frontend *fe)
 err:
 	if (!adap->suspend_resume_active) {
 		clear_bit(ADAP_INIT, &adap->state_bits);
+<<<<<<< HEAD
 		smp_mb__after_clear_bit();
+=======
+		smp_mb__after_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		wake_up_bit(&adap->state_bits, ADAP_INIT);
 	}
 
@@ -591,7 +599,11 @@ err:
 	if (!adap->suspend_resume_active) {
 		adap->active_fe = -1;
 		clear_bit(ADAP_SLEEP, &adap->state_bits);
+<<<<<<< HEAD
 		smp_mb__after_clear_bit();
+=======
+		smp_mb__after_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		wake_up_bit(&adap->state_bits, ADAP_SLEEP);
 	}
 

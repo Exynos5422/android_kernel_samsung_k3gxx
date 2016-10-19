@@ -153,7 +153,11 @@ static int wm8958_dsp2_fw(struct snd_soc_codec *codec, const char *name,
 
 			data32 &= 0xffffff;
 
+<<<<<<< HEAD
 			wm8994_bulk_write(codec->control_data,
+=======
+			wm8994_bulk_write(wm8994->wm8994,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 					  data32 & 0xffffff,
 					  block_len / 2,
 					  (void *)(data + 8));

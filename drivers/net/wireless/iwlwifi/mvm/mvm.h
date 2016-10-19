@@ -88,6 +88,10 @@ enum iwl_mvm_tx_fifo {
 	IWL_MVM_TX_FIFO_BE,
 	IWL_MVM_TX_FIFO_VI,
 	IWL_MVM_TX_FIFO_VO,
+<<<<<<< HEAD
+=======
+	IWL_MVM_TX_FIFO_MCAST = 5,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 extern struct ieee80211_ops iwl_mvm_hw_ops;

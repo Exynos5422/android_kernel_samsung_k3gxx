@@ -610,11 +610,16 @@ bfad_im_vport_set_symbolic_name(struct fc_vport *fc_vport)
 		return;
 
 	spin_lock_irqsave(&bfad->bfad_lock, flags);
+<<<<<<< HEAD
 	if (strlen(sym_name) > 0) {
 		strcpy(fcs_vport->lport.port_cfg.sym_name.symname, sym_name);
 		bfa_fcs_lport_ns_util_send_rspn_id(
 			BFA_FCS_GET_NS_FROM_PORT((&fcs_vport->lport)), NULL);
 	}
+=======
+	if (strlen(sym_name) > 0)
+		bfa_fcs_lport_set_symname(&fcs_vport->lport, sym_name);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	spin_unlock_irqrestore(&bfad->bfad_lock, flags);
 }
 

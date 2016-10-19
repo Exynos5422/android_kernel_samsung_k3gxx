@@ -32,11 +32,15 @@
 #define MAX_DIGEST_SIZE		64
 #define MAX_TAP			8
 
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_DRBG
 #define MAX_KEYLEN		160
 #else
 #define MAX_KEYLEN		56
 #endif
+=======
+#define MAX_KEYLEN		56
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define MAX_IVLEN		32
 
 struct hash_testvec {
@@ -96,6 +100,7 @@ struct cprng_testvec {
 	unsigned short loops;
 };
 
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_DRBG
 struct drbg_testvec {
 	unsigned char *entropy;
@@ -113,6 +118,8 @@ struct drbg_testvec {
 };
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static char zeroed_string[48];
 
 /*
@@ -482,11 +489,15 @@ static struct hash_testvec sha1_tv_template[] = {
 		.plaintext = "abc",
 		.psize	= 3,
 		.digest	= "\xa9\x99\x3e\x36\x47\x06\x81\x6a\xba\x3e"
+<<<<<<< HEAD
 #if FIPS_FUNC_TEST == 6
 			  "\x25\x72\x78\x50\xc2\x6c\x9c\xd0\xd8\x9d",
 #else
 			  "\x25\x71\x78\x50\xc2\x6c\x9c\xd0\xd8\x9d",
 #endif
+=======
+			  "\x25\x71\x78\x50\xc2\x6c\x9c\xd0\xd8\x9d",
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}, {
 		.plaintext = "abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq",
 		.psize	= 56,
@@ -1338,11 +1349,15 @@ static struct hash_testvec hmac_sha1_tv_template[] = {
 		.plaintext = "Hi There",
 		.psize	= 8,
 		.digest	= "\xb6\x17\x31\x86\x55\x05\x72\x64"
+<<<<<<< HEAD
 #if FIPS_FUNC_TEST == 12
 			  "\xe3\x8b\xc0\xb6\xfb\x37\x8c\x8e\xf1"
 #else
 			  "\xe2\x8b\xc0\xb6\xfb\x37\x8c\x8e\xf1"
 #endif
+=======
+			  "\xe2\x8b\xc0\xb6\xfb\x37\x8c\x8e\xf1"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			  "\x46\xbe",
 	}, {
 		.key	= "Jefe",
@@ -3005,11 +3020,15 @@ static struct cipher_testvec des_ctr_dec_tv_template[] = {
 static struct cipher_testvec des3_ede_enc_tv_template[] = {
 	{ /* These are from openssl */
 		.key	= "\x01\x23\x45\x67\x89\xab\xcd\xef"
+<<<<<<< HEAD
 #if FIPS_FUNC_TEST == 7
 			  "\x53\x55\x55\x55\x55\x55\x55\x55"
 #else
 			  "\x55\x55\x55\x55\x55\x55\x55\x55"
 #endif
+=======
+			  "\x55\x55\x55\x55\x55\x55\x55\x55"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			  "\xfe\xdc\xba\x98\x76\x54\x32\x10",
 		.klen	= 24,
 		.input	= "\x73\x6f\x6d\x65\x64\x61\x74\x61",
@@ -12848,11 +12867,15 @@ static struct cipher_testvec cast6_xts_dec_tv_template[] = {
 static struct cipher_testvec aes_enc_tv_template[] = {
 	{ /* From FIPS-197 */
 		.key	= "\x00\x01\x02\x03\x04\x05\x06\x07"
+<<<<<<< HEAD
 #if FIPS_FUNC_TEST == 1
 			  "\x08\x09\x0a\x0b\x0c\x0d\x0e\x01",
 #else
 			  "\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f",
 #endif
+=======
+			  "\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f",
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		.klen	= 16,
 		.input	= "\x00\x11\x22\x33\x44\x55\x66\x77"
 			  "\x88\x99\xaa\xbb\xcc\xdd\xee\xff",
@@ -17664,11 +17687,15 @@ static struct aead_testvec aes_gcm_enc_tv_template[] = {
 		.rlen	= 32,
 	}, {
 		.key	= "\xfe\xff\xe9\x92\x86\x65\x73\x1c"
+<<<<<<< HEAD
 #if FIPS_FUNC_TEST == 100
 			  "\x6c\x6a\x8f\x94\x67\x30\x83\x08",
 #else
 			  "\x6d\x6a\x8f\x94\x67\x30\x83\x08",
 #endif
+=======
+			  "\x6d\x6a\x8f\x94\x67\x30\x83\x08",
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		.klen	= 16,
 		.iv	= "\xca\xfe\xba\xbe\xfa\xce\xdb\xad"
 			  "\xde\xca\xf8\x88",
@@ -19085,11 +19112,15 @@ static struct aead_testvec aes_ccm_rfc4309_dec_tv_template[] = {
 static struct cprng_testvec ansi_cprng_aes_tv_template[] = {
 	{
 		.key	= "\xf3\xb1\x66\x6d\x13\x60\x72\x42"
+<<<<<<< HEAD
 #if FIPS_FUNC_TEST == 8
 			  "\xee\x06\x1c\xab\xb8\xd4\x62\x02",
 #else
 			  "\xed\x06\x1c\xab\xb8\xd4\x62\x02",
 #endif
+=======
+			  "\xed\x06\x1c\xab\xb8\xd4\x62\x02",
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		.klen	= 16,
 		.dt	= "\xe6\xb3\xbe\x78\x2a\x23\xfa\x62"
 			  "\xd7\x1d\x4a\xfb\xb0\xe9\x22\xf9",
@@ -19174,6 +19205,7 @@ static struct cprng_testvec ansi_cprng_aes_tv_template[] = {
 	},
 };
 
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_DRBG
 /*
  * SP800-90A DRBG Test vectors from
@@ -20015,6 +20047,8 @@ static struct drbg_testvec drbg_nopr_ctr_aes128_tv_template[] = {
 	},
 };
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /* Cast5 test vectors from RFC 2144 */
 #define CAST5_ENC_TEST_VECTORS		4
 #define CAST5_DEC_TEST_VECTORS		4

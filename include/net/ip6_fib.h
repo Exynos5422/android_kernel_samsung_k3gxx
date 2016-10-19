@@ -165,6 +165,10 @@ static inline struct inet6_dev *ip6_dst_idev(struct dst_entry *dst)
 static inline void rt6_clean_expires(struct rt6_info *rt)
 {
 	rt->rt6i_flags &= ~RTF_EXPIRES;
+<<<<<<< HEAD
+=======
+	rt->dst.expires = 0;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static inline void rt6_set_expires(struct rt6_info *rt, unsigned long expires)

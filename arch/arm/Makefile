@@ -27,8 +27,12 @@ KBUILD_CFLAGS	+= $(call cc-option,-fno-dwarf2-cfi-asm)
 
 # Do not use arch/arm/defconfig - it's always outdated.
 # Select a platform tht is kept up-to-date
+<<<<<<< HEAD
 KBUILD_DEFCONFIG := exynos5422-k3g_00_defconfig
 
+=======
+KBUILD_DEFCONFIG := versatile_defconfig
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 # defines filename extension depending memory management type.
 ifeq ($(CONFIG_MMU),)
@@ -40,10 +44,13 @@ ifeq ($(CONFIG_FRAME_POINTER),y)
 KBUILD_CFLAGS	+=-fno-omit-frame-pointer -mapcs -mno-sched-prolog
 endif
 
+<<<<<<< HEAD
 ifeq ($(CONFIG_CC_STACKPROTECTOR),y)
 KBUILD_CFLAGS	+=-fstack-protector
 endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 ifeq ($(CONFIG_CPU_BIG_ENDIAN),y)
 KBUILD_CPPFLAGS	+= -mbig-endian
 AS		+= -EB
@@ -72,6 +79,21 @@ arch-$(CONFIG_CPU_32v4T)	:=-D__LINUX_ARM_ARCH__=4 -march=armv4t
 arch-$(CONFIG_CPU_32v4)		:=-D__LINUX_ARM_ARCH__=4 -march=armv4
 arch-$(CONFIG_CPU_32v3)		:=-D__LINUX_ARM_ARCH__=3 -march=armv3
 
+<<<<<<< HEAD
+=======
+# Since 'cortex-a15' is a superset of the 'armv7-a' arch spec, we need to
+# explicitly redefine the arch options to not include '-march=armv7-a' when
+# generating code for Krait, which is compatible with the instruction set of the
+# Cortex-A15, because GCC will warn us about ambiguous ISA restrictions caused
+# by seemingly conflicting -march and -mcpu options.
+# If $(CC) does not support the -mcpu=cortex-a15 option, fall back on passing
+# -march=armv7-a to specify the ISA restriction, though this is suboptimal. To
+# keep things simpler, we don't bother with a fallback option if the compiler
+# doesn't even support -march=armv7-a, since in that situation we would have
+# bigger problems.
+arch-$(CONFIG_ARCH_MSM_KRAIT)	:=-D__LINUX_ARM_ARCH__=7 $(call cc-option,-mcpu=cortex-a15,-march=armv7-a)
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 # This selects how we optimise for the processor.
 tune-$(CONFIG_CPU_ARM7TDMI)	:=-mtune=arm7tdmi
 tune-$(CONFIG_CPU_ARM720T)	:=-mtune=arm7tdmi
@@ -132,9 +154,12 @@ textofs-$(CONFIG_PM_H1940)      := 0x00108000
 ifeq ($(CONFIG_ARCH_SA1100),y)
 textofs-$(CONFIG_SA1111) := 0x00208000
 endif
+<<<<<<< HEAD
 textofs-$(CONFIG_ARCH_MSM7X30) := 0x00208000
 textofs-$(CONFIG_ARCH_MSM8X60) := 0x00208000
 textofs-$(CONFIG_ARCH_MSM8960) := 0x00208000
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 # Machine directory name.  This list is sorted alphanumerically
 # by CONFIG_* macro name.
@@ -276,6 +301,15 @@ ifeq ($(CONFIG_USE_OF),y)
 KBUILD_DTBS := dtbs
 endif
 
+<<<<<<< HEAD
+=======
+ifeq ($(CONFIG_OF_RESOLVE),y)
+DTC_FLAGS += -@
+endif
+
+DTSSUBDIR := qcom
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 all:	$(KBUILD_IMAGE) $(KBUILD_DTBS)
 
 boot := arch/arm/boot
@@ -296,10 +330,18 @@ zinstall uinstall install: vmlinux
 	$(Q)$(MAKE) $(build)=$(boot)/dts MACHINE=$(MACHINE) $(boot)/dts/$@
 
 dtbs: scripts
+<<<<<<< HEAD
 	$(Q)$(MAKE) $(build)=$(boot)/dts MACHINE=$(MACHINE) dtbs
 
 zImage-dtb: vmlinux scripts dtbs
 	$(Q)$(MAKE) $(build)=$(boot) MACHINE=$(MACHINE) $(boot)/$@
+=======
+	$(Q)$(MAKE) $(build)=$(boot)/dts MACHINE=$(MACHINE) DTC_FLAGS=$(DTC_FLAGS) dtbs
+	$(foreach DIR, $(DTSSUBDIR), $(Q)$(MAKE) $(build)=$(boot)/dts/$(DIR) MACHINE=$(MACHINE) DTC_FLAGS=$(DTC_FLAGS) dtbs)
+
+zImage-dtb: vmlinux scripts dtbs
+	$(Q)$(MAKE) $(build)=$(boot) MACHINE=$(MACHINE) DTSSUBDIR=$(DTSSUBDIR) $(boot)/$@
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 # We use MRPROPER_FILES and CLEAN_FILES now
 archclean:

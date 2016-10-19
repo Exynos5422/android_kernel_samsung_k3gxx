@@ -13,6 +13,7 @@
 
 #include <linux/dmaengine.h>
 
+<<<<<<< HEAD
 /*
  * The configuration of spi dma mode
  */
@@ -43,6 +44,8 @@ enum spi_domain {
 	DOMAIN_CAM1,
 };
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 struct platform_device;
 
 /**
@@ -57,7 +60,10 @@ struct platform_device;
  */
 struct s3c64xx_spi_csinfo {
 	u8 fb_delay;
+<<<<<<< HEAD
 	u8 cs_mode;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	unsigned line;
 };
 
@@ -68,6 +74,7 @@ struct s3c64xx_spi_csinfo {
  * @cfg_gpio: Configure pins for this SPI controller.
  */
 struct s3c64xx_spi_info {
+<<<<<<< HEAD
 	struct list_head node;
 	unsigned int need_hw_init;
 	int src_clk_nr;
@@ -133,6 +140,12 @@ struct s3c64xx_spi_driver_data {
 	struct pinctrl_state		*pin_def;
 	struct pinctrl_state		*pin_idle;
 
+=======
+	int src_clk_nr;
+	int num_cs;
+	int (*cfg_gpio)(void);
+	dma_filter_fn filter;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 /**
@@ -145,12 +158,21 @@ struct s3c64xx_spi_driver_data {
  * Call this from machine init code for each SPI Controller that
  * has some chips attached to it.
  */
+<<<<<<< HEAD
 extern void s3c64xx_spi0_set_platdata(struct s3c64xx_spi_info *pd,
 				      int src_clk_nr, int num_cs);
 extern void s3c64xx_spi1_set_platdata(struct s3c64xx_spi_info *pd,
 				      int src_clk_nr, int num_cs);
 extern void s3c64xx_spi2_set_platdata(struct s3c64xx_spi_info *pd,
 				      int src_clk_nr, int num_cs);
+=======
+extern void s3c64xx_spi0_set_platdata(int (*cfg_gpio)(void), int src_clk_nr,
+						int num_cs);
+extern void s3c64xx_spi1_set_platdata(int (*cfg_gpio)(void), int src_clk_nr,
+						int num_cs);
+extern void s3c64xx_spi2_set_platdata(int (*cfg_gpio)(void), int src_clk_nr,
+						int num_cs);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /* defined by architecture to configure gpio */
 extern int s3c64xx_spi0_cfg_gpio(void);

@@ -421,8 +421,12 @@ static void rds_ib_recv_cache_put(struct list_head *new_item,
 				 struct rds_ib_refill_cache *cache)
 {
 	unsigned long flags;
+<<<<<<< HEAD
 	struct list_head *old;
 	struct list_head __percpu *chpfirst;
+=======
+	struct list_head *old, *chpfirst;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	local_irq_save(flags);
 
@@ -432,7 +436,11 @@ static void rds_ib_recv_cache_put(struct list_head *new_item,
 	else /* put on front */
 		list_add_tail(new_item, chpfirst);
 
+<<<<<<< HEAD
 	__this_cpu_write(chpfirst, new_item);
+=======
+	__this_cpu_write(cache->percpu->first, new_item);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	__this_cpu_inc(cache->percpu->count);
 
 	if (__this_cpu_read(cache->percpu->count) < RDS_IB_RECYCLE_BATCH_COUNT)
@@ -452,7 +460,11 @@ static void rds_ib_recv_cache_put(struct list_head *new_item,
 	} while (old);
 
 
+<<<<<<< HEAD
 	__this_cpu_write(chpfirst, NULL);
+=======
+	__this_cpu_write(cache->percpu->first, NULL);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	__this_cpu_write(cache->percpu->count, 0);
 end:
 	local_irq_restore(flags);
@@ -599,7 +611,11 @@ static void rds_ib_set_ack(struct rds_ib_connection *ic, u64 seq,
 {
 	atomic64_set(&ic->i_ack_next, seq);
 	if (ack_required) {
+<<<<<<< HEAD
 		smp_mb__before_clear_bit();
+=======
+		smp_mb__before_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		set_bit(IB_ACK_REQUESTED, &ic->i_ack_flags);
 	}
 }
@@ -607,7 +623,11 @@ static void rds_ib_set_ack(struct rds_ib_connection *ic, u64 seq,
 static u64 rds_ib_get_ack(struct rds_ib_connection *ic)
 {
 	clear_bit(IB_ACK_REQUESTED, &ic->i_ack_flags);
+<<<<<<< HEAD
 	smp_mb__after_clear_bit();
+=======
+	smp_mb__after_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return atomic64_read(&ic->i_ack_next);
 }

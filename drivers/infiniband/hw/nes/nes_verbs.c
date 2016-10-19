@@ -1186,7 +1186,11 @@ static struct ib_qp *nes_create_qp(struct ib_pd *ibpd,
 					nes_free_resource(nesadapter, nesadapter->allocated_qps, qp_num);
 					kfree(nesqp->allocated_buffer);
 					nes_debug(NES_DBG_QP, "ib_copy_from_udata() Failed \n");
+<<<<<<< HEAD
 					return NULL;
+=======
+					return ERR_PTR(-EFAULT);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				}
 				if (req.user_wqe_buffers) {
 					virt_wqs = 1;

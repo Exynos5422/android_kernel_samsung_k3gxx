@@ -475,6 +475,12 @@ struct scsi_host_template {
 	 */
 	unsigned ordered_tag:1;
 
+<<<<<<< HEAD
+=======
+	/* True if the controller does not support WRITE SAME */
+	unsigned no_write_same:1;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/*
 	 * Countdown for host blocking with no commands outstanding.
 	 */
@@ -674,6 +680,17 @@ struct Scsi_Host {
 	/* Don't resume host in EH */
 	unsigned eh_noresume:1;
 
+<<<<<<< HEAD
+=======
+	/* The controller does not support WRITE SAME */
+	unsigned no_write_same:1;
+
+	/*
+	 * Set "SELECT REPORT" field to allow detection of well known logical
+	 * units along with standard LUs.
+	 */
+	unsigned report_wlus:1;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/*
 	 * Optional work queue to be utilized by the transport
 	 */
@@ -733,9 +750,12 @@ struct Scsi_Host {
 	 * Needed just in case we have virtual hosts.
 	 */
 	struct device *dma_dev;
+<<<<<<< HEAD
 #ifdef CONFIG_USB_HOST_NOTIFY
 	unsigned int  by_usb;
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/*
 	 * We should ensure that this is aligned, both for better performance

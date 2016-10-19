@@ -13,12 +13,28 @@ struct tsc2007_platform_data {
 	int	fuzzx; /* fuzz factor for X, Y and pressure axes */
 	int	fuzzy;
 	int	fuzzz;
+<<<<<<< HEAD
+=======
+	u16	min_x;
+	u16	min_y;
+	u16	max_x;
+	u16	max_y;
+	unsigned long irq_flags;
+	bool	invert_x;
+	bool	invert_y;
+	bool	invert_z1;
+	bool	invert_z2;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	int	(*get_pendown_state)(void);
 	void	(*clear_penirq)(void);		/* If needed, clear 2nd level
 						   interrupt source */
 	int	(*init_platform_hw)(void);
 	void	(*exit_platform_hw)(void);
+<<<<<<< HEAD
+=======
+	int	(*power_shutdown)(bool);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 #endif

@@ -98,6 +98,7 @@ config FAT_DEFAULT_IOCHARSET
 
 	  Enable any character sets you need in File Systems/Native Language
 	  Support.
+<<<<<<< HEAD
 
 config FAT_VIRTUAL_XATTR
 	bool "Virtual xattr support for FAT filesystem"
@@ -117,3 +118,5 @@ config FAT_SUPPORT_STLOG
 	bool "Enable storage log"
 	default y
 	depends on FAT_FS && PROC_STLOG
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

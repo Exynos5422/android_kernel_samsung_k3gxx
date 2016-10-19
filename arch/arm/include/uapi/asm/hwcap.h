@@ -25,6 +25,11 @@
 #define HWCAP_IDIVT	(1 << 18)
 #define HWCAP_VFPD32	(1 << 19)	/* set if VFP has 32 regs (not 16) */
 #define HWCAP_IDIV	(HWCAP_IDIVA | HWCAP_IDIVT)
+<<<<<<< HEAD
 
+=======
+#define HWCAP_LPAE	(1 << 20)
+#define HWCAP_EVTSTRM	(1 << 21)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #endif /* _UAPI__ASMARM_HWCAP_H */

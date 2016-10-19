@@ -236,10 +236,13 @@ ecryptfs_miscdev_read(struct file *file, char __user *buf, size_t count,
 	int rc;
 
 	mutex_lock(&daemon->mux);
+<<<<<<< HEAD
 	if (task_pid(current) != daemon->pid) {
 		mutex_unlock(&daemon->mux);
 		return -EPERM;
 	}
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (daemon->flags & ECRYPTFS_DAEMON_ZOMBIE) {
 		rc = 0;
 		printk(KERN_WARNING "%s: Attempt to read from zombified "

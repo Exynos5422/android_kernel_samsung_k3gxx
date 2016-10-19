@@ -13,7 +13,11 @@
 #include <uapi/linux/input.h>
 /* Implementation details, userspace should not care about these */
 #define ABS_MT_FIRST		ABS_MT_TOUCH_MAJOR
+<<<<<<< HEAD
 #define ABS_MT_LAST		ABS_MT_GRIP
+=======
+#define ABS_MT_LAST		ABS_MT_TOOL_Y
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /*
  * In-kernel definitions.
@@ -175,9 +179,13 @@ struct input_dev {
 	struct mutex mutex;
 
 	unsigned int users;
+<<<<<<< HEAD
 	unsigned int users_private;
 	bool going_away;
 	bool disabled;
+=======
+	bool going_away;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	struct device dev;
 

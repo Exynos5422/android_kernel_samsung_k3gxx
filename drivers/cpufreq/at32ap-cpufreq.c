@@ -108,7 +108,10 @@ static int __init at32_cpufreq_driver_init(struct cpufreq_policy *policy)
 
 static struct cpufreq_driver at32_driver = {
 	.name		= "at32ap",
+<<<<<<< HEAD
 	.owner		= THIS_MODULE,
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	.init		= at32_cpufreq_driver_init,
 	.verify		= at32_verify_speed,
 	.target		= at32_set_target,

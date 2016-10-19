@@ -715,13 +715,20 @@ static int llc_ui_recvmsg(struct kiocb *iocb, struct socket *sock,
 	unsigned long cpu_flags;
 	size_t copied = 0;
 	u32 peek_seq = 0;
+<<<<<<< HEAD
 	u32 *seq;
+=======
+	u32 *seq, skb_len;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	unsigned long used;
 	int target;	/* Read at least this many bytes */
 	long timeo;
 
+<<<<<<< HEAD
 	msg->msg_namelen = 0;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	lock_sock(sk);
 	copied = -ENOTCONN;
 	if (unlikely(sk->sk_type == SOCK_STREAM && sk->sk_state == TCP_LISTEN))
@@ -814,6 +821,10 @@ static int llc_ui_recvmsg(struct kiocb *iocb, struct socket *sock,
 		}
 		continue;
 	found_ok_skb:
+<<<<<<< HEAD
+=======
+		skb_len = skb->len;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		/* Ok so how much can we use? */
 		used = skb->len - offset;
 		if (len < used)
@@ -846,7 +857,11 @@ static int llc_ui_recvmsg(struct kiocb *iocb, struct socket *sock,
 		}
 
 		/* Partial read */
+<<<<<<< HEAD
 		if (used + offset < skb->len)
+=======
+		if (used + offset < skb_len)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			continue;
 	} while (len > 0);
 

@@ -426,8 +426,12 @@ static int max8997_muic_adc_handler(struct max8997_muic_info *info)
 		break;
 	case MAX8997_MUIC_ADC_FACTORY_MODE_USB_OFF:
 	case MAX8997_MUIC_ADC_FACTORY_MODE_USB_ON:
+<<<<<<< HEAD
 		ret = max8997_muic_handle_usb(info,
 					     MAX8997_USB_DEVICE, attached);
+=======
+		ret = max8997_muic_handle_usb(info, MAX8997_USB_DEVICE, attached);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (ret < 0)
 			return ret;
 		break;
@@ -505,8 +509,12 @@ static int max8997_muic_chg_handler(struct max8997_muic_info *info)
 		}
 		break;
 	case MAX8997_CHARGER_TYPE_DOWNSTREAM_PORT:
+<<<<<<< HEAD
 		extcon_set_cable_state(info->edev,
 				      "Charge-downstream", attached);
+=======
+		extcon_set_cable_state(info->edev, "Charge-downstream", attached);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		break;
 	case MAX8997_CHARGER_TYPE_DEDICATED_CHG:
 		extcon_set_cable_state(info->edev, "TA", attached);
@@ -714,7 +722,11 @@ static int max8997_muic_probe(struct platform_device *pdev)
 		goto err_irq;
 	}
 
+<<<<<<< HEAD
 	if (pdata->muic_pdata) {
+=======
+	if (pdata && pdata->muic_pdata) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		struct max8997_muic_platform_data *muic_pdata
 			= pdata->muic_pdata;
 

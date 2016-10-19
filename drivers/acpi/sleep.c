@@ -78,6 +78,20 @@ static int acpi_sleep_prepare(u32 acpi_state)
 	return 0;
 }
 
+<<<<<<< HEAD
+=======
+static bool acpi_sleep_state_supported(u8 sleep_state)
+{
+	acpi_status status;
+	u8 type_a, type_b;
+
+	status = acpi_get_sleep_type_data(sleep_state, &type_a, &type_b);
+	return ACPI_SUCCESS(status) && (!acpi_gbl_reduced_hardware
+		|| (acpi_gbl_FADT.sleep_control.address
+			&& acpi_gbl_FADT.sleep_status.address));
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifdef CONFIG_ACPI_SLEEP
 static u32 acpi_target_sleep_state = ACPI_STATE_S0;
 
@@ -600,6 +614,7 @@ static void acpi_sleep_suspend_setup(void)
 {
 	int i;
 
+<<<<<<< HEAD
 	for (i = ACPI_STATE_S1; i < ACPI_STATE_S4; i++) {
 		acpi_status status;
 		u8 type_a, type_b;
@@ -609,6 +624,11 @@ static void acpi_sleep_suspend_setup(void)
 			sleep_states[i] = 1;
 		}
 	}
+=======
+	for (i = ACPI_STATE_S1; i < ACPI_STATE_S4; i++)
+		if (acpi_sleep_state_supported(i))
+			sleep_states[i] = 1;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	suspend_set_ops(old_suspend_ordering ?
 		&acpi_suspend_ops_old : &acpi_suspend_ops);
@@ -739,11 +759,15 @@ static const struct platform_hibernation_ops acpi_hibernation_ops_old = {
 
 static void acpi_sleep_hibernate_setup(void)
 {
+<<<<<<< HEAD
 	acpi_status status;
 	u8 type_a, type_b;
 
 	status = acpi_get_sleep_type_data(ACPI_STATE_S4, &type_a, &type_b);
 	if (ACPI_FAILURE(status))
+=======
+	if (!acpi_sleep_state_supported(ACPI_STATE_S4))
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return;
 
 	hibernation_set_ops(old_suspend_ordering ?
@@ -792,8 +816,11 @@ static void acpi_power_off(void)
 
 int __init acpi_sleep_init(void)
 {
+<<<<<<< HEAD
 	acpi_status status;
 	u8 type_a, type_b;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	char supported[ACPI_S_STATE_COUNT * 3 + 1];
 	char *pos = supported;
 	int i;
@@ -808,8 +835,12 @@ int __init acpi_sleep_init(void)
 	acpi_sleep_suspend_setup();
 	acpi_sleep_hibernate_setup();
 
+<<<<<<< HEAD
 	status = acpi_get_sleep_type_data(ACPI_STATE_S5, &type_a, &type_b);
 	if (ACPI_SUCCESS(status)) {
+=======
+	if (acpi_sleep_state_supported(ACPI_STATE_S5)) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		sleep_states[ACPI_STATE_S5] = 1;
 		pm_power_off_prepare = acpi_power_off_prepare;
 		pm_power_off = acpi_power_off;

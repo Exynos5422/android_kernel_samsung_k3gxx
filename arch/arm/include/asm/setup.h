@@ -26,6 +26,7 @@ static const struct tagtable __tagtable_##fn __tag = { tag, fn }
  */
 #define NR_BANKS	CONFIG_ARM_NR_BANKS
 
+<<<<<<< HEAD
 struct membank {
 	phys_addr_t start;
 	phys_addr_t size;
@@ -49,6 +50,8 @@ extern struct meminfo meminfo;
 #define bank_phys_end(bank)	((bank)->start + (bank)->size)
 #define bank_phys_size(bank)	(bank)->size
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 extern int arm_add_memory(phys_addr_t start, phys_addr_t size);
 extern void early_print(const char *str, ...);
 extern void dump_machine_table(void);

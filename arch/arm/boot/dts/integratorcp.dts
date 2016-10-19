@@ -9,11 +9,14 @@
 	model = "ARM Integrator/CP";
 	compatible = "arm,integrator-cp";
 
+<<<<<<< HEAD
 	aliases {
 		arm,timer-primary = &timer2;
 		arm,timer-secondary = &timer1;
 	};
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	chosen {
 		bootargs = "root=/dev/ram0 console=ttyAMA0,38400n8 earlyprintk";
 	};
@@ -24,14 +27,28 @@
 	};
 
 	timer0: timer@13000000 {
+<<<<<<< HEAD
 		compatible = "arm,integrator-cp-timer";
 	};
 
 	timer1: timer@13000100 {
+=======
+		/* TIMER0 runs @ 25MHz */
+		compatible = "arm,integrator-cp-timer";
+		status = "disabled";
+	};
+
+	timer1: timer@13000100 {
+		/* TIMER1 runs @ 1MHz */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		compatible = "arm,integrator-cp-timer";
 	};
 
 	timer2: timer@13000200 {
+<<<<<<< HEAD
+=======
+		/* TIMER2 runs @ 1MHz */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		compatible = "arm,integrator-cp-timer";
 	};
 

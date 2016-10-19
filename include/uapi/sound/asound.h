@@ -93,9 +93,17 @@ enum {
 	SNDRV_HWDEP_IFACE_SB_RC,	/* SB Extigy/Audigy2NX remote control */
 	SNDRV_HWDEP_IFACE_HDA,		/* HD-audio */
 	SNDRV_HWDEP_IFACE_USB_STREAM,	/* direct access to usb stream */
+<<<<<<< HEAD
 
 	/* Don't forget to change the following: */
 	SNDRV_HWDEP_IFACE_LAST = SNDRV_HWDEP_IFACE_USB_STREAM
+=======
+	SNDRV_HWDEP_IFACE_AUDIO_BE,	/* Backend Audio Control */
+	SNDRV_HWDEP_IFACE_AUDIO_CODEC,	/* codec Audio Control */
+
+	/* Don't forget to change the following: */
+	SNDRV_HWDEP_IFACE_LAST = SNDRV_HWDEP_IFACE_AUDIO_CODEC
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 struct snd_hwdep_info {

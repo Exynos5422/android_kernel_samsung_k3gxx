@@ -118,6 +118,7 @@ static int kobj_usermode_filter(struct kobject *kobj)
 	return 0;
 }
 
+<<<<<<< HEAD
 static int init_uevent_argv(struct kobj_uevent_env *env, const char *subsystem)
 {
 	int len;
@@ -142,6 +143,8 @@ static void cleanup_uevent_env(struct subprocess_info *info)
 	kfree(info->data);
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /**
  * kobject_uevent_env - send an uevent with environmental data
  *
@@ -319,8 +322,16 @@ int kobject_uevent_env(struct kobject *kobj, enum kobject_action action,
 
 	/* call uevent_helper, usually only enabled during early boot */
 	if (uevent_helper[0] && !kobj_usermode_filter(kobj)) {
+<<<<<<< HEAD
 		struct subprocess_info *info;
 
+=======
+		char *argv [3];
+
+		argv [0] = uevent_helper;
+		argv [1] = (char *)subsystem;
+		argv [2] = NULL;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		retval = add_uevent_var(env, "HOME=/");
 		if (retval)
 			goto exit;
@@ -328,6 +339,7 @@ int kobject_uevent_env(struct kobject *kobj, enum kobject_action action,
 					"PATH=/sbin:/bin:/usr/sbin:/usr/bin");
 		if (retval)
 			goto exit;
+<<<<<<< HEAD
 		retval = init_uevent_argv(env, subsystem);
 		if (retval)
 			goto exit;
@@ -340,6 +352,11 @@ int kobject_uevent_env(struct kobject *kobj, enum kobject_action action,
 			retval = call_usermodehelper_exec(info, UMH_NO_WAIT);
 			env = NULL;	/* freed by cleanup_uevent_env */
 		}
+=======
+
+		retval = call_usermodehelper(argv[0], argv,
+					     env->envp, UMH_WAIT_EXEC);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 exit:

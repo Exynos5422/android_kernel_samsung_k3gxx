@@ -40,6 +40,7 @@
 #define LP8553_PWM_CONFIG	LP8550_PWM_CONFIG
 #define LP8553_I2C_CONFIG	LP8550_I2C_CONFIG
 
+<<<<<<< HEAD
 /* CONFIG register - LP8555 */
 #define LP8555_PWM_STANDBY	BIT(7)
 #define LP8555_PWM_FILTER	BIT(6)
@@ -51,6 +52,8 @@
 #define LP8555_COMB1_CONFIG	LP8555_COMBINED1
 #define LP8555_COMB2_CONFIG	LP8555_COMBINED2
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /* DEVICE CONTROL register - LP8556 */
 #define LP8556_PWM_CONFIG	(LP8556_PWM_ONLY << BRT_MODE_SHFT)
 #define LP8556_COMB1_CONFIG	(LP8556_COMBINED1 << BRT_MODE_SHFT)
@@ -76,7 +79,10 @@ enum lp855x_chip_id {
 	LP8551,
 	LP8552,
 	LP8553,
+<<<<<<< HEAD
 	LP8555,
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	LP8556,
 	LP8557,
 };
@@ -101,6 +107,7 @@ enum lp8553_brighntess_source {
 	LP8553_I2C_ONLY = LP8550_I2C_ONLY,
 };
 
+<<<<<<< HEAD
 enum lp8555_brightness_source {
 	LP8555_PWM_ONLY,
 	LP8555_I2C_ONLY,
@@ -108,6 +115,8 @@ enum lp8555_brightness_source {
 	LP8555_COMBINED2,	/* PWM with shaped brightness register */
 };
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 enum lp8556_brightness_source {
 	LP8556_PWM_ONLY,
 	LP8556_COMBINED1,	/* pwm + i2c before the shaper block */

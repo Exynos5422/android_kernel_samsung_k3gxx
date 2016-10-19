@@ -31,9 +31,12 @@
 
 #include "phy-samsung-usb.h"
 
+<<<<<<< HEAD
 static struct raw_notifier_head usb_lpa_nh =
 		RAW_NOTIFIER_INIT(usb_lpa_nh);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 int samsung_usbphy_parse_dt(struct samsung_usbphy *sphy)
 {
 	struct device_node *usbphy_sys;
@@ -59,7 +62,11 @@ int samsung_usbphy_parse_dt(struct samsung_usbphy *sphy)
 	 * Few SoCs may not have this switch available
 	 */
 	if (sphy->sysreg == NULL)
+<<<<<<< HEAD
 		dev_dbg(sphy->dev, "Can't get usb-phy sysreg cfg register\n");
+=======
+		dev_warn(sphy->dev, "Can't get usb-phy sysreg cfg register\n");
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	of_node_put(usbphy_sys);
 
@@ -100,9 +107,12 @@ void samsung_usbphy_set_isolation(struct samsung_usbphy *sphy, bool on)
 		 * device phy control with enable bit at position 0.
 		 */
 	case TYPE_EXYNOS5250:
+<<<<<<< HEAD
 	case TYPE_EXYNOS5420:
 	case TYPE_EXYNOS5430:
 	case TYPE_EXYNOS5:
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (sphy->phy_type == USB_PHY_TYPE_DEVICE) {
 			reg = sphy->pmuregs +
 				sphy->drv_data->devphy_reg_offset;
@@ -118,6 +128,7 @@ void samsung_usbphy_set_isolation(struct samsung_usbphy *sphy, bool on)
 		return;
 	}
 
+<<<<<<< HEAD
 	if (reg) {
 		reg_val = readl(reg);
 
@@ -172,6 +183,19 @@ void samsung_hsicphy_set_isolation(struct samsung_usbphy *sphy, bool on)
 }
 EXPORT_SYMBOL_GPL(samsung_hsicphy_set_isolation);
 
+=======
+	reg_val = readl(reg);
+
+	if (on)
+		reg_val &= ~en_mask;
+	else
+		reg_val |= en_mask;
+
+	writel(reg_val, reg);
+}
+EXPORT_SYMBOL_GPL(samsung_usbphy_set_isolation);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * Configure the mode of working of usb-phy here: HOST/DEVICE.
  */
@@ -180,7 +204,11 @@ void samsung_usbphy_cfg_sel(struct samsung_usbphy *sphy)
 	u32 reg;
 
 	if (!sphy->sysreg) {
+<<<<<<< HEAD
 		dev_dbg(sphy->dev, "Can't configure specified phy mode\n");
+=======
+		dev_warn(sphy->dev, "Can't configure specified phy mode\n");
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return;
 	}
 
@@ -223,10 +251,14 @@ int samsung_usbphy_get_refclk_freq(struct samsung_usbphy *sphy)
 	 * In exynos5250 USB host and device PHY use
 	 * external crystal clock XXTI
 	 */
+<<<<<<< HEAD
 	if (sphy->drv_data->cpu_type == TYPE_EXYNOS5250 ||
 		sphy->drv_data->cpu_type == TYPE_EXYNOS5420 ||
 		sphy->drv_data->cpu_type == TYPE_EXYNOS5430 ||
 		sphy->drv_data->cpu_type == TYPE_EXYNOS5)
+=======
+	if (sphy->drv_data->cpu_type == TYPE_EXYNOS5250)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		ref_clk = devm_clk_get(sphy->dev, "ext_xtal");
 	else
 		ref_clk = devm_clk_get(sphy->dev, "xusbxti");
@@ -235,10 +267,14 @@ int samsung_usbphy_get_refclk_freq(struct samsung_usbphy *sphy)
 		return PTR_ERR(ref_clk);
 	}
 
+<<<<<<< HEAD
 	if (sphy->drv_data->cpu_type == TYPE_EXYNOS5250 ||
 		sphy->drv_data->cpu_type == TYPE_EXYNOS5420 ||
 		sphy->drv_data->cpu_type == TYPE_EXYNOS5430 ||
 		sphy->drv_data->cpu_type == TYPE_EXYNOS5) {
+=======
+	if (sphy->drv_data->cpu_type == TYPE_EXYNOS5250) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		/* set clock frequency for PLL */
 		switch (clk_get_rate(ref_clk)) {
 		case 9600 * KHZ:
@@ -289,6 +325,7 @@ int samsung_usbphy_get_refclk_freq(struct samsung_usbphy *sphy)
 	return refclk_freq;
 }
 EXPORT_SYMBOL_GPL(samsung_usbphy_get_refclk_freq);
+<<<<<<< HEAD
 
 int samsung_usbphy_check_op(void)
 {
@@ -323,3 +360,5 @@ int unregister_samsung_usb_lpa_notifier(struct notifier_block *nb)
 	return raw_notifier_chain_unregister(&usb_lpa_nh, nb);
 }
 EXPORT_SYMBOL_GPL(unregister_samsung_usb_lpa_notifier);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

@@ -262,6 +262,10 @@ static int konepure_raw_event(struct hid_device *hdev,
 
 static const struct hid_device_id konepure_devices[] = {
 	{ HID_USB_DEVICE(USB_VENDOR_ID_ROCCAT, USB_DEVICE_ID_ROCCAT_KONEPURE) },
+<<<<<<< HEAD
+=======
+	{ HID_USB_DEVICE(USB_VENDOR_ID_ROCCAT, USB_DEVICE_ID_ROCCAT_KONEPURE_OPTICAL) },
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	{ }
 };
 
@@ -300,5 +304,9 @@ module_init(konepure_init);
 module_exit(konepure_exit);
 
 MODULE_AUTHOR("Stefan Achatz");
+<<<<<<< HEAD
 MODULE_DESCRIPTION("USB Roccat KonePure driver");
+=======
+MODULE_DESCRIPTION("USB Roccat KonePure/Optical driver");
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 MODULE_LICENSE("GPL v2");

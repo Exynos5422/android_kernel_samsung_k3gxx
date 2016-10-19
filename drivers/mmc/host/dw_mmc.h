@@ -14,6 +14,7 @@
 #ifndef _DW_MMC_H_
 #define _DW_MMC_H_
 
+<<<<<<< HEAD
 #define DW_MMC_MAX_TRANSFER_SIZE	4096
 #define DW_MMC_SECTOR_SIZE		512
 
@@ -26,6 +27,9 @@
 
 #define DW_MMC_240A		0x240a
 #define DW_MMC_260A		0x260a
+=======
+#define DW_MMC_240A		0x240a
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define SDMMC_CTRL		0x000
 #define SDMMC_PWREN		0x004
@@ -57,6 +61,7 @@
 #define SDMMC_VERID		0x06c
 #define SDMMC_HCON		0x070
 #define SDMMC_UHS_REG		0x074
+<<<<<<< HEAD
 #define SDMMC_UHS_DDR_MODE		0x1
 #define SDMMC_BMOD		0x080
 #define SDMMC_PLDMND		0x084
@@ -65,6 +70,16 @@
 #define SDMMC_SHA_CMD_IS	0x194
 #define QRDY_INT_EN		BIT(3)
 #define QRDY_INT		BIT(3)
+=======
+#define SDMMC_BMOD		0x080
+#define SDMMC_PLDMND		0x084
+#define SDMMC_DBADDR		0x088
+#define SDMMC_IDSTS		0x08c
+#define SDMMC_IDINTEN		0x090
+#define SDMMC_DSCADDR		0x094
+#define SDMMC_BUFADDR		0x098
+#define SDMMC_DATA(x)		(x)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /*
  * Data offset is difference according to Version
@@ -109,7 +124,10 @@
 #define SDMMC_INT_HLE			BIT(12)
 #define SDMMC_INT_FRUN			BIT(11)
 #define SDMMC_INT_HTO			BIT(10)
+<<<<<<< HEAD
 #define SDMMC_INT_VOLT_SW		BIT(10)
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define SDMMC_INT_DTO			BIT(9)
 #define SDMMC_INT_RTO			BIT(8)
 #define SDMMC_INT_DCRC			BIT(7)
@@ -123,8 +141,11 @@
 #define SDMMC_INT_ERROR			0xbfc2
 /* Command register defines */
 #define SDMMC_CMD_START			BIT(31)
+<<<<<<< HEAD
 #define SDMMC_CMD_USE_HOLD_REG		BIT(29)
 #define SDMMC_VOLT_SWITCH		BIT(28)
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define SDMMC_CMD_CCS_EXP		BIT(23)
 #define SDMMC_CMD_CEATA_RD		BIT(22)
 #define SDMMC_CMD_UPD_CLK		BIT(21)
@@ -140,12 +161,16 @@
 #define SDMMC_CMD_RESP_EXP		BIT(6)
 #define SDMMC_CMD_INDX(n)		((n) & 0x1F)
 /* Status register defines */
+<<<<<<< HEAD
 #define SDMMC_STATUS_DMA_REQ		BIT(31)
 #define SDMMC_GET_FCNT(x)		(((x)>>17) & 0x1FFF)
 #define SDMMC_DATA_BUSY			BIT(9)
 /* FIFOTH register defines */
 #define SDMMC_FIFOTH_DMA_MULTI_TRANS_SIZE	28
 #define SDMMC_FIFOTH_RX_WMARK		16
+=======
+#define SDMMC_GET_FCNT(x)		(((x)>>17) & 0x1FFF)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /* Internal DMAC interrupt defines */
 #define SDMMC_IDMAC_INT_AI		BIT(9)
 #define SDMMC_IDMAC_INT_NI		BIT(8)
@@ -167,9 +192,12 @@
 #define mci_writel(dev, reg, value)			\
 	__raw_writel((value), (dev)->regs + SDMMC_##reg)
 
+<<<<<<< HEAD
 /* timeout (maximum) */
 #define dw_mci_set_timeout(host)	mci_writel(host, TMOUT, 0xffffffff)
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /* 16-bit FIFO access macros */
 #define mci_readw(dev, reg)			\
 	__raw_readw((dev)->regs + SDMMC_##reg)
@@ -197,6 +225,7 @@
 	(*(volatile u64 __force *)((dev)->regs + SDMMC_##reg) = (value))
 #endif
 
+<<<<<<< HEAD
 /*
  * platform-dependent miscellaneous control
  *
@@ -228,6 +257,14 @@ extern int dw_mci_early_resume(struct dw_mci *host);
 #endif
 extern int dw_mci_ciu_clk_en(struct dw_mci *host, bool force_gating);
 extern void dw_mci_ciu_clk_dis(struct dw_mci *host);
+=======
+extern int dw_mci_probe(struct dw_mci *host);
+extern void dw_mci_remove(struct dw_mci *host);
+#ifdef CONFIG_PM
+extern int dw_mci_suspend(struct dw_mci *host);
+extern int dw_mci_resume(struct dw_mci *host);
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /**
  * dw_mci driver data - dw-mshc implementation specific driver data.
@@ -237,8 +274,11 @@ extern void dw_mci_ciu_clk_dis(struct dw_mci *host);
  * @prepare_command: handle CMD register extensions.
  * @set_ios: handle bus specific extensions.
  * @parse_dt: parse implementation specific device tree properties.
+<<<<<<< HEAD
  * @cfg_smu: to configure security management unit
  * @execute_tuning: "auto-tune" Clock-In parameters
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  *
  * Provide controller implementation specific extensions. The usage of this
  * data structure is fully optional and usage of each member in this structure
@@ -249,6 +289,7 @@ struct dw_mci_drv_data {
 	int		(*init)(struct dw_mci *host);
 	int		(*setup_clock)(struct dw_mci *host);
 	void		(*prepare_command)(struct dw_mci *host, u32 *cmdr);
+<<<<<<< HEAD
 	void		(*register_dump)(struct dw_mci *host);
 	void		(*set_ios)(struct dw_mci *host, unsigned int tuning, struct mmc_ios *ios);
 	int		(*parse_dt)(struct dw_mci *host);
@@ -258,5 +299,9 @@ struct dw_mci_drv_data {
 			enum dw_mci_misc_control control, void *priv);
 	void		(*register_notifier)(struct dw_mci *host);
 	void		(*unregister_notifier)(struct dw_mci *host);
+=======
+	void		(*set_ios)(struct dw_mci *host, struct mmc_ios *ios);
+	int		(*parse_dt)(struct dw_mci *host);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 #endif /* _DW_MMC_H_ */

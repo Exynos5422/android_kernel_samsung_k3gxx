@@ -216,6 +216,11 @@ struct hc_driver {
 #define	HCD_MEMORY	0x0001		/* HC regs use memory (else I/O) */
 #define	HCD_LOCAL_MEM	0x0002		/* HC needs local memory */
 #define	HCD_SHARED	0x0004		/* Two (or more) usb_hcds share HW */
+<<<<<<< HEAD
+=======
+#define	HCD_RT_OLD_ENUM	0x0008		/* HC supports short enumeration
+					   on root port */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define	HCD_USB11	0x0010		/* USB 1.1 */
 #define	HCD_USB2	0x0020		/* USB 2.0 */
 #define	HCD_USB3	0x0040		/* USB 3.0 */
@@ -358,6 +363,18 @@ struct hc_driver {
 	int	(*disable_usb3_lpm_timeout)(struct usb_hcd *,
 			struct usb_device *, enum usb3_link_state state);
 	int	(*find_raw_port_number)(struct usb_hcd *, int);
+<<<<<<< HEAD
+=======
+	/* if hcd needs to finish ep cleanup asap after HC halt failiure */
+	void (*halt_failed_cleanup)(struct usb_hcd *);
+
+	/* to log submission/completion events*/
+	void	(*log_urb)(struct urb *urb, char *event, unsigned extra);
+	void	(*dump_regs)(struct usb_hcd *);
+	void	(*set_autosuspend_delay)(struct usb_device *);
+	void	(*reset_sof_bug_handler)(struct usb_hcd *hcd, u32 val);
+	void	(*udev_enum_done)(struct usb_hcd *hcd);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 extern int usb_hcd_link_urb_to_ep(struct usb_hcd *hcd, struct urb *urb);
@@ -394,10 +411,25 @@ extern struct usb_hcd *usb_create_shared_hcd(const struct hc_driver *driver,
 extern struct usb_hcd *usb_get_hcd(struct usb_hcd *hcd);
 extern void usb_put_hcd(struct usb_hcd *hcd);
 extern int usb_hcd_is_primary_hcd(struct usb_hcd *hcd);
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_USB
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 extern int usb_add_hcd(struct usb_hcd *hcd,
 		unsigned int irqnum, unsigned long irqflags);
 extern void usb_remove_hcd(struct usb_hcd *hcd);
 extern int usb_hcd_find_raw_port_number(struct usb_hcd *hcd, int port1);
+<<<<<<< HEAD
+=======
+#else
+static inline int
+usb_add_hcd(struct usb_hcd *hcd, unsigned int irqnum, unsigned long irqflags)
+{
+	return 0;
+}
+static inline void usb_remove_hcd(struct usb_hcd *hcd) {}
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 struct platform_device;
 extern void usb_hcd_platform_shutdown(struct platform_device *dev);
@@ -410,7 +442,11 @@ extern int usb_hcd_pci_probe(struct pci_dev *dev,
 extern void usb_hcd_pci_remove(struct pci_dev *dev);
 extern void usb_hcd_pci_shutdown(struct pci_dev *dev);
 
+<<<<<<< HEAD
 #ifdef CONFIG_PM_SLEEP
+=======
+#ifdef CONFIG_PM
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 extern const struct dev_pm_ops usb_hcd_pci_pm_ops;
 #endif
 #endif /* CONFIG_PCI */

@@ -17,6 +17,7 @@
 #include <linux/err.h>
 #include <linux/slab.h>
 #include <linux/i2c.h>
+<<<<<<< HEAD
 #include <linux/of_gpio.h>
 #include <linux/of_irq.h>
 #include <linux/irqnr.h>
@@ -24,6 +25,12 @@
 #include <linux/pm_runtime.h>
 #include <linux/mutex.h>
 #include <linux/rtc.h>
+=======
+#include <linux/of_irq.h>
+#include <linux/interrupt.h>
+#include <linux/pm_runtime.h>
+#include <linux/mutex.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <linux/mfd/core.h>
 #include <linux/mfd/samsung/core.h>
 #include <linux/mfd/samsung/irq.h>
@@ -61,6 +68,7 @@ static struct mfd_cell s5m8767_devs[] = {
 static struct mfd_cell s2mps11_devs[] = {
 	{
 		.name = "s2mps11-pmic",
+<<<<<<< HEAD
 	}, {
 		.name = "s2m-rtc",
 	},
@@ -71,6 +79,8 @@ static struct mfd_cell s2mps13_devs[] = {
 		.name = "s2mps13-pmic",
 	}, {
 		.name = "s2m-rtc",
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	},
 };
 
@@ -79,46 +89,70 @@ static struct of_device_id sec_dt_match[] = {
 	{	.compatible = "samsung,s5m8767-pmic",
 		.data = (void *)S5M8767X,
 	},
+<<<<<<< HEAD
 	{	.compatible = "samsung,s2mps13-pmic",
 		.data = (void *)S2MPS13X,
 	},
 	{	.compatible = "samsung,s2mps11-pmic",
 		.data = (void *)S2MPS11X,
 	},
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	{},
 };
 #endif
 
+<<<<<<< HEAD
 int sec_reg_read(struct sec_pmic_dev *sec_pmic, u32 reg, void *dest)
+=======
+int sec_reg_read(struct sec_pmic_dev *sec_pmic, u8 reg, void *dest)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	return regmap_read(sec_pmic->regmap, reg, dest);
 }
 EXPORT_SYMBOL_GPL(sec_reg_read);
 
+<<<<<<< HEAD
 int sec_bulk_read(struct sec_pmic_dev *sec_pmic, u32 reg, int count, u8 *buf)
+=======
+int sec_bulk_read(struct sec_pmic_dev *sec_pmic, u8 reg, int count, u8 *buf)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	return regmap_bulk_read(sec_pmic->regmap, reg, buf, count);
 }
 EXPORT_SYMBOL_GPL(sec_bulk_read);
 
+<<<<<<< HEAD
 int sec_reg_write(struct sec_pmic_dev *sec_pmic, u32 reg, u32 value)
+=======
+int sec_reg_write(struct sec_pmic_dev *sec_pmic, u8 reg, u8 value)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	return regmap_write(sec_pmic->regmap, reg, value);
 }
 EXPORT_SYMBOL_GPL(sec_reg_write);
 
+<<<<<<< HEAD
 int sec_bulk_write(struct sec_pmic_dev *sec_pmic, u32 reg, int count, u8 *buf)
+=======
+int sec_bulk_write(struct sec_pmic_dev *sec_pmic, u8 reg, int count, u8 *buf)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	return regmap_raw_write(sec_pmic->regmap, reg, buf, count);
 }
 EXPORT_SYMBOL_GPL(sec_bulk_write);
 
+<<<<<<< HEAD
 int sec_reg_update(struct sec_pmic_dev *sec_pmic, u32 reg, u32 val, u32 mask)
+=======
+int sec_reg_update(struct sec_pmic_dev *sec_pmic, u8 reg, u8 val, u8 mask)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	return regmap_update_bits(sec_pmic->regmap, reg, mask, val);
 }
 EXPORT_SYMBOL_GPL(sec_reg_update);
 
+<<<<<<< HEAD
 int sec_rtc_read(struct sec_pmic_dev *sec_pmic, u32 reg, void *dest)
 {
 	return regmap_read(sec_pmic->rtc_regmap, reg, dest);
@@ -152,6 +186,8 @@ int sec_rtc_update(struct sec_pmic_dev *sec_pmic, u32 reg, u32 val,
 }
 EXPORT_SYMBOL_GPL(sec_rtc_update);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static struct regmap_config sec_regmap_config = {
 	.reg_bits = 8,
 	.val_bits = 8,
@@ -159,6 +195,7 @@ static struct regmap_config sec_regmap_config = {
 
 
 #ifdef CONFIG_OF
+<<<<<<< HEAD
 static struct sec_platform_data *sec_pmic_i2c_parse_dt_pdata(
 					struct device *dev)
 {
@@ -248,12 +285,45 @@ static struct sec_platform_data *sec_pmic_i2c_parse_dt_pdata(
 		return ERR_PTR(ret);
 
 	return pdata;
+=======
+/*
+ * Only the common platform data elements for s5m8767 are parsed here from the
+ * device tree. Other sub-modules of s5m8767 such as pmic, rtc , charger and
+ * others have to parse their own platform data elements from device tree.
+ *
+ * The s5m8767 platform data structure is instantiated here and the drivers for
+ * the sub-modules need not instantiate another instance while parsing their
+ * platform data.
+ */
+static struct sec_platform_data *sec_pmic_i2c_parse_dt_pdata(
+					struct device *dev)
+{
+	struct sec_platform_data *pd;
+
+	pd = devm_kzalloc(dev, sizeof(*pd), GFP_KERNEL);
+	if (!pd) {
+		dev_err(dev, "could not allocate memory for pdata\n");
+		return ERR_PTR(-ENOMEM);
+	}
+
+	/*
+	 * ToDo: the 'wakeup' member in the platform data is more of a linux
+	 * specfic information. Hence, there is no binding for that yet and
+	 * not parsed here.
+	 */
+
+	return pd;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 #else
 static struct sec_platform_data *sec_pmic_i2c_parse_dt_pdata(
 					struct device *dev)
 {
+<<<<<<< HEAD
 	return NULL;
+=======
+	return 0;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 #endif
 
@@ -270,6 +340,7 @@ static inline int sec_i2c_get_driver_data(struct i2c_client *i2c,
 	return (int)id->driver_data;
 }
 
+<<<<<<< HEAD
 static struct sec_pmic_dev *g_sec_pmic;
 
 int sec_pmic_get_irq_base(void)
@@ -290,6 +361,8 @@ int sec_pmic_get_irq_base(void)
 	return irq_base;
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int sec_pmic_probe(struct i2c_client *i2c,
 			    const struct i2c_device_id *id)
 {
@@ -316,14 +389,22 @@ static int sec_pmic_probe(struct i2c_client *i2c,
 		}
 		pdata->device_type = sec_pmic->type;
 	}
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (pdata) {
 		sec_pmic->device_type = pdata->device_type;
 		sec_pmic->ono = pdata->ono;
 		sec_pmic->irq_base = pdata->irq_base;
+<<<<<<< HEAD
 		sec_pmic->wakeup = true;
 		sec_pmic->pdata = pdata;
 		sec_pmic->irq = i2c->irq;
+=======
+		sec_pmic->wakeup = pdata->wakeup;
+		sec_pmic->pdata = pdata;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	sec_pmic->regmap = devm_regmap_init_i2c(i2c, &sec_regmap_config);
@@ -335,6 +416,7 @@ static int sec_pmic_probe(struct i2c_client *i2c,
 	}
 
 	sec_pmic->rtc = i2c_new_dummy(i2c->adapter, RTC_I2C_ADDR);
+<<<<<<< HEAD
 	i2c_set_clientdata(sec_pmic->rtc, sec_pmic);
 	sec_pmic->rtc_regmap = devm_regmap_init_i2c(sec_pmic->rtc, &sec_regmap_config);
 	if (IS_ERR(sec_pmic->rtc_regmap)) {
@@ -343,6 +425,13 @@ static int sec_pmic_probe(struct i2c_client *i2c,
 			ret);
 		return ret;
 	}
+=======
+	if (!sec_pmic->rtc) {
+		dev_err(&i2c->dev, "Failed to allocate I2C for RTC\n");
+		return -ENODEV;
+	}
+	i2c_set_clientdata(sec_pmic->rtc, sec_pmic);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (pdata && pdata->cfg_pmic_irq)
 		pdata->cfg_pmic_irq();
@@ -368,10 +457,13 @@ static int sec_pmic_probe(struct i2c_client *i2c,
 		ret = mfd_add_devices(sec_pmic->dev, -1, s2mps11_devs,
 				      ARRAY_SIZE(s2mps11_devs), NULL, 0, NULL);
 		break;
+<<<<<<< HEAD
 	case S2MPS13X:
 		ret = mfd_add_devices(sec_pmic->dev, -1, s2mps13_devs,
 				      ARRAY_SIZE(s2mps13_devs), NULL, 0, NULL);
 		break;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	default:
 		/* If this happens the probe function is problem */
 		BUG();
@@ -380,8 +472,11 @@ static int sec_pmic_probe(struct i2c_client *i2c,
 	if (ret < 0)
 		goto err;
 
+<<<<<<< HEAD
 	g_sec_pmic = sec_pmic;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return ret;
 
 err:
@@ -397,8 +492,11 @@ static int sec_pmic_remove(struct i2c_client *i2c)
 
 	mfd_remove_devices(sec_pmic->dev);
 	sec_irq_exit(sec_pmic);
+<<<<<<< HEAD
 	regmap_exit(sec_pmic->rtc_regmap);
 	regmap_exit(sec_pmic->regmap);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	i2c_unregister_device(sec_pmic->rtc);
 	return 0;
 }
@@ -409,6 +507,7 @@ static const struct i2c_device_id sec_pmic_id[] = {
 };
 MODULE_DEVICE_TABLE(i2c, sec_pmic_id);
 
+<<<<<<< HEAD
 #ifdef CONFIG_PM
 static int sec_suspend(struct device *dev)
 {
@@ -443,12 +542,17 @@ const struct dev_pm_ops sec_pmic_apm = {
 	.resume = sec_resume,
 };
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static struct i2c_driver sec_pmic_driver = {
 	.driver = {
 		   .name = "sec_pmic",
 		   .owner = THIS_MODULE,
 		   .of_match_table = of_match_ptr(sec_dt_match),
+<<<<<<< HEAD
 		   .pm = &sec_pmic_apm,		   
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	},
 	.probe = sec_pmic_probe,
 	.remove = sec_pmic_remove,
@@ -469,5 +573,9 @@ static void __exit sec_pmic_exit(void)
 module_exit(sec_pmic_exit);
 
 MODULE_AUTHOR("Sangbeom Kim <sbkim73@samsung.com>");
+<<<<<<< HEAD
 MODULE_DESCRIPTION("Core support for the SAMSUNG MFD");
+=======
+MODULE_DESCRIPTION("Core support for the S5M MFD");
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 MODULE_LICENSE("GPL");

@@ -54,7 +54,11 @@
 static LIST_HEAD(g_tiqn_list);
 static LIST_HEAD(g_np_list);
 static DEFINE_SPINLOCK(tiqn_lock);
+<<<<<<< HEAD
 static DEFINE_SPINLOCK(np_lock);
+=======
+static DEFINE_MUTEX(np_lock);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 static struct idr tiqn_idr;
 struct idr sess_idr;
@@ -303,6 +307,12 @@ bool iscsit_check_np_match(
 	return false;
 }
 
+<<<<<<< HEAD
+=======
+/*
+ * Called with mutex np_lock held
+ */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static struct iscsi_np *iscsit_get_np(
 	struct __kernel_sockaddr_storage *sockaddr,
 	int network_transport)
@@ -310,11 +320,18 @@ static struct iscsi_np *iscsit_get_np(
 	struct iscsi_np *np;
 	bool match;
 
+<<<<<<< HEAD
 	spin_lock_bh(&np_lock);
 	list_for_each_entry(np, &g_np_list, np_list) {
 		spin_lock(&np->np_thread_lock);
 		if (np->np_thread_state != ISCSI_NP_THREAD_ACTIVE) {
 			spin_unlock(&np->np_thread_lock);
+=======
+	list_for_each_entry(np, &g_np_list, np_list) {
+		spin_lock_bh(&np->np_thread_lock);
+		if (np->np_thread_state != ISCSI_NP_THREAD_ACTIVE) {
+			spin_unlock_bh(&np->np_thread_lock);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			continue;
 		}
 
@@ -326,6 +343,7 @@ static struct iscsi_np *iscsit_get_np(
 			 * while iscsi_tpg_add_network_portal() is called.
 			 */
 			np->np_exports++;
+<<<<<<< HEAD
 			spin_unlock(&np->np_thread_lock);
 			spin_unlock_bh(&np_lock);
 			return np;
@@ -333,6 +351,13 @@ static struct iscsi_np *iscsit_get_np(
 		spin_unlock(&np->np_thread_lock);
 	}
 	spin_unlock_bh(&np_lock);
+=======
+			spin_unlock_bh(&np->np_thread_lock);
+			return np;
+		}
+		spin_unlock_bh(&np->np_thread_lock);
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return NULL;
 }
@@ -346,16 +371,33 @@ struct iscsi_np *iscsit_add_np(
 	struct sockaddr_in6 *sock_in6;
 	struct iscsi_np *np;
 	int ret;
+<<<<<<< HEAD
+=======
+
+	mutex_lock(&np_lock);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/*
 	 * Locate the existing struct iscsi_np if already active..
 	 */
 	np = iscsit_get_np(sockaddr, network_transport);
+<<<<<<< HEAD
 	if (np)
 		return np;
+=======
+	if (np) {
+		mutex_unlock(&np_lock);
+		return np;
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	np = kzalloc(sizeof(struct iscsi_np), GFP_KERNEL);
 	if (!np) {
 		pr_err("Unable to allocate memory for struct iscsi_np\n");
+<<<<<<< HEAD
+=======
+		mutex_unlock(&np_lock);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return ERR_PTR(-ENOMEM);
 	}
 
@@ -378,6 +420,10 @@ struct iscsi_np *iscsit_add_np(
 	ret = iscsi_target_setup_login_socket(np, sockaddr);
 	if (ret != 0) {
 		kfree(np);
+<<<<<<< HEAD
+=======
+		mutex_unlock(&np_lock);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return ERR_PTR(ret);
 	}
 
@@ -386,6 +432,10 @@ struct iscsi_np *iscsit_add_np(
 		pr_err("Unable to create kthread: iscsi_np\n");
 		ret = PTR_ERR(np->np_thread);
 		kfree(np);
+<<<<<<< HEAD
+=======
+		mutex_unlock(&np_lock);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return ERR_PTR(ret);
 	}
 	/*
@@ -396,10 +446,17 @@ struct iscsi_np *iscsit_add_np(
 	 * point because iscsi_np has not been added to g_np_list yet.
 	 */
 	np->np_exports = 1;
+<<<<<<< HEAD
 
 	spin_lock_bh(&np_lock);
 	list_add_tail(&np->np_list, &g_np_list);
 	spin_unlock_bh(&np_lock);
+=======
+	np->np_thread_state = ISCSI_NP_THREAD_ACTIVE;
+
+	list_add_tail(&np->np_list, &g_np_list);
+	mutex_unlock(&np_lock);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	pr_debug("CORE[0] - Added Network Portal: %s:%hu on %s\n",
 		np->np_ip, np->np_port, np->np_transport->name);
@@ -452,6 +509,10 @@ int iscsit_del_np(struct iscsi_np *np)
 	spin_lock_bh(&np->np_thread_lock);
 	np->np_exports--;
 	if (np->np_exports) {
+<<<<<<< HEAD
+=======
+		np->enabled = true;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		spin_unlock_bh(&np->np_thread_lock);
 		return 0;
 	}
@@ -469,9 +530,15 @@ int iscsit_del_np(struct iscsi_np *np)
 
 	np->np_transport->iscsit_free_np(np);
 
+<<<<<<< HEAD
 	spin_lock_bh(&np_lock);
 	list_del(&np->np_list);
 	spin_unlock_bh(&np_lock);
+=======
+	mutex_lock(&np_lock);
+	list_del(&np->np_list);
+	mutex_unlock(&np_lock);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	pr_debug("CORE[0] - Removed Network Portal: %s:%hu on %s\n",
 		np->np_ip, np->np_port, np->np_transport->name);
@@ -838,6 +905,7 @@ int iscsit_setup_scsi_cmd(struct iscsi_conn *conn, struct iscsi_cmd *cmd,
 	if (((hdr->flags & ISCSI_FLAG_CMD_READ) ||
 	     (hdr->flags & ISCSI_FLAG_CMD_WRITE)) && !hdr->data_length) {
 		/*
+<<<<<<< HEAD
 		 * Vmware ESX v3.0 uses a modified Cisco Initiator (v3.4.2)
 		 * that adds support for RESERVE/RELEASE.  There is a bug
 		 * add with this new functionality that sets R/W bits when
@@ -856,6 +924,24 @@ int iscsit_setup_scsi_cmd(struct iscsi_conn *conn, struct iscsi_cmd *cmd,
 					     ISCSI_REASON_BOOKMARK_INVALID, buf);
 	}
 done:
+=======
+		 * From RFC-3720 Section 10.3.1:
+		 *
+		 * "Either or both of R and W MAY be 1 when either the
+		 *  Expected Data Transfer Length and/or Bidirectional Read
+		 *  Expected Data Transfer Length are 0"
+		 *
+		 * For this case, go ahead and clear the unnecssary bits
+		 * to avoid any confusion with ->data_direction.
+		 */
+		hdr->flags &= ~ISCSI_FLAG_CMD_READ;
+		hdr->flags &= ~ISCSI_FLAG_CMD_WRITE;
+
+		pr_warn("ISCSI_FLAG_CMD_READ or ISCSI_FLAG_CMD_WRITE"
+			" set when Expected Data Transfer Length is 0 for"
+			" CDB: 0x%02x, Fixing up flags\n", hdr->cdb[0]);
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (!(hdr->flags & ISCSI_FLAG_CMD_READ) &&
 	    !(hdr->flags & ISCSI_FLAG_CMD_WRITE) && (hdr->data_length != 0)) {
@@ -1086,7 +1172,10 @@ int iscsit_process_scsi_cmd(struct iscsi_conn *conn, struct iscsi_cmd *cmd,
 		if (cmd->reject_reason)
 			return 0;
 
+<<<<<<< HEAD
 		target_put_sess_cmd(conn->sess->se_sess, &cmd->se_cmd);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return 1;
 	}
 	/*
@@ -1124,6 +1213,7 @@ after_immediate_data:
 		 */
 		cmdsn_ret = iscsit_sequence_cmd(cmd->conn, cmd,
 					(unsigned char *)hdr, hdr->cmdsn);
+<<<<<<< HEAD
 		if (cmdsn_ret == CMDSN_ERROR_CANNOT_RECOVER) {
 			return -1;
 		} else if (cmdsn_ret == CMDSN_LOWER_THAN_EXP) {
@@ -1132,6 +1222,12 @@ after_immediate_data:
 		}
 
 		if (cmd->sense_reason) {
+=======
+		if (cmdsn_ret == CMDSN_ERROR_CANNOT_RECOVER)
+			return -1;
+
+		if (cmd->sense_reason || cmdsn_ret == CMDSN_LOWER_THAN_EXP) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			int rc;
 
 			rc = iscsit_dump_data_payload(cmd->conn,
@@ -1311,7 +1407,11 @@ iscsit_check_dataout_hdr(struct iscsi_conn *conn, unsigned char *buf,
 	if (cmd->data_direction != DMA_TO_DEVICE) {
 		pr_err("Command ITT: 0x%08x received DataOUT for a"
 			" NON-WRITE command.\n", cmd->init_task_tag);
+<<<<<<< HEAD
 		return iscsit_reject_cmd(cmd, ISCSI_REASON_PROTOCOL_ERROR, buf);
+=======
+		return iscsit_dump_data_payload(conn, payload_length, 1);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 	se_cmd = &cmd->se_cmd;
 	iscsit_mod_dataout_timer(cmd);
@@ -1541,6 +1641,13 @@ int iscsit_handle_nop_out(struct iscsi_conn *conn, struct iscsi_cmd *cmd,
 	if (hdr->itt == RESERVED_ITT && !(hdr->opcode & ISCSI_OP_IMMEDIATE)) {
 		pr_err("NOPOUT ITT is reserved, but Immediate Bit is"
 			" not set, protocol error.\n");
+<<<<<<< HEAD
+=======
+		if (!cmd)
+			return iscsit_add_reject(conn, ISCSI_REASON_PROTOCOL_ERROR,
+						 (unsigned char *)hdr);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return iscsit_reject_cmd(cmd, ISCSI_REASON_PROTOCOL_ERROR,
 					 (unsigned char *)hdr);
 	}
@@ -1550,6 +1657,13 @@ int iscsit_handle_nop_out(struct iscsi_conn *conn, struct iscsi_cmd *cmd,
 			" greater than MaxXmitDataSegmentLength: %u, protocol"
 			" error.\n", payload_length,
 			conn->conn_ops->MaxXmitDataSegmentLength);
+<<<<<<< HEAD
+=======
+		if (!cmd)
+			return iscsit_add_reject(conn, ISCSI_REASON_PROTOCOL_ERROR,
+						 (unsigned char *)hdr);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return iscsit_reject_cmd(cmd, ISCSI_REASON_PROTOCOL_ERROR,
 					 (unsigned char *)hdr);
 	}
@@ -2445,6 +2559,10 @@ static void iscsit_build_conn_drop_async_message(struct iscsi_conn *conn)
 {
 	struct iscsi_cmd *cmd;
 	struct iscsi_conn *conn_p;
+<<<<<<< HEAD
+=======
+	bool found = false;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/*
 	 * Only send a Asynchronous Message on connections whos network
@@ -2453,11 +2571,19 @@ static void iscsit_build_conn_drop_async_message(struct iscsi_conn *conn)
 	list_for_each_entry(conn_p, &conn->sess->sess_conn_list, conn_list) {
 		if (conn_p->conn_state == TARG_CONN_STATE_LOGGED_IN) {
 			iscsit_inc_conn_usage_count(conn_p);
+<<<<<<< HEAD
+=======
+			found = true;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			break;
 		}
 	}
 
+<<<<<<< HEAD
 	if (!conn_p)
+=======
+	if (!found)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return;
 
 	cmd = iscsit_allocate_cmd(conn_p, GFP_ATOMIC);
@@ -3644,7 +3770,11 @@ iscsit_immediate_queue(struct iscsi_conn *conn, struct iscsi_cmd *cmd, int state
 		break;
 	case ISTATE_REMOVE:
 		spin_lock_bh(&conn->cmd_lock);
+<<<<<<< HEAD
 		list_del(&cmd->i_conn_node);
+=======
+		list_del_init(&cmd->i_conn_node);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		spin_unlock_bh(&conn->cmd_lock);
 
 		iscsit_free_cmd(cmd, false);
@@ -4090,7 +4220,11 @@ static void iscsit_release_commands_from_conn(struct iscsi_conn *conn)
 	spin_lock_bh(&conn->cmd_lock);
 	list_for_each_entry_safe(cmd, cmd_tmp, &conn->conn_cmd_list, i_conn_node) {
 
+<<<<<<< HEAD
 		list_del(&cmd->i_conn_node);
+=======
+		list_del_init(&cmd->i_conn_node);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		spin_unlock_bh(&conn->cmd_lock);
 
 		iscsit_increment_maxcmdsn(cmd, sess);
@@ -4135,7 +4269,13 @@ int iscsit_close_connection(
 	iscsit_stop_timers_for_cmds(conn);
 	iscsit_stop_nopin_response_timer(conn);
 	iscsit_stop_nopin_timer(conn);
+<<<<<<< HEAD
 	iscsit_free_queue_reqs_for_conn(conn);
+=======
+
+	if (conn->conn_transport->iscsit_wait_conn)
+		conn->conn_transport->iscsit_wait_conn(conn);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/*
 	 * During Connection recovery drop unacknowledged out of order
@@ -4153,6 +4293,10 @@ int iscsit_close_connection(
 		iscsit_clear_ooo_cmdsns_for_conn(conn);
 		iscsit_release_commands_from_conn(conn);
 	}
+<<<<<<< HEAD
+=======
+	iscsit_free_queue_reqs_for_conn(conn);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/*
 	 * Handle decrementing session or connection usage count if

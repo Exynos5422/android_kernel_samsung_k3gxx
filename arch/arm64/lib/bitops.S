@@ -46,11 +46,19 @@ ENTRY(	\name	)
 	mov	x2, #1
 	add	x1, x1, x0, lsr #3	// Get word offset
 	lsl	x4, x2, x3		// Create mask
+<<<<<<< HEAD
 1:	ldaxr	x2, [x1]
+=======
+1:	ldxr	x2, [x1]
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	lsr	x0, x2, x3		// Save old value of bit
 	\instr	x2, x2, x4		// toggle bit
 	stlxr	w5, x2, [x1]
 	cbnz	w5, 1b
+<<<<<<< HEAD
+=======
+	dmb	ish
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	and	x0, x0, #1
 3:	ret
 ENDPROC(\name	)

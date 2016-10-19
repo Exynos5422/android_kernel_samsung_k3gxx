@@ -1670,7 +1670,11 @@ static int dcb_doit(struct sk_buff *skb, struct nlmsghdr *nlh)
 	struct nlmsghdr *reply_nlh = NULL;
 	const struct reply_func *fn;
 
+<<<<<<< HEAD
 	if ((nlh->nlmsg_type == RTM_SETDCB) && !capable(CAP_NET_ADMIN))
+=======
+	if ((nlh->nlmsg_type == RTM_SETDCB) && !netlink_capable(skb, CAP_NET_ADMIN))
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return -EPERM;
 
 	ret = nlmsg_parse(nlh, sizeof(*dcb), tb, DCB_ATTR_MAX,

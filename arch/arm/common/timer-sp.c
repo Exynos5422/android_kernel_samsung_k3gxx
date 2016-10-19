@@ -28,8 +28,13 @@
 #include <linux/of.h>
 #include <linux/of_address.h>
 #include <linux/of_irq.h>
+<<<<<<< HEAD
 
 #include <asm/sched_clock.h>
+=======
+#include <linux/sched_clock.h>
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <asm/hardware/arm_timer.h>
 #include <asm/hardware/timer-sp.h>
 

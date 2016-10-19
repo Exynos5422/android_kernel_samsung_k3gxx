@@ -89,13 +89,19 @@ struct exynos_adc {
 	struct clk		*clk;
 	unsigned int		irq;
 	struct regulator	*vdd;
+<<<<<<< HEAD
 	struct device		*dev;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	struct completion	completion;
 
 	u32			value;
 	unsigned int            version;
+<<<<<<< HEAD
 	bool			phy_ctrl;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 static const struct of_device_id exynos_adc_match[] = {
@@ -113,6 +119,7 @@ static inline unsigned int exynos_adc_get_version(struct platform_device *pdev)
 	return (unsigned int)match->data;
 }
 
+<<<<<<< HEAD
 static void exynos_adc_hw_init(struct exynos_adc *info)
 {
 	u32 con1, con2;
@@ -188,6 +195,8 @@ static void exynos_adc_hw_deinit(struct exynos_adc *info)
 		writel(0, info->enable_reg);
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int exynos_read_raw(struct iio_dev *indio_dev,
 				struct iio_chan_spec const *chan,
 				int *val,
@@ -203,8 +212,11 @@ static int exynos_read_raw(struct iio_dev *indio_dev,
 
 	mutex_lock(&indio_dev->mlock);
 
+<<<<<<< HEAD
 	exynos_adc_hw_init(info);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* Select the channel to be used and Trigger conversion */
 	if (info->version == ADC_V2) {
 		con2 = readl(ADC_V2_CON2(info->regs));
@@ -223,6 +235,7 @@ static int exynos_read_raw(struct iio_dev *indio_dev,
 				ADC_V1_CON(info->regs));
 	}
 
+<<<<<<< HEAD
 	timeout = wait_for_completion_timeout
 			(&info->completion, EXYNOS_ADC_TIMEOUT);
 
@@ -230,6 +243,12 @@ static int exynos_read_raw(struct iio_dev *indio_dev,
 
 	exynos_adc_hw_deinit(info);
 
+=======
+	timeout = wait_for_completion_interruptible_timeout
+			(&info->completion, EXYNOS_ADC_TIMEOUT);
+	*val = info->value;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	mutex_unlock(&indio_dev->mlock);
 
 	if (timeout == 0)
@@ -265,6 +284,7 @@ static int exynos_adc_reg_access(struct iio_dev *indio_dev,
 	if (readval == NULL)
 		return -EINVAL;
 
+<<<<<<< HEAD
 	mutex_lock(&indio_dev->mlock);
 	clk_prepare_enable(info->clk);
 
@@ -273,6 +293,10 @@ static int exynos_adc_reg_access(struct iio_dev *indio_dev,
 	clk_disable_unprepare(info->clk);
 	mutex_unlock(&indio_dev->mlock);
 
+=======
+	*readval = readl(info->regs + reg);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 
@@ -313,6 +337,33 @@ static int exynos_adc_remove_devices(struct device *dev, void *c)
 	return 0;
 }
 
+<<<<<<< HEAD
+=======
+static void exynos_adc_hw_init(struct exynos_adc *info)
+{
+	u32 con1, con2;
+
+	if (info->version == ADC_V2) {
+		con1 = ADC_V2_CON1_SOFT_RESET;
+		writel(con1, ADC_V2_CON1(info->regs));
+
+		con2 = ADC_V2_CON2_OSEL | ADC_V2_CON2_ESEL |
+			ADC_V2_CON2_HIGHF | ADC_V2_CON2_C_TIME(0);
+		writel(con2, ADC_V2_CON2(info->regs));
+
+		/* Enable interrupts */
+		writel(1, ADC_V2_INT_EN(info->regs));
+	} else {
+		/* set default prescaler values and Enable prescaler */
+		con1 =  ADC_V1_CON_PRSCLV(49) | ADC_V1_CON_PRSCEN;
+
+		/* Enable 12-bit ADC resolution */
+		con1 |= ADC_V1_CON_RES;
+		writel(con1, ADC_V1_CON(info->regs));
+	}
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int exynos_adc_probe(struct platform_device *pdev)
 {
 	struct exynos_adc *info = NULL;
@@ -333,11 +384,14 @@ static int exynos_adc_probe(struct platform_device *pdev)
 
 	info = iio_priv(indio_dev);
 
+<<<<<<< HEAD
 	if (of_find_property(np, "samsung,adc-phy-control", NULL))
 		info->phy_ctrl = true;
 	else
 		info->phy_ctrl = false;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
 	info->regs = devm_request_and_ioremap(&pdev->dev, mem);
 	if (!info->regs) {
@@ -345,6 +399,7 @@ static int exynos_adc_probe(struct platform_device *pdev)
 		goto err_iio;
 	}
 
+<<<<<<< HEAD
 	if (info->phy_ctrl) {
 		mem = platform_get_resource(pdev, IORESOURCE_MEM, 1);
 		info->enable_reg = devm_request_and_ioremap(&pdev->dev, mem);
@@ -359,6 +414,12 @@ static int exynos_adc_probe(struct platform_device *pdev)
 		dev_err(&pdev->dev, "failed getting clock, err = %ld\n",
 							PTR_ERR(info->clk));
 		ret = PTR_ERR(info->clk);
+=======
+	mem = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+	info->enable_reg = devm_request_and_ioremap(&pdev->dev, mem);
+	if (!info->enable_reg) {
+		ret = -ENOMEM;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		goto err_iio;
 	}
 
@@ -373,9 +434,13 @@ static int exynos_adc_probe(struct platform_device *pdev)
 
 	init_completion(&info->completion);
 
+<<<<<<< HEAD
 	clk_prepare_enable(info->clk);
 
 	ret = devm_request_irq(&pdev->dev, info->irq, exynos_adc_isr,
+=======
+	ret = request_irq(info->irq, exynos_adc_isr,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 					0, dev_name(&pdev->dev), info);
 	if (ret < 0) {
 		dev_err(&pdev->dev, "failed requesting irq, irq = %d\n",
@@ -383,6 +448,7 @@ static int exynos_adc_probe(struct platform_device *pdev)
 		goto err_iio;
 	}
 
+<<<<<<< HEAD
 	disable_irq(info->irq);
 	clk_disable_unprepare(info->clk);
 
@@ -391,6 +457,24 @@ static int exynos_adc_probe(struct platform_device *pdev)
 		dev_err(&pdev->dev, "operating without regulator vdd[%ld]\n",
 							PTR_ERR(info->vdd));
 		info->vdd = NULL;
+=======
+	writel(1, info->enable_reg);
+
+	info->clk = devm_clk_get(&pdev->dev, "adc");
+	if (IS_ERR(info->clk)) {
+		dev_err(&pdev->dev, "failed getting clock, err = %ld\n",
+							PTR_ERR(info->clk));
+		ret = PTR_ERR(info->clk);
+		goto err_irq;
+	}
+
+	info->vdd = devm_regulator_get(&pdev->dev, "vdd");
+	if (IS_ERR(info->vdd)) {
+		dev_err(&pdev->dev, "failed getting regulator, err = %ld\n",
+							PTR_ERR(info->vdd));
+		ret = PTR_ERR(info->vdd);
+		goto err_irq;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	info->version = exynos_adc_get_version(pdev);
@@ -411,9 +495,21 @@ static int exynos_adc_probe(struct platform_device *pdev)
 
 	ret = iio_device_register(indio_dev);
 	if (ret)
+<<<<<<< HEAD
 		goto err_iio;
 
 	info->dev = &pdev->dev;
+=======
+		goto err_irq;
+
+	ret = regulator_enable(info->vdd);
+	if (ret)
+		goto err_iio_dev;
+
+	clk_prepare_enable(info->clk);
+
+	exynos_adc_hw_init(info);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	ret = of_platform_populate(np, exynos_adc_match, NULL, &pdev->dev);
 	if (ret < 0) {
@@ -421,17 +517,29 @@ static int exynos_adc_probe(struct platform_device *pdev)
 		goto err_of_populate;
 	}
 
+<<<<<<< HEAD
 	dev_info(&pdev->dev, "Probed successfully driver.\n");
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 
 err_of_populate:
 	device_for_each_child(&pdev->dev, NULL,
 				exynos_adc_remove_devices);
+<<<<<<< HEAD
 	if (info->vdd)
 		regulator_disable(info->vdd);
 
 	iio_device_unregister(indio_dev);
+=======
+	regulator_disable(info->vdd);
+	clk_disable_unprepare(info->clk);
+err_iio_dev:
+	iio_device_unregister(indio_dev);
+err_irq:
+	free_irq(info->irq, info);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 err_iio:
 	iio_device_free(indio_dev);
 	return ret;
@@ -444,6 +552,7 @@ static int exynos_adc_remove(struct platform_device *pdev)
 
 	device_for_each_child(&pdev->dev, NULL,
 				exynos_adc_remove_devices);
+<<<<<<< HEAD
 
 	clk_prepare_enable(info->clk);
 
@@ -451,10 +560,68 @@ static int exynos_adc_remove(struct platform_device *pdev)
 
 	iio_device_unregister(indio_dev);
 	iio_device_free(indio_dev);
+=======
+	regulator_disable(info->vdd);
+	clk_disable_unprepare(info->clk);
+	writel(0, info->enable_reg);
+	iio_device_unregister(indio_dev);
+	free_irq(info->irq, info);
+	iio_device_free(indio_dev);
 
 	return 0;
 }
 
+#ifdef CONFIG_PM_SLEEP
+static int exynos_adc_suspend(struct device *dev)
+{
+	struct iio_dev *indio_dev = dev_get_drvdata(dev);
+	struct exynos_adc *info = iio_priv(indio_dev);
+	u32 con;
+
+	if (info->version == ADC_V2) {
+		con = readl(ADC_V2_CON1(info->regs));
+		con &= ~ADC_CON_EN_START;
+		writel(con, ADC_V2_CON1(info->regs));
+	} else {
+		con = readl(ADC_V1_CON(info->regs));
+		con |= ADC_V1_CON_STANDBY;
+		writel(con, ADC_V1_CON(info->regs));
+	}
+
+	clk_disable_unprepare(info->clk);
+	writel(0, info->enable_reg);
+	regulator_disable(info->vdd);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
+
+	return 0;
+}
+
+<<<<<<< HEAD
+=======
+static int exynos_adc_resume(struct device *dev)
+{
+	struct iio_dev *indio_dev = dev_get_drvdata(dev);
+	struct exynos_adc *info = iio_priv(indio_dev);
+	int ret;
+
+	ret = regulator_enable(info->vdd);
+	if (ret)
+		return ret;
+
+	writel(1, info->enable_reg);
+	clk_prepare_enable(info->clk);
+
+	exynos_adc_hw_init(info);
+
+	return 0;
+}
+#endif
+
+static SIMPLE_DEV_PM_OPS(exynos_adc_pm_ops,
+			exynos_adc_suspend,
+			exynos_adc_resume);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static struct platform_driver exynos_adc_driver = {
 	.probe		= exynos_adc_probe,
 	.remove		= exynos_adc_remove,
@@ -462,6 +629,10 @@ static struct platform_driver exynos_adc_driver = {
 		.name	= "exynos-adc",
 		.owner	= THIS_MODULE,
 		.of_match_table = exynos_adc_match,
+<<<<<<< HEAD
+=======
+		.pm	= &exynos_adc_pm_ops,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	},
 };
 

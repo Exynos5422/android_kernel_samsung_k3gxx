@@ -82,7 +82,10 @@ obj-$(CONFIG_ISO9660_FS)	+= isofs/
 obj-$(CONFIG_HFSPLUS_FS)	+= hfsplus/ # Before hfs to find wrapped HFS+
 obj-$(CONFIG_HFS_FS)		+= hfs/
 obj-$(CONFIG_ECRYPT_FS)		+= ecryptfs/
+<<<<<<< HEAD
 obj-$(CONFIG_SCFS)		+= scfs/
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 obj-$(CONFIG_VXFS_FS)		+= freevxfs/
 obj-$(CONFIG_NFS_FS)		+= nfs/
 obj-$(CONFIG_EXPORTFS)		+= exportfs/
@@ -106,7 +109,10 @@ obj-$(CONFIG_QNX6FS_FS)		+= qnx6/
 obj-$(CONFIG_AUTOFS4_FS)	+= autofs4/
 obj-$(CONFIG_ADFS_FS)		+= adfs/
 obj-$(CONFIG_FUSE_FS)		+= fuse/
+<<<<<<< HEAD
 obj-$(CONFIG_SDCARD_FS)		+= sdcardfs/
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 obj-$(CONFIG_UDF_FS)		+= udf/
 obj-$(CONFIG_SUN_OPENPROMFS)	+= openpromfs/
 obj-$(CONFIG_OMFS_FS)		+= omfs/
@@ -128,4 +134,10 @@ obj-y				+= exofs/ # Multiple modules
 obj-$(CONFIG_CEPH_FS)		+= ceph/
 obj-$(CONFIG_PSTORE)		+= pstore/
 obj-$(CONFIG_EFIVAR_FS)		+= efivarfs/
+<<<<<<< HEAD
 obj-$(CONFIG_EXFAT_FS)		+= exfat/
+=======
+
+# Patched by YAFFS
+obj-$(CONFIG_YAFFS_FS)		+= yaffs2/
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

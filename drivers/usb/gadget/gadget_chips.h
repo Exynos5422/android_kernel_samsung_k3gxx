@@ -28,6 +28,10 @@
  * do that for you.
  */
 #define gadget_is_at91(g)		(!strcmp("at91_udc", (g)->name))
+<<<<<<< HEAD
+=======
+#define gadget_is_dwc3(g)		(!strcmp("dwc3-gadget", (g)->name))
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define gadget_is_goku(g)		(!strcmp("goku_udc", (g)->name))
 #define gadget_is_musbhdrc(g)		(!strcmp("musb-hdrc", (g)->name))
 #define gadget_is_net2280(g)		(!strcmp("net2280", (g)->name))

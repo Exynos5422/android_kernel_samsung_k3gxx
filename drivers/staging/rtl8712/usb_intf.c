@@ -358,6 +358,13 @@ static u8 key_2char2num(u8 hch, u8 lch)
 	return (hex_to_bin(hch) << 4) | hex_to_bin(lch);
 }
 
+<<<<<<< HEAD
+=======
+static const struct device_type wlan_type = {
+	.name = "wlan",
+};
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * drv_init() - a device potentially for us
  *
@@ -393,6 +400,10 @@ static int r871xu_drv_init(struct usb_interface *pusb_intf,
 	padapter->pusb_intf = pusb_intf;
 	usb_set_intfdata(pusb_intf, pnetdev);
 	SET_NETDEV_DEV(pnetdev, &pusb_intf->dev);
+<<<<<<< HEAD
+=======
+	pnetdev->dev.type = &wlan_type;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* step 2. */
 	padapter->dvobj_init = &r8712_usb_dvobj_init;
 	padapter->dvobj_deinit = &r8712_usb_dvobj_deinit;

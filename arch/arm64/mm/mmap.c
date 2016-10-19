@@ -90,11 +90,17 @@ void arch_pick_mmap_layout(struct mm_struct *mm)
 	if (mmap_is_legacy()) {
 		mm->mmap_base = TASK_UNMAPPED_BASE;
 		mm->get_unmapped_area = arch_get_unmapped_area;
+<<<<<<< HEAD
 		mm->unmap_area = arch_unmap_area;
 	} else {
 		mm->mmap_base = mmap_base();
 		mm->get_unmapped_area = arch_get_unmapped_area_topdown;
 		mm->unmap_area = arch_unmap_area_topdown;
+=======
+	} else {
+		mm->mmap_base = mmap_base();
+		mm->get_unmapped_area = arch_get_unmapped_area_topdown;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 }
 EXPORT_SYMBOL_GPL(arch_pick_mmap_layout);

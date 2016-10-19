@@ -66,9 +66,14 @@ static int fd_attach_hba(struct se_hba *hba, u32 host_id)
 	pr_debug("CORE_HBA[%d] - TCM FILEIO HBA Driver %s on Generic"
 		" Target Core Stack %s\n", hba->hba_id, FD_VERSION,
 		TARGET_CORE_MOD_VERSION);
+<<<<<<< HEAD
 	pr_debug("CORE_HBA[%d] - Attached FILEIO HBA: %u to Generic"
 		" MaxSectors: %u\n",
 		hba->hba_id, fd_host->fd_host_id, FD_MAX_SECTORS);
+=======
+	pr_debug("CORE_HBA[%d] - Attached FILEIO HBA: %u to Generic\n",
+		hba->hba_id, fd_host->fd_host_id);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return 0;
 }
@@ -220,7 +225,12 @@ static int fd_configure_device(struct se_device *dev)
 	}
 
 	dev->dev_attrib.hw_block_size = fd_dev->fd_block_size;
+<<<<<<< HEAD
 	dev->dev_attrib.hw_max_sectors = FD_MAX_SECTORS;
+=======
+	dev->dev_attrib.max_bytes_per_io = FD_MAX_BYTES;
+	dev->dev_attrib.hw_max_sectors = FD_MAX_BYTES / fd_dev->fd_block_size;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	dev->dev_attrib.hw_queue_depth = FD_MAX_DEVICE_QUEUE_DEPTH;
 
 	if (fd_dev->fbd_flags & FDBD_HAS_BUFFERED_IO_WCE) {

@@ -90,6 +90,10 @@ extern unsigned long highest_memmap_pfn;
  */
 extern int isolate_lru_page(struct page *page);
 extern void putback_lru_page(struct page *page);
+<<<<<<< HEAD
+=======
+extern bool zone_reclaimable(struct zone *zone);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /*
  * in mm/rmap.c:
@@ -228,10 +232,15 @@ static inline void mlock_migrate_page(struct page *newpage, struct page *page)
 
 extern pmd_t maybe_pmd_mkwrite(pmd_t pmd, struct vm_area_struct *vma);
 
+<<<<<<< HEAD
 #ifdef CONFIG_TRANSPARENT_HUGEPAGE
 extern unsigned long vma_address(struct page *page,
 				 struct vm_area_struct *vma);
 #endif
+=======
+extern unsigned long vma_address(struct page *page,
+				 struct vm_area_struct *vma);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #else /* !CONFIG_MMU */
 static inline int mlocked_vma_newpage(struct vm_area_struct *v, struct page *p)
 {

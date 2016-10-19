@@ -48,7 +48,11 @@ static void vexpress_power_off(void)
 
 static struct device *vexpress_restart_device;
 
+<<<<<<< HEAD
 static void vexpress_restart(char str, const char *cmd)
+=======
+static void vexpress_restart(enum reboot_mode reboot_mode, const char *cmd)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	vexpress_reset_do(vexpress_restart_device, "restart");
 }

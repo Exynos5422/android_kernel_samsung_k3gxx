@@ -1,6 +1,10 @@
 config USB_DWC3
 	tristate "DesignWare USB3 DRD Core Support"
+<<<<<<< HEAD
 	depends on (USB || USB_GADGET) && GENERIC_HARDIRQS && HAS_DMA
+=======
+	depends on (USB || USB_GADGET)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	select USB_XHCI_PLATFORM if USB_SUPPORT && USB_XHCI_HCD
 	help
 	  Say Y or M here if your system has a Dual Role SuperSpeed
@@ -40,6 +44,7 @@ config USB_DWC3_DUAL_ROLE
 
 endchoice
 
+<<<<<<< HEAD
 comment "Platform Glue Driver Support"
 
 config USB_DWC3_OMAP
@@ -72,6 +77,8 @@ config USB_DWC3_PCI
 
 comment "Debugging features"
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 config USB_DWC3_DEBUG
 	bool "Enable Debugging Messages"
 	help

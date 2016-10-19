@@ -171,13 +171,21 @@ static void __kprobes save_previous_kprobe(struct kprobe_ctlblk *kcb)
 
 static void __kprobes restore_previous_kprobe(struct kprobe_ctlblk *kcb)
 {
+<<<<<<< HEAD
 	__get_cpu_var(current_kprobe) = kcb->prev_kprobe.kp;
+=======
+	__this_cpu_write(current_kprobe, kcb->prev_kprobe.kp);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	kcb->kprobe_status = kcb->prev_kprobe.status;
 }
 
 static void __kprobes set_current_kprobe(struct kprobe *p)
 {
+<<<<<<< HEAD
 	__get_cpu_var(current_kprobe) = p;
+=======
+	__this_cpu_write(current_kprobe, p);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static void __kprobes
@@ -421,10 +429,17 @@ static __used __kprobes void *trampoline_handler(struct pt_regs *regs)
 			continue;
 
 		if (ri->rp && ri->rp->handler) {
+<<<<<<< HEAD
 			__get_cpu_var(current_kprobe) = &ri->rp->kp;
 			get_kprobe_ctlblk()->kprobe_status = KPROBE_HIT_ACTIVE;
 			ri->rp->handler(ri, regs);
 			__get_cpu_var(current_kprobe) = NULL;
+=======
+			__this_cpu_write(current_kprobe, &ri->rp->kp);
+			get_kprobe_ctlblk()->kprobe_status = KPROBE_HIT_ACTIVE;
+			ri->rp->handler(ri, regs);
+			__this_cpu_write(current_kprobe, NULL);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		}
 
 		orig_ret_address = (unsigned long)ri->ret_addr;

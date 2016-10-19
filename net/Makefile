@@ -71,5 +71,9 @@ obj-$(CONFIG_NFC)		+= nfc/
 obj-$(CONFIG_OPENVSWITCH)	+= openvswitch/
 obj-$(CONFIG_VSOCKETS)	+= vmw_vsock/
 obj-$(CONFIG_NET_ACTIVITY_STATS)		+= activity_stats.o
+<<<<<<< HEAD
 obj-$(CONFIG_RMNET_DATA) 	+= rmnet_data/
+=======
+obj-$(CONFIG_RMNET_DATA) += rmnet_data/
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 obj-$(CONFIG_IPC_ROUTER)	+= ipc_router/

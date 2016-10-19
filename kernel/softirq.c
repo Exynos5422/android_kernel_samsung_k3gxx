@@ -26,13 +26,19 @@
 #include <linux/smpboot.h>
 #include <linux/tick.h>
 
+<<<<<<< HEAD
 #include <mach/exynos-ss.h>
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define CREATE_TRACE_POINTS
 #include <trace/events/irq.h>
 
 #include <asm/irq.h>
+<<<<<<< HEAD
 
 #include <linux/sec_debug.h>
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
    - No shared variables, all the data are CPU local.
    - If a softirq needs serialization, let it serialize itself
@@ -210,14 +216,22 @@ EXPORT_SYMBOL(local_bh_enable_ip);
  * we want to handle softirqs as soon as possible, but they
  * should not be able to lock up the box.
  */
+<<<<<<< HEAD
 #define MAX_SOFTIRQ_TIME  2 * NSEC_PER_MSEC
+=======
+#define MAX_SOFTIRQ_TIME  msecs_to_jiffies(2)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define MAX_SOFTIRQ_RESTART 10
 
 asmlinkage void __do_softirq(void)
 {
 	struct softirq_action *h;
 	__u32 pending;
+<<<<<<< HEAD
 	unsigned long long end = local_clock() + MAX_SOFTIRQ_TIME;
+=======
+	unsigned long end = jiffies + MAX_SOFTIRQ_TIME;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	int cpu;
 	unsigned long old_flags = current->flags;
 	int max_restart = MAX_SOFTIRQ_RESTART;
@@ -249,6 +263,7 @@ restart:
 		if (pending & 1) {
 			unsigned int vec_nr = h - softirq_vec;
 			int prev_count = preempt_count();
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_DEBUG_RT_THROTTLE_ACTIVE
 			unsigned long long start_time, end_time;
 
@@ -269,6 +284,14 @@ restart:
 				sec_debug_aux_log(SEC_DEBUG_AUXLOG_IRQ, "S:%llu %pf", start_time, h->action);
 			}
 #endif
+=======
+
+			kstat_incr_softirqs_this_cpu(vec_nr);
+
+			trace_softirq_entry(vec_nr);
+			h->action(h);
+			trace_softirq_exit(vec_nr);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			if (unlikely(prev_count != preempt_count())) {
 				printk(KERN_ERR "huh, entered softirq %u %s %p"
 				       "with preempt_count %08x,"
@@ -288,7 +311,11 @@ restart:
 
 	pending = local_softirq_pending();
 	if (pending) {
+<<<<<<< HEAD
 		if ((end > local_clock()) && !need_resched() &&
+=======
+		if (time_before(jiffies, end) && !need_resched() &&
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		    --max_restart)
 			goto restart;
 
@@ -329,8 +356,11 @@ asmlinkage void do_softirq(void)
  */
 void irq_enter(void)
 {
+<<<<<<< HEAD
 	int cpu = smp_processor_id();
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	rcu_irq_enter();
 	if (is_idle_task(current) && !in_interrupt()) {
 		/*
@@ -338,7 +368,11 @@ void irq_enter(void)
 		 * here, as softirq will be serviced on return from interrupt.
 		 */
 		local_bh_disable();
+<<<<<<< HEAD
 		tick_check_idle(cpu);
+=======
+		tick_check_idle();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		_local_bh_enable();
 	}
 
@@ -347,10 +381,26 @@ void irq_enter(void)
 
 static inline void invoke_softirq(void)
 {
+<<<<<<< HEAD
 	if (!force_irqthreads)
 		__do_softirq();
 	else
 		wakeup_softirqd();
+=======
+	if (!force_irqthreads) {
+		/*
+		 * We can safely execute softirq on the current stack if
+		 * it is the irq stack, because it should be near empty
+		 * at this stage. But we have no way to know if the arch
+		 * calls irq_exit() on the irq stack. So call softirq
+		 * in its own stack to prevent from any overrun on top
+		 * of a potentially deep task stack.
+		 */
+		do_softirq();
+	} else {
+		wakeup_softirqd();
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static inline void tick_irq_exit(void)
@@ -495,6 +545,7 @@ static void tasklet_action(struct softirq_action *a)
 
 		if (tasklet_trylock(t)) {
 			if (!atomic_read(&t->count)) {
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_DEBUG_RT_THROTTLE_ACTIVE
 				unsigned long long start_time, end_time;
 
@@ -515,6 +566,11 @@ static void tasklet_action(struct softirq_action *a)
 					sec_debug_aux_log(SEC_DEBUG_AUXLOG_IRQ, "T:%llu %pf", start_time, t->func);
 				}
 #endif
+=======
+				if (!test_and_clear_bit(TASKLET_STATE_SCHED, &t->state))
+					BUG();
+				t->func(t->data);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				tasklet_unlock(t);
 				continue;
 			}
@@ -547,6 +603,7 @@ static void tasklet_hi_action(struct softirq_action *a)
 
 		if (tasklet_trylock(t)) {
 			if (!atomic_read(&t->count)) {
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_DEBUG_RT_THROTTLE_ACTIVE
 				unsigned long long start_time, end_time;
 
@@ -567,6 +624,11 @@ static void tasklet_hi_action(struct softirq_action *a)
 					sec_debug_aux_log(SEC_DEBUG_AUXLOG_IRQ, "TH:%llu %pf", start_time, t->func);
 				}
 #endif
+=======
+				if (!test_and_clear_bit(TASKLET_STATE_SCHED, &t->state))
+					BUG();
+				t->func(t->data);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				tasklet_unlock(t);
 				continue;
 			}
@@ -929,7 +991,10 @@ int __init __weak early_irq_init(void)
 	return 0;
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_GENERIC_HARDIRQS
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 int __init __weak arch_probe_nr_irqs(void)
 {
 	return NR_IRQS_LEGACY;
@@ -939,4 +1004,7 @@ int __init __weak arch_early_irq_init(void)
 {
 	return 0;
 }
+<<<<<<< HEAD
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

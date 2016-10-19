@@ -107,7 +107,11 @@ static inline void dnrmg_receive_user_skb(struct sk_buff *skb)
 	if (nlh->nlmsg_len < sizeof(*nlh) || skb->len < nlh->nlmsg_len)
 		return;
 
+<<<<<<< HEAD
 	if (!capable(CAP_NET_ADMIN))
+=======
+	if (!netlink_capable(skb, CAP_NET_ADMIN))
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		RCV_SKB_FAIL(-EPERM);
 
 	/* Eventually we might send routing messages too */

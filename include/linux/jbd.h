@@ -244,6 +244,7 @@ typedef struct journal_superblock_s
 
 #include <linux/fs.h>
 #include <linux/sched.h>
+<<<<<<< HEAD
 
 enum jbd_state_bits {
 	BH_JBD			/* Has an attached ext3 journal_head */
@@ -269,6 +270,8 @@ BUFFER_FNS(RevokeValid, revokevalid)
 TAS_BUFFER_FNS(RevokeValid, revokevalid)
 BUFFER_FNS(Freed, freed)
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <linux/jbd_common.h>
 
 #define J_ASSERT(assert)	BUG_ON(!(assert))

@@ -24,10 +24,14 @@
 #include <linux/usb/cdc.h>
 #include <linux/termios.h>
 #include <asm/unaligned.h>
+<<<<<<< HEAD
 #include <mach/usb_bridge.h>
 #ifdef CONFIG_MDM_HSIC_PM
 #include <linux/mdm_hsic_pm.h>
 #endif
+=======
+#include <linux/usb/usb_bridge.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define ACM_CTRL_DTR		(1 << 0)
 #define DEFAULT_READ_URB_LENGTH	4096
@@ -144,10 +148,15 @@ EXPORT_SYMBOL(ctrl_bridge_set_cbits);
 static int ctrl_bridge_start_read(struct ctrl_bridge *dev, gfp_t gfp_flags)
 {
 	int	retval = 0;
+<<<<<<< HEAD
 	unsigned long 	flags;
 	unsigned int	iface_num;
 
 	iface_num = dev->intf->cur_altsetting->desc.bInterfaceNumber;
+=======
+	unsigned long flags;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (!dev->inturb) {
 		dev_err(&dev->intf->dev, "%s: inturb is NULL\n", __func__);
 		return -ENODEV;
@@ -158,8 +167,12 @@ static int ctrl_bridge_start_read(struct ctrl_bridge *dev, gfp_t gfp_flags)
 		dev_err(&dev->intf->dev,
 			"%s error submitting int urb %d\n",
 			__func__, retval);
+<<<<<<< HEAD
 	} else
 		pr_info("[CHKRA:%d]>\n", iface_num);
+=======
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	spin_lock_irqsave(&dev->lock, flags);
 	if (retval)
@@ -177,9 +190,13 @@ static void resp_avail_cb(struct urb *urb)
 	int			resubmit_urb = 1;
 	struct bridge		*brdg = dev->brdg;
 	unsigned long		flags;
+<<<<<<< HEAD
 	unsigned int		iface_num;
 
 	iface_num = dev->intf->cur_altsetting->desc.bInterfaceNumber;
+=======
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/*usb device disconnect*/
 	if (urb->dev->state == USB_STATE_NOTATTACHED)
 		return;
@@ -188,7 +205,10 @@ static void resp_avail_cb(struct urb *urb)
 	case 0:
 		/*success*/
 		dev->get_encap_res++;
+<<<<<<< HEAD
 		pr_info("[RACB:%d]<\n", iface_num);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (brdg && brdg->ops.send_pkt)
 			brdg->ops.send_pkt(brdg->ctx, urb->transfer_buffer,
 				urb->actual_length);
@@ -230,9 +250,13 @@ static void notification_available_cb(struct urb *urb)
 	unsigned int			ctrl_bits;
 	unsigned char			*data;
 	unsigned long			flags;
+<<<<<<< HEAD
 	unsigned int			iface_num;
 
 	iface_num = dev->intf->cur_altsetting->desc.bInterfaceNumber;
+=======
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/*usb device disconnect*/
 	if (urb->dev->state == USB_STATE_NOTATTACHED)
 		return;
@@ -243,7 +267,10 @@ static void notification_available_cb(struct urb *urb)
 
 	switch (urb->status) {
 	case 0:
+<<<<<<< HEAD
 		pr_info("[NACB:%d]<\n", iface_num);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		/*success*/
 		break;
 	case -ESHUTDOWN:
@@ -272,11 +299,15 @@ static void notification_available_cb(struct urb *urb)
 		dev->rx_state = RX_BUSY;
 		spin_unlock_irqrestore(&dev->lock, flags);
 		dev->resp_avail++;
+<<<<<<< HEAD
 #if defined (CONFIG_SEC_TRLTE_CHNDUOS)
 		usb_autopm_get_interface_async(dev->intf);
 #else
 		usb_autopm_get_interface_no_resume(dev->intf);
 #endif
+=======
+		usb_autopm_get_interface_async(dev->intf);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		usb_fill_control_urb(dev->readurb, dev->udev,
 					usb_rcvctrlpipe(dev->udev, 0),
 					(unsigned char *)dev->in_ctlreq,
@@ -291,8 +322,12 @@ static void notification_available_cb(struct urb *urb)
 				__func__, status);
 			usb_autopm_put_interface_async(dev->intf);
 			goto resubmit_int_urb;
+<<<<<<< HEAD
 		} else
 			pr_info("[NRA:%d]>\n", iface_num);
+=======
+		}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return;
 	case USB_CDC_NOTIFY_NETWORK_CONNECTION:
 		dev_dbg(&dev->intf->dev, "%s network\n", ctrl->wValue ?
@@ -305,10 +340,13 @@ static void notification_available_cb(struct urb *urb)
 		dev->cbits_tohost = ctrl_bits;
 		if (brdg && brdg->ops.send_cbits)
 			brdg->ops.send_cbits(brdg->ctx, ctrl_bits);
+<<<<<<< HEAD
 #ifdef CONFIG_MDM_HSIC_PM
 		pr_info("%s: set lpa handling to false\n", __func__);
 		lpa_handling = false;
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		break;
 	default:
 		dev_err(&dev->intf->dev, "%s: unknown notification %d received:"

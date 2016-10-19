@@ -285,8 +285,22 @@ static int vti_rcv(struct sk_buff *skb)
 	tunnel = vti_tunnel_lookup(dev_net(skb->dev), iph->saddr, iph->daddr);
 	if (tunnel != NULL) {
 		struct pcpu_tstats *tstats;
+<<<<<<< HEAD
 
 		if (!xfrm4_policy_check(NULL, XFRM_POLICY_IN, skb))
+=======
+		u32 oldmark = skb->mark;
+		int ret;
+
+
+		/* temporarily mark the skb with the tunnel o_key, to
+		 * only match policies with this mark.
+		 */
+		skb->mark = be32_to_cpu(tunnel->parms.o_key);
+		ret = xfrm4_policy_check(NULL, XFRM_POLICY_IN, skb);
+		skb->mark = oldmark;
+		if (!ret)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			return -1;
 
 		tstats = this_cpu_ptr(tunnel->dev->tstats);
@@ -295,7 +309,10 @@ static int vti_rcv(struct sk_buff *skb)
 		tstats->rx_bytes += skb->len;
 		u64_stats_update_end(&tstats->syncp);
 
+<<<<<<< HEAD
 		skb->mark = 0;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		secpath_reset(skb);
 		skb->dev = tunnel->dev;
 		return 1;
@@ -327,7 +344,11 @@ static netdev_tx_t vti_tunnel_xmit(struct sk_buff *skb, struct net_device *dev)
 
 	memset(&fl4, 0, sizeof(fl4));
 	flowi4_init_output(&fl4, tunnel->parms.link,
+<<<<<<< HEAD
 			   be32_to_cpu(tunnel->parms.i_key), RT_TOS(tos),
+=======
+			   be32_to_cpu(tunnel->parms.o_key), RT_TOS(tos),
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			   RT_SCOPE_UNIVERSE,
 			   IPPROTO_IPIP, 0,
 			   dst, tiph->saddr, 0, 0);
@@ -342,6 +363,10 @@ static netdev_tx_t vti_tunnel_xmit(struct sk_buff *skb, struct net_device *dev)
 	if (!rt->dst.xfrm ||
 	    rt->dst.xfrm->props.mode != XFRM_MODE_TUNNEL) {
 		dev->stats.tx_carrier_errors++;
+<<<<<<< HEAD
+=======
+		ip_rt_put(rt);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		goto tx_error_icmp;
 	}
 	tdev = rt->dst.dev;
@@ -570,9 +595,15 @@ static void vti_dev_free(struct net_device *dev)
 static void vti_tunnel_setup(struct net_device *dev)
 {
 	dev->netdev_ops		= &vti_netdev_ops;
+<<<<<<< HEAD
 	dev->destructor		= vti_dev_free;
 
 	dev->type		= ARPHRD_TUNNEL;
+=======
+	dev->type		= ARPHRD_TUNNEL;
+	dev->destructor		= vti_dev_free;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	dev->hard_header_len	= LL_MAX_HEADER + sizeof(struct iphdr);
 	dev->mtu		= ETH_DATA_LEN;
 	dev->flags		= IFF_NOARP;

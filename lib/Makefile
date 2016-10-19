@@ -45,6 +45,10 @@ lib-$(CONFIG_RWSEM_GENERIC_SPINLOCK) += rwsem-spinlock.o
 lib-$(CONFIG_RWSEM_XCHGADD_ALGORITHM) += rwsem.o
 lib-$(CONFIG_PERCPU_RWSEM) += percpu-rwsem.o
 
+<<<<<<< HEAD
+=======
+GCOV_PROFILE_hweight.o := n
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 CFLAGS_hweight.o = $(subst $(quote),,$(CONFIG_ARCH_HWEIGHT_CFLAGS))
 obj-$(CONFIG_GENERIC_HWEIGHT) += hweight.o
 
@@ -132,6 +136,11 @@ obj-$(CONFIG_SIGNATURE) += digsig.o
 
 obj-$(CONFIG_CLZ_TAB) += clz_tab.o
 
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_QMI_ENCDEC) += qmi_encdec.o
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 obj-$(CONFIG_DDR) += jedec_ddr_data.o
 
 obj-$(CONFIG_GENERIC_STRNCPY_FROM_USER) += strncpy_from_user.o

@@ -555,7 +555,11 @@ static void serial8250_set_sleep(struct uart_8250_port *p, int sleep)
 	 */
 	if ((p->port.type == PORT_XR17V35X) ||
 	   (p->port.type == PORT_XR17D15X)) {
+<<<<<<< HEAD
 		serial_out(p, UART_EXAR_SLEEP, 0xff);
+=======
+		serial_out(p, UART_EXAR_SLEEP, sleep ? 0xff : 0);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return;
 	}
 
@@ -1520,7 +1524,11 @@ int serial8250_handle_irq(struct uart_port *port, unsigned int iir)
 			status = serial8250_rx_chars(up, status);
 	}
 	serial8250_modem_status(up);
+<<<<<<< HEAD
 	if (status & UART_LSR_THRE)
+=======
+	if (!up->dma && (status & UART_LSR_THRE))
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		serial8250_tx_chars(up);
 
 	spin_unlock_irqrestore(&port->lock, flags);
@@ -2670,6 +2678,13 @@ static void serial8250_config_port(struct uart_port *port, int flags)
 	if (port->type == PORT_16550A && port->iotype == UPIO_AU)
 		up->bugs |= UART_BUG_NOMSR;
 
+<<<<<<< HEAD
+=======
+	/* HW bugs may trigger IRQ while IIR == NO_INT */
+	if (port->type == PORT_TEGRA)
+		up->bugs |= UART_BUG_NOMSR;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (port->type != PORT_UNKNOWN && flags & UART_CONFIG_IRQ)
 		autoconfig_irq(up);
 

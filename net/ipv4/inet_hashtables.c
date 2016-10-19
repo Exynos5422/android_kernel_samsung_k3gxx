@@ -87,6 +87,7 @@ static void __inet_put_port(struct sock *sk)
 
 	spin_lock(&head->lock);
 	tb = inet_csk(sk)->icsk_bind_hash;
+<<<<<<< HEAD
 	if (tb != NULL) {
 		__sk_del_bind_node(sk);
 		tb->num_owners--;
@@ -94,6 +95,13 @@ static void __inet_put_port(struct sock *sk)
 		inet_sk(sk)->inet_num = 0;
 		inet_bind_bucket_destroy(hashinfo->bind_bucket_cachep, tb);
 	}
+=======
+	__sk_del_bind_node(sk);
+	tb->num_owners--;
+	inet_csk(sk)->icsk_bind_hash = NULL;
+	inet_sk(sk)->inet_num = 0;
+	inet_bind_bucket_destroy(hashinfo->bind_bucket_cachep, tb);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	spin_unlock(&head->lock);
 }
 
@@ -289,7 +297,11 @@ begintw:
 			if (unlikely(!INET_TW_MATCH(sk, net, acookie,
 						    saddr, daddr, ports,
 						    dif))) {
+<<<<<<< HEAD
 				sock_put(sk);
+=======
+				inet_twsk_put(inet_twsk(sk));
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				goto begintw;
 			}
 			goto out;

@@ -12,6 +12,10 @@
 #include <linux/debug_locks.h>
 #include <linux/delay.h>
 #include <linux/export.h>
+<<<<<<< HEAD
+=======
+#include <soc/qcom/watchdog.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 void __raw_spin_lock_init(raw_spinlock_t *lock, const char *name,
 			  struct lock_class_key *key)
@@ -64,6 +68,14 @@ static void spin_dump(raw_spinlock_t *lock, const char *msg)
 		owner ? owner->comm : "<none>",
 		owner ? task_pid_nr(owner) : -1,
 		lock->owner_cpu);
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_DEBUG_SPINLOCK_BITE_ON_BUG
+	msm_trigger_wdog_bite();
+#elif defined(CONFIG_DEBUG_SPINLOCK_PANIC_ON_BUG)
+	BUG();
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	dump_stack();
 }
 
@@ -113,16 +125,24 @@ static void __spin_lock_debug(raw_spinlock_t *lock)
 			return;
 		__delay(1);
 	}
+<<<<<<< HEAD
 
 #ifndef CONFIG_SOC_EXYNOS5430 /* skip spin_dump in order to avoid logbuf lock recursion */
 	/* lockup suspected: */
 	spin_dump(lock, "lockup suspected");
+=======
+	/* lockup suspected: */
+	spin_bug(lock, "lockup suspected");
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifdef CONFIG_SMP
 	trigger_all_cpu_backtrace();
 #endif
 
+<<<<<<< HEAD
 #endif /* CONFIG_SOC_EXYNOS5430 */
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/*
 	 * The trylock above was causing a livelock.  Give the lower level arch
 	 * specific lock code a chance to acquire the lock. We have already

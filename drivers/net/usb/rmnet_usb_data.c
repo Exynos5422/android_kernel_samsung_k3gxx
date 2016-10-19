@@ -22,10 +22,13 @@
 #include <linux/msm_rmnet.h>
 
 #include "rmnet_usb.h"
+<<<<<<< HEAD
 #ifdef CONFIG_MDM_HSIC_PM
 #include <linux/mdm_hsic_pm.h>
 static const char rmnet_pm_dev[] = "15510000.mdmpm_pdata";
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define RMNET_DATA_LEN			2000
 #define RMNET_HEADROOM			sizeof(struct QMI_QOS_HDR_S)
@@ -137,6 +140,10 @@ module_param_cb(rmnet_data_init, &rmnet_init_ops, &rmnet_data_init,
 
 static void rmnet_usb_setup(struct net_device *);
 static int rmnet_ioctl(struct net_device *, struct ifreq *, int);
+<<<<<<< HEAD
+=======
+static void rmnet_usb_disable_hsic_autosuspend(struct usbnet *, int);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 static int rmnet_usb_suspend(struct usb_interface *iface, pm_message_t message)
 {
@@ -171,6 +178,29 @@ static int rmnet_usb_resume(struct usb_interface *iface)
 	return rmnet_usb_ctrl_start_rx(dev);
 }
 
+<<<<<<< HEAD
+=======
+static void rmnet_usb_disable_hsic_autosuspend(struct usbnet *usbnet,
+						int enable_autosuspend)
+{
+	struct usb_device *usb_dev = usbnet->udev;
+	struct rmnet_ctrl_udev *rmnet_udev =
+		(struct rmnet_ctrl_udev *)usbnet->data[1];
+
+	usb_get_dev(usb_dev);
+	if (!enable_autosuspend) {
+		usb_disable_autosuspend(usb_dev);
+		rmnet_udev->autosuspend_disabled = 1;
+		rmnet_udev->autosuspend_dis_cnt++;
+	} else {
+		usb_enable_autosuspend(usb_dev);
+		rmnet_udev->autosuspend_disabled = 0;
+		rmnet_udev->autosuspend_en_cnt++;
+	}
+	usb_put_dev(usb_dev);
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int rmnet_usb_bind(struct usbnet *usbnet, struct usb_interface *iface)
 {
 	struct usb_host_endpoint	*endpoint = NULL;
@@ -366,6 +396,12 @@ static int rmnet_ioctl_extended(struct net_device *dev, struct ifreq *ifr)
 		ext_cmd.u.data =
 			unet->intf->cur_altsetting->desc.bInterfaceNumber;
 		break;
+<<<<<<< HEAD
+=======
+	case RMNET_IOCTL_SET_SLEEP_STATE:
+		rmnet_usb_disable_hsic_autosuspend(unet, ext_cmd.u.data);
+		break;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	rc = copy_to_user(ifr->ifr_ifru.ifru_data, &ext_cmd,
@@ -500,6 +536,11 @@ static void rmnet_usb_setup(struct net_device *dev)
 static int rmnet_usb_data_status(struct seq_file *s, void *unused)
 {
 	struct usbnet *unet = s->private;
+<<<<<<< HEAD
+=======
+	struct rmnet_ctrl_udev *rmnet_udev =
+		(struct rmnet_ctrl_udev *)unet->data[1];
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	seq_printf(s, "RMNET_MODE_LLP_IP:  %d\n",
 			test_bit(RMNET_MODE_LLP_IP, &unet->data[0]));
@@ -532,6 +573,15 @@ static int rmnet_usb_data_status(struct seq_file *s, void *unused)
 			test_bit(EVENT_RX_MEMORY, &unet->flags));
 	seq_printf(s, "EVENT_DEV_ASLEEP:   %d\n",
 			test_bit(EVENT_DEV_ASLEEP, &unet->flags));
+<<<<<<< HEAD
+=======
+	seq_printf(s, "autosuspend_disabled: %d\n",
+			rmnet_udev->autosuspend_disabled);
+	seq_printf(s, "No. of times autosuspend enabled: %d\n",
+					rmnet_udev->autosuspend_en_cnt);
+	seq_printf(s, "No. of times autosuspend disabled: %d\n",
+					rmnet_udev->autosuspend_dis_cnt);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return 0;
 }
@@ -634,6 +684,7 @@ static int rmnet_usb_probe(struct usb_interface *iface,
 		dev_dbg(&iface->dev,
 				"mode debugfs file is not available\n");
 
+<<<<<<< HEAD
 #ifdef CONFIG_MDM_HSIC_PM
 		status = register_udev_to_pm_dev(rmnet_pm_dev, udev);
 		if (status) {
@@ -643,6 +694,8 @@ static int rmnet_usb_probe(struct usb_interface *iface,
 		}
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	usb_enable_autosuspend(udev);
 
 	if (udev->parent && !udev->parent->parent) {
@@ -781,8 +834,11 @@ static int rmnet_data_start(void)
 {
 	int	retval;
 
+<<<<<<< HEAD
 	pr_info("[MIF] rmnet_dev : %d, rmnet_insts_per_dev : %d\n",
 			no_rmnet_devs, no_rmnet_insts_per_dev);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (no_rmnet_devs > MAX_RMNET_DEVS) {
 		pr_err("ERROR:%s: param no_rmnet_devs(%d) > than maximum(%d)",
 			__func__, no_rmnet_devs, MAX_RMNET_DEVS);

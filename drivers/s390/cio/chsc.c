@@ -500,18 +500,40 @@ static void chsc_process_sei_nt0(struct chsc_sei_nt0_area *sei_area)
 
 static void chsc_process_event_information(struct chsc_sei *sei, u64 ntsm)
 {
+<<<<<<< HEAD
 	do {
 		memset(sei, 0, sizeof(*sei));
 		sei->request.length = 0x0010;
 		sei->request.code = 0x000e;
 		sei->ntsm = ntsm;
+=======
+	static int ntsm_unsupported;
+
+	while (true) {
+		memset(sei, 0, sizeof(*sei));
+		sei->request.length = 0x0010;
+		sei->request.code = 0x000e;
+		if (!ntsm_unsupported)
+			sei->ntsm = ntsm;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 		if (chsc(sei))
 			break;
 
 		if (sei->response.code != 0x0001) {
+<<<<<<< HEAD
 			CIO_CRW_EVENT(2, "chsc: sei failed (rc=%04x)\n",
 				      sei->response.code);
+=======
+			CIO_CRW_EVENT(2, "chsc: sei failed (rc=%04x, ntsm=%llx)\n",
+				      sei->response.code, sei->ntsm);
+
+			if (sei->response.code == 3 && sei->ntsm) {
+				/* Fallback for old firmware. */
+				ntsm_unsupported = 1;
+				continue;
+			}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			break;
 		}
 
@@ -527,7 +549,14 @@ static void chsc_process_event_information(struct chsc_sei *sei, u64 ntsm)
 			CIO_CRW_EVENT(2, "chsc: unhandled nt: %d\n", sei->nt);
 			break;
 		}
+<<<<<<< HEAD
 	} while (sei->u.nt0_area.flags & 0x80);
+=======
+
+		if (!(sei->u.nt0_area.flags & 0x80))
+			break;
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 /*

@@ -1984,6 +1984,10 @@ static const struct address_space_operations ext3_ordered_aops = {
 	.direct_IO		= ext3_direct_IO,
 	.migratepage		= buffer_migrate_page,
 	.is_partially_uptodate  = block_is_partially_uptodate,
+<<<<<<< HEAD
+=======
+	.is_dirty_writeback	= buffer_check_dirty_writeback,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	.error_remove_page	= generic_error_remove_page,
 };
 

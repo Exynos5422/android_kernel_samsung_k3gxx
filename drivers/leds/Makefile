@@ -11,8 +11,11 @@ obj-$(CONFIG_LEDS_BD2802)		+= leds-bd2802.o
 obj-$(CONFIG_LEDS_LOCOMO)		+= leds-locomo.o
 obj-$(CONFIG_LEDS_LM3530)		+= leds-lm3530.o
 obj-$(CONFIG_LEDS_LM3533)		+= leds-lm3533.o
+<<<<<<< HEAD
 obj-$(CONFIG_LEDS_LM3560)		+= leds-lm3560.o
 obj-$(CONFIG_LEDS_SKY81296)		+= leds-sky81296.o
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 obj-$(CONFIG_LEDS_LM3642)		+= leds-lm3642.o
 obj-$(CONFIG_LEDS_MIKROTIK_RB532)	+= leds-rb532.o
 obj-$(CONFIG_LEDS_S3C24XX)		+= leds-s3c24xx.o
@@ -22,6 +25,12 @@ obj-$(CONFIG_LEDS_COBALT_QUBE)		+= leds-cobalt-qube.o
 obj-$(CONFIG_LEDS_COBALT_RAQ)		+= leds-cobalt-raq.o
 obj-$(CONFIG_LEDS_SUNFIRE)		+= leds-sunfire.o
 obj-$(CONFIG_LEDS_PCA9532)		+= leds-pca9532.o
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_LEDS_QPNP)			+= leds-qpnp.o
+obj-$(CONFIG_LEDS_QPNP_FLASH)		+= leds-qpnp-flash.o
+obj-$(CONFIG_LEDS_QPNP_WLED)		+= leds-qpnp-wled.o
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 obj-$(CONFIG_LEDS_GPIO_REGISTER)	+= leds-gpio-register.o
 obj-$(CONFIG_LEDS_GPIO)			+= leds-gpio.o
 obj-$(CONFIG_LEDS_LP3944)		+= leds-lp3944.o
@@ -29,8 +38,11 @@ obj-$(CONFIG_LEDS_LP55XX_COMMON)	+= leds-lp55xx-common.o
 obj-$(CONFIG_LEDS_LP5521)		+= leds-lp5521.o
 obj-$(CONFIG_LEDS_LP5523)		+= leds-lp5523.o
 obj-$(CONFIG_LEDS_LP5562)		+= leds-lp5562.o
+<<<<<<< HEAD
 obj-$(CONFIG_LEDS_LP55XX_COMMON_VER_J)	+= leds-j_lp55xx-common.o
 obj-$(CONFIG_LEDS_LP5562_VER_J)		+= leds-j_lp5562.o
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 obj-$(CONFIG_LEDS_LP8788)		+= leds-lp8788.o
 obj-$(CONFIG_LEDS_TCA6507)		+= leds-tca6507.o
 obj-$(CONFIG_LEDS_CLEVO_MAIL)		+= leds-clevo-mail.o
@@ -57,6 +69,7 @@ obj-$(CONFIG_LEDS_RENESAS_TPU)		+= leds-renesas-tpu.o
 obj-$(CONFIG_LEDS_MAX8997)		+= leds-max8997.o
 obj-$(CONFIG_LEDS_LM355x)		+= leds-lm355x.o
 obj-$(CONFIG_LEDS_BLINKM)		+= leds-blinkm.o
+<<<<<<< HEAD
 obj-$(CONFIG_LEDS_MAX77804)		+= leds-max77804.o
 obj-$(CONFIG_LEDS_MAX77828_RGB)		+= leds-max77828-rgb.o
 obj-$(CONFIG_LEDS_MAX77843_RGB)		+= leds-max77843-rgb.o
@@ -69,6 +82,10 @@ obj-$(CONFIG_RT_FLASH_LED)		+= rtfled.o
 obj-$(CONFIG_FLED_RT5033)		+= rt5033_fled.o
 obj-$(CONFIG_SM_FLASH_LED)		+= smfled.o
 obj-$(CONFIG_FLED_SM5703)		+= sm5703_fled.o
+=======
+obj-$(CONFIG_LEDS_MSM_GPIO_FLASH)	+= leds-msm-gpio-flash.o
+obj-$(CONFIG_LEDS_AW2013)		+= leds-aw2013.o
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 # LED SPI Drivers
 obj-$(CONFIG_LEDS_DAC124S085)		+= leds-dac124s085.o

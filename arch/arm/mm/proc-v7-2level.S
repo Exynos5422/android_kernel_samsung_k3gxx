@@ -8,6 +8,7 @@
  * published by the Free Software Foundation.
  */
 
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP
 #ifdef CONFIG_HYP_RKP 
 #define rkp_call hvc
@@ -18,6 +19,8 @@
 #endif	//CONFIG_HYP_RKP
 #endif //CONFIG_TIMA_RKP
 		
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define TTB_S		(1 << 1)
 #define TTB_RGN_NC	(0 << 3)
 #define TTB_RGN_OC_WBWA	(1 << 3)
@@ -63,6 +66,7 @@ ENTRY(cpu_v7_switch_mm)
 #endif
 #ifdef CONFIG_ARM_ERRATA_754322
 	dsb
+<<<<<<< HEAD
 #elif CONFIG_ARM_ERRATA_766421
 	dmb
 #endif
@@ -92,11 +96,18 @@ ENTRY(cpu_v7_switch_mm)
 	dsb
 6:
 #endif
+=======
+#endif
+	mcr	p15, 0, r1, c13, c0, 1		@ set context ID
+	isb
+	mcr	p15, 0, r0, c2, c0, 0		@ set TTB 0
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	isb
 #endif
 	mov	pc, lr
 ENDPROC(cpu_v7_switch_mm)
 
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP
 #ifdef CONFIG_TIMA_IOMMU_OPT
 ENTRY(cpu_v7_tima_iommu_opt)
@@ -125,6 +136,8 @@ ENTRY(cpu_v7_tima_iommu_opt)
 ENDPROC(cpu_v7_tima_iommu_opt)
 #endif
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  *	cpu_v7_set_pte_ext(ptep, pte)
  *
@@ -135,6 +148,7 @@ ENDPROC(cpu_v7_tima_iommu_opt)
  *	- pte   - PTE value to store
  *	- ext	- value for extended PTE bits
  */
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_L2_TABLES
 ENTRY(cpu_v7_tima_set_pte_ext)
 # ifdef CONFIG_MMU
@@ -282,6 +296,8 @@ stop_timer:
 
 
 		
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 ENTRY(cpu_v7_set_pte_ext)
 #ifdef CONFIG_MMU
 	str	r1, [r0]			@ linux version
@@ -300,21 +316,29 @@ ENTRY(cpu_v7_set_pte_ext)
 
 	tst	r1, #L_PTE_USER
 	orrne	r3, r3, #PTE_EXT_AP1
+<<<<<<< HEAD
 #ifdef CONFIG_CPU_USE_DOMAINS
 	@ allow kernel read/write access to read-only user pages
 	tstne	r3, #PTE_EXT_APX
 	bicne	r3, r3, #PTE_EXT_APX | PTE_EXT_AP0
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	tst	r1, #L_PTE_XN
 	orrne	r3, r3, #PTE_EXT_XN
 
 	tst	r1, #L_PTE_YOUNG
 	tstne	r1, #L_PTE_VALID
+<<<<<<< HEAD
 #ifndef CONFIG_CPU_USE_DOMAINS
 	eorne	r1, r1, #L_PTE_NONE
 	tstne	r1, #L_PTE_NONE
 #endif
+=======
+	eorne	r1, r1, #L_PTE_NONE
+	tstne	r1, #L_PTE_NONE
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	moveq	r3, #0
 
  ARM(	str	r3, [r0, #2048]! )
@@ -324,9 +348,12 @@ ENTRY(cpu_v7_set_pte_ext)
 	ALT_UP (mcr	p15, 0, r0, c7, c10, 1)		@ flush_pte
 #endif
 	mov	pc, lr
+<<<<<<< HEAD
 #ifdef	CONFIG_TIMA_RKP
 cpu_v7_set_pte_ext_proc_end:
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 ENDPROC(cpu_v7_set_pte_ext)
 
 	/*
@@ -358,7 +385,15 @@ ENDPROC(cpu_v7_set_pte_ext)
 	 *   NOS = PRRR[24+n] = 1	- not outer shareable
 	 */
 .equ	PRRR,	0xff0a81a8
+<<<<<<< HEAD
 .equ	NMRR,	0x40e040e0
+=======
+#ifdef CONFIG_ARCH_MSM_SCORPIONMP
+.equ	NMRR,	0x40e080e0
+#else
+.equ	NMRR,	0x40e040e0
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/*
 	 * Macro for setting up the TTBRx and TTBCR registers.

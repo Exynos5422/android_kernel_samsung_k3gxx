@@ -14,7 +14,10 @@
  * with this program; if not, write  to the Free Software Foundation, Inc.,
  * 675 Mass Ave, Cambridge, MA 02139, USA.
  */
+<<<<<<< HEAD
 #ifndef	__LINUX_USB_COMPOSITE_H
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #undef DEBUG
 #undef VERBOSE
@@ -38,16 +41,22 @@
 #define MPC_LOC do {} while (0)
 #endif
 
+<<<<<<< HEAD
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define PROTO_UNDEF	(0)
 #define PROTO_HOST	(1)
 #define PROTO_GADGET	(2)
 
 /* OTG state machine according to the OTG spec */
 struct otg_fsm {
+<<<<<<< HEAD
 	int reset;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* Input */
 	int a_bus_resume;
 	int a_bus_suspend;
@@ -91,12 +100,20 @@ struct otg_fsm {
 
 	/* Current usb protocol used: 0:undefine; 1:host; 2:client */
 	int protocol;
+<<<<<<< HEAD
 	struct mutex lock;
+=======
+	spinlock_t lock;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 struct otg_fsm_ops {
 	void	(*chrg_vbus)(int on);
+<<<<<<< HEAD
 	void	(*drv_vbus)(struct otg_fsm *fsm, int on);
+=======
+	void	(*drv_vbus)(int on);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	void	(*loc_conn)(int on);
 	void	(*loc_sof)(int on);
 	void	(*start_pulse)(void);
@@ -116,7 +133,11 @@ static inline void otg_drv_vbus(struct otg_fsm *fsm, int on)
 {
 	if (fsm->drv_vbus != on) {
 		fsm->drv_vbus = on;
+<<<<<<< HEAD
 		fsm->ops->drv_vbus(fsm, on);
+=======
+		fsm->ops->drv_vbus(on);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 }
 
@@ -151,6 +172,7 @@ static inline void otg_del_timer(struct otg_fsm *fsm, void *timer)
 	fsm->ops->del_timer(timer);
 }
 
+<<<<<<< HEAD
 static inline int otg_start_host(struct otg_fsm *fsm, int on)
 {
 	if (!fsm->ops->start_host)
@@ -165,6 +187,8 @@ static inline int otg_start_gadget(struct otg_fsm *fsm, int on)
 	return fsm->ops->start_gadget(fsm, on);
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 int otg_statemachine(struct otg_fsm *fsm);
 
 /* Defined by device specific driver, for different timer implementation */

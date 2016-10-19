@@ -1078,6 +1078,10 @@ static void srpt_unmap_sg_to_ib_sge(struct srpt_rdma_ch *ch,
 static int srpt_map_sg_to_ib_sge(struct srpt_rdma_ch *ch,
 				 struct srpt_send_ioctx *ioctx)
 {
+<<<<<<< HEAD
+=======
+	struct ib_device *dev = ch->sport->sdev->device;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct se_cmd *cmd;
 	struct scatterlist *sg, *sg_orig;
 	int sg_cnt;
@@ -1124,7 +1128,11 @@ static int srpt_map_sg_to_ib_sge(struct srpt_rdma_ch *ch,
 
 	db = ioctx->rbufs;
 	tsize = cmd->data_length;
+<<<<<<< HEAD
 	dma_len = sg_dma_len(&sg[0]);
+=======
+	dma_len = ib_sg_dma_len(dev, &sg[0]);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	riu = ioctx->rdma_ius;
 
 	/*
@@ -1155,7 +1163,12 @@ static int srpt_map_sg_to_ib_sge(struct srpt_rdma_ch *ch,
 					++j;
 					if (j < count) {
 						sg = sg_next(sg);
+<<<<<<< HEAD
 						dma_len = sg_dma_len(sg);
+=======
+						dma_len = ib_sg_dma_len(
+								dev, sg);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 					}
 				}
 			} else {
@@ -1192,8 +1205,13 @@ static int srpt_map_sg_to_ib_sge(struct srpt_rdma_ch *ch,
 	tsize = cmd->data_length;
 	riu = ioctx->rdma_ius;
 	sg = sg_orig;
+<<<<<<< HEAD
 	dma_len = sg_dma_len(&sg[0]);
 	dma_addr = sg_dma_address(&sg[0]);
+=======
+	dma_len = ib_sg_dma_len(dev, &sg[0]);
+	dma_addr = ib_sg_dma_address(dev, &sg[0]);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/* this second loop is really mapped sg_addres to rdma_iu->ib_sge */
 	for (i = 0, j = 0;
@@ -1216,8 +1234,15 @@ static int srpt_map_sg_to_ib_sge(struct srpt_rdma_ch *ch,
 					++j;
 					if (j < count) {
 						sg = sg_next(sg);
+<<<<<<< HEAD
 						dma_len = sg_dma_len(sg);
 						dma_addr = sg_dma_address(sg);
+=======
+						dma_len = ib_sg_dma_len(
+								dev, sg);
+						dma_addr = ib_sg_dma_address(
+								dev, sg);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 					}
 				}
 			} else {
@@ -1588,7 +1613,11 @@ static int srpt_build_tskmgmt_rsp(struct srpt_rdma_ch *ch,
 	int resp_data_len;
 	int resp_len;
 
+<<<<<<< HEAD
 	resp_data_len = (rsp_code == SRP_TSK_MGMT_SUCCESS) ? 0 : 4;
+=======
+	resp_data_len = 4;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	resp_len = sizeof(*srp_rsp) + resp_data_len;
 
 	srp_rsp = ioctx->ioctx.buf;
@@ -1600,11 +1629,17 @@ static int srpt_build_tskmgmt_rsp(struct srpt_rdma_ch *ch,
 				    + atomic_xchg(&ch->req_lim_delta, 0));
 	srp_rsp->tag = tag;
 
+<<<<<<< HEAD
 	if (rsp_code != SRP_TSK_MGMT_SUCCESS) {
 		srp_rsp->flags |= SRP_RSP_FLAG_RSPVALID;
 		srp_rsp->resp_data_len = cpu_to_be32(resp_data_len);
 		srp_rsp->data[3] = rsp_code;
 	}
+=======
+	srp_rsp->flags |= SRP_RSP_FLAG_RSPVALID;
+	srp_rsp->resp_data_len = cpu_to_be32(resp_data_len);
+	srp_rsp->data[3] = rsp_code;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return resp_len;
 }
@@ -2358,6 +2393,11 @@ static void srpt_release_channel_work(struct work_struct *w)
 	transport_deregister_session(se_sess);
 	ch->sess = NULL;
 
+<<<<<<< HEAD
+=======
+	ib_destroy_cm_id(ch->cm_id);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	srpt_destroy_ch_ib(ch);
 
 	srpt_free_ioctx_ring((struct srpt_ioctx **)ch->ioctx_ring,
@@ -2368,8 +2408,11 @@ static void srpt_release_channel_work(struct work_struct *w)
 	list_del(&ch->list);
 	spin_unlock_irq(&sdev->spinlock);
 
+<<<<<<< HEAD
 	ib_destroy_cm_id(ch->cm_id);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (ch->release_done)
 		complete(ch->release_done);
 

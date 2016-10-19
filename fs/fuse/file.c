@@ -630,7 +630,12 @@ static void fuse_read_update_size(struct inode *inode, loff_t size,
 	struct fuse_inode *fi = get_fuse_inode(inode);
 
 	spin_lock(&fc->lock);
+<<<<<<< HEAD
 	if (attr_ver == fi->attr_version && size < inode->i_size) {
+=======
+	if (attr_ver == fi->attr_version && size < inode->i_size &&
+	    !test_bit(FUSE_I_SIZE_UNSTABLE, &fi->state)) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		fi->attr_version = ++fc->attr_version;
 		i_size_write(inode, size);
 	}
@@ -794,6 +799,47 @@ static int fuse_readpages_fill(void *_data, struct page *page)
 		return -EIO;
 	}
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_CMA
+	if (is_cma_pageblock(page)) {
+		struct page *oldpage = page, *newpage;
+		int err;
+
+		/* make sure that old page is not free in-between the calls */
+		page_cache_get(oldpage);
+
+		newpage = alloc_page(GFP_HIGHUSER);
+		if (!newpage) {
+			page_cache_release(oldpage);
+			return -ENOMEM;
+		}
+
+		lock_page(newpage);
+		err = replace_page_cache_page(oldpage, newpage, GFP_KERNEL);
+		if (err) {
+			unlock_page(newpage);
+			__free_page(newpage);
+			page_cache_release(oldpage);
+			return err;
+		}
+
+		/*
+		 * Decrement the count on new page to make page cache the only
+		 * owner of it
+		 */
+		put_page(newpage);
+
+		lru_cache_add_file(newpage);
+
+		/* finally release the old page and swap pointers */
+		unlock_page(oldpage);
+		page_cache_release(oldpage);
+		page = newpage;
+	}
+#endif
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	page_cache_get(page);
 	req->pages[req->num_pages] = page;
 	req->page_descs[req->num_pages].length = PAGE_SIZE;
@@ -1033,12 +1079,22 @@ static ssize_t fuse_perform_write(struct file *file,
 {
 	struct inode *inode = mapping->host;
 	struct fuse_conn *fc = get_fuse_conn(inode);
+<<<<<<< HEAD
+=======
+	struct fuse_inode *fi = get_fuse_inode(inode);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	int err = 0;
 	ssize_t res = 0;
 
 	if (is_bad_inode(inode))
 		return -EIO;
 
+<<<<<<< HEAD
+=======
+	if (inode->i_size < pos + iov_iter_count(ii))
+		set_bit(FUSE_I_SIZE_UNSTABLE, &fi->state);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	do {
 		struct fuse_req *req;
 		ssize_t count;
@@ -1074,6 +1130,10 @@ static ssize_t fuse_perform_write(struct file *file,
 	if (res > 0)
 		fuse_write_update_size(inode, pos);
 
+<<<<<<< HEAD
+=======
+	clear_bit(FUSE_I_SIZE_UNSTABLE, &fi->state);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	fuse_invalidate_attr(inode);
 
 	return res > 0 ? res : err;
@@ -1530,7 +1590,10 @@ static int fuse_writepage_locked(struct page *page)
 
 	inc_bdi_stat(mapping->backing_dev_info, BDI_WRITEBACK);
 	inc_zone_page_state(tmp_page, NR_WRITEBACK_TEMP);
+<<<<<<< HEAD
 	end_page_writeback(page);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	spin_lock(&fc->lock);
 	list_add(&req->writepages_entry, &fi->writepages);
@@ -1538,6 +1601,11 @@ static int fuse_writepage_locked(struct page *page)
 	fuse_flush_writepages(inode);
 	spin_unlock(&fc->lock);
 
+<<<<<<< HEAD
+=======
+	end_page_writeback(page);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 
 err_free:
@@ -2461,6 +2529,10 @@ static long fuse_file_fallocate(struct file *file, int mode, loff_t offset,
 {
 	struct fuse_file *ff = file->private_data;
 	struct inode *inode = file->f_inode;
+<<<<<<< HEAD
+=======
+	struct fuse_inode *fi = get_fuse_inode(inode);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct fuse_conn *fc = ff->fc;
 	struct fuse_req *req;
 	struct fuse_fallocate_in inarg = {
@@ -2478,10 +2550,27 @@ static long fuse_file_fallocate(struct file *file, int mode, loff_t offset,
 
 	if (lock_inode) {
 		mutex_lock(&inode->i_mutex);
+<<<<<<< HEAD
 		if (mode & FALLOC_FL_PUNCH_HOLE)
 			fuse_set_nowrite(inode);
 	}
 
+=======
+		if (mode & FALLOC_FL_PUNCH_HOLE) {
+			loff_t endbyte = offset + length - 1;
+			err = filemap_write_and_wait_range(inode->i_mapping,
+							   offset, endbyte);
+			if (err)
+				goto out;
+
+			fuse_sync_writes(inode);
+		}
+	}
+
+	if (!(mode & FALLOC_FL_KEEP_SIZE))
+		set_bit(FUSE_I_SIZE_UNSTABLE, &fi->state);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	req = fuse_get_req_nopages(fc);
 	if (IS_ERR(req)) {
 		err = PTR_ERR(req);
@@ -2514,11 +2603,19 @@ static long fuse_file_fallocate(struct file *file, int mode, loff_t offset,
 	fuse_invalidate_attr(inode);
 
 out:
+<<<<<<< HEAD
 	if (lock_inode) {
 		if (mode & FALLOC_FL_PUNCH_HOLE)
 			fuse_release_nowrite(inode);
 		mutex_unlock(&inode->i_mutex);
 	}
+=======
+	if (!(mode & FALLOC_FL_KEEP_SIZE))
+		clear_bit(FUSE_I_SIZE_UNSTABLE, &fi->state);
+
+	if (lock_inode)
+		mutex_unlock(&inode->i_mutex);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return err;
 }

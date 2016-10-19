@@ -577,9 +577,19 @@ static void kovaplus_keep_values_up_to_date(struct kovaplus_device *kovaplus,
 		break;
 	case KOVAPLUS_MOUSE_REPORT_BUTTON_TYPE_CPI:
 		kovaplus->actual_cpi = kovaplus_convert_event_cpi(button_report->data1);
+<<<<<<< HEAD
 	case KOVAPLUS_MOUSE_REPORT_BUTTON_TYPE_SENSITIVITY:
 		kovaplus->actual_x_sensitivity = button_report->data1;
 		kovaplus->actual_y_sensitivity = button_report->data2;
+=======
+		break;
+	case KOVAPLUS_MOUSE_REPORT_BUTTON_TYPE_SENSITIVITY:
+		kovaplus->actual_x_sensitivity = button_report->data1;
+		kovaplus->actual_y_sensitivity = button_report->data2;
+		break;
+	default:
+		break;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 }
 

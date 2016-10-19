@@ -129,6 +129,17 @@ static void br_stp_start(struct net_bridge *br)
 	char *envp[] = { NULL };
 
 	r = call_usermodehelper(BR_STP_PROG, argv, envp, UMH_WAIT_PROC);
+<<<<<<< HEAD
+=======
+
+	spin_lock_bh(&br->lock);
+
+	if (br->bridge_forward_delay < BR_MIN_FORWARD_DELAY)
+		__br_set_forward_delay(br, BR_MIN_FORWARD_DELAY);
+	else if (br->bridge_forward_delay > BR_MAX_FORWARD_DELAY)
+		__br_set_forward_delay(br, BR_MAX_FORWARD_DELAY);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (r == 0) {
 		br->stp_enabled = BR_USER_STP;
 		br_debug(br, "userspace STP started\n");
@@ -137,10 +148,17 @@ static void br_stp_start(struct net_bridge *br)
 		br_debug(br, "using kernel STP\n");
 
 		/* To start timers on any ports left in blocking */
+<<<<<<< HEAD
 		spin_lock_bh(&br->lock);
 		br_port_state_selection(br);
 		spin_unlock_bh(&br->lock);
 	}
+=======
+		br_port_state_selection(br);
+	}
+
+	spin_unlock_bh(&br->lock);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static void br_stp_stop(struct net_bridge *br)

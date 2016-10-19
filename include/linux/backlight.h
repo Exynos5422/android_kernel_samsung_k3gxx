@@ -114,10 +114,13 @@ static inline void backlight_update_status(struct backlight_device *bd)
 extern struct backlight_device *backlight_device_register(const char *name,
 	struct device *dev, void *devdata, const struct backlight_ops *ops,
 	const struct backlight_properties *props);
+<<<<<<< HEAD
 extern struct backlight_device *devm_backlight_device_register(
 	struct device *dev, const char *name, struct device *parent,
 	void *devdata, const struct backlight_ops *ops,
 	const struct backlight_properties *props);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 extern void backlight_device_unregister(struct backlight_device *bd);
 extern void backlight_force_update(struct backlight_device *bd,
 				   enum backlight_update_reason reason);

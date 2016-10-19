@@ -58,7 +58,10 @@ struct pppopns_opt {
 	__u32		xmit_sequence;
 	void		(*data_ready)(struct sock *sk_raw, int length);
 	int		(*backlog_rcv)(struct sock *sk_raw, struct sk_buff *skb);
+<<<<<<< HEAD
 	int 		ppp_flags;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 #include <net/sock.h>
@@ -74,8 +77,11 @@ struct pppox_sock {
 		struct pppolac_opt lac;
 		struct pppopns_opt pns;
 	} proto;
+<<<<<<< HEAD
 	struct timer_list recv_queue_timer;
 	spinlock_t recv_queue_lock;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	__be16			num;
 };
 #define pppoe_dev	proto.pppoe.dev

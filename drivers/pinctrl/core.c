@@ -1077,7 +1077,11 @@ void devm_pinctrl_put(struct pinctrl *p)
 EXPORT_SYMBOL_GPL(devm_pinctrl_put);
 
 int pinctrl_register_map(struct pinctrl_map const *maps, unsigned num_maps,
+<<<<<<< HEAD
 			 bool dup, bool locked)
+=======
+			 bool dup)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	int i, ret;
 	struct pinctrl_maps *maps_node;
@@ -1145,11 +1149,17 @@ int pinctrl_register_map(struct pinctrl_map const *maps, unsigned num_maps,
 		maps_node->maps = maps;
 	}
 
+<<<<<<< HEAD
 	if (!locked)
 		mutex_lock(&pinctrl_maps_mutex);
 	list_add_tail(&maps_node->node, &pinctrl_maps);
 	if (!locked)
 		mutex_unlock(&pinctrl_maps_mutex);
+=======
+	mutex_lock(&pinctrl_maps_mutex);
+	list_add_tail(&maps_node->node, &pinctrl_maps);
+	mutex_unlock(&pinctrl_maps_mutex);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return 0;
 }
@@ -1164,7 +1174,11 @@ int pinctrl_register_map(struct pinctrl_map const *maps, unsigned num_maps,
 int pinctrl_register_mappings(struct pinctrl_map const *maps,
 			      unsigned num_maps)
 {
+<<<<<<< HEAD
 	return pinctrl_register_map(maps, num_maps, true, false);
+=======
+	return pinctrl_register_map(maps, num_maps, true);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 void pinctrl_unregister_map(struct pinctrl_map const *map)
@@ -1694,15 +1708,25 @@ void pinctrl_unregister(struct pinctrl_dev *pctldev)
 	if (pctldev == NULL)
 		return;
 
+<<<<<<< HEAD
 	mutex_lock(&pctldev->mutex);
 	pinctrl_remove_device_debugfs(pctldev);
 	mutex_unlock(&pctldev->mutex);
+=======
+	mutex_lock(&pinctrldev_list_mutex);
+	mutex_lock(&pctldev->mutex);
+
+	pinctrl_remove_device_debugfs(pctldev);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (!IS_ERR(pctldev->p))
 		pinctrl_put(pctldev->p);
 
+<<<<<<< HEAD
 	mutex_lock(&pinctrldev_list_mutex);
 	mutex_lock(&pctldev->mutex);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* TODO: check that no pinmuxes are still active? */
 	list_del(&pctldev->node);
 	/* Destroy descriptor tree */

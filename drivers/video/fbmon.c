@@ -311,6 +311,7 @@ static void parse_vendor_block(unsigned char *block, struct fb_monspecs *specs)
 	DPRINTK("   Year: %u Week %u\n", specs->year, specs->week);
 }
 
+<<<<<<< HEAD
 static void parse_vendor_specific_block(struct fb_vendor *vsdb,
 					unsigned char *svsdb, u8 length)
 {
@@ -399,6 +400,8 @@ static void parse_vendor_specific_block(struct fb_vendor *vsdb,
 	}
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static void get_dpms_capabilities(unsigned char flags,
 				  struct fb_monspecs *specs)
 {
@@ -641,9 +644,12 @@ static int get_dst_timing(unsigned char *block,
 static void get_detailed_timing(unsigned char *block,
 				struct fb_videomode *mode)
 {
+<<<<<<< HEAD
 	int v_size = V_SIZE;
 	int h_size = H_SIZE;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	mode->xres = H_ACTIVE;
 	mode->yres = V_ACTIVE;
 	mode->pixclock = PIXEL_CLOCK;
@@ -672,18 +678,24 @@ static void get_detailed_timing(unsigned char *block,
 	}
 	mode->flag = FB_MODE_IS_DETAILED;
 
+<<<<<<< HEAD
 	/* get aspect ratio */
 	if (h_size * 18 > v_size * 31 && h_size * 18 < v_size * 33)
 		mode->flag |= FB_FLAG_RATIO_16_9;
 	if (h_size * 18 > v_size * 23 && h_size * 18 < v_size * 25)
 		mode->flag |= FB_FLAG_RATIO_4_3;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	DPRINTK("      %d MHz ",  PIXEL_CLOCK/1000000);
 	DPRINTK("%d %d %d %d ", H_ACTIVE, H_ACTIVE + H_SYNC_OFFSET,
 	       H_ACTIVE + H_SYNC_OFFSET + H_SYNC_WIDTH, H_ACTIVE + H_BLANKING);
 	DPRINTK("%d %d %d %d ", V_ACTIVE, V_ACTIVE + V_SYNC_OFFSET,
 	       V_ACTIVE + V_SYNC_OFFSET + V_SYNC_WIDTH, V_ACTIVE + V_BLANKING);
+<<<<<<< HEAD
 	DPRINTK("%dmm %dmm ", H_SIZE, V_SIZE);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	DPRINTK("%sHSync %sVSync\n\n", (HSYNC_POSITIVE) ? "+" : "-",
 	       (VSYNC_POSITIVE) ? "+" : "-");
 }
@@ -765,6 +777,7 @@ static struct fb_videomode *fb_create_modedb(unsigned char *edid, int *dbsize)
 }
 
 /**
+<<<<<<< HEAD
  * fb_destroy_xxdb - destroys databases
  * @modedb: mode database to destroy
  * @audiodb: audio database to destroy
@@ -773,12 +786,20 @@ static struct fb_videomode *fb_create_modedb(unsigned char *edid, int *dbsize)
  *
  * DESCRIPTION:
  * Destroy databases created by fb_create_modedb or fb_edid_add_monspecs
+=======
+ * fb_destroy_modedb - destroys mode database
+ * @modedb: mode database to destroy
+ *
+ * DESCRIPTION:
+ * Destroy mode database created by fb_create_modedb
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  */
 void fb_destroy_modedb(struct fb_videomode *modedb)
 {
 	kfree(modedb);
 }
 
+<<<<<<< HEAD
 void fb_destroy_audiodb(struct fb_audio *audiodb)
 {
 	kfree(audiodb);
@@ -794,6 +815,8 @@ void fb_destroy_vsdb(struct fb_vendor *vsdb)
 	kfree(vsdb);
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int fb_get_monitor_limits(unsigned char *edid, struct fb_monspecs *specs)
 {
 	int i, retval = 1;
@@ -1036,12 +1059,17 @@ int fb_parse_edid(unsigned char *edid, struct fb_var_screeninfo *var)
 	return 1;
 }
 
+<<<<<<< HEAD
 int fb_edid_to_monspecs(unsigned char *edid, struct fb_monspecs *specs)
+=======
+void fb_edid_to_monspecs(unsigned char *edid, struct fb_monspecs *specs)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	unsigned char *block;
 	int i, found = 0;
 
 	if (edid == NULL)
+<<<<<<< HEAD
 		return -EINVAL;
 
 	if (!(edid_checksum(edid)))
@@ -1049,6 +1077,15 @@ int fb_edid_to_monspecs(unsigned char *edid, struct fb_monspecs *specs)
 
 	if (!(edid_check_header(edid)))
 		return -EINVAL;
+=======
+		return;
+
+	if (!(edid_checksum(edid)))
+		return;
+
+	if (!(edid_check_header(edid)))
+		return;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	memset(specs, 0, sizeof(struct fb_monspecs));
 
@@ -1098,6 +1135,7 @@ int fb_edid_to_monspecs(unsigned char *edid, struct fb_monspecs *specs)
 		specs->misc &= ~FB_MISC_1ST_DETAIL;
 
 	DPRINTK("========================================\n");
+<<<<<<< HEAD
 	return 1;
 }
 
@@ -1190,10 +1228,39 @@ int fb_edid_add_monspecs(unsigned char *edid, struct fb_monspecs *specs)
 		return -EINVAL;
 
 	DPRINTK("  Data Block Collection\n");
+=======
+}
+
+/**
+ * fb_edid_add_monspecs() - add monitor video modes from E-EDID data
+ * @edid:	128 byte array with an E-EDID block
+ * @spacs:	monitor specs to be extended
+ */
+void fb_edid_add_monspecs(unsigned char *edid, struct fb_monspecs *specs)
+{
+	unsigned char *block;
+	struct fb_videomode *m;
+	int num = 0, i;
+	u8 svd[64], edt[(128 - 4) / DETAILED_TIMING_DESCRIPTION_SIZE];
+	u8 pos = 4, svd_n = 0;
+
+	if (!edid)
+		return;
+
+	if (!edid_checksum(edid))
+		return;
+
+	if (edid[0] != 0x2 ||
+	    edid[2] < 4 || edid[2] > 128 - DETAILED_TIMING_DESCRIPTION_SIZE)
+		return;
+
+	DPRINTK("  Short Video Descriptors\n");
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	while (pos < edid[2]) {
 		u8 len = edid[pos] & 0x1f, type = (edid[pos] >> 5) & 7;
 		pr_debug("Data block %u of %u bytes\n", type, len);
+<<<<<<< HEAD
 
 		if (len == 0)
 			break;
@@ -1290,6 +1357,16 @@ int fb_edid_add_monspecs(unsigned char *edid, struct fb_monspecs *specs)
 	} else {
 		kfree(specs->vsdb);
 		specs->vsdb = NULL;
+=======
+		if (type == 2)
+			for (i = pos; i < pos + len; i++) {
+				u8 idx = edid[pos + i] & 0x7f;
+				svd[svd_n++] = idx;
+				pr_debug("N%sative mode #%d\n",
+					 edid[pos + i] & 0x80 ? "" : "on-n", idx);
+			}
+		pos += len + 1;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	block = edid + edid[2];
@@ -1301,15 +1378,25 @@ int fb_edid_add_monspecs(unsigned char *edid, struct fb_monspecs *specs)
 		if (PIXEL_CLOCK)
 			edt[num++] = block - edid;
 
+<<<<<<< HEAD
 	/* No video descriptors, so nothing more to do */
 	if (!(num + svd_n))
 		return 1;
+=======
+	/* Yikes, EDID data is totally useless */
+	if (!(num + svd_n))
+		return;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	m = kzalloc((specs->modedb_len + num + svd_n) *
 		       sizeof(struct fb_videomode), GFP_KERNEL);
 
 	if (!m)
+<<<<<<< HEAD
 		goto fail_modedb;
+=======
+		return;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	memcpy(m, specs->modedb, specs->modedb_len * sizeof(struct fb_videomode));
 
@@ -1322,12 +1409,19 @@ int fb_edid_add_monspecs(unsigned char *edid, struct fb_monspecs *specs)
 
 	for (i = specs->modedb_len + num; i < specs->modedb_len + num + svd_n; i++) {
 		int idx = svd[i - specs->modedb_len - num];
+<<<<<<< HEAD
 		if (!idx || idx > (CEA_MODEDB_SIZE - 1)) {
 			pr_warning("Reserved SVD code %d\n", idx);
 #if defined(CONFIG_SEC_MHL_EDID) && defined(CONFIG_SEC_MHL_SII8620)
 			if (devtype_ssdongle_v4 == 0)
 				convert_hev_861F_to_861D(idx);
 #endif
+=======
+		if (!idx || idx > 63) {
+			pr_warning("Reserved SVD code %d\n", idx);
+		} else if (idx > ARRAY_SIZE(cea_modes) || !cea_modes[idx].xres) {
+			pr_warning("Unimplemented SVD code %d\n", idx);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		} else {
 			memcpy(&m[i], cea_modes + idx, sizeof(m[i]));
 			pr_debug("Adding SVD #%d: %ux%u@%u\n", idx,
@@ -1338,6 +1432,7 @@ int fb_edid_add_monspecs(unsigned char *edid, struct fb_monspecs *specs)
 	kfree(specs->modedb);
 	specs->modedb = m;
 	specs->modedb_len = specs->modedb_len + num + svd_n;
+<<<<<<< HEAD
 
 	return 1;
 
@@ -1352,6 +1447,8 @@ fail_videodb:
 
 fail_audiodb:
 	return -ENOMEM;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 /*
@@ -1758,6 +1855,7 @@ int fb_parse_edid(unsigned char *edid, struct fb_var_screeninfo *var)
 {
 	return 1;
 }
+<<<<<<< HEAD
 int fb_edid_to_monspecs(unsigned char *edid, struct fb_monspecs *specs)
 {
 	specs = NULL;
@@ -1766,10 +1864,19 @@ int fb_edid_to_monspecs(unsigned char *edid, struct fb_monspecs *specs)
 int fb_edid_add_monspecs(unsigned char *edid, struct fb_monspecs *specs)
 {
 	return 1;
+=======
+void fb_edid_to_monspecs(unsigned char *edid, struct fb_monspecs *specs)
+{
+	specs = NULL;
+}
+void fb_edid_add_monspecs(unsigned char *edid, struct fb_monspecs *specs)
+{
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 void fb_destroy_modedb(struct fb_videomode *modedb)
 {
 }
+<<<<<<< HEAD
 void fb_destroy_audiodb(struct fb_audio *audiodb)
 {
 }
@@ -1779,6 +1886,8 @@ void fb_destroy_videodb(struct fb_video *videodb)
 void fb_destroy_vsdb(struct fb_vendor *vsdb)
 {
 }
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 int fb_get_mode(int flags, u32 val, struct fb_var_screeninfo *var,
 		struct fb_info *info)
 {
@@ -1887,6 +1996,9 @@ EXPORT_SYMBOL(fb_edid_add_monspecs);
 EXPORT_SYMBOL(fb_get_mode);
 EXPORT_SYMBOL(fb_validate_mode);
 EXPORT_SYMBOL(fb_destroy_modedb);
+<<<<<<< HEAD
 EXPORT_SYMBOL(fb_destroy_audiodb);
 EXPORT_SYMBOL(fb_destroy_videodb);
 EXPORT_SYMBOL(fb_destroy_vsdb);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

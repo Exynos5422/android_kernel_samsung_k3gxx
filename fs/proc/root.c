@@ -110,7 +110,12 @@ static struct dentry *proc_mount(struct file_system_type *fs_type,
 		ns = task_active_pid_ns(current);
 		options = data;
 
+<<<<<<< HEAD
 		if (!current_user_ns()->may_mount_proc)
+=======
+		if (!current_user_ns()->may_mount_proc ||
+		    !ns_capable(ns->user_ns, CAP_SYS_ADMIN))
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			return ERR_PTR(-EPERM);
 	}
 
@@ -154,6 +159,7 @@ static struct file_system_type proc_fs_type = {
 	.fs_flags	= FS_USERNS_MOUNT,
 };
 
+<<<<<<< HEAD
 #ifdef CONFIG_DEFERRED_INITCALLS
 extern void do_deferred_initcalls(void);
 
@@ -186,6 +192,8 @@ static const struct file_operations deferred_initcalls_fops = {
 };
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 void __init proc_root_init(void)
 {
 	int err;
@@ -196,10 +204,13 @@ void __init proc_root_init(void)
 		return;
 
 	proc_self_init();
+<<<<<<< HEAD
 
 #ifdef CONFIG_DEFERRED_INITCALLS
 	proc_create("deferred_initcalls", 0, NULL, &deferred_initcalls_fops);
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	proc_symlink("mounts", NULL, "self/mounts");
 
 	proc_net_init();

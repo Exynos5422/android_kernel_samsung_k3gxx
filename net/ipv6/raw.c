@@ -459,6 +459,7 @@ static int rawv6_recvmsg(struct kiocb *iocb, struct sock *sk,
 	if (flags & MSG_OOB)
 		return -EOPNOTSUPP;
 
+<<<<<<< HEAD
 	if (addr_len)
 		*addr_len=sizeof(*sin6);
 
@@ -467,6 +468,13 @@ static int rawv6_recvmsg(struct kiocb *iocb, struct sock *sk,
 
 	if (np->rxpmtu && np->rxopt.bits.rxpmtu)
 		return ipv6_recv_rxpmtu(sk, msg, len);
+=======
+	if (flags & MSG_ERRQUEUE)
+		return ipv6_recv_error(sk, msg, len, addr_len);
+
+	if (np->rxpmtu && np->rxopt.bits.rxpmtu)
+		return ipv6_recv_rxpmtu(sk, msg, len, addr_len);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	skb = skb_recv_datagram(sk, flags, noblock, &err);
 	if (!skb)
@@ -500,6 +508,10 @@ static int rawv6_recvmsg(struct kiocb *iocb, struct sock *sk,
 		sin6->sin6_flowinfo = 0;
 		sin6->sin6_scope_id = ipv6_iface_scope_id(&sin6->sin6_addr,
 							  IP6CB(skb)->iif);
+<<<<<<< HEAD
+=======
+		*addr_len = sizeof(*sin6);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	sock_recv_ts_and_drops(msg, sk, skb);
@@ -728,6 +740,10 @@ static int rawv6_probe_proto_opt(struct flowi6 *fl6, struct msghdr *msg)
 static int rawv6_sendmsg(struct kiocb *iocb, struct sock *sk,
 		   struct msghdr *msg, size_t len)
 {
+<<<<<<< HEAD
+=======
+	struct ipv6_txoptions *opt_to_free = NULL;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct ipv6_txoptions opt_space;
 	struct sockaddr_in6 * sin6 = (struct sockaddr_in6 *) msg->msg_name;
 	struct in6_addr *daddr, *final_p, final;
@@ -835,8 +851,15 @@ static int rawv6_sendmsg(struct kiocb *iocb, struct sock *sk,
 		if (!(opt->opt_nflen|opt->opt_flen))
 			opt = NULL;
 	}
+<<<<<<< HEAD
 	if (opt == NULL)
 		opt = np->opt;
+=======
+	if (!opt) {
+		opt = txopt_get(np);
+		opt_to_free = opt;
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (flowlabel)
 		opt = fl6_merge_options(&opt_space, flowlabel, opt);
 	opt = ipv6_fixup_options(&opt_space, opt);
@@ -903,6 +926,10 @@ done:
 	dst_release(dst);
 out:
 	fl6_sock_release(flowlabel);
+<<<<<<< HEAD
+=======
+	txopt_put(opt_to_free);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return err<0?err:len;
 do_confirm:
 	dst_confirm(dst);

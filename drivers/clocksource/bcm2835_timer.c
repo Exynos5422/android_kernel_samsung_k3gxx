@@ -28,8 +28,13 @@
 #include <linux/of_platform.h>
 #include <linux/slab.h>
 #include <linux/string.h>
+<<<<<<< HEAD
 
 #include <asm/sched_clock.h>
+=======
+#include <linux/sched_clock.h>
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <asm/irq.h>
 
 #define REG_CONTROL	0x00

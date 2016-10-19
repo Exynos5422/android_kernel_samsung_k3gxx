@@ -45,7 +45,24 @@ int request_firmware_nowait(
 	struct module *module, bool uevent,
 	const char *name, struct device *device, gfp_t gfp, void *context,
 	void (*cont)(const struct firmware *fw, void *context));
+<<<<<<< HEAD
 
+=======
+int request_firmware_direct(const char *name, struct device *device,
+			    phys_addr_t dest_addr, size_t dest_size,
+			    void * (*map_fw_mem)(phys_addr_t phys,
+						 size_t size, void *data),
+			    void (*unmap_fw_mem)(void *virt, size_t size,
+							void *data),
+			    void *data);
+int request_firmware_nowait_direct(
+	struct module *module, bool uevent,
+	const char *name, struct device *device, gfp_t gfp, void *context,
+	void (*cont)(const struct firmware *fw, void *context),
+	phys_addr_t dest_addr, size_t dest_size,
+	void * (*map_fw_mem)(phys_addr_t phys, size_t size, void *data),
+	void (*unmap_fw_mem)(void *virt, size_t size, void *data), void *data);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 void release_firmware(const struct firmware *fw);
 int cache_firmware(const char *name);
 int uncache_firmware(const char *name);
@@ -56,6 +73,20 @@ static inline int request_firmware(const struct firmware **fw,
 {
 	return -EINVAL;
 }
+<<<<<<< HEAD
+=======
+static inline int request_firmware_direct(const char *name,
+					  struct device *device,
+					  phys_addr_t dest_addr,
+					  size_t dest_size,
+					  void * (*map_fw_mem)(phys_addr_t phys,
+						       size_t size, void *data),
+					  void (*unmap_fw_mem)(void *virt),
+					  void *data)
+{
+	return -EINVAL;
+}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static inline int request_firmware_nowait(
 	struct module *module, bool uevent,
 	const char *name, struct device *device, gfp_t gfp, void *context,
@@ -63,7 +94,20 @@ static inline int request_firmware_nowait(
 {
 	return -EINVAL;
 }
+<<<<<<< HEAD
 
+=======
+static inline int request_firmware_nowait_direct(
+	struct module *module, bool uevent,
+	const char *name, struct device *device, gfp_t gfp, void *context,
+	void (*cont)(const struct firmware *fw, void *context),
+	phys_addr_t dest_addr, size_t dest_size,
+	void * (*map_fw_mem)(phys_addr_t phys, size_t size, void *data),
+	void (*unmap_fw_mem)(void *virt, void *data), void *data)
+{
+	return -EINVAL;
+}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static inline void release_firmware(const struct firmware *fw)
 {
 }

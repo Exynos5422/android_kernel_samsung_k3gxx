@@ -446,7 +446,10 @@ static struct cpufreq_driver gx_suspmod_driver = {
 	.target		= cpufreq_gx_target,
 	.init		= cpufreq_gx_cpu_init,
 	.name		= "gx-suspmod",
+<<<<<<< HEAD
 	.owner		= THIS_MODULE,
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 static int __init cpufreq_gx_init(void)
@@ -466,7 +469,11 @@ static int __init cpufreq_gx_init(void)
 
 	pr_debug("geode suspend modulation available.\n");
 
+<<<<<<< HEAD
 	params = kzalloc(sizeof(struct gxfreq_params), GFP_KERNEL);
+=======
+	params = kzalloc(sizeof(*params), GFP_KERNEL);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (params == NULL)
 		return -ENOMEM;
 

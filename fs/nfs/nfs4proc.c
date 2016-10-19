@@ -1160,6 +1160,7 @@ _nfs4_opendata_reclaim_to_nfs4_state(struct nfs4_opendata *data)
 	int ret;
 
 	if (!data->rpc_done) {
+<<<<<<< HEAD
 		ret = data->rpc_status;
 		goto err;
 	}
@@ -1175,14 +1176,31 @@ _nfs4_opendata_reclaim_to_nfs4_state(struct nfs4_opendata *data)
 	if (state == NULL)
 		goto err;
 
+=======
+		if (data->rpc_status) {
+			ret = data->rpc_status;
+			goto err;
+		}
+		/* cached opens have already been processed */
+		goto update;
+	}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ret = nfs_refresh_inode(inode, &data->f_attr);
 	if (ret)
 		goto err;
 
 	if (data->o_res.delegation_type != 0)
 		nfs4_opendata_check_deleg(data, state);
+<<<<<<< HEAD
 	update_open_stateid(state, &data->o_res.stateid, NULL,
 			    data->o_arg.fmode);
+=======
+update:
+	update_open_stateid(state, &data->o_res.stateid, NULL,
+			    data->o_arg.fmode);
+	atomic_inc(&state->count);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return state;
 err:
@@ -3612,8 +3630,14 @@ static bool nfs4_stateid_is_current(nfs4_stateid *stateid,
 {
 	nfs4_stateid current_stateid;
 
+<<<<<<< HEAD
 	if (nfs4_set_rw_stateid(&current_stateid, ctx, l_ctx, fmode))
 		return false;
+=======
+	/* If the current stateid represents a lost lock, then exit */
+	if (nfs4_set_rw_stateid(&current_stateid, ctx, l_ctx, fmode) == -EIO)
+		return true;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return nfs4_stateid_match(stateid, &current_stateid);
 }
 
@@ -4227,8 +4251,12 @@ nfs4_async_handle_error(struct rpc_task *task, const struct nfs_server *server, 
 			dprintk("%s ERROR %d, Reset session\n", __func__,
 				task->tk_status);
 			nfs4_schedule_session_recovery(clp->cl_session, task->tk_status);
+<<<<<<< HEAD
 			task->tk_status = 0;
 			return -EAGAIN;
+=======
+			goto wait_on_recovery;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif /* CONFIG_NFS_V4_1 */
 		case -NFS4ERR_DELAY:
 			nfs_inc_server_stats(server, NFSIOS_DELAY);
@@ -4406,11 +4434,25 @@ static void nfs4_delegreturn_done(struct rpc_task *task, void *calldata)
 		return;
 
 	switch (task->tk_status) {
+<<<<<<< HEAD
 	case -NFS4ERR_STALE_STATEID:
 	case -NFS4ERR_EXPIRED:
 	case 0:
 		renew_lease(data->res.server, data->timestamp);
 		break;
+=======
+	case 0:
+		renew_lease(data->res.server, data->timestamp);
+		break;
+	case -NFS4ERR_ADMIN_REVOKED:
+	case -NFS4ERR_DELEG_REVOKED:
+	case -NFS4ERR_BAD_STATEID:
+	case -NFS4ERR_OLD_STATEID:
+	case -NFS4ERR_STALE_STATEID:
+	case -NFS4ERR_EXPIRED:
+		task->tk_status = 0;
+		break;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	default:
 		if (nfs4_async_handle_error(task, data->res.server, NULL) ==
 				-EAGAIN) {
@@ -4572,6 +4614,10 @@ static int _nfs4_proc_getlk(struct nfs4_state *state, int cmd, struct file_lock 
 			status = 0;
 	}
 	request->fl_ops->fl_release_private(request);
+<<<<<<< HEAD
+=======
+	request->fl_ops = NULL;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 out:
 	return status;
 }
@@ -6231,9 +6277,15 @@ static void nfs4_layoutget_done(struct rpc_task *task, void *calldata)
 	struct nfs_server *server = NFS_SERVER(inode);
 	struct pnfs_layout_hdr *lo;
 	struct nfs4_state *state = NULL;
+<<<<<<< HEAD
 	unsigned long timeo, giveup;
 
 	dprintk("--> %s\n", __func__);
+=======
+	unsigned long timeo, now, giveup;
+
+	dprintk("--> %s tk_status => %d\n", __func__, -task->tk_status);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (!nfs41_sequence_done(task, &lgp->res.seq_res))
 		goto out;
@@ -6241,12 +6293,47 @@ static void nfs4_layoutget_done(struct rpc_task *task, void *calldata)
 	switch (task->tk_status) {
 	case 0:
 		goto out;
+<<<<<<< HEAD
 	case -NFS4ERR_LAYOUTTRYLATER:
 	case -NFS4ERR_RECALLCONFLICT:
 		timeo = rpc_get_timeout(task->tk_client);
 		giveup = lgp->args.timestamp + timeo;
 		if (time_after(giveup, jiffies))
 			task->tk_status = -NFS4ERR_DELAY;
+=======
+	/*
+	 * NFS4ERR_LAYOUTTRYLATER is a conflict with another client
+	 * (or clients) writing to the same RAID stripe
+	 */
+	case -NFS4ERR_LAYOUTTRYLATER:
+	/*
+	 * NFS4ERR_RECALLCONFLICT is when conflict with self (must recall
+	 * existing layout before getting a new one).
+	 */
+	case -NFS4ERR_RECALLCONFLICT:
+		timeo = rpc_get_timeout(task->tk_client);
+		giveup = lgp->args.timestamp + timeo;
+		now = jiffies;
+		if (time_after(giveup, now)) {
+			unsigned long delay;
+
+			/* Delay for:
+			 * - Not less then NFS4_POLL_RETRY_MIN.
+			 * - One last time a jiffie before we give up
+			 * - exponential backoff (time_now minus start_attempt)
+			 */
+			delay = max_t(unsigned long, NFS4_POLL_RETRY_MIN,
+				    min((giveup - now - 1),
+					now - lgp->args.timestamp));
+
+			dprintk("%s: NFS4ERR_RECALLCONFLICT waiting %lu\n",
+				__func__, delay);
+			rpc_delay(task, delay);
+			task->tk_status = 0;
+			rpc_restart_call_prepare(task);
+			goto out; /* Do not call nfs4_async_handle_error() */
+		}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		break;
 	case -NFS4ERR_EXPIRED:
 	case -NFS4ERR_BAD_STATEID:
@@ -6682,7 +6769,11 @@ nfs41_proc_secinfo_no_name(struct nfs_server *server, struct nfs_fh *fhandle,
 		switch (err) {
 		case 0:
 		case -NFS4ERR_WRONGSEC:
+<<<<<<< HEAD
 		case -NFS4ERR_NOTSUPP:
+=======
+		case -ENOTSUPP:
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			goto out;
 		default:
 			err = nfs4_handle_exception(server, err, &exception);
@@ -6714,7 +6805,11 @@ nfs41_find_root_sec(struct nfs_server *server, struct nfs_fh *fhandle,
 	 * Fall back on "guess and check" method if
 	 * the server doesn't support SECINFO_NO_NAME
 	 */
+<<<<<<< HEAD
 	if (err == -NFS4ERR_WRONGSEC || err == -NFS4ERR_NOTSUPP) {
+=======
+	if (err == -NFS4ERR_WRONGSEC || err == -ENOTSUPP) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		err = nfs4_find_root_sec(server, fhandle, info);
 		goto out_freepage;
 	}

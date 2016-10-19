@@ -18,6 +18,10 @@
  *      2 of the License, or (at your option) any later version.
  */
 #include <linux/ctype.h>
+<<<<<<< HEAD
+=======
+#include <linux/cpu.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <linux/module.h>
 #include <linux/of.h>
 #include <linux/spinlock.h>
@@ -230,6 +234,103 @@ const void *of_get_property(const struct device_node *np, const char *name,
 }
 EXPORT_SYMBOL(of_get_property);
 
+<<<<<<< HEAD
+=======
+/*
+ * arch_match_cpu_phys_id - Match the given logical CPU and physical id
+ *
+ * @cpu: logical cpu index of a core/thread
+ * @phys_id: physical identifier of a core/thread
+ *
+ * CPU logical to physical index mapping is architecture specific.
+ * However this __weak function provides a default match of physical
+ * id to logical cpu index. phys_id provided here is usually values read
+ * from the device tree which must match the hardware internal registers.
+ *
+ * Returns true if the physical identifier and the logical cpu index
+ * correspond to the same core/thread, false otherwise.
+ */
+bool __weak arch_match_cpu_phys_id(int cpu, u64 phys_id)
+{
+	return (u32)phys_id == cpu;
+}
+
+/**
+ * Checks if the given "prop_name" property holds the physical id of the
+ * core/thread corresponding to the logical cpu 'cpu'. If 'thread' is not
+ * NULL, local thread number within the core is returned in it.
+ */
+static bool __of_find_n_match_cpu_property(struct device_node *cpun,
+			const char *prop_name, int cpu, unsigned int *thread)
+{
+	const __be32 *cell;
+	int ac, prop_len, tid;
+	u64 hwid;
+
+	ac = of_n_addr_cells(cpun);
+	cell = of_get_property(cpun, prop_name, &prop_len);
+	if (!cell)
+		return false;
+	prop_len /= sizeof(*cell);
+	for (tid = 0; tid < prop_len; tid++) {
+		hwid = of_read_number(cell, ac);
+		if (arch_match_cpu_phys_id(cpu, hwid)) {
+			if (thread)
+				*thread = tid;
+			return true;
+		}
+		cell += ac;
+	}
+	return false;
+}
+
+/**
+ * of_get_cpu_node - Get device node associated with the given logical CPU
+ *
+ * @cpu: CPU number(logical index) for which device node is required
+ * @thread: if not NULL, local thread number within the physical core is
+ *          returned
+ *
+ * The main purpose of this function is to retrieve the device node for the
+ * given logical CPU index. It should be used to initialize the of_node in
+ * cpu device. Once of_node in cpu device is populated, all the further
+ * references can use that instead.
+ *
+ * CPU logical to physical index mapping is architecture specific and is built
+ * before booting secondary cores. This function uses arch_match_cpu_phys_id
+ * which can be overridden by architecture specific implementation.
+ *
+ * Returns a node pointer for the logical cpu if found, else NULL.
+ */
+struct device_node *of_get_cpu_node(int cpu, unsigned int *thread)
+{
+	struct device_node *cpun, *cpus;
+
+	cpus = of_find_node_by_path("/cpus");
+	if (!cpus) {
+		pr_warn("Missing cpus node, bailing out\n");
+		return NULL;
+	}
+
+	for_each_child_of_node(cpus, cpun) {
+		if (of_node_cmp(cpun->type, "cpu"))
+			continue;
+		/* Check for non-standard "ibm,ppc-interrupt-server#s" property
+		 * for thread ids on PowerPC. If it doesn't exist fallback to
+		 * standard "reg" property.
+		 */
+		if (IS_ENABLED(CONFIG_PPC) &&
+			__of_find_n_match_cpu_property(cpun,
+				"ibm,ppc-interrupt-server#s", cpu, thread))
+			return cpun;
+		if (__of_find_n_match_cpu_property(cpun, "reg", cpu, thread))
+			return cpun;
+	}
+	return NULL;
+}
+EXPORT_SYMBOL(of_get_cpu_node);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /** Checks if the given "compat" string matches one of the strings in
  * the device's "compatible" property
  */
@@ -1271,7 +1372,11 @@ int of_count_phandle_with_args(const struct device_node *np, const char *list_na
 EXPORT_SYMBOL(of_count_phandle_with_args);
 
 #if defined(CONFIG_OF_DYNAMIC)
+<<<<<<< HEAD
 static int of_property_notify(int action, struct device_node *np,
+=======
+int of_property_notify(int action, struct device_node *np,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			      struct property *prop)
 {
 	struct of_prop_reconfig pr;
@@ -1280,6 +1385,7 @@ static int of_property_notify(int action, struct device_node *np,
 	pr.prop = prop;
 	return of_reconfig_notify(action, &pr);
 }
+<<<<<<< HEAD
 #else
 static int of_property_notify(int action, struct device_node *np,
 			      struct property *prop)
@@ -1287,6 +1393,43 @@ static int of_property_notify(int action, struct device_node *np,
 	return 0;
 }
 #endif
+=======
+#endif
+
+#ifdef CONFIG_PROC_DEVICETREE
+
+void of_add_proc_dt_entry(struct device_node *dn)
+{
+	struct proc_dir_entry *ent;
+
+	ent = proc_mkdir(strrchr(dn->full_name, '/') + 1, dn->parent->pde);
+	if (ent)
+		proc_device_tree_add_node(dn, ent);
+}
+
+void of_add_proc_dt_prop_entry(struct device_node *np,
+		struct property *prop)
+{
+	if (np && prop && np->pde)
+		proc_device_tree_add_prop(np->pde, prop);
+}
+
+void of_remove_proc_dt_prop_entry(struct device_node *np,
+		struct property *prop)
+{
+	if (np && prop && np->pde)
+		proc_device_tree_remove_prop(np->pde, prop);
+}
+
+void of_update_proc_dt_prop_entry(struct device_node *np,
+		struct property *newprop, struct property *oldprop)
+{
+	if (np && newprop && oldprop && np->pde)
+		proc_device_tree_update_prop(np->pde, newprop, oldprop);
+}
+
+#endif /* CONFIG_PROC_DEVICETREE */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /**
  * of_add_property - Add a property to a node
@@ -1315,11 +1458,16 @@ int of_add_property(struct device_node *np, struct property *prop)
 	*next = prop;
 	raw_spin_unlock_irqrestore(&devtree_lock, flags);
 
+<<<<<<< HEAD
 #ifdef CONFIG_PROC_DEVICETREE
 	/* try to add to proc as well if it was initialized */
 	if (np->pde)
 		proc_device_tree_add_prop(np->pde, prop);
 #endif /* CONFIG_PROC_DEVICETREE */
+=======
+	/* try to add to proc as well if it was initialized */
+	of_add_proc_dt_prop_entry(np, prop);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return 0;
 }
@@ -1361,11 +1509,15 @@ int of_remove_property(struct device_node *np, struct property *prop)
 	if (!found)
 		return -ENODEV;
 
+<<<<<<< HEAD
 #ifdef CONFIG_PROC_DEVICETREE
 	/* try to remove the proc node as well */
 	if (np->pde)
 		proc_device_tree_remove_prop(np->pde, prop);
 #endif /* CONFIG_PROC_DEVICETREE */
+=======
+	of_remove_proc_dt_prop_entry(np, prop);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return 0;
 }
@@ -1415,11 +1567,16 @@ int of_update_property(struct device_node *np, struct property *newprop)
 	if (!found)
 		return -ENODEV;
 
+<<<<<<< HEAD
 #ifdef CONFIG_PROC_DEVICETREE
 	/* try to add to proc as well if it was initialized */
 	if (np->pde)
 		proc_device_tree_update_prop(np->pde, newprop, oldprop);
 #endif /* CONFIG_PROC_DEVICETREE */
+=======
+	/* try to add to proc as well if it was initialized */
+	of_update_proc_dt_prop_entry(np, newprop, oldprop);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return 0;
 }
@@ -1455,6 +1612,7 @@ int of_reconfig_notify(unsigned long action, void *p)
 	return notifier_to_errno(rc);
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_PROC_DEVICETREE
 static void of_add_proc_dt_entry(struct device_node *dn)
 {
@@ -1471,6 +1629,8 @@ static void of_add_proc_dt_entry(struct device_node *dn)
 }
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /**
  * of_attach_node - Plug a device node into the tree and global list.
  */
@@ -1488,6 +1648,10 @@ int of_attach_node(struct device_node *np)
 	np->allnext = of_allnodes;
 	np->parent->child = np;
 	of_allnodes = np;
+<<<<<<< HEAD
+=======
+	of_node_clear_flag(np, OF_DETACHED);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	raw_spin_unlock_irqrestore(&devtree_lock, flags);
 
 	of_add_proc_dt_entry(np);
@@ -1495,6 +1659,7 @@ int of_attach_node(struct device_node *np)
 }
 
 #ifdef CONFIG_PROC_DEVICETREE
+<<<<<<< HEAD
 static void of_remove_proc_dt_entry(struct device_node *dn)
 {
 	proc_remove(dn->pde);
@@ -1504,6 +1669,12 @@ static void of_remove_proc_dt_entry(struct device_node *dn)
 {
 	return;
 }
+=======
+void of_remove_proc_dt_entry(struct device_node *dn)
+{
+	proc_remove(dn->pde);
+}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif
 
 /**
@@ -1629,6 +1800,10 @@ void of_alias_scan(void * (*dt_alloc)(u64 size, u64 align))
 		ap = dt_alloc(sizeof(*ap) + len + 1, 4);
 		if (!ap)
 			continue;
+<<<<<<< HEAD
+=======
+		memset(ap, 0, sizeof(*ap) + len + 1);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		ap->alias = start;
 		of_alias_add(ap, np, id, start, len);
 	}

@@ -745,6 +745,12 @@ static void l2cap_send_cmd(struct l2cap_conn *conn, u8 ident, u8 code, u16 len,
 	if (!skb)
 		return;
 
+<<<<<<< HEAD
+=======
+	if (conn->hcon == NULL || conn->hcon->hdev == NULL)
+		return;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (lmp_no_flush_capable(conn->hcon->hdev))
 		flags = ACL_START_NO_FLUSH;
 	else

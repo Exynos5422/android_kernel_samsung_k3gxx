@@ -10,7 +10,10 @@
  */
 #if __LINUX_ARM_ARCH__ >= 6
 
+<<<<<<< HEAD
 #ifndef CONFIG_EXYNOS_SNAPSHOT_IRQ_DISABLED
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static inline unsigned long arch_local_irq_save(void)
 {
 	unsigned long flags;
@@ -39,11 +42,14 @@ static inline void arch_local_irq_disable(void)
 		:
 		: "memory", "cc");
 }
+<<<<<<< HEAD
 #else
 extern unsigned long arch_local_irq_save(void);
 extern void arch_local_irq_disable(void);
 extern void arch_local_irq_enable(void);
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define local_fiq_enable()  __asm__("cpsie f	@ __stf" : : : "memory", "cc")
 #define local_fiq_disable() __asm__("cpsid f	@ __clf" : : : "memory", "cc")
@@ -143,7 +149,10 @@ static inline unsigned long arch_local_save_flags(void)
 /*
  * restore saved IRQ & FIQ state
  */
+<<<<<<< HEAD
 #ifndef CONFIG_EXYNOS_SNAPSHOT_IRQ_DISABLED
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static inline void arch_local_irq_restore(unsigned long flags)
 {
 	asm volatile(
@@ -152,9 +161,12 @@ static inline void arch_local_irq_restore(unsigned long flags)
 		: "r" (flags)
 		: "memory", "cc");
 }
+<<<<<<< HEAD
 #else
 void arch_local_irq_restore(unsigned long flags);
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 static inline int arch_irqs_disabled_flags(unsigned long flags)
 {

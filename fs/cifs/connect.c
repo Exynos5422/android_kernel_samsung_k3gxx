@@ -377,6 +377,10 @@ cifs_reconnect(struct TCP_Server_Info *server)
 		try_to_freeze();
 
 		/* we should try only the port we connected to before */
+<<<<<<< HEAD
+=======
+		mutex_lock(&server->srv_mutex);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		rc = generic_ip_connect(server);
 		if (rc) {
 			cifs_dbg(FYI, "reconnect error %d\n", rc);
@@ -388,6 +392,10 @@ cifs_reconnect(struct TCP_Server_Info *server)
 				server->tcpStatus = CifsNeedNegotiate;
 			spin_unlock(&GlobalMid_Lock);
 		}
+<<<<<<< HEAD
+=======
+		mutex_unlock(&server->srv_mutex);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	} while (server->tcpStatus == CifsNeedReconnect);
 
 	return rc;

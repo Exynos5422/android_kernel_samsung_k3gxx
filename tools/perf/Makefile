@@ -544,6 +544,10 @@ BUILTIN_OBJS += $(OUTPUT)builtin-list.o
 BUILTIN_OBJS += $(OUTPUT)builtin-record.o
 BUILTIN_OBJS += $(OUTPUT)builtin-report.o
 BUILTIN_OBJS += $(OUTPUT)builtin-stat.o
+<<<<<<< HEAD
+=======
+BUILTIN_OBJS += $(OUTPUT)builtin-periodic.o
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 BUILTIN_OBJS += $(OUTPUT)builtin-timechart.o
 BUILTIN_OBJS += $(OUTPUT)builtin-top.o
 BUILTIN_OBJS += $(OUTPUT)builtin-script.o

@@ -1,11 +1,22 @@
 # UAPI Header export list
 header-y += audio.h
 header-y += cdc.h
+<<<<<<< HEAD
+=======
+header-y += cdc-wdm.h
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 header-y += ch11.h
 header-y += ch9.h
 header-y += functionfs.h
 header-y += g_printer.h
 header-y += gadgetfs.h
 header-y += midi.h
+<<<<<<< HEAD
 header-y += tmc.h
 header-y += video.h
+=======
+header-y += msm_ext_chg.h
+header-y += tmc.h
+header-y += video.h
+header-y += ccid_bridge.h
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

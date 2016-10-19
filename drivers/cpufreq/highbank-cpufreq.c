@@ -66,7 +66,12 @@ static int hb_cpufreq_driver_init(void)
 	struct device_node *np;
 	int ret;
 
+<<<<<<< HEAD
 	if (!of_machine_is_compatible("calxeda,highbank"))
+=======
+	if ((!of_machine_is_compatible("calxeda,highbank")) &&
+		(!of_machine_is_compatible("calxeda,ecx-2000")))
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return -ENODEV;
 
 	for_each_child_of_node(of_find_node_by_path("/cpus"), np)

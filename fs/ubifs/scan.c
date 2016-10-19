@@ -101,7 +101,11 @@ int ubifs_scan_a_node(const struct ubifs_info *c, void *buf, int len, int lnum,
 		    offs + node_len + pad_len > c->leb_size) {
 			if (!quiet) {
 				ubifs_err("bad pad node at LEB %d:%d",
+<<<<<<< HEAD
 					  lnum, offs);
+=======
+						c->vi.ubi_num, lnum, offs);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				ubifs_dump_node(c, pad);
 			}
 			return SCANNED_A_BAD_PAD_NODE;
@@ -111,7 +115,12 @@ int ubifs_scan_a_node(const struct ubifs_info *c, void *buf, int len, int lnum,
 		if ((node_len + pad_len) & 7) {
 			if (!quiet)
 				ubifs_err("bad padding length %d - %d",
+<<<<<<< HEAD
 					  offs, offs + node_len + pad_len);
+=======
+						c->vi.ubi_num, offs,
+						offs + node_len + pad_len);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			return SCANNED_A_BAD_PAD_NODE;
 		}
 
@@ -152,7 +161,11 @@ struct ubifs_scan_leb *ubifs_start_scan(const struct ubifs_info *c, int lnum,
 	err = ubifs_leb_read(c, lnum, sbuf + offs, offs, c->leb_size - offs, 0);
 	if (err && err != -EBADMSG) {
 		ubifs_err("cannot read %d bytes from LEB %d:%d, error %d",
+<<<<<<< HEAD
 			  c->leb_size - offs, lnum, offs, err);
+=======
+			  c->vi.ubi_num, c->leb_size - offs, lnum, offs, err);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		kfree(sleb);
 		return ERR_PTR(err);
 	}
@@ -240,11 +253,20 @@ void ubifs_scanned_corruption(const struct ubifs_info *c, int lnum, int offs,
 {
 	int len;
 
+<<<<<<< HEAD
 	ubifs_err("corruption at LEB %d:%d", lnum, offs);
 	len = c->leb_size - offs;
 	if (len > 8192)
 		len = 8192;
 	ubifs_err("first %d bytes from LEB %d:%d", len, lnum, offs);
+=======
+	ubifs_err("corruption at LEB %d:%d", c->vi.ubi_num, lnum, offs);
+	len = c->leb_size - offs;
+	if (len > 8192)
+		len = 8192;
+	ubifs_err("first %d bytes from LEB %d:%d", c->vi.ubi_num, len,
+			lnum, offs);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	print_hex_dump(KERN_DEBUG, "", DUMP_PREFIX_OFFSET, 32, 4, buf, len, 1);
 }
 
@@ -299,16 +321,27 @@ struct ubifs_scan_leb *ubifs_scan(const struct ubifs_info *c, int lnum,
 
 		switch (ret) {
 		case SCANNED_GARBAGE:
+<<<<<<< HEAD
 			ubifs_err("garbage");
+=======
+			ubifs_err("garbage", c->vi.ubi_num);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			goto corrupted;
 		case SCANNED_A_NODE:
 			break;
 		case SCANNED_A_CORRUPT_NODE:
 		case SCANNED_A_BAD_PAD_NODE:
+<<<<<<< HEAD
 			ubifs_err("bad node");
 			goto corrupted;
 		default:
 			ubifs_err("unknown");
+=======
+			ubifs_err("bad node", c->vi.ubi_num);
+			goto corrupted;
+		default:
+			ubifs_err("unknown", c->vi.ubi_num);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			err = -EINVAL;
 			goto error;
 		}
@@ -326,7 +359,11 @@ struct ubifs_scan_leb *ubifs_scan(const struct ubifs_info *c, int lnum,
 	if (offs % c->min_io_size) {
 		if (!quiet)
 			ubifs_err("empty space starts at non-aligned offset %d",
+<<<<<<< HEAD
 				  offs);
+=======
+					c->vi.ubi_num, offs);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		goto corrupted;
 	}
 
@@ -339,7 +376,11 @@ struct ubifs_scan_leb *ubifs_scan(const struct ubifs_info *c, int lnum,
 		if (*(uint8_t *)buf != 0xff) {
 			if (!quiet)
 				ubifs_err("corrupt empty space at LEB %d:%d",
+<<<<<<< HEAD
 					  lnum, offs);
+=======
+						c->vi.ubi_num, lnum, offs);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			goto corrupted;
 		}
 
@@ -348,14 +389,22 @@ struct ubifs_scan_leb *ubifs_scan(const struct ubifs_info *c, int lnum,
 corrupted:
 	if (!quiet) {
 		ubifs_scanned_corruption(c, lnum, offs, buf);
+<<<<<<< HEAD
 		ubifs_err("LEB %d scanning failed", lnum);
+=======
+		ubifs_err("LEB %d scanning failed", c->vi.ubi_num, lnum);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 	err = -EUCLEAN;
 	ubifs_scan_destroy(sleb);
 	return ERR_PTR(err);
 
 error:
+<<<<<<< HEAD
 	ubifs_err("LEB %d scanning failed, error %d", lnum, err);
+=======
+	ubifs_err("LEB %d scanning failed, error %d", c->vi.ubi_num, lnum, err);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ubifs_scan_destroy(sleb);
 	return ERR_PTR(err);
 }

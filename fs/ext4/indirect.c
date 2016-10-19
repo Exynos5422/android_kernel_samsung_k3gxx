@@ -390,7 +390,17 @@ static int ext4_alloc_branch(handle_t *handle, struct inode *inode,
 	return 0;
 failed:
 	for (; i >= 0; i--) {
+<<<<<<< HEAD
 		if (i != indirect_blks && branch[i].bh)
+=======
+		/*
+		 * We want to ext4_forget() only freshly allocated indirect
+		 * blocks.  Buffer for new_blocks[i-1] is at branch[i].bh and
+		 * buffer at branch[0].bh is indirect block / inode already
+		 * existing before ext4_alloc_branch() was called.
+		 */
+		if (i > 0 && i != indirect_blks && branch[i].bh)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			ext4_forget(handle, 1, inode, branch[i].bh,
 				    branch[i].bh->b_blocknr);
 		ext4_free_blocks(handle, inode, NULL, new_blocks[i],
@@ -1325,16 +1335,34 @@ static int free_hole_blocks(handle_t *handle, struct inode *inode,
 		blk = *i_data;
 		if (level > 0) {
 			ext4_lblk_t first2;
+<<<<<<< HEAD
+=======
+			ext4_lblk_t count2;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			bh = sb_bread(inode->i_sb, le32_to_cpu(blk));
 			if (!bh) {
 				EXT4_ERROR_INODE_BLOCK(inode, le32_to_cpu(blk),
 						       "Read failure");
 				return -EIO;
 			}
+<<<<<<< HEAD
 			first2 = (first > offset) ? first - offset : 0;
 			ret = free_hole_blocks(handle, inode, bh,
 					       (__le32 *)bh->b_data, level - 1,
 					       first2, count - offset,
+=======
+			if (first > offset) {
+				first2 = first - offset;
+				count2 = count;
+			} else {
+				first2 = 0;
+				count2 = count - (offset - first);
+			}
+			ret = free_hole_blocks(handle, inode, bh,
+					       (__le32 *)bh->b_data, level - 1,
+					       first2, count2,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 					       inode->i_sb->s_blocksize >> 2);
 			if (ret) {
 				brelse(bh);

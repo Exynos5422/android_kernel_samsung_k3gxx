@@ -41,7 +41,11 @@ config P54_PCI
 
 config P54_SPI
 	tristate "Prism54 SPI (stlc45xx) support"
+<<<<<<< HEAD
 	depends on P54_COMMON && SPI_MASTER && GENERIC_HARDIRQS
+=======
+	depends on P54_COMMON && SPI_MASTER
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	---help---
 	  This driver is for stlc4550 or stlc4560 based wireless chips
 	  such as Nokia's N800/N810 Portable Internet Tablet.

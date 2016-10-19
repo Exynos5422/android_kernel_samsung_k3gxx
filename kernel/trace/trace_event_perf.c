@@ -26,7 +26,11 @@ static int perf_trace_event_perm(struct ftrace_event_call *tp_event,
 {
 	/* The ftrace function trace is allowed only for root. */
 	if (ftrace_event_is_function(tp_event) &&
+<<<<<<< HEAD
 	    perf_paranoid_kernel() && !capable(CAP_SYS_ADMIN))
+=======
+	    perf_paranoid_tracepoint_raw() && !capable(CAP_SYS_ADMIN))
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return -EPERM;
 
 	/* No tracing, just counting, so no obvious leak */
@@ -222,7 +226,14 @@ int perf_trace_add(struct perf_event *p_event, int flags)
 void perf_trace_del(struct perf_event *p_event, int flags)
 {
 	struct ftrace_event_call *tp_event = p_event->tp_event;
+<<<<<<< HEAD
 	hlist_del_rcu(&p_event->hlist_entry);
+=======
+	if(!hlist_unhashed(&p_event->hlist_entry))
+		hlist_del_rcu(&p_event->hlist_entry);
+	else
+		return;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	tp_event->class->reg(tp_event, TRACE_REG_PERF_DEL, p_event);
 }
 

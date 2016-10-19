@@ -30,9 +30,13 @@ static const int cfq_back_penalty = 2;
 static const int cfq_slice_sync = HZ / 10;
 static int cfq_slice_async = HZ / 25;
 static const int cfq_slice_async_rq = 2;
+<<<<<<< HEAD
 /* Explicitly set cfq_slice_idle to 0 */
 static int cfq_slice_idle = 0;
 /*static int cfq_slice_idle = HZ / 125;*/
+=======
+static int cfq_slice_idle = HZ / 125;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int cfq_group_idle = HZ / 125;
 static const int cfq_target_latency = HZ * 3/10; /* 300 ms */
 static const int cfq_hist_divisor = 4;
@@ -1805,7 +1809,11 @@ static u64 cfqg_prfill_avg_queue_size(struct seq_file *sf,
 
 	if (samples) {
 		v = blkg_stat_read(&cfqg->stats.avg_queue_size_sum);
+<<<<<<< HEAD
 		do_div(v, samples);
+=======
+		v = div64_u64(v, samples);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 	__blkg_prfill_u64(sf, pd, v);
 	return 0;
@@ -3000,6 +3008,12 @@ static void cfq_choose_cfqg(struct cfq_data *cfqd)
 {
 	struct cfq_group *cfqg = cfq_get_next_cfqg(cfqd);
 
+<<<<<<< HEAD
+=======
+	if (!cfqg)
+		return;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	cfqd->serving_group = cfqg;
 
 	/* Restore the workload type data */
@@ -4085,10 +4099,15 @@ static void cfq_completed_request(struct request_queue *q, struct request *rq)
 		}
 	}
 
+<<<<<<< HEAD
 	/* Disable uplug_work at blk_end_request
 	if (!cfqd->rq_in_driver)
 		cfq_schedule_dispatch(cfqd);
 	*/
+=======
+	if (!cfqd->rq_in_driver)
+		cfq_schedule_dispatch(cfqd);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static inline int __cfq_may_queue(struct cfq_queue *cfqq)
@@ -4594,11 +4613,17 @@ static int __init cfq_init(void)
 	 */
 	if (!cfq_slice_async)
 		cfq_slice_async = 1;
+<<<<<<< HEAD
         /* Do not touch cfq_slice_idle if it is zero */
         /*
 	if (!cfq_slice_idle)
 		cfq_slice_idle = 1;
         */
+=======
+	if (!cfq_slice_idle)
+		cfq_slice_idle = 1;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifdef CONFIG_CFQ_GROUP_IOSCHED
 	if (!cfq_group_idle)
 		cfq_group_idle = 1;

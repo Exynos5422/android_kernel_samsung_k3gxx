@@ -47,6 +47,7 @@
 
 #define DAPM_UPDATE_STAT(widget, val) widget->dapm->card->dapm_stats.val++;
 
+<<<<<<< HEAD
 /* Lock for cross i/f checks */
 static DEFINE_SPINLOCK(dapm_lock);
 
@@ -99,6 +100,8 @@ static void list_del_init_dapm(struct list_head *entry)
 #define list_add_tail(x, y)	list_add_tail_dapm(x, y)
 #define list_del_init(x)	list_del_init_dapm(x)
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /* dapm power sequences - make this per codec in the future */
 static int dapm_up_seq[] = {
 	[snd_soc_dapm_pre] = 0,
@@ -109,8 +112,12 @@ static int dapm_up_seq[] = {
 	[snd_soc_dapm_dai_link] = 2,
 	[snd_soc_dapm_dai_in] = 3,
 	[snd_soc_dapm_dai_out] = 3,
+<<<<<<< HEAD
 	[snd_soc_dapm_aif_in] = 3,
 	[snd_soc_dapm_aif_out] = 3,
+=======
+	[snd_soc_dapm_adc] = 3,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	[snd_soc_dapm_mic] = 4,
 	[snd_soc_dapm_mux] = 5,
 	[snd_soc_dapm_virt_mux] = 5,
@@ -119,7 +126,12 @@ static int dapm_up_seq[] = {
 	[snd_soc_dapm_mixer] = 7,
 	[snd_soc_dapm_mixer_named_ctl] = 7,
 	[snd_soc_dapm_pga] = 8,
+<<<<<<< HEAD
 	[snd_soc_dapm_adc] = 9,
+=======
+	[snd_soc_dapm_aif_in] = 8,
+	[snd_soc_dapm_aif_out] = 8,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	[snd_soc_dapm_out_drv] = 10,
 	[snd_soc_dapm_hp] = 10,
 	[snd_soc_dapm_spk] = 10,
@@ -129,7 +141,13 @@ static int dapm_up_seq[] = {
 
 static int dapm_down_seq[] = {
 	[snd_soc_dapm_pre] = 0,
+<<<<<<< HEAD
 	[snd_soc_dapm_adc] = 1,
+=======
+	[snd_soc_dapm_aif_in] = 1,
+	[snd_soc_dapm_aif_out] = 1,
+	[snd_soc_dapm_adc] = 5,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	[snd_soc_dapm_hp] = 2,
 	[snd_soc_dapm_spk] = 2,
 	[snd_soc_dapm_line] = 2,
@@ -143,8 +161,11 @@ static int dapm_down_seq[] = {
 	[snd_soc_dapm_mux] = 9,
 	[snd_soc_dapm_virt_mux] = 9,
 	[snd_soc_dapm_value_mux] = 9,
+<<<<<<< HEAD
 	[snd_soc_dapm_aif_in] = 10,
 	[snd_soc_dapm_aif_out] = 10,
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	[snd_soc_dapm_dai_in] = 10,
 	[snd_soc_dapm_dai_out] = 10,
 	[snd_soc_dapm_dai_link] = 11,
@@ -203,6 +224,11 @@ void dapm_mark_io_dirty(struct snd_soc_dapm_context *dapm)
 	mutex_lock(&card->dapm_mutex);
 
 	list_for_each_entry(w, &card->widgets, list) {
+<<<<<<< HEAD
+=======
+		if (w->ignore_suspend)
+			continue;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		switch (w->id) {
 		case snd_soc_dapm_input:
 		case snd_soc_dapm_output:
@@ -734,13 +760,23 @@ static int dapm_new_mux(struct snd_soc_dapm_widget *w)
 		return -EINVAL;
 	}
 
+<<<<<<< HEAD
 	path = list_first_entry(&w->sources, struct snd_soc_dapm_path,
 				list_sink);
 	if (!path) {
+=======
+	if (list_empty(&w->sources)) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		dev_err(dapm->dev, "ASoC: mux %s has no paths\n", w->name);
 		return -EINVAL;
 	}
 
+<<<<<<< HEAD
+=======
+	path = list_first_entry(&w->sources, struct snd_soc_dapm_path,
+				list_sink);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ret = dapm_create_or_share_mixmux_kcontrol(w, 0, path);
 	if (ret < 0)
 		return ret;
@@ -1429,7 +1465,11 @@ static void dapm_seq_run(struct snd_soc_dapm_context *dapm,
 		/* Do we need to apply any queued changes? */
 		if (sort[w->id] != cur_sort || w->reg != cur_reg ||
 		    w->dapm != cur_dapm || w->subseq != cur_subseq) {
+<<<<<<< HEAD
 			if (!list_empty(&pending))
+=======
+			if (cur_dapm && !list_empty(&pending))
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				dapm_seq_run_coalesced(cur_dapm, &pending);
 
 			if (cur_dapm && cur_dapm->seq_notifier) {
@@ -1484,12 +1524,24 @@ static void dapm_seq_run(struct snd_soc_dapm_context *dapm,
 			break;
 		}
 
+<<<<<<< HEAD
+=======
+		/* Add this debug log to keep track of widgets being
+		 * powered-up and powered-down */
+		dev_dbg(w->dapm->dev, "dapm: powering %s widget %s\n",
+			power_up ? "up" : "down", w->name);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (ret < 0)
 			dev_err(w->dapm->dev,
 				"ASoC: Failed to apply widget power: %d\n", ret);
 	}
 
+<<<<<<< HEAD
 	if (!list_empty(&pending))
+=======
+	if (cur_dapm && !list_empty(&pending))
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		dapm_seq_run_coalesced(cur_dapm, &pending);
 
 	if (cur_dapm && cur_dapm->seq_notifier) {
@@ -1704,7 +1756,11 @@ static int dapm_power_widgets(struct snd_soc_dapm_context *dapm, int event)
 	enum snd_soc_bias_level bias;
 
 	trace_snd_soc_dapm_start(card);
+<<<<<<< HEAD
 
+=======
+	mutex_lock(&dapm->card->dapm_power_mutex);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	list_for_each_entry(d, &card->dapm_list, list) {
 		if (d->idle_bias_off)
 			d->target_bias_level = SND_SOC_BIAS_OFF;
@@ -1777,9 +1833,17 @@ static int dapm_power_widgets(struct snd_soc_dapm_context *dapm, int event)
 	trace_snd_soc_dapm_walk_done(card);
 
 	/* Run all the bias changes in parallel */
+<<<<<<< HEAD
 	list_for_each_entry(d, &dapm->card->dapm_list, list)
 		async_schedule_domain(dapm_pre_sequence_async, d,
 					&async_domain);
+=======
+	list_for_each_entry(d, &dapm->card->dapm_list, list) {
+		if (d->codec || d->platform)
+			async_schedule_domain(dapm_pre_sequence_async, d,
+						&async_domain);
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	async_synchronize_full_domain(&async_domain);
 
 	/* Power down widgets first; try to avoid amplifying pops. */
@@ -1791,9 +1855,17 @@ static int dapm_power_widgets(struct snd_soc_dapm_context *dapm, int event)
 	dapm_seq_run(dapm, &up_list, event, true);
 
 	/* Run all the bias changes in parallel */
+<<<<<<< HEAD
 	list_for_each_entry(d, &dapm->card->dapm_list, list)
 		async_schedule_domain(dapm_post_sequence_async, d,
 					&async_domain);
+=======
+	list_for_each_entry(d, &dapm->card->dapm_list, list) {
+		if (d->codec || d->platform)
+			async_schedule_domain(dapm_post_sequence_async, d,
+						&async_domain);
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	async_synchronize_full_domain(&async_domain);
 
 	/* do we need to notify any clients that DAPM event is complete */
@@ -1805,7 +1877,11 @@ static int dapm_power_widgets(struct snd_soc_dapm_context *dapm, int event)
 	pop_dbg(dapm->dev, card->pop_time,
 		"DAPM sequencing finished, waiting %dms\n", card->pop_time);
 	pop_wait(card->pop_time);
+<<<<<<< HEAD
 
+=======
+	mutex_unlock(&dapm->card->dapm_power_mutex);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	trace_snd_soc_dapm_done(card);
 
 	return 0;
@@ -2208,8 +2284,15 @@ static int snd_soc_dapm_set_pin(struct snd_soc_dapm_context *dapm,
 {
 	struct snd_soc_dapm_widget *w = dapm_find_widget(dapm, pin, true);
 
+<<<<<<< HEAD
 	if (!w) {
 		dev_err(dapm->dev, "ASoC: DAPM unknown pin %s\n", pin);
+=======
+	mutex_lock_nested(&dapm->card->dapm_mutex, SND_SOC_DAPM_CLASS_RUNTIME);
+	if (!w) {
+		dev_err(dapm->dev, "ASoC: DAPM unknown pin %s\n", pin);
+		mutex_unlock(&dapm->card->dapm_mutex);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return -EINVAL;
 	}
 
@@ -2220,6 +2303,10 @@ static int snd_soc_dapm_set_pin(struct snd_soc_dapm_context *dapm,
 	if (status == 0)
 		w->force = 0;
 
+<<<<<<< HEAD
+=======
+	mutex_unlock(&dapm->card->dapm_mutex);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 
@@ -3431,7 +3518,10 @@ int snd_soc_dapm_new_dai_widgets(struct snd_soc_dapm_context *dapm,
 		if (!w) {
 			dev_err(dapm->dev, "ASoC: Failed to create %s widget\n",
 				dai->driver->playback.stream_name);
+<<<<<<< HEAD
 			return -ENOMEM;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		}
 
 		w->priv = dai;
@@ -3450,7 +3540,10 @@ int snd_soc_dapm_new_dai_widgets(struct snd_soc_dapm_context *dapm,
 		if (!w) {
 			dev_err(dapm->dev, "ASoC: Failed to create %s widget\n",
 				dai->driver->capture.stream_name);
+<<<<<<< HEAD
 			return -ENOMEM;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		}
 
 		w->priv = dai;
@@ -3493,7 +3586,11 @@ int snd_soc_dapm_link_dai_widgets(struct snd_soc_card *card)
 				break;
 			}
 
+<<<<<<< HEAD
 			if (!w->sname || !strstr(w->sname, dai_w->name))
+=======
+			if (!w->sname)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				continue;
 
 			if (dai->driver->playback.stream_name &&
@@ -3634,8 +3731,15 @@ int snd_soc_dapm_force_enable_pin(struct snd_soc_dapm_context *dapm,
 {
 	struct snd_soc_dapm_widget *w = dapm_find_widget(dapm, pin, true);
 
+<<<<<<< HEAD
 	if (!w) {
 		dev_err(dapm->dev, "ASoC: unknown pin %s\n", pin);
+=======
+	mutex_lock_nested(&dapm->card->dapm_mutex, SND_SOC_DAPM_CLASS_RUNTIME);
+	if (!w) {
+		dev_err(dapm->dev, "ASoC: unknown pin %s\n", pin);
+		mutex_unlock(&dapm->card->dapm_mutex);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return -EINVAL;
 	}
 
@@ -3643,6 +3747,10 @@ int snd_soc_dapm_force_enable_pin(struct snd_soc_dapm_context *dapm,
 	w->connected = 1;
 	w->force = 1;
 	dapm_mark_dirty(w, "force enable");
+<<<<<<< HEAD
+=======
+	mutex_unlock(&dapm->card->dapm_mutex);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return 0;
 }

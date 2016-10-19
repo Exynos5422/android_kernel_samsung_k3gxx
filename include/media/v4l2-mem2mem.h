@@ -84,7 +84,10 @@ struct v4l2_m2m_ctx {
 struct v4l2_m2m_buffer {
 	struct vb2_buffer	vb;
 	struct list_head	list;
+<<<<<<< HEAD
 	struct list_head	wait;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 void *v4l2_m2m_get_curr_priv(struct v4l2_m2m_dev *m2m_dev);
@@ -139,8 +142,11 @@ void v4l2_m2m_ctx_release(struct v4l2_m2m_ctx *m2m_ctx);
 
 void v4l2_m2m_buf_queue(struct v4l2_m2m_ctx *m2m_ctx, struct vb2_buffer *vb);
 
+<<<<<<< HEAD
 void v4l2_m2m_try_schedule(struct v4l2_m2m_ctx *m2m_ctx);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /**
  * v4l2_m2m_num_src_bufs_ready() - return the number of source buffers ready for
  * use

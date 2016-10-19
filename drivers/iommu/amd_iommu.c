@@ -3959,7 +3959,11 @@ static struct irq_remap_table *get_irq_table(u16 devid, bool ioapic)
 	iommu_flush_dte(iommu, devid);
 	if (devid != alias) {
 		irq_lookup_table[alias] = table;
+<<<<<<< HEAD
 		set_dte_irq_entry(devid, table);
+=======
+		set_dte_irq_entry(alias, table);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		iommu_flush_dte(iommu, alias);
 	}
 

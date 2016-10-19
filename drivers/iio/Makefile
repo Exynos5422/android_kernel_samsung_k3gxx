@@ -19,7 +19,12 @@ obj-y += dac/
 obj-y += gyro/
 obj-y += frequency/
 obj-y += imu/
+<<<<<<< HEAD
 obj-y += inv_test/
 obj-y += light/
 obj-y += magnetometer/
 obj-y += grip/
+=======
+obj-y += light/
+obj-y += magnetometer/
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

@@ -21,6 +21,11 @@
 #include <linux/init.h>
 #include <linux/sched.h>
 
+<<<<<<< HEAD
+=======
+#if defined(CONFIG_COMMON_CLK)
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static DEFINE_SPINLOCK(enable_lock);
 static DEFINE_MUTEX(prepare_lock);
 
@@ -987,11 +992,14 @@ static void __clk_recalc_rates(struct clk *clk, unsigned long msg)
 		__clk_notify(clk, msg, old_rate, clk->rate);
 
 	hlist_for_each_entry(child, &clk->children, child_node)
+<<<<<<< HEAD
 #ifdef CONFIG_SOC_EXYNOS5422
 		if (child->flags & CLK_DO_NOT_UPDATE_CHILD)
 			continue;
 		else
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		__clk_recalc_rates(child, msg);
 }
 
@@ -1220,6 +1228,13 @@ int clk_set_rate(struct clk *clk, unsigned long rate)
 	/* prevent racing with updates to the clock topology */
 	clk_prepare_lock();
 
+<<<<<<< HEAD
+=======
+	/* bail early if nothing to do */
+	if (rate == clk->rate)
+		goto out;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if ((clk->flags & CLK_SET_RATE_GATE) && clk->prepare_count) {
 		ret = -EBUSY;
 		goto out;
@@ -1473,6 +1488,12 @@ int clk_set_parent(struct clk *clk, struct clk *parent)
 	/* prevent racing with updates to the clock topology */
 	clk_prepare_lock();
 
+<<<<<<< HEAD
+=======
+	if (clk->parent == parent)
+		goto out;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* check that we are allowed to re-parent if the clock is in use */
 	if ((clk->flags & CLK_SET_PARENT_GATE) && clk->prepare_count) {
 		ret = -EBUSY;
@@ -1967,6 +1988,11 @@ int clk_notifier_unregister(struct clk *clk, struct notifier_block *nb)
 }
 EXPORT_SYMBOL_GPL(clk_notifier_unregister);
 
+<<<<<<< HEAD
+=======
+#endif /* CONFIG_COMMON_CLK */
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifdef CONFIG_OF
 /**
  * struct of_clk_provider - Clock provider registration structure
@@ -1999,6 +2025,11 @@ struct clk *of_clk_src_simple_get(struct of_phandle_args *clkspec,
 }
 EXPORT_SYMBOL_GPL(of_clk_src_simple_get);
 
+<<<<<<< HEAD
+=======
+#if defined(CONFIG_COMMON_CLK)
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 struct clk *of_clk_src_onecell_get(struct of_phandle_args *clkspec, void *data)
 {
 	struct clk_onecell_data *clk_data = data;
@@ -2013,6 +2044,11 @@ struct clk *of_clk_src_onecell_get(struct of_phandle_args *clkspec, void *data)
 }
 EXPORT_SYMBOL_GPL(of_clk_src_onecell_get);
 
+<<<<<<< HEAD
+=======
+#endif /* CONFIG_COMMON_CLK */
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /**
  * of_clk_add_provider() - Register a clock provider for a node
  * @np: Device node pointer associated with clock provider
@@ -2106,6 +2142,11 @@ const char *of_clk_get_parent_name(struct device_node *np, int index)
 }
 EXPORT_SYMBOL_GPL(of_clk_get_parent_name);
 
+<<<<<<< HEAD
+=======
+#if defined(CONFIG_COMMON_CLK)
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /**
  * of_clk_init() - Scan and init clock providers from the DT
  * @matches: array of compatible values and init functions for providers.
@@ -2126,4 +2167,10 @@ void __init of_clk_init(const struct of_device_id *matches)
 		clk_init_cb(np);
 	}
 }
+<<<<<<< HEAD
+=======
+
+#endif /* CONFIG_COMMON_CLK */
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif

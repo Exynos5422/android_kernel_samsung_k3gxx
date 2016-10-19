@@ -394,7 +394,11 @@ static void dump_buff_as_hex(char *dst, size_t dst_sz, const u8 *data,
 void picolcd_debug_out_report(struct picolcd_data *data,
 		struct hid_device *hdev, struct hid_report *report)
 {
+<<<<<<< HEAD
 	u8 raw_data[70];
+=======
+	u8 *raw_data;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	int raw_size = (report->size >> 3) + 1;
 	char *buff;
 #define BUFF_SZ 256
@@ -407,6 +411,7 @@ void picolcd_debug_out_report(struct picolcd_data *data,
 	if (!buff)
 		return;
 
+<<<<<<< HEAD
 	snprintf(buff, BUFF_SZ, "\nout report %d (size %d) =  ",
 			report->id, raw_size);
 	hid_debug_event(hdev, buff);
@@ -421,6 +426,22 @@ void picolcd_debug_out_report(struct picolcd_data *data,
 		hid_debug_event(hdev, buff);
 	}
 
+=======
+	raw_data = hid_alloc_report_buf(report, GFP_ATOMIC);
+	if (!raw_data) {
+		kfree(buff);
+		return;
+	}
+
+	snprintf(buff, BUFF_SZ, "\nout report %d (size %d) =  ",
+			report->id, raw_size);
+	hid_debug_event(hdev, buff);
+	raw_data[0] = report->id;
+	hid_output_report(report, raw_data);
+	dump_buff_as_hex(buff, BUFF_SZ, raw_data, raw_size);
+	hid_debug_event(hdev, buff);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	switch (report->id) {
 	case REPORT_LED_STATE:
 		/* 1 data byte with GPO state */
@@ -644,6 +665,10 @@ void picolcd_debug_out_report(struct picolcd_data *data,
 		break;
 	}
 	wake_up_interruptible(&hdev->debug_wait);
+<<<<<<< HEAD
+=======
+	kfree(raw_data);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	kfree(buff);
 }
 

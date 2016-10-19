@@ -24,10 +24,15 @@
 #include <linux/mm.h>
 #include <linux/module.h>
 #include <linux/scatterlist.h>
+<<<<<<< HEAD
 #include <linux/string.h>
 #ifndef CONFIG_CRYPTO_DRBG
 #include <linux/spinlock.h>
 #endif
+=======
+#include <linux/spinlock.h>
+#include <linux/string.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 struct eseqiv_request_ctx {
 	struct scatterlist src[2];
@@ -36,9 +41,13 @@ struct eseqiv_request_ctx {
 };
 
 struct eseqiv_ctx {
+<<<<<<< HEAD
 #ifndef CONFIG_CRYPTO_DRBG
 	spinlock_t lock;
 #endif
+=======
+	spinlock_t lock;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	unsigned int reqoff;
 	char salt[];
 };
@@ -150,7 +159,10 @@ out:
 	return err;
 }
 
+<<<<<<< HEAD
 #ifndef CONFIG_CRYPTO_DRBG
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int eseqiv_givencrypt_first(struct skcipher_givcrypt_request *req)
 {
 	struct crypto_ablkcipher *geniv = skcipher_givcrypt_reqtfm(req);
@@ -173,7 +185,10 @@ unlock:
 
 	return eseqiv_givencrypt(req);
 }
+<<<<<<< HEAD
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 static int eseqiv_init(struct crypto_tfm *tfm)
 {
@@ -182,9 +197,13 @@ static int eseqiv_init(struct crypto_tfm *tfm)
 	unsigned long alignmask;
 	unsigned int reqsize;
 
+<<<<<<< HEAD
 #ifndef CONFIG_CRYPTO_DRBG
 	spin_lock_init(&ctx->lock);
 #endif
+=======
+	spin_lock_init(&ctx->lock);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	alignmask = crypto_tfm_ctx_alignment() - 1;
 	reqsize = sizeof(struct eseqiv_request_ctx);
@@ -205,10 +224,13 @@ static int eseqiv_init(struct crypto_tfm *tfm)
 
 	tfm->crt_ablkcipher.reqsize = reqsize +
 				      sizeof(struct ablkcipher_request);
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_DRBG
 	crypto_rng_get_bytes(crypto_default_rng, ctx->salt,
 						crypto_ablkcipher_ivsize(geniv));
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return skcipher_geniv_init(tfm);
 }
@@ -232,11 +254,15 @@ static struct crypto_instance *eseqiv_alloc(struct rtattr **tb)
 	if (inst->alg.cra_ablkcipher.ivsize != inst->alg.cra_blocksize)
 		goto free_inst;
 
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_DRBG
 	inst->alg.cra_ablkcipher.givencrypt = eseqiv_givencrypt;
 #else
 	inst->alg.cra_ablkcipher.givencrypt = eseqiv_givencrypt_first;
 #endif
+=======
+	inst->alg.cra_ablkcipher.givencrypt = eseqiv_givencrypt_first;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	inst->alg.cra_init = eseqiv_init;
 	inst->alg.cra_exit = skcipher_geniv_exit;

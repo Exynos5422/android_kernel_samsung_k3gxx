@@ -9,12 +9,15 @@
 #include <linux/blktrace_api.h>
 #include <asm/uaccess.h>
 
+<<<<<<< HEAD
 #ifdef CONFIG_BLOCK_SUPPORT_STLOG
 #include <linux/stlog.h>
 #else
 #define ST_LOG(fmt,...)
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int blkpg_ioctl(struct block_device *bdev, struct blkpg_ioctl_arg __user *arg)
 {
 	struct block_device *bdevp;
@@ -188,7 +191,10 @@ static int blk_ioctl_discard(struct block_device *bdev, uint64_t start,
 		return -EINVAL;
 	if (secure)
 		flags |= BLKDEV_DISCARD_SECURE;
+<<<<<<< HEAD
 	ST_LOG("%s %d:%d %lu %lu", secure?"SECDIS":"DIS", MAJOR(bdev->bd_dev), MINOR(bdev->bd_dev), start, len);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return blkdev_issue_discard(bdev, start, len, GFP_KERNEL, flags);
 }
 

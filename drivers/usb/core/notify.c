@@ -58,6 +58,15 @@ void usb_notify_remove_device(struct usb_device *udev)
 	mutex_unlock(&usbfs_mutex);
 }
 
+<<<<<<< HEAD
+=======
+void usb_notify_config_device(struct usb_device *udev)
+{
+	blocking_notifier_call_chain(&usb_notifier_list,
+			USB_DEVICE_CONFIG, udev);
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 void usb_notify_add_bus(struct usb_bus *ubus)
 {
 	blocking_notifier_call_chain(&usb_notifier_list, USB_BUS_ADD, ubus);

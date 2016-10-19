@@ -5,7 +5,10 @@
 # Object files in subdirectories
 
 obj-$(CONFIG_USB)		+= core/
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 obj-$(CONFIG_USB_PHY)		+= phy/
 
 obj-$(CONFIG_USB_DWC3)		+= dwc3/
@@ -27,6 +30,10 @@ obj-$(CONFIG_USB_HWA_HCD)	+= host/
 obj-$(CONFIG_USB_ISP1760_HCD)	+= host/
 obj-$(CONFIG_USB_IMX21_HCD)	+= host/
 obj-$(CONFIG_USB_FSL_MPH_DR_OF)	+= host/
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_USB_ICE40_HCD)	+= host/
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 obj-$(CONFIG_USB_C67X00_HCD)	+= c67x00/
 
@@ -36,6 +43,10 @@ obj-$(CONFIG_USB_ACM)		+= class/
 obj-$(CONFIG_USB_PRINTER)	+= class/
 obj-$(CONFIG_USB_WDM)		+= class/
 obj-$(CONFIG_USB_TMC)		+= class/
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_USB_CCID_BRIDGE)	+= class/
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 obj-$(CONFIG_USB_STORAGE)	+= storage/
 obj-$(CONFIG_USB)		+= storage/
@@ -57,5 +68,8 @@ obj-$(CONFIG_USB_RENESAS_USBHS)	+= renesas_usbhs/
 obj-$(CONFIG_USB_GADGET)	+= gadget/
 
 obj-$(CONFIG_USB_COMMON)	+= usb-common.o
+<<<<<<< HEAD
 
 obj-$(CONFIG_USB_NOTIFY_LAYER)	+= notify/
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

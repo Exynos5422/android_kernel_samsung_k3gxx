@@ -739,6 +739,27 @@ static int iwlagn_mac_set_key(struct ieee80211_hw *hw, enum set_key_cmd cmd,
 	return ret;
 }
 
+<<<<<<< HEAD
+=======
+static inline bool iwl_enable_rx_ampdu(const struct iwl_cfg *cfg)
+{
+	if (iwlwifi_mod_params.disable_11n & IWL_DISABLE_HT_RXAGG)
+		return false;
+	return true;
+}
+
+static inline bool iwl_enable_tx_ampdu(const struct iwl_cfg *cfg)
+{
+	if (iwlwifi_mod_params.disable_11n & IWL_DISABLE_HT_TXAGG)
+		return false;
+	if (iwlwifi_mod_params.disable_11n & IWL_ENABLE_HT_TXAGG)
+		return true;
+
+	/* disabled by default */
+	return false;
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int iwlagn_mac_ampdu_action(struct ieee80211_hw *hw,
 				   struct ieee80211_vif *vif,
 				   enum ieee80211_ampdu_mlme_action action,
@@ -760,7 +781,11 @@ static int iwlagn_mac_ampdu_action(struct ieee80211_hw *hw,
 
 	switch (action) {
 	case IEEE80211_AMPDU_RX_START:
+<<<<<<< HEAD
 		if (iwlwifi_mod_params.disable_11n & IWL_DISABLE_HT_RXAGG)
+=======
+		if (!iwl_enable_rx_ampdu(priv->cfg))
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			break;
 		IWL_DEBUG_HT(priv, "start Rx\n");
 		ret = iwl_sta_rx_agg_start(priv, sta, tid, *ssn);
@@ -772,7 +797,11 @@ static int iwlagn_mac_ampdu_action(struct ieee80211_hw *hw,
 	case IEEE80211_AMPDU_TX_START:
 		if (!priv->trans->ops->txq_enable)
 			break;
+<<<<<<< HEAD
 		if (iwlwifi_mod_params.disable_11n & IWL_DISABLE_HT_TXAGG)
+=======
+		if (!iwl_enable_tx_ampdu(priv->cfg))
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			break;
 		IWL_DEBUG_HT(priv, "start Tx\n");
 		ret = iwlagn_tx_agg_start(priv, vif, sta, tid, ssn);
@@ -1059,7 +1088,14 @@ void iwl_chswitch_done(struct iwl_priv *priv, bool is_success)
 	if (test_bit(STATUS_EXIT_PENDING, &priv->status))
 		return;
 
+<<<<<<< HEAD
 	if (test_and_clear_bit(STATUS_CHANNEL_SWITCH_PENDING, &priv->status))
+=======
+	if (!test_and_clear_bit(STATUS_CHANNEL_SWITCH_PENDING, &priv->status))
+		return;
+
+	if (ctx->vif)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		ieee80211_chswitch_done(ctx->vif, is_success);
 }
 

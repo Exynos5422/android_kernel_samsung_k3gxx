@@ -429,7 +429,11 @@ static void rds_iw_set_ack(struct rds_iw_connection *ic, u64 seq,
 {
 	atomic64_set(&ic->i_ack_next, seq);
 	if (ack_required) {
+<<<<<<< HEAD
 		smp_mb__before_clear_bit();
+=======
+		smp_mb__before_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		set_bit(IB_ACK_REQUESTED, &ic->i_ack_flags);
 	}
 }
@@ -437,7 +441,11 @@ static void rds_iw_set_ack(struct rds_iw_connection *ic, u64 seq,
 static u64 rds_iw_get_ack(struct rds_iw_connection *ic)
 {
 	clear_bit(IB_ACK_REQUESTED, &ic->i_ack_flags);
+<<<<<<< HEAD
 	smp_mb__after_clear_bit();
+=======
+	smp_mb__after_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return atomic64_read(&ic->i_ack_next);
 }

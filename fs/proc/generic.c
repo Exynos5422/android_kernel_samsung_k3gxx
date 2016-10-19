@@ -24,6 +24,10 @@
 #include <linux/spinlock.h>
 #include <linux/completion.h>
 #include <asm/uaccess.h>
+<<<<<<< HEAD
+=======
+#include <linux/kmemleak.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #include "internal.h"
 
@@ -391,6 +395,10 @@ static struct proc_dir_entry *__proc_create(struct proc_dir_entry **parent,
 	if (!ent)
 		goto out;
 
+<<<<<<< HEAD
+=======
+	kmemleak_not_leak(ent);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	memcpy(ent->name, fn, len + 1);
 	ent->namelen = len;
 	ent->mode = mode;

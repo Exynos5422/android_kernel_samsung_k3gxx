@@ -1,7 +1,11 @@
 /*
  * Exynos Generic power domain support.
  *
+<<<<<<< HEAD
  * Copyright (c) 2013 Samsung Electronics Co., Ltd.
+=======
+ * Copyright (c) 2012 Samsung Electronics Co., Ltd.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  *		http://www.samsung.com
  *
  * Implementation of Exynos specific power domain control which is used in
@@ -11,6 +15,7 @@
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
  * published by the Free Software Foundation.
+<<<<<<< HEAD
  */
 
 #include <mach/pm_domains.h>
@@ -335,10 +340,88 @@ static struct gpd_timing_data gpd_td = {
 };
 
 static void exynos_add_device_to_pd(struct exynos_pm_domain *pd,
+=======
+*/
+
+#include <linux/io.h>
+#include <linux/err.h>
+#include <linux/slab.h>
+#include <linux/pm_domain.h>
+#include <linux/delay.h>
+#include <linux/of_address.h>
+#include <linux/of_platform.h>
+#include <linux/sched.h>
+
+#include <mach/regs-pmu.h>
+#include <plat/devs.h>
+
+/*
+ * Exynos specific wrapper around the generic power domain
+ */
+struct exynos_pm_domain {
+	void __iomem *base;
+	char const *name;
+	bool is_off;
+	struct generic_pm_domain pd;
+};
+
+static int exynos_pd_power(struct generic_pm_domain *domain, bool power_on)
+{
+	struct exynos_pm_domain *pd;
+	void __iomem *base;
+	u32 timeout, pwr;
+	char *op;
+
+	pd = container_of(domain, struct exynos_pm_domain, pd);
+	base = pd->base;
+
+	pwr = power_on ? S5P_INT_LOCAL_PWR_EN : 0;
+	__raw_writel(pwr, base);
+
+	/* Wait max 1ms */
+	timeout = 10;
+
+	while ((__raw_readl(base + 0x4) & S5P_INT_LOCAL_PWR_EN)	!= pwr) {
+		if (!timeout) {
+			op = (power_on) ? "enable" : "disable";
+			pr_err("Power domain %s %s failed\n", domain->name, op);
+			return -ETIMEDOUT;
+		}
+		timeout--;
+		cpu_relax();
+		usleep_range(80, 100);
+	}
+	return 0;
+}
+
+static int exynos_pd_power_on(struct generic_pm_domain *domain)
+{
+	return exynos_pd_power(domain, true);
+}
+
+static int exynos_pd_power_off(struct generic_pm_domain *domain)
+{
+	return exynos_pd_power(domain, false);
+}
+
+#define EXYNOS_GPD(PD, BASE, NAME)			\
+static struct exynos_pm_domain PD = {			\
+	.base = (void __iomem *)BASE,			\
+	.name = NAME,					\
+	.pd = {						\
+		.power_off = exynos_pd_power_off,	\
+		.power_on = exynos_pd_power_on,	\
+	},						\
+}
+
+#ifdef CONFIG_OF
+static void exynos_add_device_to_domain(struct exynos_pm_domain *pd,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 					 struct device *dev)
 {
 	int ret;
 
+<<<<<<< HEAD
 	if (unlikely(!pd)) {
 		pr_err(PM_DOMAIN_PREFIX "can't add device, domain is empty\n");
 		return;
@@ -353,11 +436,18 @@ static void exynos_add_device_to_pd(struct exynos_pm_domain *pd,
 
 	while (1) {
 		ret = __pm_genpd_add_device(&pd->genpd, dev, &gpd_td);
+=======
+	dev_dbg(dev, "adding to power domain %s\n", pd->pd.name);
+
+	while (1) {
+		ret = pm_genpd_add_device(&pd->pd, dev);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (ret != -EAGAIN)
 			break;
 		cond_resched();
 	}
 
+<<<<<<< HEAD
 	if (!ret) {
 		pm_genpd_dev_need_restore(dev, true);
 		pr_info(PM_DOMAIN_PREFIX "%s, Device : %s Registered\n", pd->genpd.name, dev_name(dev));
@@ -366,11 +456,21 @@ static void exynos_add_device_to_pd(struct exynos_pm_domain *pd,
 }
 
 static void exynos_remove_device_from_pd(struct device *dev)
+=======
+	pm_genpd_dev_need_restore(dev, true);
+}
+
+static void exynos_remove_device_from_domain(struct device *dev)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	struct generic_pm_domain *genpd = dev_to_genpd(dev);
 	int ret;
 
+<<<<<<< HEAD
 	DEBUG_PRINT_INFO("removing %s from power domain %s\n", dev_name(dev), genpd->name);
+=======
+	dev_dbg(dev, "removing from power domain %s\n", genpd->name);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	while (1) {
 		ret = pm_genpd_remove_device(genpd, dev);
@@ -386,6 +486,7 @@ static void exynos_read_domain_from_dt(struct device *dev)
 	struct exynos_pm_domain *pd;
 	struct device_node *node;
 
+<<<<<<< HEAD
 	/* add platform device to power domain
 	 * 1. get power domain node for given platform device
 	 * 2. get power domain device from power domain node
@@ -402,6 +503,16 @@ static void exynos_read_domain_from_dt(struct device *dev)
 
 	pd = platform_get_drvdata(pd_pdev);
 	exynos_add_device_to_pd(pd, dev);
+=======
+	node = of_parse_phandle(dev->of_node, "samsung,power-domain", 0);
+	if (!node)
+		return;
+	pd_pdev = of_find_device_by_node(node);
+	if (!pd_pdev)
+		return;
+	pd = platform_get_drvdata(pd_pdev);
+	exynos_add_device_to_domain(pd, dev);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static int exynos_pm_notifier_call(struct notifier_block *nb,
@@ -413,10 +524,19 @@ static int exynos_pm_notifier_call(struct notifier_block *nb,
 	case BUS_NOTIFY_BIND_DRIVER:
 		if (dev->of_node)
 			exynos_read_domain_from_dt(dev);
+<<<<<<< HEAD
 		break;
 
 	case BUS_NOTIFY_UNBOUND_DRIVER:
 		exynos_remove_device_from_pd(dev);
+=======
+
+		break;
+
+	case BUS_NOTIFY_UNBOUND_DRIVER:
+		exynos_remove_device_from_domain(dev);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		break;
 	}
 	return NOTIFY_DONE;
@@ -428,6 +548,7 @@ static struct notifier_block platform_nb = {
 
 static __init int exynos_pm_dt_parse_domains(void)
 {
+<<<<<<< HEAD
 	struct platform_device *pdev = NULL;
 	struct device_node *np = NULL;
 
@@ -439,16 +560,29 @@ static __init int exynos_pm_dt_parse_domains(void)
 		/* skip unmanaged power domain */
 		if (!of_device_is_available(np))
 			continue;
+=======
+	struct platform_device *pdev;
+	struct device_node *np;
+
+	for_each_compatible_node(np, NULL, "samsung,exynos4210-pd") {
+		struct exynos_pm_domain *pd;
+		int on;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 		pdev = of_find_device_by_node(np);
 
 		pd = kzalloc(sizeof(*pd), GFP_KERNEL);
 		if (!pd) {
+<<<<<<< HEAD
 			pr_err(PM_DOMAIN_PREFIX "%s: failed to allocate memory for domain\n",
+=======
+			pr_err("%s: failed to allocate memory for domain\n",
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 					__func__);
 			return -ENOMEM;
 		}
 
+<<<<<<< HEAD
 		pd->genpd.name = kstrdup(np->name, GFP_KERNEL);
 		pd->name = pd->genpd.name;
 		pd->genpd.of_node = np;
@@ -576,10 +710,25 @@ static __init int exynos_pm_dt_parse_domains(void)
 				pr_info(PM_DOMAIN_PREFIX "%s has a new child %s.\n",
 						parent_pd->name, child_pd->name);
 		}
+=======
+		pd->pd.name = kstrdup(np->name, GFP_KERNEL);
+		pd->name = pd->pd.name;
+		pd->base = of_iomap(np, 0);
+		pd->pd.power_off = exynos_pd_power_off;
+		pd->pd.power_on = exynos_pd_power_on;
+		pd->pd.of_node = np;
+
+		platform_set_drvdata(pdev, pd);
+
+		on = __raw_readl(pd->base + 0x4) & S5P_INT_LOCAL_PWR_EN;
+
+		pm_genpd_init(&pd->pd, NULL, !on);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	bus_register_notifier(&platform_bus_type, &platform_nb);
 
+<<<<<<< HEAD
 	pr_info("EXYNOS5: PM Domain Initialize\n");
 	/* show information of power domain registration */
 	show_power_domain();
@@ -609,3 +758,102 @@ static __init int exynos_pm_domain_idle(void)
 	return 0;
 }
 late_initcall_sync(exynos_pm_domain_idle);
+=======
+	return 0;
+}
+#else
+static __init int exynos_pm_dt_parse_domains(void)
+{
+	return 0;
+}
+#endif /* CONFIG_OF */
+
+static __init __maybe_unused void exynos_pm_add_dev_to_genpd(struct platform_device *pdev,
+						struct exynos_pm_domain *pd)
+{
+	if (pdev->dev.bus) {
+		if (!pm_genpd_add_device(&pd->pd, &pdev->dev))
+			pm_genpd_dev_need_restore(&pdev->dev, true);
+		else
+			pr_info("%s: error in adding %s device to %s power"
+				"domain\n", __func__, dev_name(&pdev->dev),
+				pd->name);
+	}
+}
+
+EXYNOS_GPD(exynos4_pd_mfc, S5P_PMU_MFC_CONF, "pd-mfc");
+EXYNOS_GPD(exynos4_pd_g3d, S5P_PMU_G3D_CONF, "pd-g3d");
+EXYNOS_GPD(exynos4_pd_lcd0, S5P_PMU_LCD0_CONF, "pd-lcd0");
+EXYNOS_GPD(exynos4_pd_lcd1, S5P_PMU_LCD1_CONF, "pd-lcd1");
+EXYNOS_GPD(exynos4_pd_tv, S5P_PMU_TV_CONF, "pd-tv");
+EXYNOS_GPD(exynos4_pd_cam, S5P_PMU_CAM_CONF, "pd-cam");
+EXYNOS_GPD(exynos4_pd_gps, S5P_PMU_GPS_CONF, "pd-gps");
+
+static struct exynos_pm_domain *exynos4_pm_domains[] = {
+	&exynos4_pd_mfc,
+	&exynos4_pd_g3d,
+	&exynos4_pd_lcd0,
+	&exynos4_pd_lcd1,
+	&exynos4_pd_tv,
+	&exynos4_pd_cam,
+	&exynos4_pd_gps,
+};
+
+static __init int exynos4_pm_init_power_domain(void)
+{
+	int idx;
+
+	if (of_have_populated_dt())
+		return exynos_pm_dt_parse_domains();
+
+	for (idx = 0; idx < ARRAY_SIZE(exynos4_pm_domains); idx++) {
+		struct exynos_pm_domain *pd = exynos4_pm_domains[idx];
+		int on = __raw_readl(pd->base + 0x4) & S5P_INT_LOCAL_PWR_EN;
+
+		pm_genpd_init(&pd->pd, NULL, !on);
+	}
+
+#ifdef CONFIG_S5P_DEV_FIMD0
+	exynos_pm_add_dev_to_genpd(&s5p_device_fimd0, &exynos4_pd_lcd0);
+#endif
+#ifdef CONFIG_S5P_DEV_TV
+	exynos_pm_add_dev_to_genpd(&s5p_device_hdmi, &exynos4_pd_tv);
+	exynos_pm_add_dev_to_genpd(&s5p_device_mixer, &exynos4_pd_tv);
+#endif
+#ifdef CONFIG_S5P_DEV_MFC
+	exynos_pm_add_dev_to_genpd(&s5p_device_mfc, &exynos4_pd_mfc);
+#endif
+#ifdef CONFIG_S5P_DEV_FIMC0
+	exynos_pm_add_dev_to_genpd(&s5p_device_fimc0, &exynos4_pd_cam);
+#endif
+#ifdef CONFIG_S5P_DEV_FIMC1
+	exynos_pm_add_dev_to_genpd(&s5p_device_fimc1, &exynos4_pd_cam);
+#endif
+#ifdef CONFIG_S5P_DEV_FIMC2
+	exynos_pm_add_dev_to_genpd(&s5p_device_fimc2, &exynos4_pd_cam);
+#endif
+#ifdef CONFIG_S5P_DEV_FIMC3
+	exynos_pm_add_dev_to_genpd(&s5p_device_fimc3, &exynos4_pd_cam);
+#endif
+#ifdef CONFIG_S5P_DEV_CSIS0
+	exynos_pm_add_dev_to_genpd(&s5p_device_mipi_csis0, &exynos4_pd_cam);
+#endif
+#ifdef CONFIG_S5P_DEV_CSIS1
+	exynos_pm_add_dev_to_genpd(&s5p_device_mipi_csis1, &exynos4_pd_cam);
+#endif
+#ifdef CONFIG_S5P_DEV_G2D
+	exynos_pm_add_dev_to_genpd(&s5p_device_g2d, &exynos4_pd_lcd0);
+#endif
+#ifdef CONFIG_S5P_DEV_JPEG
+	exynos_pm_add_dev_to_genpd(&s5p_device_jpeg, &exynos4_pd_cam);
+#endif
+	return 0;
+}
+arch_initcall(exynos4_pm_init_power_domain);
+
+int __init exynos_pm_late_initcall(void)
+{
+	pm_genpd_poweroff_unused();
+	return 0;
+}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

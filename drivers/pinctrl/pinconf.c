@@ -602,12 +602,20 @@ static int pinconf_dbg_config_print(struct seq_file *s, void *d)
 {
 	struct pinctrl_maps *maps_node;
 	const struct pinctrl_map *map;
+<<<<<<< HEAD
 	struct pinctrl_dev *pctldev = NULL;
 	const struct pinconf_ops *confops = NULL;
 	const struct pinctrl_map_configs *configs;
 	struct dbg_cfg *dbg = &pinconf_dbg_conf;
 	int i, j;
 	bool found = false;
+=======
+	const struct pinctrl_map *found = NULL;
+	struct pinctrl_dev *pctldev;
+	const struct pinconf_ops *confops = NULL;
+	struct dbg_cfg *dbg = &pinconf_dbg_conf;
+	int i, j;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	unsigned long config;
 
 	mutex_lock(&pinctrl_maps_mutex);
@@ -624,6 +632,7 @@ static int pinconf_dbg_config_print(struct seq_file *s, void *d)
 		for (j = 0; j < map->data.configs.num_configs; j++) {
 			if (!strcmp(map->data.configs.group_or_pin,
 					dbg->pin_name)) {
+<<<<<<< HEAD
 				/*
 				 * We found the right pin / state, read the
 				 * config and he pctldev for later use
@@ -632,6 +641,10 @@ static int pinconf_dbg_config_print(struct seq_file *s, void *d)
 				pctldev = get_pinctrl_dev_from_devname
 					(map->ctrl_dev_name);
 				found = true;
+=======
+				/* We found the right pin / state */
+				found = map;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				break;
 			}
 		}
@@ -647,7 +660,12 @@ static int pinconf_dbg_config_print(struct seq_file *s, void *d)
 		goto exit;
 	}
 
+<<<<<<< HEAD
 	config = *(configs->configs);
+=======
+	pctldev = get_pinctrl_dev_from_devname(found->ctrl_dev_name);
+	config = *found->data.configs.configs;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	seq_printf(s, "Dev %s has config of %s in state %s: 0x%08lX\n",
 			dbg->dev_name, dbg->pin_name,
 			dbg->state_name, config);
@@ -674,17 +692,29 @@ exit:
  * <devicename> <state> <pinname> are values that should match the pinctrl-maps
  * <newvalue> reflects the new config and is driver dependant
  */
+<<<<<<< HEAD
 static int pinconf_dbg_config_write(struct file *file,
+=======
+static ssize_t pinconf_dbg_config_write(struct file *file,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	const char __user *user_buf, size_t count, loff_t *ppos)
 {
 	struct pinctrl_maps *maps_node;
 	const struct pinctrl_map *map;
+<<<<<<< HEAD
 	struct pinctrl_dev *pctldev = NULL;
+=======
+	const struct pinctrl_map *found = NULL;
+	struct pinctrl_dev *pctldev;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	const struct pinconf_ops *confops = NULL;
 	struct dbg_cfg *dbg = &pinconf_dbg_conf;
 	const struct pinctrl_map_configs *configs;
 	char config[MAX_NAME_LEN+1];
+<<<<<<< HEAD
 	bool found = false;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	char buf[128];
 	char *b = &buf[0];
 	int buf_size;
@@ -762,10 +792,14 @@ static int pinconf_dbg_config_write(struct file *file,
 
 		/*  we found the right pin / state, so overwrite config */
 		if (!strcmp(map->data.configs.group_or_pin, dbg->pin_name)) {
+<<<<<<< HEAD
 			found = true;
 			pctldev = get_pinctrl_dev_from_devname(
 					map->ctrl_dev_name);
 			configs = &map->data.configs;
+=======
+			found = map;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			break;
 		}
 	}
@@ -775,10 +809,18 @@ static int pinconf_dbg_config_write(struct file *file,
 		goto exit;
 	}
 
+<<<<<<< HEAD
+=======
+	pctldev = get_pinctrl_dev_from_devname(found->ctrl_dev_name);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (pctldev)
 		confops = pctldev->desc->confops;
 
 	if (confops && confops->pin_config_dbg_parse_modify) {
+<<<<<<< HEAD
+=======
+		configs = &found->data.configs;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		for (i = 0; i < configs->num_configs; i++) {
 			confops->pin_config_dbg_parse_modify(pctldev,
 						     config,

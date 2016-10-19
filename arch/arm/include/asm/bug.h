@@ -86,6 +86,9 @@ extern asmlinkage void c_backtrace(unsigned long fp, int pmode);
 struct mm_struct;
 extern void show_pte(struct mm_struct *mm, unsigned long addr);
 extern void __show_regs(struct pt_regs *);
+<<<<<<< HEAD
 extern void __show_regs_without_extra(struct pt_regs *);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #endif

@@ -27,6 +27,10 @@
 #include <linux/moduleparam.h>
 #include <linux/slab.h>
 #include <linux/dmi.h>
+<<<<<<< HEAD
+=======
+#include <linux/dma-mapping.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #include "xhci.h"
 
@@ -100,6 +104,11 @@ void xhci_quiesce(struct xhci_hcd *xhci)
 int xhci_halt(struct xhci_hcd *xhci)
 {
 	int ret;
+<<<<<<< HEAD
+=======
+	struct usb_hcd *hcd = xhci_to_hcd(xhci);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	xhci_dbg(xhci, "// Halt the HC\n");
 	xhci_quiesce(xhci);
 
@@ -108,16 +117,31 @@ int xhci_halt(struct xhci_hcd *xhci)
 	if (!ret) {
 		xhci->xhc_state |= XHCI_STATE_HALTED;
 		xhci->cmd_ring_state = CMD_RING_STATE_STOPPED;
+<<<<<<< HEAD
 	} else
 		xhci_warn(xhci, "Host not halted after %u microseconds.\n",
 				XHCI_MAX_HALT_USEC);
+=======
+	} else {
+		xhci_warn(xhci, "Host not halted after %u microseconds.\n",
+				XHCI_MAX_HALT_USEC);
+
+		if (hcd->driver->halt_failed_cleanup)
+			hcd->driver->halt_failed_cleanup(hcd);
+	}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return ret;
 }
 
 /*
  * Set the run bit and wait for the host to be running.
  */
+<<<<<<< HEAD
 static int xhci_start(struct xhci_hcd *xhci)
+=======
+int xhci_start(struct xhci_hcd *xhci)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	u32 temp;
 	int ret;
@@ -332,6 +356,7 @@ static void xhci_cleanup_msix(struct xhci_hcd *xhci)
 	return;
 }
 
+<<<<<<< HEAD
 static void xhci_msix_sync_irqs(struct xhci_hcd *xhci)
 {
 	int i;
@@ -342,6 +367,8 @@ static void xhci_msix_sync_irqs(struct xhci_hcd *xhci)
 	}
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int xhci_try_enable_msi(struct usb_hcd *hcd)
 {
 	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
@@ -394,11 +421,16 @@ static int xhci_try_enable_msi(struct usb_hcd *hcd)
 
 #else
 
+<<<<<<< HEAD
 static int xhci_try_enable_msi(struct usb_hcd *hcd)
+=======
+static inline int xhci_try_enable_msi(struct usb_hcd *hcd)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	return 0;
 }
 
+<<<<<<< HEAD
 static void xhci_cleanup_msix(struct xhci_hcd *xhci)
 {
 }
@@ -408,6 +440,13 @@ static void xhci_msix_sync_irqs(struct xhci_hcd *xhci)
 }
 
 #endif
+=======
+static inline void xhci_cleanup_msix(struct xhci_hcd *xhci)
+{
+}
+
+#endif /* CONFIG_PCI */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 static void compliance_mode_recovery(unsigned long arg)
 {
@@ -632,6 +671,16 @@ int xhci_run(struct usb_hcd *hcd)
 
 	xhci_dbg(xhci, "xhci_run\n");
 
+<<<<<<< HEAD
+=======
+	xhci_dbg(xhci, "Calling HCD init\n");
+	/* Initialize HCD and host controller data structures. */
+	ret = xhci_init(hcd);
+	if (ret)
+		return ret;
+	xhci_dbg(xhci, "Called HCD init\n");
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ret = xhci_try_enable_msi(hcd);
 	if (ret)
 		return ret;
@@ -791,6 +840,26 @@ void xhci_shutdown(struct usb_hcd *hcd)
 }
 
 #ifdef CONFIG_PM
+<<<<<<< HEAD
+=======
+
+#ifdef CONFIG_PCI
+static void xhci_msix_sync_irqs(struct xhci_hcd *xhci)
+{
+	int i;
+
+	if (xhci->msix_entries) {
+		for (i = 0; i < xhci->msix_count; i++)
+			synchronize_irq(xhci->msix_entries[i].vector);
+	}
+}
+#else
+static void xhci_msix_sync_irqs(struct xhci_hcd *xhci)
+{
+}
+#endif /* CONFIG_PCI */
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static void xhci_save_registers(struct xhci_hcd *xhci)
 {
 	xhci->s3.command = xhci_readl(xhci, &xhci->op_regs->command);
@@ -900,6 +969,11 @@ int xhci_suspend(struct xhci_hcd *xhci)
 	xhci_dbg(xhci, "%s: stopping port polling.\n", __func__);
 	clear_bit(HCD_FLAG_POLL_RH, &hcd->flags);
 	del_timer_sync(&hcd->rh_timer);
+<<<<<<< HEAD
+=======
+	clear_bit(HCD_FLAG_POLL_RH, &xhci->shared_hcd->flags);
+	del_timer_sync(&xhci->shared_hcd->rh_timer);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	spin_lock_irq(&xhci->lock);
 	clear_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags);
@@ -960,7 +1034,11 @@ int xhci_suspend(struct xhci_hcd *xhci)
  */
 int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
 {
+<<<<<<< HEAD
 	u32			command, temp = 0;
+=======
+	u32			command, temp = 0, status;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct usb_hcd		*hcd = xhci_to_hcd(xhci);
 	struct usb_hcd		*secondary_hcd;
 	int			retval = 0;
@@ -1084,8 +1162,17 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
 
  done:
 	if (retval == 0) {
+<<<<<<< HEAD
 		usb_hcd_resume_root_hub(hcd);
 		usb_hcd_resume_root_hub(xhci->shared_hcd);
+=======
+		/* Resume root hubs only when have pending events. */
+		status = readl(&xhci->op_regs->status);
+		if (status & STS_EINT) {
+			usb_hcd_resume_root_hub(hcd);
+			usb_hcd_resume_root_hub(xhci->shared_hcd);
+		}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	/*
@@ -1101,6 +1188,11 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
 	xhci_dbg(xhci, "%s: starting port polling.\n", __func__);
 	set_bit(HCD_FLAG_POLL_RH, &hcd->flags);
 	usb_hcd_poll_rh_status(hcd);
+<<<<<<< HEAD
+=======
+	set_bit(HCD_FLAG_POLL_RH, &xhci->shared_hcd->flags);
+	usb_hcd_poll_rh_status(xhci->shared_hcd);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return retval;
 }
@@ -2595,6 +2687,7 @@ static int xhci_configure_endpoint(struct xhci_hcd *xhci,
 	if (command) {
 		cmd_completion = command->completion;
 		cmd_status = &command->status;
+<<<<<<< HEAD
 		command->command_trb = xhci->cmd_ring->enqueue;
 
 		/* Enqueue pointer can be left pointing to the link TRB,
@@ -2604,6 +2697,9 @@ static int xhci_configure_endpoint(struct xhci_hcd *xhci,
 			command->command_trb =
 				xhci->cmd_ring->enq_seg->next->trbs;
 
+=======
+		command->command_trb = xhci_find_next_enqueue(xhci->cmd_ring);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		list_add_tail(&command->cmd_list, &virt_dev->cmd_list);
 	} else {
 		cmd_completion = &virt_dev->cmd_completion;
@@ -2611,7 +2707,11 @@ static int xhci_configure_endpoint(struct xhci_hcd *xhci,
 	}
 	init_completion(cmd_completion);
 
+<<<<<<< HEAD
 	cmd_trb = xhci->cmd_ring->dequeue;
+=======
+	cmd_trb = xhci_find_next_enqueue(xhci->cmd_ring);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (!ctx_change)
 		ret = xhci_queue_configure_endpoint(xhci, in_ctx->dma,
 				udev->slot_id, must_succeed);
@@ -3396,6 +3496,7 @@ int xhci_discover_or_reset_device(struct usb_hcd *hcd, struct usb_device *udev)
 
 	/* Attempt to submit the Reset Device command to the command ring */
 	spin_lock_irqsave(&xhci->lock, flags);
+<<<<<<< HEAD
 	reset_device_cmd->command_trb = xhci->cmd_ring->enqueue;
 
 	/* Enqueue pointer can be left pointing to the link TRB,
@@ -3404,6 +3505,9 @@ int xhci_discover_or_reset_device(struct usb_hcd *hcd, struct usb_device *udev)
 	if (TRB_TYPE_LINK_LE32(reset_device_cmd->command_trb->link.control))
 		reset_device_cmd->command_trb =
 			xhci->cmd_ring->enq_seg->next->trbs;
+=======
+	reset_device_cmd->command_trb = xhci_find_next_enqueue(xhci->cmd_ring);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	list_add_tail(&reset_device_cmd->cmd_list, &virt_dev->cmd_list);
 	ret = xhci_queue_reset_device(xhci, slot_id);
@@ -3514,10 +3618,29 @@ void xhci_free_dev(struct usb_hcd *hcd, struct usb_device *udev)
 {
 	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
 	struct xhci_virt_device *virt_dev;
+<<<<<<< HEAD
+=======
+#ifndef CONFIG_USB_DEFAULT_PERSIST
+	struct device *dev = hcd->self.controller;
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	unsigned long flags;
 	u32 state;
 	int i, ret;
 
+<<<<<<< HEAD
+=======
+#ifndef CONFIG_USB_DEFAULT_PERSIST
+	/*
+	 * We called pm_runtime_get_noresume when the device was attached.
+	 * Decrement the counter here to allow controller to runtime suspend
+	 * if no devices remain.
+	 */
+	if (xhci->quirks & XHCI_RESET_ON_RESUME)
+		pm_runtime_put_noidle(dev);
+#endif
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ret = xhci_check_args(hcd, udev, NULL, 0, true, __func__);
 	/* If the host is halted due to driver unload, we still need to free the
 	 * device.
@@ -3589,13 +3712,23 @@ static int xhci_reserve_host_control_ep_resources(struct xhci_hcd *xhci)
 int xhci_alloc_dev(struct usb_hcd *hcd, struct usb_device *udev)
 {
 	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
+<<<<<<< HEAD
+=======
+#ifndef CONFIG_USB_DEFAULT_PERSIST
+	struct device *dev = hcd->self.controller;
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	unsigned long flags;
 	int timeleft;
 	int ret;
 	union xhci_trb *cmd_trb;
 
 	spin_lock_irqsave(&xhci->lock, flags);
+<<<<<<< HEAD
 	cmd_trb = xhci->cmd_ring->dequeue;
+=======
+	cmd_trb = xhci_find_next_enqueue(xhci->cmd_ring);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ret = xhci_queue_slot_control(xhci, TRB_ENABLE_SLOT, 0);
 	if (ret) {
 		spin_unlock_irqrestore(&xhci->lock, flags);
@@ -3641,6 +3774,19 @@ int xhci_alloc_dev(struct usb_hcd *hcd, struct usb_device *udev)
 		goto disable_slot;
 	}
 	udev->slot_id = xhci->slot_id;
+<<<<<<< HEAD
+=======
+
+#ifndef CONFIG_USB_DEFAULT_PERSIST
+	/*
+	 * If resetting upon resume, we can't put the controller into runtime
+	 * suspend if there is a device attached.
+	 */
+	if (xhci->quirks & XHCI_RESET_ON_RESUME)
+		pm_runtime_get_noresume(dev);
+#endif
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* Is this a LS or FS device under a HS hub? */
 	/* Hub or peripherial? */
 	return 1;
@@ -3712,7 +3858,11 @@ int xhci_address_device(struct usb_hcd *hcd, struct usb_device *udev)
 	xhci_dbg_ctx(xhci, virt_dev->in_ctx, 2);
 
 	spin_lock_irqsave(&xhci->lock, flags);
+<<<<<<< HEAD
 	cmd_trb = xhci->cmd_ring->dequeue;
+=======
+	cmd_trb = xhci_find_next_enqueue(xhci->cmd_ring);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ret = xhci_queue_address_device(xhci, virt_dev->in_ctx->dma,
 					udev->slot_id);
 	if (ret) {
@@ -3923,6 +4073,11 @@ static int xhci_usb2_software_lpm_test(struct usb_hcd *hcd,
 	hird = xhci_calculate_hird_besl(xhci, udev);
 	temp = PORT_L1DS(udev->slot_id) | PORT_HIRD(hird);
 	xhci_writel(xhci, temp, pm_addr);
+<<<<<<< HEAD
+=======
+	if (xhci->quirks & XHCI_PORTSC_DELAY)
+		ndelay(100);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/* Set port link state to U2(L1) */
 	addr = port_array[port_num];
@@ -4001,6 +4156,10 @@ int xhci_set_usb2_hardware_lpm(struct usb_hcd *hcd,
 	unsigned int	port_num;
 	unsigned long	flags;
 	int		hird;
+<<<<<<< HEAD
+=======
+	bool		delay = false;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (hcd->speed == HCD_USB3 || !xhci->hw_lpm_support ||
 			!udev->lpm_capable)
@@ -4013,6 +4172,12 @@ int xhci_set_usb2_hardware_lpm(struct usb_hcd *hcd,
 	if (udev->usb2_hw_lpm_capable != 1)
 		return -EPERM;
 
+<<<<<<< HEAD
+=======
+	if (xhci->quirks & XHCI_PORTSC_DELAY)
+		delay = true;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	spin_lock_irqsave(&xhci->lock, flags);
 
 	port_array = xhci->usb2_ports;
@@ -4029,12 +4194,27 @@ int xhci_set_usb2_hardware_lpm(struct usb_hcd *hcd,
 		temp &= ~PORT_HIRD_MASK;
 		temp |= PORT_HIRD(hird) | PORT_RWE;
 		xhci_writel(xhci, temp, pm_addr);
+<<<<<<< HEAD
 		temp = xhci_readl(xhci, pm_addr);
 		temp |= PORT_HLE;
 		xhci_writel(xhci, temp, pm_addr);
 	} else {
 		temp &= ~(PORT_HLE | PORT_RWE | PORT_HIRD_MASK);
 		xhci_writel(xhci, temp, pm_addr);
+=======
+		if (delay)
+			ndelay(100);
+		temp = xhci_readl(xhci, pm_addr);
+		temp |= PORT_HLE;
+		xhci_writel(xhci, temp, pm_addr);
+		if (delay)
+			ndelay(100);
+	} else {
+		temp &= ~(PORT_HLE | PORT_RWE | PORT_HIRD_MASK);
+		xhci_writel(xhci, temp, pm_addr);
+		if (delay)
+			ndelay(100);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	spin_unlock_irqrestore(&xhci->lock, flags);
@@ -4722,6 +4902,12 @@ int xhci_gen_setup(struct usb_hcd *hcd, xhci_get_quirks_t get_quirks)
 	retval = xhci_reset(xhci);
 	if (retval)
 		goto error;
+<<<<<<< HEAD
+=======
+
+	if (xhci->quirks & XHCI_RESET_DELAY)
+		usleep_range(350, 1000);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	xhci_dbg(xhci, "Reset complete\n");
 
 	temp = xhci_readl(xhci, &xhci->cap_regs->hcc_params);
@@ -4732,12 +4918,15 @@ int xhci_gen_setup(struct usb_hcd *hcd, xhci_get_quirks_t get_quirks)
 		dma_set_mask(hcd->self.controller, DMA_BIT_MASK(32));
 	}
 
+<<<<<<< HEAD
 	xhci_dbg(xhci, "Calling HCD init\n");
 	/* Initialize HCD and host controller data structures. */
 	retval = xhci_init(hcd);
 	if (retval)
 		goto error;
 	xhci_dbg(xhci, "Called HCD init\n");
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 error:
 	kfree(xhci);

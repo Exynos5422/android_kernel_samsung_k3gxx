@@ -1164,6 +1164,11 @@ static void csi_J(struct vc_data *vc, int vpar)
 			scr_memsetw(vc->vc_screenbuf, vc->vc_video_erase_char,
 				    vc->vc_screenbuf_size >> 1);
 			set_origin(vc);
+<<<<<<< HEAD
+=======
+			if (CON_IS_VISIBLE(vc))
+				update_screen(vc);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			/* fall through */
 		case 2: /* erase whole display */
 			count = vc->vc_cols * vc->vc_rows;

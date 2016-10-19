@@ -27,7 +27,11 @@ of_usb_get_maximum_speed(struct device_node *np)
 }
 #endif
 
+<<<<<<< HEAD
 #if IS_ENABLED(CONFIG_OF) && IS_ENABLED(CONFIG_USB_SUPPORT)
+=======
+#if IS_ENABLED(CONFIG_OF) && IS_ENABLED(CONFIG_USB_PHY)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 enum usb_phy_interface of_usb_get_phy_mode(struct device_node *np);
 #else
 static inline enum usb_phy_interface of_usb_get_phy_mode(struct device_node *np)

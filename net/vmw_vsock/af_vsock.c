@@ -1670,8 +1670,11 @@ vsock_stream_recvmsg(struct kiocb *kiocb,
 	vsk = vsock_sk(sk);
 	err = 0;
 
+<<<<<<< HEAD
 	msg->msg_namelen = 0;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	lock_sock(sk);
 
 	if (sk->sk_state != SS_CONNECTED) {

@@ -17,7 +17,12 @@ int arch_timer_arch_init(void);
  * nicely work out which register we want, and chuck away the rest of
  * the code. At least it does so with a recent GCC (4.6.3).
  */
+<<<<<<< HEAD
 static inline void arch_timer_reg_write(const int access, const int reg, u32 val)
+=======
+static inline void arch_timer_reg_write_cp15(const int access, const int reg,
+					  u32 val)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	if (access == ARCH_TIMER_PHYS_ACCESS) {
 		switch (reg) {
@@ -44,7 +49,11 @@ static inline void arch_timer_reg_write(const int access, const int reg, u32 val
 	isb();
 }
 
+<<<<<<< HEAD
 static inline u32 arch_timer_reg_read(const int access, const int reg)
+=======
+static inline u32 arch_timer_reg_read_cp15(const int access, const int reg)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	u32 val = 0;
 
@@ -80,7 +89,11 @@ static inline u32 arch_timer_get_cntfrq(void)
 	return val;
 }
 
+<<<<<<< HEAD
 static inline u64 arch_counter_get_cntpct(void)
+=======
+static inline u64 arch_counter_get_cntpct_cp15(void)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	u64 cval;
 
@@ -89,7 +102,11 @@ static inline u64 arch_counter_get_cntpct(void)
 	return cval;
 }
 
+<<<<<<< HEAD
 static inline u64 arch_counter_get_cntvct(void)
+=======
+static notrace inline u64 arch_counter_get_cntvct_cp15(void)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	u64 cval;
 
@@ -98,6 +115,7 @@ static inline u64 arch_counter_get_cntvct(void)
 	return cval;
 }
 
+<<<<<<< HEAD
 static inline void __cpuinit arch_counter_set_user_access(void)
 {
 	u32 cntkctl;
@@ -109,6 +127,31 @@ static inline void __cpuinit arch_counter_set_user_access(void)
 
 	asm volatile("mcr p15, 0, %0, c14, c1, 0" : : "r" (cntkctl));
 }
+=======
+static inline u32 arch_timer_get_cntkctl(void)
+{
+	u32 cntkctl;
+	asm volatile("mrc p15, 0, %0, c14, c1, 0" : "=r" (cntkctl));
+	return cntkctl;
+}
+
+static inline void arch_timer_set_cntkctl(u32 cntkctl)
+{
+	asm volatile("mcr p15, 0, %0, c14, c1, 0" : : "r" (cntkctl));
+}
+
+static inline void arch_timer_evtstrm_enable(int divider)
+{
+	u32 cntkctl = arch_timer_get_cntkctl();
+	cntkctl &= ~ARCH_TIMER_EVT_TRIGGER_MASK;
+	/* Set the divider and enable virtual event stream */
+	cntkctl |= (divider << ARCH_TIMER_EVT_TRIGGER_SHIFT)
+			| ARCH_TIMER_VIRT_EVT_EN;
+	arch_timer_set_cntkctl(cntkctl);
+	elf_hwcap |= HWCAP_EVTSTRM;
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif
 
 #endif

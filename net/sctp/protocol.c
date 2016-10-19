@@ -498,8 +498,18 @@ static void sctp_v4_get_dst(struct sctp_transport *t, union sctp_addr *saddr,
 			continue;
 		if ((laddr->state == SCTP_ADDR_SRC) &&
 		    (AF_INET == laddr->a.sa.sa_family)) {
+<<<<<<< HEAD
 			fl4->saddr = laddr->a.v4.sin_addr.s_addr;
 			fl4->fl4_sport = laddr->a.v4.sin_port;
+=======
+			fl4->fl4_sport = laddr->a.v4.sin_port;
+			flowi4_update_output(fl4,
+					     asoc->base.sk->sk_bound_dev_if,
+					     RT_CONN_FLAGS(asoc->base.sk),
+					     daddr->v4.sin_addr.s_addr,
+					     laddr->a.v4.sin_addr.s_addr);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			rt = ip_route_output_key(sock_net(sk), fl4);
 			if (!IS_ERR(rt)) {
 				dst = &rt->dst;

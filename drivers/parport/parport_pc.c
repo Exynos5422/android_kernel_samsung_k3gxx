@@ -2596,8 +2596,11 @@ enum parport_pc_pci_cards {
 	syba_2p_epp,
 	syba_1p_ecp,
 	titan_010l,
+<<<<<<< HEAD
 	titan_1284p1,
 	titan_1284p2,
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	avlab_1p,
 	avlab_2p,
 	oxsemi_952,
@@ -2656,8 +2659,11 @@ static struct parport_pc_pci {
 	/* syba_2p_epp AP138B */	{ 2, { { 0, 0x078 }, { 0, 0x178 }, } },
 	/* syba_1p_ecp W83787 */	{ 1, { { 0, 0x078 }, } },
 	/* titan_010l */		{ 1, { { 3, -1 }, } },
+<<<<<<< HEAD
 	/* titan_1284p1 */              { 1, { { 0, 1 }, } },
 	/* titan_1284p2 */		{ 2, { { 0, 1 }, { 2, 3 }, } },
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* avlab_1p		*/	{ 1, { { 0, 1}, } },
 	/* avlab_2p		*/	{ 2, { { 0, 1}, { 2, 3 },} },
 	/* The Oxford Semi cards are unusual: 954 doesn't support ECP,
@@ -2673,8 +2679,13 @@ static struct parport_pc_pci {
 	/* netmos_9705 */               { 1, { { 0, -1 }, } },
 	/* netmos_9715 */               { 2, { { 0, 1 }, { 2, 3 },} },
 	/* netmos_9755 */               { 2, { { 0, 1 }, { 2, 3 },} },
+<<<<<<< HEAD
 	/* netmos_9805 */               { 1, { { 0, -1 }, } },
 	/* netmos_9815 */               { 2, { { 0, -1 }, { 2, -1 }, } },
+=======
+	/* netmos_9805 */		{ 1, { { 0, 1 }, } },
+	/* netmos_9815 */		{ 2, { { 0, 1 }, { 2, 3 }, } },
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* netmos_9901 */               { 1, { { 0, -1 }, } },
 	/* netmos_9865 */               { 1, { { 0, -1 }, } },
 	/* quatech_sppxp100 */		{ 1, { { 0, 1 }, } },
@@ -2718,8 +2729,11 @@ static const struct pci_device_id parport_pc_pci_tbl[] = {
 	  PCI_ANY_ID, PCI_ANY_ID, 0, 0, syba_1p_ecp },
 	{ PCI_VENDOR_ID_TITAN, PCI_DEVICE_ID_TITAN_010L,
 	  PCI_ANY_ID, PCI_ANY_ID, 0, 0, titan_010l },
+<<<<<<< HEAD
 	{ 0x9710, 0x9805, 0x1000, 0x0010, 0, 0, titan_1284p1 },
 	{ 0x9710, 0x9815, 0x1000, 0x0020, 0, 0, titan_1284p2 },
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* PCI_VENDOR_ID_AVLAB/Intek21 has another bunch of cards ...*/
 	/* AFAVLAB_TK9902 */
 	{ 0x14db, 0x2120, PCI_ANY_ID, PCI_ANY_ID, 0, 0, avlab_1p},

@@ -181,6 +181,10 @@ static void rt2x00lib_autowakeup(struct work_struct *work)
 static void rt2x00lib_bc_buffer_iter(void *data, u8 *mac,
 				     struct ieee80211_vif *vif)
 {
+<<<<<<< HEAD
+=======
+	struct ieee80211_tx_control control = {};
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct rt2x00_dev *rt2x00dev = data;
 	struct sk_buff *skb;
 
@@ -195,7 +199,11 @@ static void rt2x00lib_bc_buffer_iter(void *data, u8 *mac,
 	 */
 	skb = ieee80211_get_buffered_bc(rt2x00dev->hw, vif);
 	while (skb) {
+<<<<<<< HEAD
 		rt2x00mac_tx(rt2x00dev->hw, NULL, skb);
+=======
+		rt2x00mac_tx(rt2x00dev->hw, &control, skb);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		skb = ieee80211_get_buffered_bc(rt2x00dev->hw, vif);
 	}
 }
@@ -1127,9 +1135,16 @@ static void rt2x00lib_uninitialize(struct rt2x00_dev *rt2x00dev)
 		return;
 
 	/*
+<<<<<<< HEAD
 	 * Unregister extra components.
 	 */
 	rt2x00rfkill_unregister(rt2x00dev);
+=======
+	 * Stop rfkill polling.
+	 */
+	if (test_bit(REQUIRE_DELAYED_RFKILL, &rt2x00dev->cap_flags))
+		rt2x00rfkill_unregister(rt2x00dev);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/*
 	 * Allow the HW to uninitialize.
@@ -1167,6 +1182,15 @@ static int rt2x00lib_initialize(struct rt2x00_dev *rt2x00dev)
 
 	set_bit(DEVICE_STATE_INITIALIZED, &rt2x00dev->flags);
 
+<<<<<<< HEAD
+=======
+	/*
+	 * Start rfkill polling.
+	 */
+	if (test_bit(REQUIRE_DELAYED_RFKILL, &rt2x00dev->cap_flags))
+		rt2x00rfkill_register(rt2x00dev);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 
@@ -1362,7 +1386,16 @@ int rt2x00lib_probe_dev(struct rt2x00_dev *rt2x00dev)
 	rt2x00link_register(rt2x00dev);
 	rt2x00leds_register(rt2x00dev);
 	rt2x00debug_register(rt2x00dev);
+<<<<<<< HEAD
 	rt2x00rfkill_register(rt2x00dev);
+=======
+
+	/*
+	 * Start rfkill polling.
+	 */
+	if (!test_bit(REQUIRE_DELAYED_RFKILL, &rt2x00dev->cap_flags))
+		rt2x00rfkill_register(rt2x00dev);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return 0;
 
@@ -1378,6 +1411,15 @@ void rt2x00lib_remove_dev(struct rt2x00_dev *rt2x00dev)
 	clear_bit(DEVICE_STATE_PRESENT, &rt2x00dev->flags);
 
 	/*
+<<<<<<< HEAD
+=======
+	 * Stop rfkill polling.
+	 */
+	if (!test_bit(REQUIRE_DELAYED_RFKILL, &rt2x00dev->cap_flags))
+		rt2x00rfkill_unregister(rt2x00dev);
+
+	/*
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	 * Disable radio.
 	 */
 	rt2x00lib_disable_radio(rt2x00dev);

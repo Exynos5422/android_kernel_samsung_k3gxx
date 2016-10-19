@@ -190,7 +190,11 @@ raw3270_put_view(struct raw3270_view *view)
 		wake_up(&raw3270_wait_queue);
 }
 
+<<<<<<< HEAD
 struct raw3270 *raw3270_setup_console(struct ccw_device *cdev);
+=======
+struct raw3270 *raw3270_setup_console(void);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 void raw3270_wait_cons_dev(struct raw3270 *);
 
 /* Notifier for device addition/removal */

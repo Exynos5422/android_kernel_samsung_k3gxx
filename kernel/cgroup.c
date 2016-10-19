@@ -92,6 +92,17 @@ static DEFINE_MUTEX(cgroup_mutex);
 static DEFINE_MUTEX(cgroup_root_mutex);
 
 /*
+<<<<<<< HEAD
+=======
+ * cgroup destruction makes heavy use of work items and there can be a lot
+ * of concurrent destructions.  Use a separate workqueue so that cgroup
+ * destruction work items don't end up filling up max_active of system_wq
+ * which may lead to deadlock.
+ */
+static struct workqueue_struct *cgroup_destroy_wq;
+
+/*
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  * Generate an array of cgroup subsystem pointers. At boot time, this is
  * populated with the built in subsystems, and modular subsystems are
  * registered after that. The mutable section of this array is protected by
@@ -873,7 +884,11 @@ static void cgroup_free_rcu(struct rcu_head *head)
 {
 	struct cgroup *cgrp = container_of(head, struct cgroup, rcu_head);
 
+<<<<<<< HEAD
 	schedule_work(&cgrp->free_work);
+=======
+	queue_work(cgroup_destroy_wq, &cgrp->free_work);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static void cgroup_diput(struct dentry *dentry, struct inode *inode)
@@ -1574,9 +1589,13 @@ static struct dentry *cgroup_mount(struct file_system_type *fs_type,
 	struct super_block *sb;
 	struct cgroupfs_root *new_root;
 	struct inode *inode;
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_RO_CRED
 	struct cred *root_cred = &init_cred;
 #endif  /* CONFIG_TIMA_RKP_RO_CRED */
+=======
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* First find the desired set of subsystems */
 	mutex_lock(&cgroup_mutex);
 	ret = parse_cgroupfs_options(data, &opts);
@@ -1675,11 +1694,15 @@ static struct dentry *cgroup_mount(struct file_system_type *fs_type,
 		BUG_ON(!list_empty(&root_cgrp->children));
 		BUG_ON(root->number_of_cgroups != 1);
 
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_RO_CRED
 		cred = override_creds(root_cred);
 #else
 		cred = override_creds(&init_cred);
 #endif  /* CONFIG_TIMA_RKP_RO_CRED */
+=======
+		cred = override_creds(&init_cred);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		cgroup_populate_dir(root_cgrp, true, root->subsys_mask);
 		revert_creds(cred);
 		mutex_unlock(&cgroup_root_mutex);
@@ -2017,7 +2040,11 @@ static int cgroup_attach_task(struct cgroup *cgrp, struct task_struct *tsk,
 		retval = flex_array_put(group, i, &ent, GFP_ATOMIC);
 		BUG_ON(retval != 0);
 		i++;
+<<<<<<< HEAD
 	next:
+=======
+next:
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (!threadgroup)
 			break;
 	} while_each_thread(leader, tsk);
@@ -4719,6 +4746,25 @@ out:
 	return err;
 }
 
+<<<<<<< HEAD
+=======
+static int __init cgroup_wq_init(void)
+{
+	/*
+	 * There isn't much point in executing destruction path in
+	 * parallel.  Good chunk is serialized with cgroup_mutex anyway.
+	 * Use 1 for @max_active.
+	 *
+	 * We would prefer to do this in cgroup_init() above, but that
+	 * is called before init_workqueues(): so leave this until after.
+	 */
+	cgroup_destroy_wq = alloc_workqueue("cgroup_destroy", 0, 1);
+	BUG_ON(!cgroup_destroy_wq);
+	return 0;
+}
+core_initcall(cgroup_wq_init);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * proc_cgroup_show()
  *  - Print task's cgroup paths into seq_file, one line for each hierarchy
@@ -5029,7 +5075,11 @@ void __css_put(struct cgroup_subsys_state *css)
 
 	v = css_unbias_refcnt(atomic_dec_return(&css->refcnt));
 	if (v == 0)
+<<<<<<< HEAD
 		schedule_work(&css->dput_work);
+=======
+		queue_work(cgroup_destroy_wq, &css->dput_work);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 EXPORT_SYMBOL_GPL(__css_put);
 

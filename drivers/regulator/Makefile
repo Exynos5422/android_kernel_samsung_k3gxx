@@ -2,11 +2,19 @@
 # Makefile for regulator drivers.
 #
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 obj-$(CONFIG_REGULATOR) += core.o dummy.o fixed-helper.o
 obj-$(CONFIG_OF) += of_regulator.o
 obj-$(CONFIG_REGULATOR_FIXED_VOLTAGE) += fixed.o
 obj-$(CONFIG_REGULATOR_VIRTUAL_CONSUMER) += virtual.o
 obj-$(CONFIG_REGULATOR_USERSPACE_CONSUMER) += userspace-consumer.o
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_REGULATOR_PROXY_CONSUMER) += proxy-consumer.o
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 obj-$(CONFIG_REGULATOR_88PM8607) += 88pm8607.o
 obj-$(CONFIG_REGULATOR_AAT2870) += aat2870-regulator.o
@@ -40,6 +48,7 @@ obj-$(CONFIG_REGULATOR_MAX8973) += max8973-regulator.o
 obj-$(CONFIG_REGULATOR_MAX8997) += max8997.o
 obj-$(CONFIG_REGULATOR_MAX8998) += max8998.o
 obj-$(CONFIG_REGULATOR_MAX77686) += max77686.o
+<<<<<<< HEAD
 obj-$(CONFIG_REGULATOR_MAX77804) += max77804.o
 obj-$(CONFIG_REGULATOR_MAX77843) += max77843.o
 obj-$(CONFIG_REGULATOR_MAX77849) += max77849.o
@@ -48,13 +57,23 @@ obj-$(CONFIG_REGULATOR_SM5703) += sm5703.o
 obj-$(CONFIG_REGULATOR_MC13783) += mc13783-regulator.o
 obj-$(CONFIG_REGULATOR_MC13892) += mc13892-regulator.o
 obj-$(CONFIG_REGULATOR_MC13XXX_CORE) +=  mc13xxx-regulator-core.o
+=======
+obj-$(CONFIG_REGULATOR_MC13783) += mc13783-regulator.o
+obj-$(CONFIG_REGULATOR_MC13892) += mc13892-regulator.o
+obj-$(CONFIG_REGULATOR_MC13XXX_CORE) +=  mc13xxx-regulator-core.o
+obj-$(CONFIG_REGULATOR_MEM_ACC) += mem-acc-regulator.o
+obj-$(CONFIG_REGULATOR_ONSEMI_NCP6335D) += onsemi-ncp6335d.o
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 obj-$(CONFIG_REGULATOR_PALMAS) += palmas-regulator.o
 obj-$(CONFIG_REGULATOR_TPS51632) += tps51632-regulator.o
 obj-$(CONFIG_REGULATOR_PCAP) += pcap-regulator.o
 obj-$(CONFIG_REGULATOR_PCF50633) += pcf50633-regulator.o
 obj-$(CONFIG_REGULATOR_RC5T583)  += rc5t583-regulator.o
 obj-$(CONFIG_REGULATOR_S2MPS11) += s2mps11.o
+<<<<<<< HEAD
 obj-$(CONFIG_REGULATOR_S2MPS13) += s2mps13.o
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 obj-$(CONFIG_REGULATOR_S5M8767) += s5m8767.o
 obj-$(CONFIG_REGULATOR_TPS6105X) += tps6105x-regulator.o
 obj-$(CONFIG_REGULATOR_TPS62360) += tps62360-regulator.o
@@ -65,9 +84,17 @@ obj-$(CONFIG_REGULATOR_TPS65217) += tps65217-regulator.o
 obj-$(CONFIG_REGULATOR_TPS6524X) += tps6524x-regulator.o
 obj-$(CONFIG_REGULATOR_TPS6586X) += tps6586x-regulator.o
 obj-$(CONFIG_REGULATOR_TPS65910) += tps65910-regulator.o
+<<<<<<< HEAD
 obj-$(CONFIG_REGULATOR_TPS65912) += tps65912-regulator.o
 obj-$(CONFIG_REGULATOR_TPS80031) += tps80031-regulator.o
 obj-$(CONFIG_REGULATOR_TWL4030) += twl-regulator.o
+=======
+obj-$(CONFIG_REGULATOR_STUB) += stub-regulator.o
+obj-$(CONFIG_REGULATOR_TPS65912) += tps65912-regulator.o
+obj-$(CONFIG_REGULATOR_TPS80031) += tps80031-regulator.o
+obj-$(CONFIG_REGULATOR_TWL4030) += twl-regulator.o
+obj-$(CONFIG_REGULATOR_TPS65132) += tps65132-regulator.o
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 obj-$(CONFIG_REGULATOR_VEXPRESS) += vexpress.o
 obj-$(CONFIG_REGULATOR_WM831X) += wm831x-dcdc.o
 obj-$(CONFIG_REGULATOR_WM831X) += wm831x-isink.o
@@ -75,9 +102,16 @@ obj-$(CONFIG_REGULATOR_WM831X) += wm831x-ldo.o
 obj-$(CONFIG_REGULATOR_WM8350) += wm8350-regulator.o
 obj-$(CONFIG_REGULATOR_WM8400) += wm8400-regulator.o
 obj-$(CONFIG_REGULATOR_WM8994) += wm8994-regulator.o
+<<<<<<< HEAD
 ifeq ($(CONFIG_COMPANION_USE),y)
 obj-$(CONFIG_REGULATOR_NCP6335B) += ncp6335b.o
 endif
 obj-$(CONFIG_REGULATOR_RT5033) += rt5033_regulator.o
+=======
+obj-$(CONFIG_REGULATOR_RPM_SMD) += rpm-smd-regulator.o
+obj-$(CONFIG_REGULATOR_QPNP) += qpnp-regulator.o
+obj-$(CONFIG_REGULATOR_SPM) += spm-regulator.o
+obj-$(CONFIG_REGULATOR_CPR) += cpr-regulator.o
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 ccflags-$(CONFIG_REGULATOR_DEBUG) += -DDEBUG

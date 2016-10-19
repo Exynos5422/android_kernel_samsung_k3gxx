@@ -16,6 +16,10 @@
 #include <linux/list.h>
 #include <linux/rbtree.h>
 #include <linux/err.h>
+<<<<<<< HEAD
+=======
+#include <linux/bug.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 struct module;
 struct device;
@@ -376,11 +380,14 @@ int regmap_raw_write(struct regmap *map, unsigned int reg,
 		     const void *val, size_t val_len);
 int regmap_bulk_write(struct regmap *map, unsigned int reg, const void *val,
 			size_t val_count);
+<<<<<<< HEAD
 int regmap_multi_reg_write(struct regmap *map, const struct reg_default *regs,
 			int num_regs);
 int regmap_multi_reg_write_bypassed(struct regmap *map,
 				    const struct reg_default *regs,
 				    int num_regs);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 int regmap_raw_write_async(struct regmap *map, unsigned int reg,
 			   const void *val, size_t val_len);
 int regmap_read(struct regmap *map, unsigned int reg, unsigned int *val);

@@ -325,7 +325,11 @@ static const char * const cs42l73_mono_mix_texts[] = {
 static const unsigned int cs42l73_mono_mix_values[] = { 0, 1, 2 };
 
 static const struct soc_enum spk_asp_enum =
+<<<<<<< HEAD
 	SOC_VALUE_ENUM_SINGLE(CS42L73_MMIXCTL, 6, 1,
+=======
+	SOC_VALUE_ENUM_SINGLE(CS42L73_MMIXCTL, 6, 3,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			      ARRAY_SIZE(cs42l73_mono_mix_texts),
 			      cs42l73_mono_mix_texts,
 			      cs42l73_mono_mix_values);
@@ -343,7 +347,11 @@ static const struct snd_kcontrol_new spk_xsp_mixer =
 	SOC_DAPM_ENUM("Route", spk_xsp_enum);
 
 static const struct soc_enum esl_asp_enum =
+<<<<<<< HEAD
 	SOC_VALUE_ENUM_SINGLE(CS42L73_MMIXCTL, 2, 5,
+=======
+	SOC_VALUE_ENUM_SINGLE(CS42L73_MMIXCTL, 2, 3,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			      ARRAY_SIZE(cs42l73_mono_mix_texts),
 			      cs42l73_mono_mix_texts,
 			      cs42l73_mono_mix_values);
@@ -352,7 +360,11 @@ static const struct snd_kcontrol_new esl_asp_mixer =
 	SOC_DAPM_ENUM("Route", esl_asp_enum);
 
 static const struct soc_enum esl_xsp_enum =
+<<<<<<< HEAD
 	SOC_VALUE_ENUM_SINGLE(CS42L73_MMIXCTL, 0, 7,
+=======
+	SOC_VALUE_ENUM_SINGLE(CS42L73_MMIXCTL, 0, 3,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			      ARRAY_SIZE(cs42l73_mono_mix_texts),
 			      cs42l73_mono_mix_texts,
 			      cs42l73_mono_mix_values);

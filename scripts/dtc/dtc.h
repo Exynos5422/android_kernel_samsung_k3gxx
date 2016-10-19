@@ -54,6 +54,10 @@ extern int reservenum;		/* Number of memory reservation slots */
 extern int minsize;		/* Minimum blob size */
 extern int padsize;		/* Additional padding to blob */
 extern int phandle_format;	/* Use linux,phandle or phandle properties */
+<<<<<<< HEAD
+=======
+extern int symbol_fixup_support;/* enable symbols & fixup support */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define PHANDLE_LEGACY	0x1
 #define PHANDLE_EPAPR	0x2
@@ -133,6 +137,28 @@ struct label {
 	struct label *next;
 };
 
+<<<<<<< HEAD
+=======
+struct fixup_entry {
+	int offset;
+	struct node *node;
+	struct property *prop;
+	struct fixup_entry *next;
+};
+
+struct fixup {
+	char *ref;
+	struct fixup_entry *entries;
+	struct fixup *next;
+};
+
+struct symbol {
+	struct label *label;
+	struct node *node;
+	struct symbol *next;
+};
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 struct property {
 	int deleted;
 	char *name;
@@ -159,6 +185,15 @@ struct node {
 	int addr_cells, size_cells;
 
 	struct label *labels;
+<<<<<<< HEAD
+=======
+
+	int is_root;
+	int is_plugin;
+	struct fixup *fixups;
+	struct symbol *symbols;
+	struct fixup_entry *local_fixups;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 #define for_each_label_withdel(l0, l) \
@@ -182,6 +217,21 @@ struct node {
 	for_each_child_withdel(n, c) \
 		if (!(c)->deleted)
 
+<<<<<<< HEAD
+=======
+#define for_each_fixup(n, f) \
+	for ((f) = (n)->fixups; (f); (f) = (f)->next)
+
+#define for_each_fixup_entry(f, fe) \
+	for ((fe) = (f)->entries; (fe); (fe) = (fe)->next)
+
+#define for_each_symbol(n, s) \
+	for ((s) = (n)->symbols; (s); (s) = (s)->next)
+
+#define for_each_local_fixup_entry(n, fe) \
+	for ((fe) = (n)->local_fixups; (fe); (fe) = (fe)->next)
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 void add_label(struct label **labels, char *label);
 void delete_labels(struct label **labels);
 

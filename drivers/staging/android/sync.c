@@ -25,8 +25,12 @@
 #include <linux/slab.h>
 #include <linux/uaccess.h>
 #include <linux/anon_inodes.h>
+<<<<<<< HEAD
 
 #include "sync.h"
+=======
+#include <linux/sync.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define CREATE_TRACE_POINTS
 #include "trace/sync.h"
@@ -34,7 +38,10 @@
 static void sync_fence_signal_pt(struct sync_pt *pt);
 static int _sync_pt_has_signaled(struct sync_pt *pt);
 static void sync_fence_free(struct kref *kref);
+<<<<<<< HEAD
 static void sync_dump(void);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 static LIST_HEAD(sync_timeline_list_head);
 static DEFINE_SPINLOCK(sync_timeline_list_lock);
@@ -79,13 +86,22 @@ static void sync_timeline_free(struct kref *kref)
 		container_of(kref, struct sync_timeline, kref);
 	unsigned long flags;
 
+<<<<<<< HEAD
 	if (obj->ops->release_obj)
 		obj->ops->release_obj(obj);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	spin_lock_irqsave(&sync_timeline_list_lock, flags);
 	list_del(&obj->sync_timeline_list);
 	spin_unlock_irqrestore(&sync_timeline_list_lock, flags);
 
+<<<<<<< HEAD
+=======
+	if (obj->ops->release_obj)
+		obj->ops->release_obj(obj);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	kfree(obj);
 }
 
@@ -588,6 +604,77 @@ static bool sync_fence_check(struct sync_fence *fence)
 	return fence->status != 0;
 }
 
+<<<<<<< HEAD
+=======
+static const char *sync_status_str(int status)
+{
+	if (status > 0)
+		return "signaled";
+	else if (status == 0)
+		return "active";
+	else
+		return "error";
+}
+
+static void sync_pt_log(struct sync_pt *pt)
+{
+	int status = pt->status;
+	pr_cont("  %s_pt %s",
+		   pt->parent->name,
+		   sync_status_str(status));
+
+	if (pt->status) {
+		struct timeval tv = ktime_to_timeval(pt->timestamp);
+		pr_cont("@%ld.%06ld", tv.tv_sec, tv.tv_usec);
+	}
+
+	if (pt->parent->ops->timeline_value_str &&
+	    pt->parent->ops->pt_value_str) {
+		char value[64];
+		pt->parent->ops->pt_value_str(pt, value, sizeof(value));
+		pr_cont(": %s", value);
+		pt->parent->ops->timeline_value_str(pt->parent, value,
+					    sizeof(value));
+		pr_cont(" / %s", value);
+	}
+
+	pr_cont("\n");
+
+	/* Show additional details for active fences */
+	if (pt->status == 0 && pt->parent->ops->pt_log)
+		pt->parent->ops->pt_log(pt);
+}
+
+void sync_fence_log(struct sync_fence *fence)
+{
+	struct list_head *pos;
+	unsigned long flags;
+
+	pr_info("[%p] %s: %s\n", fence, fence->name,
+		sync_status_str(fence->status));
+
+	pr_info("waiters:\n");
+
+	spin_lock_irqsave(&fence->waiter_list_lock, flags);
+	list_for_each(pos, &fence->waiter_list_head) {
+		struct sync_fence_waiter *waiter =
+			container_of(pos, struct sync_fence_waiter,
+				     waiter_list);
+
+		pr_info(" %pF\n", waiter->callback);
+	}
+	spin_unlock_irqrestore(&fence->waiter_list_lock, flags);
+
+	pr_info("syncpoints:\n");
+	list_for_each(pos, &fence->pt_list_head) {
+		struct sync_pt *pt =
+			container_of(pos, struct sync_pt, pt_list);
+		sync_pt_log(pt);
+	}
+}
+EXPORT_SYMBOL(sync_fence_log);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 int sync_fence_wait(struct sync_fence *fence, long timeout)
 {
 	int err = 0;
@@ -613,7 +700,11 @@ int sync_fence_wait(struct sync_fence *fence, long timeout)
 
 	if (fence->status < 0) {
 		pr_info("fence error %d on [%p]\n", fence->status, fence);
+<<<<<<< HEAD
 		sync_dump();
+=======
+		sync_fence_log(fence);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return fence->status;
 	}
 
@@ -621,7 +712,11 @@ int sync_fence_wait(struct sync_fence *fence, long timeout)
 		if (timeout > 0) {
 			pr_info("fence timeout on [%p] after %dms\n", fence,
 				jiffies_to_msecs(timeout));
+<<<<<<< HEAD
 			sync_dump();
+=======
+			sync_fence_log(fence);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		}
 		return -ETIME;
 	}
@@ -843,6 +938,7 @@ static long sync_fence_ioctl(struct file *file, unsigned int cmd,
 }
 
 #ifdef CONFIG_DEBUG_FS
+<<<<<<< HEAD
 static const char *sync_status_str(int status)
 {
 	if (status > 0)
@@ -853,6 +949,8 @@ static const char *sync_status_str(int status)
 		return "error";
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static void sync_print_pt(struct seq_file *s, struct sync_pt *pt, bool fence)
 {
 	int status = pt->status;
@@ -985,6 +1083,7 @@ static __init int sync_debugfs_init(void)
 	return 0;
 }
 late_initcall(sync_debugfs_init);
+<<<<<<< HEAD
 
 #define DUMP_CHUNK 256
 static char sync_dump_buf[64 * 1024];
@@ -1014,4 +1113,6 @@ void sync_dump(void)
 static void sync_dump(void)
 {
 }
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif

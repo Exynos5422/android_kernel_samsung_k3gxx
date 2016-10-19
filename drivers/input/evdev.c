@@ -721,8 +721,13 @@ static int evdev_disable_suspend_block(struct evdev *evdev,
 
 	spin_lock_irq(&client->buffer_lock);
 	client->use_wake_lock = false;
+<<<<<<< HEAD
 	wake_lock_destroy(&client->wake_lock);
 	spin_unlock_irq(&client->buffer_lock);
+=======
+	spin_unlock_irq(&client->buffer_lock);
+	wake_lock_destroy(&client->wake_lock);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return 0;
 }
@@ -876,6 +881,7 @@ static long evdev_do_ioctl(struct file *file, unsigned int cmd,
 						_IOC_NR(cmd) & EV_MAX, size,
 						p, compat_mode);
 
+<<<<<<< HEAD
 #ifdef CONFIG_INPUT_EXPANDED_ABS
 		if ((EVIOCGABS_CHG_LIMIT(_IOC_NR(cmd)) & ~(EVIOCGABS_CHG_LIMIT(EVIOCGABS_LIMIT) - 1))
 			== EVIOCGABS_CHG_LIMIT(_IOC_NR(EVIOCGABS(0)))) {
@@ -906,6 +912,8 @@ static long evdev_do_ioctl(struct file *file, unsigned int cmd,
 			return 0;
 		}
 #else
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if ((_IOC_NR(cmd) & ~ABS_MAX) == _IOC_NR(EVIOCGABS(0))) {
 
 			if (!dev->absinfo)
@@ -920,7 +928,10 @@ static long evdev_do_ioctl(struct file *file, unsigned int cmd,
 
 			return 0;
 		}
+<<<<<<< HEAD
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	if (_IOC_DIR(cmd) == _IOC_WRITE) {

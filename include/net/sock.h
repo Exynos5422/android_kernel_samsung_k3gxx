@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 /* Copyright (c) 2015 Samsung Electronics Co., Ltd. */
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * INET		An implementation of the TCP/IP protocol suite for the LINUX
  *		operating system.  INET is implemented using the  BSD Socket
@@ -38,6 +41,7 @@
  *		as published by the Free Software Foundation; either version
  *		2 of the License, or (at your option) any later version.
  */
+<<<<<<< HEAD
 /*
  *  Changes:
  *  KwnagHyun Kim <kh0304.kim@samsung.com> 2015/07/08
@@ -47,6 +51,8 @@
  *
  */
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifndef _SOCK_H
 #define _SOCK_H
 
@@ -240,6 +246,10 @@ struct cg_proto;
   *	@sk_wmem_queued: persistent queue size
   *	@sk_forward_alloc: space allocated forward
   *	@sk_allocation: allocation mode
+<<<<<<< HEAD
+=======
+  *	@sk_pacing_rate: Pacing rate (if supported by transport/packet scheduler)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
   *	@sk_sndbuf: size of send buffer in bytes
   *	@sk_flags: %SO_LINGER (l_onoff), %SO_BROADCAST, %SO_KEEPALIVE,
   *		   %SO_OOBINLINE settings, %SO_TIMESTAMPING settings
@@ -361,11 +371,18 @@ struct sock {
 				sk_no_check  : 2,
 				sk_userlocks : 4,
 				sk_protocol  : 8,
+<<<<<<< HEAD
 #define SK_PROTOCOL_MAX U8_MAX
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				sk_type      : 16;
 	kmemcheck_bitfield_end(flags);
 	int			sk_wmem_queued;
 	gfp_t			sk_allocation;
+<<<<<<< HEAD
+=======
+	u32			sk_pacing_rate; /* bytes per second */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	netdev_features_t	sk_route_caps;
 	netdev_features_t	sk_route_nocaps;
 	int			sk_gso_type;
@@ -403,8 +420,11 @@ struct sock {
 	__u32			sk_mark;
 	u32			sk_classid;
 	struct cg_proto		*sk_cgrp;
+<<<<<<< HEAD
 	uid_t			knox_uid;
 	pid_t			knox_pid;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	void			(*sk_state_change)(struct sock *sk);
 	void			(*sk_data_ready)(struct sock *sk, int bytes);
 	void			(*sk_write_space)(struct sock *sk);
@@ -1448,6 +1468,14 @@ static inline void sk_wmem_free_skb(struct sock *sk, struct sk_buff *skb)
  */
 #define sock_owned_by_user(sk)	((sk)->sk_lock.owned)
 
+<<<<<<< HEAD
+=======
+static inline void sock_release_ownership(struct sock *sk)
+{
+	sk->sk_lock.owned = 0;
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * Macro so as to not evaluate some arguments when
  * lockdep is not enabled.
@@ -1733,8 +1761,13 @@ sk_dst_get(struct sock *sk)
 
 	rcu_read_lock();
 	dst = rcu_dereference(sk->sk_dst_cache);
+<<<<<<< HEAD
 	if (dst && !atomic_inc_not_zero(&dst->__refcnt))
 		dst = NULL;
+=======
+	if (dst)
+		dst_hold(dst);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	rcu_read_unlock();
 	return dst;
 }
@@ -2254,6 +2287,14 @@ extern void sock_enable_timestamp(struct sock *sk, int flag);
 extern int sock_get_timestamp(struct sock *, struct timeval __user *);
 extern int sock_get_timestampns(struct sock *, struct timespec __user *);
 
+<<<<<<< HEAD
+=======
+bool sk_ns_capable(const struct sock *sk,
+		   struct user_namespace *user_ns, int cap);
+bool sk_capable(const struct sock *sk, int cap);
+bool sk_net_capable(const struct sock *sk, int cap);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  *	Enable debug/info messages
  */
@@ -2272,4 +2313,18 @@ extern int sysctl_optmem_max;
 extern __u32 sysctl_wmem_default;
 extern __u32 sysctl_rmem_default;
 
+<<<<<<< HEAD
+=======
+/* SOCKEV Notifier Events */
+#define SOCKEV_SOCKET   0x00
+#define SOCKEV_BIND     0x01
+#define SOCKEV_LISTEN   0x02
+#define SOCKEV_ACCEPT   0x03
+#define SOCKEV_CONNECT  0x04
+#define SOCKEV_SHUTDOWN 0x05
+
+int sockev_register_notify(struct notifier_block *nb);
+int sockev_unregister_notify(struct notifier_block *nb);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif	/* _SOCK_H */

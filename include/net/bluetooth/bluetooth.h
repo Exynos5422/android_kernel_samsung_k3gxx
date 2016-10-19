@@ -1,6 +1,10 @@
 /*
    BlueZ - Bluetooth protocol stack for Linux
    Copyright (C) 2000-2001 Qualcomm Incorporated
+<<<<<<< HEAD
+=======
+   Copyright (C) 2014 The Linux Foundation. All rights reserved.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
    Written 2000,2001 by Maxim Krasnyansky <maxk@qualcomm.com>
 
@@ -28,6 +32,10 @@
 #include <linux/poll.h>
 #include <net/sock.h>
 #include <linux/seq_file.h>
+<<<<<<< HEAD
+=======
+#include <linux/usb.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #ifndef AF_BLUETOOTH
 #define AF_BLUETOOTH	31
@@ -344,4 +352,10 @@ void sco_exit(void);
 
 void bt_sock_reclassify_lock(struct sock *sk, int proto);
 
+<<<<<<< HEAD
+=======
+int get_rome_version(struct usb_device *udev);
+int rome_download(struct usb_device *udev);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif /* __BLUETOOTH_H */

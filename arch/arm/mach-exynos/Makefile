@@ -13,6 +13,7 @@ obj-				:=
 # Core
 
 obj-$(CONFIG_ARCH_EXYNOS)	+= common.o
+<<<<<<< HEAD
 obj-$(CONFIG_SOC_EXYNOS5430)	+= asv-exynos.o asv-exynos5430.o pm_domains-exynos5430.o
 obj-$(CONFIG_SOC_EXYNOS5433)	+= asv-exynos.o asv-exynos5433.o pm_domains-exynos5433.o asv-exynos5433_cal.o otp.o
 obj-$(CONFIG_SOC_EXYNOS5422)	+= asv-exynos.o asv-exynos5422.o pm_domains-exynos5422.o
@@ -38,6 +39,14 @@ endif
 obj-$(CONFIG_CPU_IDLE)		+= exynos-pm.o
 obj-$(CONFIG_PM_RUNTIME)	+= pm_domains.o
 obj-$(CONFIG_PM_RUNTIME_TEST_SYSFS)	+= pm_domains_sysfs.o
+=======
+
+obj-$(CONFIG_PM)		+= pm.o
+obj-$(CONFIG_PM_GENERIC_DOMAINS) += pm_domains.o
+obj-$(CONFIG_CPU_IDLE)		+= cpuidle.o
+
+obj-$(CONFIG_ARCH_EXYNOS)	+= pmu.o
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 obj-$(CONFIG_SMP)		+= platsmp.o headsmp.o
 
@@ -45,6 +54,7 @@ obj-$(CONFIG_HOTPLUG_CPU)	+= hotplug.o
 
 obj-$(CONFIG_ARCH_EXYNOS)	+= exynos-smc.o
 obj-$(CONFIG_ARCH_EXYNOS)	+= firmware.o
+<<<<<<< HEAD
 obj-$(CONFIG_SOC_EXYNOS5430)	+= pmu-exynos5430.o
 obj-$(CONFIG_SOC_EXYNOS5433)	+= pmu-exynos5433.o
 obj-$(CONFIG_SOC_EXYNOS5422)	+= pmu-exynos5422.o
@@ -56,6 +66,8 @@ endif
 
 obj-$(CONFIG_EXYNOS_SNAPSHOT)	+= exynos-ss.o
 obj-$(CONFIG_EXYNOS_CORESIGHT)	+= exynos-coresight.o
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 plus_sec := $(call as-instr,.arch_extension sec,+sec)
 AFLAGS_exynos-smc.o		:=-Wa,-march=armv7-a$(plus_sec)
@@ -75,6 +87,7 @@ obj-$(CONFIG_MACH_SMDK4412)		+= mach-smdk4x12.o
 obj-$(CONFIG_MACH_EXYNOS4_DT)		+= mach-exynos4-dt.o
 obj-$(CONFIG_MACH_EXYNOS5_DT)		+= mach-exynos5-dt.o
 
+<<<<<<< HEAD
 obj-$(CONFIG_MACH_SMDK5422)		+= mach-smdk5422.o
 obj-$(CONFIG_MACH_XYREF5422)		+= mach-xyref5422.o
 obj-$(CONFIG_MACH_UNIVERSAL5422)	+= mach-universal5422.o
@@ -89,6 +102,8 @@ obj-$(CONFIG_VIDEO_EXYNOS_FIMC_IS)    += setup-fimc-is.o
 obj-$(CONFIG_VIDEO_EXYNOS_FIMC_IS)    += setup-fimc-is-sensor.o
 obj-$(CONFIG_COMPANION_USE)		+= setup-fimc-is-companion.o
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 # device support
 
 obj-y					+= dev-uart.o
@@ -96,7 +111,10 @@ obj-$(CONFIG_ARCH_EXYNOS4)		+= dev-audio.o
 obj-$(CONFIG_EXYNOS4_DEV_AHCI)		+= dev-ahci.o
 obj-$(CONFIG_EXYNOS_DEV_DMA)		+= dma.o
 obj-$(CONFIG_EXYNOS4_DEV_USB_OHCI)	+= dev-ohci.o
+<<<<<<< HEAD
 obj-$(CONFIG_VIDEO_EXYNOS_FIMG2D)	+= dev-fimg2d.o
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 obj-$(CONFIG_ARCH_EXYNOS)		+= setup-i2c0.o
 obj-$(CONFIG_EXYNOS4_SETUP_FIMC)	+= setup-fimc.o
@@ -112,6 +130,7 @@ obj-$(CONFIG_EXYNOS4_SETUP_KEYPAD)	+= setup-keypad.o
 obj-$(CONFIG_EXYNOS4_SETUP_SDHCI_GPIO)	+= setup-sdhci-gpio.o
 obj-$(CONFIG_EXYNOS4_SETUP_USB_PHY)	+= setup-usb-phy.o
 obj-$(CONFIG_EXYNOS_SETUP_SPI)		+= setup-spi.o
+<<<<<<< HEAD
 obj-$(CONFIG_EXYNOS5_SETUP_MIPIPHY)	+= setup-exynos5-mipiphy.o
 obj-$(CONFIG_EXYNOS_CONTENT_PATH_PROTECTION) += secmem.o
 
@@ -126,3 +145,5 @@ ifdef CONFIG_MSM_SUBSYSTEM_RESTART
 	obj-y += subsystem_restart.o
 endif
 obj-$(CONFIG_EXYNOS_RUN_QUEUE_STATS) += exynos_rq_stats.o
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

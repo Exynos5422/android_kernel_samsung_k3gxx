@@ -135,6 +135,10 @@ static inline unsigned long change_pmd_range(struct vm_area_struct *vma,
 	pmd_t *pmd;
 	unsigned long next;
 	unsigned long pages = 0;
+<<<<<<< HEAD
+=======
+	unsigned long nr_huge_updates = 0;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	bool all_same_node;
 
 	pmd = pmd_offset(pud, addr);
@@ -146,6 +150,10 @@ static inline unsigned long change_pmd_range(struct vm_area_struct *vma,
 			else if (change_huge_pmd(vma, pmd, addr, newprot,
 						 prot_numa)) {
 				pages += HPAGE_PMD_NR;
+<<<<<<< HEAD
+=======
+				nr_huge_updates++;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				continue;
 			}
 			/* fall through */
@@ -165,6 +173,12 @@ static inline unsigned long change_pmd_range(struct vm_area_struct *vma,
 			change_pmd_protnuma(vma->vm_mm, addr, pmd);
 	} while (pmd++, addr = next, addr != end);
 
+<<<<<<< HEAD
+=======
+	if (nr_huge_updates)
+		count_vm_numa_events(NUMA_HUGE_PTE_UPDATES, nr_huge_updates);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return pages;
 }
 
@@ -201,6 +215,10 @@ static unsigned long change_protection_range(struct vm_area_struct *vma,
 	BUG_ON(addr >= end);
 	pgd = pgd_offset(mm, addr);
 	flush_cache_range(vma, addr, end);
+<<<<<<< HEAD
+=======
+	set_tlb_flush_pending(mm);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	do {
 		next = pgd_addr_end(addr, end);
 		if (pgd_none_or_clear_bad(pgd))
@@ -212,6 +230,10 @@ static unsigned long change_protection_range(struct vm_area_struct *vma,
 	/* Only flush the TLB if we actually modified any entries: */
 	if (pages)
 		flush_tlb_range(vma, start, end);
+<<<<<<< HEAD
+=======
+	clear_tlb_flush_pending(mm);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return pages;
 }

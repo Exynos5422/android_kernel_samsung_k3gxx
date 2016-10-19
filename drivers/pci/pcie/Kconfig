@@ -33,7 +33,11 @@ source "drivers/pci/pcie/aer/Kconfig"
 config PCIEASPM
 	bool "PCI Express ASPM control" if EXPERT
 	depends on PCI && PCIEPORTBUS
+<<<<<<< HEAD
 	default n
+=======
+	default y
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	help
 	  This enables OS control over PCI Express ASPM (Active State
 	  Power Management) and Clock Power Management. ASPM supports

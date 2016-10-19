@@ -118,7 +118,11 @@ static int cpufreq_p4_target(struct cpufreq_policy *policy,
 		return -EINVAL;
 
 	freqs.old = cpufreq_p4_get(policy->cpu);
+<<<<<<< HEAD
 	freqs.new = stock_freq * p4clockmod_table[newstate].index / 8;
+=======
+	freqs.new = stock_freq * p4clockmod_table[newstate].driver_data / 8;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (freqs.new == freqs.old)
 		return 0;
@@ -131,7 +135,11 @@ static int cpufreq_p4_target(struct cpufreq_policy *policy,
 	 * Developer's Manual, Volume 3
 	 */
 	for_each_cpu(i, policy->cpus)
+<<<<<<< HEAD
 		cpufreq_p4_setdc(i, p4clockmod_table[newstate].index);
+=======
+		cpufreq_p4_setdc(i, p4clockmod_table[newstate].driver_data);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/* notifiers */
 	cpufreq_notify_transition(policy, &freqs, CPUFREQ_POSTCHANGE);
@@ -279,7 +287,10 @@ static struct cpufreq_driver p4clockmod_driver = {
 	.exit		= cpufreq_p4_cpu_exit,
 	.get		= cpufreq_p4_get,
 	.name		= "p4-clockmod",
+<<<<<<< HEAD
 	.owner		= THIS_MODULE,
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	.attr		= p4clockmod_attr,
 };
 

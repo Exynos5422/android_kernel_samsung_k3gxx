@@ -499,7 +499,11 @@ struct cached_dev {
 	 */
 	atomic_t		has_dirty;
 
+<<<<<<< HEAD
 	struct ratelimit	writeback_rate;
+=======
+	struct bch_ratelimit	writeback_rate;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct delayed_work	writeback_rate_update;
 
 	/*
@@ -508,10 +512,16 @@ struct cached_dev {
 	 */
 	sector_t		last_read;
 
+<<<<<<< HEAD
 	/* Number of writeback bios in flight */
 	atomic_t		in_flight;
 	struct closure_with_timer writeback;
 	struct closure_waitlist	writeback_wait;
+=======
+	/* Limit number of writeback bios in flight */
+	struct semaphore	in_flight;
+	struct closure_with_timer writeback;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	struct keybuf		writeback_keys;
 
@@ -1142,7 +1152,11 @@ static inline bool cached_dev_get(struct cached_dev *dc)
 		return false;
 
 	/* Paired with the mb in cached_dev_attach */
+<<<<<<< HEAD
 	smp_mb__after_atomic_inc();
+=======
+	smp_mb__after_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return true;
 }
 

@@ -53,9 +53,12 @@
 #include <linux/pm_runtime.h>
 #include <asm/uaccess.h>
 #include <asm/unaligned.h>
+<<<<<<< HEAD
 #ifdef CONFIG_USB_HOST_NOTIFY
 #include <linux/kthread.h>
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #include <scsi/scsi.h>
 #include <scsi/scsi_cmnd.h>
@@ -172,7 +175,11 @@ sd_store_cache_type(struct device *dev, struct device_attribute *attr,
 	if (ct < 0)
 		return -EINVAL;
 	rcd = ct & 0x01 ? 1 : 0;
+<<<<<<< HEAD
 	wce = ct & 0x02 ? 1 : 0;
+=======
+	wce = (ct & 0x02) && !sdkp->write_prot ? 1 : 0;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (sdkp->cache_override) {
 		sdkp->WCE = wce;
@@ -561,7 +568,11 @@ static struct scsi_disk *scsi_disk_get(struct gendisk *disk)
 	return sdkp;
 }
 
+<<<<<<< HEAD
 static struct scsi_disk *scsi_disk_get_from_dev(struct device *dev)
+=======
+struct scsi_disk *scsi_disk_get_from_dev(struct device *dev)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	struct scsi_disk *sdkp;
 
@@ -583,6 +594,34 @@ static void scsi_disk_put(struct scsi_disk *sdkp)
 	mutex_unlock(&sd_ref_mutex);
 }
 
+<<<<<<< HEAD
+=======
+struct gendisk *scsi_gendisk_get_from_dev(struct device *dev)
+{
+	struct scsi_disk *sdkp;
+
+	mutex_lock(&sd_ref_mutex);
+	sdkp = dev_get_drvdata(dev);
+	if (sdkp)
+		sdkp = __scsi_disk_get(sdkp->disk);
+	mutex_unlock(&sd_ref_mutex);
+	return !sdkp ? NULL : sdkp->disk;
+}
+EXPORT_SYMBOL(scsi_gendisk_get_from_dev);
+
+void scsi_gendisk_put(struct device *dev)
+{
+	struct scsi_disk *sdkp = dev_get_drvdata(dev);
+	struct scsi_device *sdev = sdkp->device;
+
+	mutex_lock(&sd_ref_mutex);
+	put_device(&sdkp->dev);
+	scsi_device_put(sdev);
+	mutex_unlock(&sd_ref_mutex);
+}
+EXPORT_SYMBOL(scsi_gendisk_put);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static void sd_prot_op(struct scsi_cmnd *scmd, unsigned int dif)
 {
 	unsigned int prot_op = SCSI_PROT_NORMAL;
@@ -2412,6 +2451,7 @@ sd_read_cache_type(struct scsi_disk *sdkp, unsigned char *buffer)
 			}
 		}
 
+<<<<<<< HEAD
 		if (modepage == 0x3F) {
 			sd_printk(KERN_ERR, sdkp, "No Caching mode page "
 				  "present\n");
@@ -2420,6 +2460,11 @@ sd_read_cache_type(struct scsi_disk *sdkp, unsigned char *buffer)
 			sd_printk(KERN_ERR, sdkp, "Got wrong page\n");
 			goto defaults;
 		}
+=======
+		sd_printk(KERN_ERR, sdkp, "No Caching mode page found\n");
+		goto defaults;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	Page_found:
 		if (modepage == 8) {
 			sdkp->WCE = ((buffer[offset + 2] & 0x04) != 0);
@@ -2436,6 +2481,13 @@ sd_read_cache_type(struct scsi_disk *sdkp, unsigned char *buffer)
 			sdkp->DPOFUA = 0;
 		}
 
+<<<<<<< HEAD
+=======
+		/* No cache flush allowed for write protected devices */
+		if (sdkp->WCE && sdkp->write_prot)
+			sdkp->WCE = 0;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (sdkp->first_scan || old_wce != sdkp->WCE ||
 		    old_rcd != sdkp->RCD || old_dpofua != sdkp->DPOFUA)
 			sd_printk(KERN_NOTICE, sdkp,
@@ -2635,14 +2687,31 @@ static void sd_read_write_same(struct scsi_disk *sdkp, unsigned char *buffer)
 {
 	struct scsi_device *sdev = sdkp->device;
 
+<<<<<<< HEAD
 	if (scsi_report_opcode(sdev, buffer, SD_BUF_SIZE, INQUIRY) < 0) {
+=======
+	if (sdev->host->no_write_same) {
+		sdev->no_write_same = 1;
+
+		return;
+	}
+
+	if (scsi_report_opcode(sdev, buffer, SD_BUF_SIZE, INQUIRY) < 0) {
+		/* too large values might cause issues with arcmsr */
+		int vpd_buf_len = 64;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		sdev->no_report_opcodes = 1;
 
 		/* Disable WRITE SAME if REPORT SUPPORTED OPERATION
 		 * CODES is unsupported and the device has an ATA
 		 * Information VPD page (SAT).
 		 */
+<<<<<<< HEAD
 		if (!scsi_get_vpd_page(sdev, 0x89, buffer, SD_BUF_SIZE))
+=======
+		if (!scsi_get_vpd_page(sdev, 0x89, buffer, vpd_buf_len))
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			sdev->no_write_same = 1;
 	}
 
@@ -2701,9 +2770,12 @@ static int sd_revalidate_disk(struct gendisk *disk)
 	 * react badly if we do.
 	 */
 	if (sdkp->media_present) {
+<<<<<<< HEAD
 #ifdef CONFIG_USB_HOST_NOTIFY
 		disk->media_present = 1;
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		sd_read_capacity(sdkp, buffer);
 
 		if (sd_try_extended_inquiry(sdp)) {
@@ -2806,6 +2878,7 @@ static int sd_format_disk_name(char *prefix, int index, char *buf, int buflen)
 	return 0;
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_USB_HOST_NOTIFY
 static void sd_media_state_emit(struct scsi_disk *sdkp)
 {
@@ -2904,6 +2977,8 @@ static int sd_media_scan_thread(void *__sdkp)
 	complete_and_exit(&sdkp->scanning_done, 0);
 }
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * The asynchronous part of sd_probe
  */
@@ -2951,6 +3026,7 @@ static void sd_probe_async(void *data, async_cookie_t cookie)
 		gd->flags |= GENHD_FL_REMOVABLE;
 		gd->events |= DISK_EVENT_MEDIA_CHANGE;
 	}
+<<<<<<< HEAD
 #ifdef CONFIG_USB_HOST_NOTIFY
 	if (sdp->host->by_usb)
 		gd->interfaces = GENHD_IF_USB;
@@ -2961,6 +3037,14 @@ static void sd_probe_async(void *data, async_cookie_t cookie)
 #ifdef CONFIG_USB_HOST_NOTIFY
 	sdkp->prv_media_present = sdkp->media_present;
 #endif
+=======
+
+	blk_pm_runtime_init(sdp->request_queue, dev);
+	if (sdp->autosuspend_delay >= 0)
+		pm_runtime_set_autosuspend_delay(dev, sdp->autosuspend_delay);
+
+	add_disk(gd);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (sdkp->capacity)
 		sd_dif_config_host(sdkp);
 
@@ -2968,6 +3052,7 @@ static void sd_probe_async(void *data, async_cookie_t cookie)
 
 	sd_printk(KERN_NOTICE, sdkp, "Attached SCSI %sdisk\n",
 		  sdp->removable ? "removable " : "");
+<<<<<<< HEAD
 	blk_pm_runtime_init(sdp->request_queue, dev);
 	scsi_autopm_put_device(sdp);
 	put_device(&sdkp->dev);
@@ -2977,6 +3062,10 @@ static void sd_probe_async(void *data, async_cookie_t cookie)
 			wake_up_process(sdkp->th);
 	}
 #endif
+=======
+	scsi_autopm_put_device(sdp);
+	put_device(&sdkp->dev);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 /**
@@ -3066,6 +3155,7 @@ static int sd_probe(struct device *dev)
 
 	get_device(dev);
 	dev_set_drvdata(dev, sdkp);
+<<<<<<< HEAD
 #ifdef CONFIG_USB_HOST_NOTIFY
 	if (sdp->host->by_usb) {
 		init_waitqueue_head(&sdkp->delay_wait);
@@ -3079,6 +3169,8 @@ static int sd_probe(struct device *dev)
 		}
 	}
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	get_device(&sdkp->dev);	/* prevent release before async_schedule */
 	async_schedule_domain(sd_probe_async, sdkp, &scsi_sd_probe_domain);
@@ -3114,6 +3206,7 @@ static int sd_remove(struct device *dev)
 
 	sdkp = dev_get_drvdata(dev);
 	scsi_autopm_get_device(sdkp->device);
+<<<<<<< HEAD
 #ifdef CONFIG_USB_HOST_NOTIFY
 	sdkp->disk->media_present = 0;
 	if (sdkp->device->host->by_usb) {
@@ -3123,6 +3216,8 @@ static int sd_remove(struct device *dev)
 		sd_printk(KERN_NOTICE, sdkp, "scan thread kill success\n");
 	}
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	async_synchronize_full_domain(&scsi_sd_probe_domain);
 	blk_queue_prep_rq(sdkp->device->request_queue, scsi_prep_fn);

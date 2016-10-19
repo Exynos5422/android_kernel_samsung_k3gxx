@@ -13,10 +13,15 @@
 #ifndef __WM_ADSP_H
 #define __WM_ADSP_H
 
+<<<<<<< HEAD
 #include <linux/circ_buf.h>
 #include <sound/soc.h>
 #include <sound/soc-dapm.h>
 #include <sound/compress_driver.h>
+=======
+#include <sound/soc.h>
+#include <sound/soc-dapm.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #include "wmfw.h"
 
@@ -29,6 +34,7 @@ struct wm_adsp_region {
 
 struct wm_adsp_alg_region {
 	struct list_head list;
+<<<<<<< HEAD
 	unsigned int block;
 	unsigned int alg;
 	int type;
@@ -69,10 +75,16 @@ struct wm_adsp_fw_defs {
 struct wm_adsp_fw_features {
 	bool shutdown:1;
 	bool ez2control_trigger:1;
+=======
+	unsigned int alg;
+	int type;
+	unsigned int base;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 struct wm_adsp {
 	const char *part;
+<<<<<<< HEAD
 	char part_rev;
 	int num;
 	int type;
@@ -80,15 +92,24 @@ struct wm_adsp {
 	struct device *dev;
 	struct regmap *regmap;
 	struct snd_soc_card *card;
+=======
+	int num;
+	int type;
+	struct device *dev;
+	struct regmap *regmap;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	int base;
 	int sysclk_reg;
 	int sysclk_mask;
 	int sysclk_shift;
 
+<<<<<<< HEAD
 	unsigned int rate_cache;
 	struct mutex rate_lock;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct list_head alg_regions;
 
 	int fw_id;
@@ -98,6 +119,7 @@ struct wm_adsp {
 
 	int fw;
 	bool running;
+<<<<<<< HEAD
 	int fw_ver;
 
 	struct mutex ctl_lock;
@@ -121,11 +143,16 @@ struct wm_adsp {
 
 	struct mutex *fw_lock;
 	struct work_struct boot_work;
+=======
+
+	struct regulator *dvfs;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 #define WM_ADSP1(wname, num) \
 	{ .id = snd_soc_dapm_pga, .name = wname, .reg = SND_SOC_NOPM, \
 	.shift = num, .event = wm_adsp1_event, \
+<<<<<<< HEAD
 	.event_flags = SND_SOC_DAPM_PRE_PMU | SND_SOC_DAPM_PRE_PMD }
 
 #define WM_ADSP2(wname, num, event_fn) \
@@ -134,10 +161,18 @@ struct wm_adsp {
 	.event_flags = SND_SOC_DAPM_PRE_PMU | SND_SOC_DAPM_POST_PMD }, \
 {	.id = snd_soc_dapm_out_drv, .name = wname, \
 	.reg = SND_SOC_NOPM, .shift = num, .event = wm_adsp2_event, \
+=======
+	.event_flags = SND_SOC_DAPM_POST_PMU | SND_SOC_DAPM_PRE_PMD }
+
+#define WM_ADSP2(wname, num) \
+{	.id = snd_soc_dapm_pga, .name = wname, .reg = SND_SOC_NOPM, \
+	.shift = num, .event = wm_adsp2_event, \
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	.event_flags = SND_SOC_DAPM_POST_PMU | SND_SOC_DAPM_PRE_PMD }
 
 extern const struct snd_kcontrol_new wm_adsp1_fw_controls[];
 extern const struct snd_kcontrol_new wm_adsp2_fw_controls[];
+<<<<<<< HEAD
 extern const struct snd_kcontrol_new wm_adsp2v2_fw_controls[];
 
 int wm_adsp1_init(struct wm_adsp *adsp);
@@ -182,3 +217,14 @@ extern int wm_adsp_stream_avail(const struct wm_adsp *adsp);
 
 #endif
 
+=======
+
+int wm_adsp1_init(struct wm_adsp *adsp);
+int wm_adsp2_init(struct wm_adsp *adsp, bool dvfs);
+int wm_adsp1_event(struct snd_soc_dapm_widget *w,
+		   struct snd_kcontrol *kcontrol, int event);
+int wm_adsp2_event(struct snd_soc_dapm_widget *w,
+		   struct snd_kcontrol *kcontrol, int event);
+
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

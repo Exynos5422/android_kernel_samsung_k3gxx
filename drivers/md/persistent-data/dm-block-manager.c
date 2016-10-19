@@ -595,6 +595,7 @@ int dm_bm_unlock(struct dm_block *b)
 }
 EXPORT_SYMBOL_GPL(dm_bm_unlock);
 
+<<<<<<< HEAD
 int dm_bm_flush_and_unlock(struct dm_block_manager *bm,
 			   struct dm_block *superblock)
 {
@@ -614,6 +615,16 @@ int dm_bm_flush_and_unlock(struct dm_block_manager *bm,
 	return dm_bufio_write_dirty_buffers(bm->bufio);
 }
 EXPORT_SYMBOL_GPL(dm_bm_flush_and_unlock);
+=======
+int dm_bm_flush(struct dm_block_manager *bm)
+{
+	if (bm->read_only)
+		return -EPERM;
+
+	return dm_bufio_write_dirty_buffers(bm->bufio);
+}
+EXPORT_SYMBOL_GPL(dm_bm_flush);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 void dm_bm_set_read_only(struct dm_block_manager *bm)
 {

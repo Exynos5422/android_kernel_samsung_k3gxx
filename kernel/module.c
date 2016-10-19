@@ -64,6 +64,7 @@
 #include <uapi/linux/module.h>
 #include "module-internal.h"
 
+<<<<<<< HEAD
 #ifdef	CONFIG_TIMA_LKMAUTH_CODE_PROT
 #include <asm/tlbflush.h>
 #endif/*CONFIG_TIMA_LKMAUTH_CODE_PROT*/
@@ -73,11 +74,16 @@
 #define TIMA_SET_PTE_RO 1
 #define TIMA_SET_PTE_NX 2
 #endif/*CONFIG_TIMA_LKMAUTH_CODE_PROT*/
+=======
+#define CREATE_TRACE_POINTS
+#include <trace/events/module.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #ifndef ARCH_SHF_SMALL
 #define ARCH_SHF_SMALL 0
 #endif
 
+<<<<<<< HEAD
 #ifdef TIMA_LKM_AUTH_ENABLED
 #define TIMA_ON_MC20
 
@@ -222,11 +228,14 @@ typedef struct {
 #endif /* End TIMA_LKM_AUTH_ENABLED */
 
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * Modules' sections will be aligned on page boundaries
  * to ensure complete separation of code and data, but
  * only when CONFIG_DEBUG_SET_MODULE_RONX=y
  */
+<<<<<<< HEAD
 #ifdef	CONFIG_TIMA_LKMAUTH_CODE_PROT
 # define debug_align(X) ALIGN(X, PAGE_SIZE)
 #else
@@ -240,6 +249,14 @@ typedef struct {
 #endif
 #endif
 #endif
+=======
+#ifdef CONFIG_DEBUG_SET_MODULE_RONX
+# define debug_align(X) ALIGN(X, PAGE_SIZE)
+#else
+# define debug_align(X) (X)
+#endif
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * Given BASE and SIZE this macro calculates the number of pages the
  * memory regions occupies
@@ -2541,6 +2558,7 @@ static void add_kallsyms(struct module *mod, const struct load_info *info)
 }
 #endif /* CONFIG_KALLSYMS */
 
+<<<<<<< HEAD
 #ifdef	TIMA_LKM_AUTH_ENABLED
 
 #ifdef TIMA_ON_QSEE		/* lkmauth for QSEE */
@@ -2994,6 +3012,8 @@ lkmauth_ret:
 
 #endif /* End TIMA_LKM_AUTH_ENABLED */
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static void dynamic_debug_setup(struct _ddebug *debug, unsigned int num)
 {
 	if (!debug)
@@ -3032,7 +3052,17 @@ static void *module_alloc_update_bounds(unsigned long size)
 	return ret;
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_DEBUG_KMEMLEAK
+=======
+#if defined(CONFIG_DEBUG_KMEMLEAK) && defined(CONFIG_DEBUG_MODULE_SCAN_OFF)
+static void kmemleak_load_module(const struct module *mod,
+				 const struct load_info *info)
+{
+	kmemleak_no_scan(mod->module_core);
+}
+#elif defined(CONFIG_DEBUG_KMEMLEAK)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static void kmemleak_load_module(const struct module *mod,
 				 const struct load_info *info)
 {
@@ -3110,6 +3140,7 @@ static int elf_header_check(struct load_info *info)
 	    || (info->hdr->e_shnum * sizeof(Elf_Shdr) >
 		info->len - info->hdr->e_shoff))
 		return -ENOEXEC;
+<<<<<<< HEAD
 		
 #ifdef TIMA_LKM_AUTH_ENABLED
 	if (lkmauth_bootmode != BOOTMODE_RECOVERY &&
@@ -3120,6 +3151,8 @@ static int elf_header_check(struct load_info *info)
 		return -ENOEXEC;
 	}
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return 0;
 }
@@ -3651,6 +3684,7 @@ static void do_mod_ctors(struct module *mod)
 #endif
 }
 
+<<<<<<< HEAD
 #ifdef	CONFIG_TIMA_LKMAUTH_CODE_PROT
 
 #ifndef TIMA_KERNEL_L1_MANAGE
@@ -3815,6 +3849,8 @@ void tima_mod_page_change_access(struct module *mod)
 
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /* This is where the real work happens */
 static int do_init_module(struct module *mod)
 {
@@ -3828,9 +3864,13 @@ static int do_init_module(struct module *mod)
 
 	blocking_notifier_call_chain(&module_notify_list,
 			MODULE_STATE_COMING, mod);
+<<<<<<< HEAD
 #ifdef	CONFIG_TIMA_LKMAUTH_CODE_PROT
 	tima_mod_page_change_access(mod);
 #endif/*CONFIG_TIMA_LKMAUTH_CODE_PROT*/
+=======
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* Set RO and NX regions for core */
 	set_section_ro_nx(mod->module_core,
 				mod->core_text_size,
@@ -3873,9 +3913,12 @@ static int do_init_module(struct module *mod)
 	blocking_notifier_call_chain(&module_notify_list,
 				     MODULE_STATE_LIVE, mod);
 
+<<<<<<< HEAD
 #ifdef	TIMA_LKM_SET_PAGE_ATTRIB
 	tima_mod_page_change_access(mod);
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/*
 	 * We need to finish all async code before the module init sequence
 	 * is done.  This has potential to deadlock.  For example, a newly
@@ -4069,6 +4112,12 @@ static int load_module(struct load_info *info, const char __user *uargs,
 
 	dynamic_debug_setup(info->debug, info->num_debug);
 
+<<<<<<< HEAD
+=======
+	/* Ftrace init must be called in the MODULE_STATE_UNFORMED state */
+	ftrace_module_init(mod);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* Finally it's fully formed, ready to start executing. */
 	err = complete_formation(mod, info);
 	if (err)

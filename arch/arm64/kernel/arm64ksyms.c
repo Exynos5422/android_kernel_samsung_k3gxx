@@ -27,6 +27,7 @@
 #include <linux/uaccess.h>
 #include <linux/io.h>
 
+<<<<<<< HEAD
 #include <asm/checksum.h>
 
 	/* user mem (segment) */
@@ -39,6 +40,19 @@ EXPORT_SYMBOL(clear_page);
 EXPORT_SYMBOL(__copy_from_user);
 EXPORT_SYMBOL(__copy_to_user);
 EXPORT_SYMBOL(__clear_user);
+=======
+#include <asm/cacheflush.h>
+#include <asm/checksum.h>
+
+EXPORT_SYMBOL(copy_page);
+EXPORT_SYMBOL(clear_page);
+
+	/* user mem (segment) */
+EXPORT_SYMBOL(__copy_from_user);
+EXPORT_SYMBOL(__copy_to_user);
+EXPORT_SYMBOL(__clear_user);
+EXPORT_SYMBOL(__copy_in_user);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/* physical memory */
 EXPORT_SYMBOL(memstart_addr);
@@ -46,10 +60,21 @@ EXPORT_SYMBOL(memstart_addr);
 	/* string / mem functions */
 EXPORT_SYMBOL(strchr);
 EXPORT_SYMBOL(strrchr);
+<<<<<<< HEAD
+=======
+EXPORT_SYMBOL(strcmp);
+EXPORT_SYMBOL(strncmp);
+EXPORT_SYMBOL(strlen);
+EXPORT_SYMBOL(strnlen);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 EXPORT_SYMBOL(memset);
 EXPORT_SYMBOL(memcpy);
 EXPORT_SYMBOL(memmove);
 EXPORT_SYMBOL(memchr);
+<<<<<<< HEAD
+=======
+EXPORT_SYMBOL(memcmp);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/* atomic bitops */
 EXPORT_SYMBOL(set_bit);
@@ -58,3 +83,15 @@ EXPORT_SYMBOL(clear_bit);
 EXPORT_SYMBOL(test_and_clear_bit);
 EXPORT_SYMBOL(change_bit);
 EXPORT_SYMBOL(test_and_change_bit);
+<<<<<<< HEAD
+=======
+
+	/* caching functions */
+EXPORT_SYMBOL(__dma_inv_range);
+EXPORT_SYMBOL(__dma_clean_range);
+EXPORT_SYMBOL(__dma_flush_range);
+
+#ifdef CONFIG_FUNCTION_TRACER
+EXPORT_SYMBOL(_mcount);
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

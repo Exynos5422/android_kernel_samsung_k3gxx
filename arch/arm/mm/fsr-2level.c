@@ -30,7 +30,11 @@ static struct fsr_info fsr_info[] = {
 	{ do_bad,		SIGBUS,  0,		"unknown 19"			   },
 	{ do_bad,		SIGBUS,  0,		"lock abort"			   }, /* xscale */
 	{ do_bad,		SIGBUS,  0,		"unknown 21"			   },
+<<<<<<< HEAD
 	{ do_bad,		SIGBUS,  BUS_OBJERR,	"imprecise external abort"	   }, /* xscale */
+=======
+	{ do_imprecise_ext,	SIGBUS,  BUS_OBJERR,	"imprecise external abort"	   }, /* xscale */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	{ do_bad,		SIGBUS,  0,		"unknown 23"			   },
 	{ do_bad,		SIGBUS,  0,		"dcache parity error"		   }, /* xscale */
 	{ do_bad,		SIGBUS,  0,		"unknown 25"			   },

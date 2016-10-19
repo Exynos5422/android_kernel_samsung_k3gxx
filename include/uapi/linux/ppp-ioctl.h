@@ -31,7 +31,10 @@
 #define SC_COMP_RUN	0x00001000	/* compressor has been inited */
 #define SC_DECOMP_RUN	0x00002000	/* decompressor has been inited */
 #define SC_MP_XSHORTSEQ	0x00004000	/* transmit short MP seq numbers */
+<<<<<<< HEAD
 #define SC_GRE_SEQ_CHK  0x00008000      /* enable GRE sequencing in pppopns */
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define SC_DEBUG	0x00010000	/* enable debug messages */
 #define SC_LOG_INPKT	0x00020000	/* log contents of good pkts recvd */
 #define SC_LOG_OUTPKT	0x00040000	/* log contents of pkts sent */

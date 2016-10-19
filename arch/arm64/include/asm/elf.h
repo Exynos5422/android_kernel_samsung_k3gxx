@@ -33,8 +33,11 @@ typedef unsigned long elf_greg_t;
 typedef elf_greg_t elf_gregset_t[ELF_NGREG];
 typedef struct user_fpsimd_state elf_fpregset_t;
 
+<<<<<<< HEAD
 #define EM_AARCH64		183
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * AArch64 static relocation types.
  */
@@ -92,11 +95,32 @@ typedef struct user_fpsimd_state elf_fpregset_t;
  * These are used to set parameters in the core dumps.
  */
 #define ELF_CLASS	ELFCLASS64
+<<<<<<< HEAD
 #define ELF_DATA	ELFDATA2LSB
 #define ELF_ARCH	EM_AARCH64
 
 #define ELF_PLATFORM_SIZE	16
 #define ELF_PLATFORM		("aarch64")
+=======
+#ifdef __AARCH64EB__
+#define ELF_DATA	ELFDATA2MSB
+#else
+#define ELF_DATA	ELFDATA2LSB
+#endif
+#define ELF_ARCH	EM_AARCH64
+
+/*
+ * This yields a string that ld.so will use to load implementation
+ * specific libraries for optimization.  This is more specific in
+ * intent than poking at uname or /proc/cpuinfo.
+ */
+#define ELF_PLATFORM_SIZE	16
+#ifdef __AARCH64EB__
+#define ELF_PLATFORM		("aarch64_be")
+#else
+#define ELF_PLATFORM		("aarch64")
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /*
  * This is used to ensure we don't load something for the wrong architecture.
@@ -151,8 +175,17 @@ extern unsigned long arch_randomize_brk(struct mm_struct *mm);
 #define arch_randomize_brk arch_randomize_brk
 
 #ifdef CONFIG_COMPAT
+<<<<<<< HEAD
 #define EM_ARM				40
 #define COMPAT_ELF_PLATFORM		("v8l")
+=======
+
+#ifdef __AARCH64EB__
+#define COMPAT_ELF_PLATFORM		("v8b")
+#else
+#define COMPAT_ELF_PLATFORM		("v8l")
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define COMPAT_ELF_ET_DYN_BASE		(randomize_et_dyn(2 * TASK_SIZE_32 / 3))
 

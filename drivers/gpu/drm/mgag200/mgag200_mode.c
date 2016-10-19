@@ -1477,11 +1477,19 @@ static int mga_vga_mode_valid(struct drm_connector *connector,
 		(mga_vga_calculate_mode_bandwidth(mode, bpp)
 			> (32700 * 1024))) {
 		return MODE_BANDWIDTH;
+<<<<<<< HEAD
 	} else if (mode->type == G200_EH &&
 		(mga_vga_calculate_mode_bandwidth(mode, bpp)
 			> (37500 * 1024))) {
 		return MODE_BANDWIDTH;
 	} else if (mode->type == G200_ER &&
+=======
+	} else if (mdev->type == G200_EH &&
+		(mga_vga_calculate_mode_bandwidth(mode, bpp)
+			> (37500 * 1024))) {
+		return MODE_BANDWIDTH;
+	} else if (mdev->type == G200_ER &&
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		(mga_vga_calculate_mode_bandwidth(mode,
 			bpp) > (55000 * 1024))) {
 		return MODE_BANDWIDTH;

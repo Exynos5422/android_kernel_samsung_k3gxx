@@ -161,9 +161,12 @@ __do_page_cache_readahead(struct address_space *mapping, struct file *filp,
 	int page_idx;
 	int ret = 0;
 	loff_t isize = i_size_read(inode);
+<<<<<<< HEAD
 #ifdef CONFIG_SCFS_LOWER_PAGECACHE_INVALIDATION
 	//struct scfs_sb_info *sbi;
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (isize == 0)
 		goto out;
@@ -188,6 +191,7 @@ __do_page_cache_readahead(struct address_space *mapping, struct file *filp,
 		page = page_cache_alloc_readahead(mapping);
 		if (!page)
 			break;
+<<<<<<< HEAD
 
 #ifdef CONFIG_SCFS_LOWER_PAGECACHE_INVALIDATION
 		/*
@@ -199,6 +203,12 @@ __do_page_cache_readahead(struct address_space *mapping, struct file *filp,
 #endif
 
 		page->index = page_offset;
+=======
+		page->index = page_offset;
+
+		page->flags |= (1L << PG_readahead);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		list_add(&page->lru, &page_pool);
 		if (page_idx == nr_to_read - lookahead_size)
 			SetPageReadahead(page);
@@ -276,6 +286,11 @@ unsigned long ra_submit(struct file_ra_state *ra,
 
 /*
  * Set the initial window size, round to next power of 2 and square
+<<<<<<< HEAD
+=======
+ * Small size is not dependant on max value - only a one-page read is regarded
+ * as small.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  * for small size, x 4 for medium, and x 2 for large
  * for 128k (32 page) max ra
  * 1-8 page = 32k initial, > 8 page = 128k initial
@@ -284,7 +299,11 @@ static unsigned long get_init_ra_size(unsigned long size, unsigned long max)
 {
 	unsigned long newsize = roundup_pow_of_two(size);
 
+<<<<<<< HEAD
 	if (newsize <= max / 32)
+=======
+	if (newsize <= 1)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		newsize = newsize * 4;
 	else if (newsize <= max / 4)
 		newsize = newsize * 2;

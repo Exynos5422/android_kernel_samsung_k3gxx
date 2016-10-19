@@ -68,6 +68,10 @@ static struct ft_tport *ft_tport_create(struct fc_lport *lport)
 
 	if (tport) {
 		tport->tpg = tpg;
+<<<<<<< HEAD
+=======
+		tpg->tport = tport;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return tport;
 	}
 

@@ -212,7 +212,11 @@ int ipv6_find_hdr(const struct sk_buff *skb, unsigned int *offset,
 		found = (nexthdr == target);
 
 		if ((!ipv6_ext_hdr(nexthdr)) || nexthdr == NEXTHDR_NONE) {
+<<<<<<< HEAD
 			if (target < 0)
+=======
+			if (target < 0 || found)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				break;
 			return -ENOENT;
 		}

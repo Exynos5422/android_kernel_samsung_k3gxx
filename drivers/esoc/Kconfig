@@ -44,6 +44,7 @@ config ESOC_MDM_4x
 
 config ESOC_MDM_DRV
 	tristate "Command engine for 4x series external modems"
+<<<<<<< HEAD
 	select USB_QCOM_KS_BRIDGE
 	select USB_QCOM_MDM_BRIDGE
 	select USB_QCOM_DIAG_BRIDGE
@@ -52,6 +53,8 @@ config ESOC_MDM_DRV
 	select MDM_HSIC_PM
 	select USB_SERIAL_CSVT
 	select MSM_HSIC_SYSMON
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	help
 	  Provides a command engine to control the behavior of an external modem
 	  such as mdm9x25/mdm9x35/QSC. Allows the primary soc to put the

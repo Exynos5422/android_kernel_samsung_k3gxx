@@ -1,10 +1,18 @@
 ccflags-$(CONFIG_USB_DWC3_DEBUG)	:= -DDEBUG
 ccflags-$(CONFIG_USB_DWC3_VERBOSE)	+= -DVERBOSE_DEBUG
+<<<<<<< HEAD
+=======
+ccflags-y += -Idrivers/usb/host
+ccflags-y += -Idrivers/base/power
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 obj-$(CONFIG_USB_DWC3)			+= dwc3.o
 
 dwc3-y					:= core.o
+<<<<<<< HEAD
 dwc3-y					+= otg.o
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 ifneq ($(filter y,$(CONFIG_USB_DWC3_HOST) $(CONFIG_USB_DWC3_DUAL_ROLE)),)
 	dwc3-y				+= host.o
@@ -14,6 +22,11 @@ ifneq ($(filter y,$(CONFIG_USB_DWC3_GADGET) $(CONFIG_USB_DWC3_DUAL_ROLE)),)
 	dwc3-y				+= gadget.o ep0.o
 endif
 
+<<<<<<< HEAD
+=======
+dwc3-y					+= dwc3_otg.o
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 ifneq ($(CONFIG_DEBUG_FS),)
 	dwc3-y				+= debugfs.o
 endif
@@ -28,8 +41,24 @@ endif
 # the entire driver (with all its glue layers) on several architectures
 # and make sure it compiles fine. This will also help with allmodconfig
 # and allyesconfig builds.
+<<<<<<< HEAD
 ##
 
 obj-$(CONFIG_USB_DWC3_OMAP)		+= dwc3-omap.o
 obj-$(CONFIG_USB_DWC3_EXYNOS)		+= dwc3-exynos.o
 obj-$(CONFIG_USB_DWC3_PCI)		+= dwc3-pci.o
+=======
+#
+# The only exception is the PCI glue layer, but that's only because
+# PCI doesn't provide nops if CONFIG_PCI isn't enabled.
+##
+
+obj-$(CONFIG_USB_DWC3)		+= dwc3-omap.o
+obj-$(CONFIG_USB_DWC3)		+= dwc3-exynos.o
+obj-$(CONFIG_USB_DWC3_MSM)	+= dbm-1_4.o dbm-1_5.o dwc3-msm.o dbm.o
+
+ifneq ($(CONFIG_PCI),)
+	obj-$(CONFIG_USB_DWC3)		+= dwc3-pci.o
+endif
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

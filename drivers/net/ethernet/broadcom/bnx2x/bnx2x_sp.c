@@ -282,16 +282,28 @@ static bool bnx2x_raw_check_pending(struct bnx2x_raw_obj *o)
 
 static void bnx2x_raw_clear_pending(struct bnx2x_raw_obj *o)
 {
+<<<<<<< HEAD
 	smp_mb__before_clear_bit();
 	clear_bit(o->state, o->pstate);
 	smp_mb__after_clear_bit();
+=======
+	smp_mb__before_atomic();
+	clear_bit(o->state, o->pstate);
+	smp_mb__after_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static void bnx2x_raw_set_pending(struct bnx2x_raw_obj *o)
 {
+<<<<<<< HEAD
 	smp_mb__before_clear_bit();
 	set_bit(o->state, o->pstate);
 	smp_mb__after_clear_bit();
+=======
+	smp_mb__before_atomic();
+	set_bit(o->state, o->pstate);
+	smp_mb__after_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 /**
@@ -1038,9 +1050,12 @@ static void bnx2x_set_one_vlan_mac_e1h(struct bnx2x *bp,
 				     ETH_VLAN_FILTER_CLASSIFY, config);
 }
 
+<<<<<<< HEAD
 #define list_next_entry(pos, member) \
 	list_entry((pos)->member.next, typeof(*(pos)), member)
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /**
  * bnx2x_vlan_mac_restore - reconfigure next MAC/VLAN/VLAN-MAC element
  *
@@ -2184,7 +2199,11 @@ static int bnx2x_set_rx_mode_e1x(struct bnx2x *bp,
 
 	/* The operation is completed */
 	clear_bit(p->state, p->pstate);
+<<<<<<< HEAD
 	smp_mb__after_clear_bit();
+=======
+	smp_mb__after_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return 0;
 }
@@ -3643,16 +3662,28 @@ error_exit1:
 
 static void bnx2x_mcast_clear_sched(struct bnx2x_mcast_obj *o)
 {
+<<<<<<< HEAD
 	smp_mb__before_clear_bit();
 	clear_bit(o->sched_state, o->raw.pstate);
 	smp_mb__after_clear_bit();
+=======
+	smp_mb__before_atomic();
+	clear_bit(o->sched_state, o->raw.pstate);
+	smp_mb__after_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static void bnx2x_mcast_set_sched(struct bnx2x_mcast_obj *o)
 {
+<<<<<<< HEAD
 	smp_mb__before_clear_bit();
 	set_bit(o->sched_state, o->raw.pstate);
 	smp_mb__after_clear_bit();
+=======
+	smp_mb__before_atomic();
+	set_bit(o->sched_state, o->raw.pstate);
+	smp_mb__after_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static bool bnx2x_mcast_check_sched(struct bnx2x_mcast_obj *o)
@@ -4272,7 +4303,11 @@ int bnx2x_queue_state_change(struct bnx2x *bp,
 		if (rc) {
 			o->next_state = BNX2X_Q_STATE_MAX;
 			clear_bit(pending_bit, pending);
+<<<<<<< HEAD
 			smp_mb__after_clear_bit();
+=======
+			smp_mb__after_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			return rc;
 		}
 
@@ -4361,7 +4396,11 @@ static int bnx2x_queue_comp_cmd(struct bnx2x *bp,
 	wmb();
 
 	clear_bit(cmd, &o->pending);
+<<<<<<< HEAD
 	smp_mb__after_clear_bit();
+=======
+	smp_mb__after_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return 0;
 }
@@ -5309,7 +5348,11 @@ static inline int bnx2x_func_state_change_comp(struct bnx2x *bp,
 	wmb();
 
 	clear_bit(cmd, &o->pending);
+<<<<<<< HEAD
 	smp_mb__after_clear_bit();
+=======
+	smp_mb__after_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return 0;
 }
@@ -5947,7 +5990,11 @@ int bnx2x_func_state_change(struct bnx2x *bp,
 		if (rc) {
 			o->next_state = BNX2X_F_STATE_MAX;
 			clear_bit(cmd, pending);
+<<<<<<< HEAD
 			smp_mb__after_clear_bit();
+=======
+			smp_mb__after_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			return rc;
 		}
 

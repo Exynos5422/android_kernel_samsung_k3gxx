@@ -7,10 +7,13 @@
 #include <linux/sched.h>
 #include <asm/irq.h>
 
+<<<<<<< HEAD
 #ifdef CONFIG_EXYNOS_CORESIGHT_PC_INFO
 #include <mach/coresight.h>
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /**
  * touch_nmi_watchdog - restart NMI watchdog timeout.
  * 

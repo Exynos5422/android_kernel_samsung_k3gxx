@@ -127,6 +127,11 @@ struct ntb_device {
 	unsigned char link_status;
 	struct delayed_work hb_timer;
 	unsigned long last_ts;
+<<<<<<< HEAD
+=======
+
+	struct dentry *debugfs_dir;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 /**
@@ -155,6 +160,23 @@ static inline struct pci_dev *ntb_query_pdev(struct ntb_device *ndev)
 	return ndev->pdev;
 }
 
+<<<<<<< HEAD
+=======
+/**
+ * ntb_query_debugfs() - return the debugfs pointer
+ * @ndev: pointer to ntb_device instance
+ *
+ * Given the ntb pointer, return the debugfs directory pointer for the NTB
+ * hardware device
+ *
+ * RETURNS: a pointer to the debugfs directory
+ */
+static inline struct dentry *ntb_query_debugfs(struct ntb_device *ndev)
+{
+	return ndev->debugfs_dir;
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 struct ntb_device *ntb_register_transport(struct pci_dev *pdev,
 					  void *transport);
 void ntb_unregister_transport(struct ntb_device *ndev);

@@ -168,7 +168,11 @@ void __iomem *devm_request_and_ioremap(struct device *device,
 }
 EXPORT_SYMBOL(devm_request_and_ioremap);
 
+<<<<<<< HEAD
 #ifdef CONFIG_HAS_IOPORT
+=======
+#ifdef CONFIG_HAS_IOPORT_MAP
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * Generic iomap devres
  */
@@ -227,7 +231,11 @@ void devm_ioport_unmap(struct device *dev, void __iomem *addr)
 			       devm_ioport_map_match, (void *)addr));
 }
 EXPORT_SYMBOL(devm_ioport_unmap);
+<<<<<<< HEAD
 #endif /* CONFIG_HAS_IOPORT */
+=======
+#endif /* CONFIG_HAS_IOPORT_MAP */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #ifdef CONFIG_PCI
 /*

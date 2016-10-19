@@ -45,12 +45,20 @@ static void resume_irqs(bool want_early)
 	struct irq_desc *desc;
 	int irq;
 
+<<<<<<< HEAD
 	for_each_irq_desc(irq, desc) {
+=======
+	for_each_irq_desc_reverse(irq, desc) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		unsigned long flags;
 		bool is_early = desc->action &&
 			desc->action->flags & IRQF_EARLY_RESUME;
 
+<<<<<<< HEAD
 		if (is_early != want_early)
+=======
+		if (!is_early && want_early)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			continue;
 
 		raw_spin_lock_irqsave(&desc->lock, flags);

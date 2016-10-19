@@ -207,7 +207,11 @@ static void ixgbe_service_event_complete(struct ixgbe_adapter *adapter)
 	BUG_ON(!test_bit(__IXGBE_SERVICE_SCHED, &adapter->state));
 
 	/* flush memory to make sure state is correct before next watchdog */
+<<<<<<< HEAD
 	smp_mb__before_clear_bit();
+=======
+	smp_mb__before_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	clear_bit(__IXGBE_SERVICE_SCHED, &adapter->state);
 }
 

@@ -43,14 +43,26 @@ TRACE_EVENT(irq_handler_entry,
 	TP_STRUCT__entry(
 		__field(	int,	irq		)
 		__string(	name,	action->name	)
+<<<<<<< HEAD
+=======
+		__field(void*,	handler)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	),
 
 	TP_fast_assign(
 		__entry->irq = irq;
 		__assign_str(name, action->name);
+<<<<<<< HEAD
 	),
 
 	TP_printk("irq=%d name=%s", __entry->irq, __get_str(name))
+=======
+		__entry->handler = action->handler;
+	),
+
+	TP_printk("irq=%d name=%s handler=%pf",
+		 __entry->irq, __get_str(name), __entry->handler)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 );
 
 /**

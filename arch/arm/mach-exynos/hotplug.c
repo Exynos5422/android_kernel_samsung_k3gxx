@@ -20,15 +20,21 @@
 #include <asm/smp_plat.h>
 
 #include <mach/regs-pmu.h>
+<<<<<<< HEAD
 #include <mach/pmu.h>
 #include <mach/smc.h>
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <plat/cpu.h>
 
 #include "common.h"
 
+<<<<<<< HEAD
 #define L2_CCI_OFF (1 << 1)
 #define CHECK_CCI_SNOOP (1 << 7)
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static inline void cpu_enter_lowpower_a9(void)
 {
 	unsigned int v;
@@ -68,7 +74,10 @@ static inline void cpu_enter_lowpower_a15(void)
 	/*
 	* Turn off coherency
 	*/
+<<<<<<< HEAD
 	"       clrex\n"
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	"	mrc	p15, 0, %0, c1, c0, 1\n"
 	"	bic	%0, %0, %1\n"
 	"	mcr	p15, 0, %0, c1, c0, 1\n"
@@ -96,6 +105,7 @@ static inline void cpu_leave_lowpower(void)
 	  : "cc");
 }
 
+<<<<<<< HEAD
 void exynos_power_down_cpu(unsigned int cpu)
 {
 	struct cpumask mask;
@@ -119,13 +129,22 @@ void exynos_power_down_cpu(unsigned int cpu)
 #endif
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static inline void platform_do_lowpower(unsigned int cpu, int *spurious)
 {
 	for (;;) {
 
+<<<<<<< HEAD
 		/* make secondary cpus to be turned off at next WFI command */
 		exynos_power_down_cpu(cpu);
 #ifndef CONFIG_ARM_TRUSTZONE
+=======
+		/* make cpu1 to be turned off at next WFI command */
+		if (cpu == 1)
+			__raw_writel(0, S5P_ARM_CORE1_CONFIGURATION);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		/*
 		 * here's the WFI
 		 */
@@ -133,7 +152,11 @@ static inline void platform_do_lowpower(unsigned int cpu, int *spurious)
 		    :
 		    :
 		    : "memory", "cc");
+<<<<<<< HEAD
 #endif
+=======
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (pen_release == cpu_logical_map(cpu)) {
 			/*
 			 * OK, proper wakeup, we're done
@@ -160,7 +183,10 @@ static inline void platform_do_lowpower(unsigned int cpu, int *spurious)
 void __ref exynos_cpu_die(unsigned int cpu)
 {
 	int spurious = 0;
+<<<<<<< HEAD
 #ifndef CONFIG_ARM_TRUSTZONE
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	int primary_part = 0;
 
 	/*
@@ -170,12 +196,19 @@ void __ref exynos_cpu_die(unsigned int cpu)
 	 * appropriate sequence for entering low power.
 	 */
 	asm("mrc p15, 0, %0, c0, c0, 0" : "=r"(primary_part) : : "cc");
+<<<<<<< HEAD
 	primary_part &= 0xfff0;
 	if ((primary_part == 0xc0f0) || (primary_part == 0xc070))
 		cpu_enter_lowpower_a15();
 	else
 		cpu_enter_lowpower_a9();
 #endif
+=======
+	if ((primary_part & 0xfff0) == 0xc0f0)
+		cpu_enter_lowpower_a15();
+	else
+		cpu_enter_lowpower_a9();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	platform_do_lowpower(cpu, &spurious);
 

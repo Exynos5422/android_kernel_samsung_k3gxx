@@ -604,9 +604,15 @@ static void write_endio(struct bio *bio, int error)
 
 	BUG_ON(!test_bit(B_WRITING, &b->state));
 
+<<<<<<< HEAD
 	smp_mb__before_clear_bit();
 	clear_bit(B_WRITING, &b->state);
 	smp_mb__after_clear_bit();
+=======
+	smp_mb__before_atomic();
+	clear_bit(B_WRITING, &b->state);
+	smp_mb__after_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	wake_up_bit(&b->state, B_WRITING);
 }
@@ -973,9 +979,15 @@ static void read_endio(struct bio *bio, int error)
 
 	BUG_ON(!test_bit(B_READING, &b->state));
 
+<<<<<<< HEAD
 	smp_mb__before_clear_bit();
 	clear_bit(B_READING, &b->state);
 	smp_mb__after_clear_bit();
+=======
+	smp_mb__before_atomic();
+	clear_bit(B_READING, &b->state);
+	smp_mb__after_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	wake_up_bit(&b->state, B_READING);
 }
@@ -1660,6 +1672,14 @@ static int __init dm_bufio_init(void)
 {
 	__u64 mem;
 
+<<<<<<< HEAD
+=======
+	dm_bufio_allocated_kmem_cache = 0;
+	dm_bufio_allocated_get_free_pages = 0;
+	dm_bufio_allocated_vmalloc = 0;
+	dm_bufio_current_allocated = 0;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	memset(&dm_bufio_caches, 0, sizeof dm_bufio_caches);
 	memset(&dm_bufio_cache_names, 0, sizeof dm_bufio_cache_names);
 
@@ -1674,8 +1694,13 @@ static int __init dm_bufio_init(void)
 	 * Get the size of vmalloc space the same way as VMALLOC_TOTAL
 	 * in fs/proc/internal.h
 	 */
+<<<<<<< HEAD
 	if (mem > (VMALLOC_END - VMALLOC_START) / 100 * DM_BUFIO_VMALLOC_PERCENT)
 		mem = (VMALLOC_END - VMALLOC_START) / 100 * DM_BUFIO_VMALLOC_PERCENT;
+=======
+	if (mem > (VMALLOC_END - VMALLOC_START) * DM_BUFIO_VMALLOC_PERCENT / 100)
+		mem = (VMALLOC_END - VMALLOC_START) * DM_BUFIO_VMALLOC_PERCENT / 100;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif
 
 	dm_bufio_default_cache_size = mem;

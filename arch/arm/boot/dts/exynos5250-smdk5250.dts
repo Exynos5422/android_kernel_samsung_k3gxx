@@ -10,7 +10,11 @@
 */
 
 /dts-v1/;
+<<<<<<< HEAD
 #include "exynos5250.dtsi"
+=======
+/include/ "exynos5250.dtsi"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 / {
 	model = "SAMSUNG SMDK5250 board based on EXYNOS5250";
@@ -37,6 +41,7 @@
 		};
 	};
 
+<<<<<<< HEAD
 	vdd:fixed-regulator@0 {
 		compatible = "regulator-fixed";
 		regulator-name = "vdd-supply";
@@ -61,6 +66,8 @@
 		regulator-always-on;
 	};
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	i2c@12C70000 {
 		samsung,i2c-sda-delay = <100>;
 		samsung,i2c-max-bus-freq = <20000>;
@@ -71,6 +78,7 @@
 		};
 
 		wm8994: wm8994@1a {
+<<<<<<< HEAD
 			compatible = "wlf,wm8994";
 			reg = <0x1a>;
 
@@ -82,6 +90,10 @@
 			DBVDD-supply = <&dbvdd>;
 			SPKVDD1-supply = <&spkvdd>;
 			SPKVDD2-supply = <&spkvdd>;
+=======
+			 compatible = "wlf,wm8994";
+			 reg = <0x1a>;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		};
 	};
 
@@ -257,9 +269,12 @@
 		samsung,color-depth = <1>;
 		samsung,link-rate = <0x0a>;
 		samsung,lane-count = <4>;
+<<<<<<< HEAD
 
 		pinctrl-names = "default";
 		pinctrl-0 = <&dp_hpd>;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	};
 
 	display-timings {

@@ -383,6 +383,7 @@ static int ni_65xx_dio_insn_bits(struct comedi_device *dev,
 {
 	const struct ni_65xx_board *board = comedi_board(dev);
 	struct ni_65xx_private *devpriv = dev->private;
+<<<<<<< HEAD
 	unsigned base_bitfield_channel;
 	const unsigned max_ports_per_bitfield = 5;
 	unsigned read_bits = 0;
@@ -405,6 +406,25 @@ static int ni_65xx_dio_insn_bits(struct comedi_device *dev,
 		bitshift = base_port_channel - base_bitfield_channel;
 		if (bitshift >= 32 || bitshift <= -32)
 			break;
+=======
+	int base_bitfield_channel;
+	unsigned read_bits = 0;
+	int last_port_offset = ni_65xx_port_by_channel(s->n_chan - 1);
+	int port_offset;
+
+	base_bitfield_channel = CR_CHAN(insn->chanspec);
+	for (port_offset = ni_65xx_port_by_channel(base_bitfield_channel);
+	     port_offset <= last_port_offset; port_offset++) {
+		unsigned port = sprivate(s)->base_port + port_offset;
+		int base_port_channel = port_offset * ni_65xx_channels_per_port;
+		unsigned port_mask, port_data, port_read_bits;
+		int bitshift = base_port_channel - base_bitfield_channel;
+
+		if (bitshift >= 32)
+			break;
+		port_mask = data[0];
+		port_data = data[1];
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (bitshift > 0) {
 			port_mask >>= bitshift;
 			port_data >>= bitshift;

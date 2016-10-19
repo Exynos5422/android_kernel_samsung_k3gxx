@@ -109,10 +109,14 @@ enum pageflags {
 #ifdef CONFIG_TRANSPARENT_HUGEPAGE
 	PG_compound_lock,
 #endif
+<<<<<<< HEAD
 #ifdef CONFIG_SCFS_LOWER_PAGECACHE_INVALIDATION
 	PG_scfslower,
 	PG_nocache,
 #endif
+=======
+	PG_readahead,		/* page in a readahead window */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	__NR_PAGEFLAGS,
 
 	/* Filesystems */
@@ -279,11 +283,14 @@ PAGEFLAG_FALSE(HWPoison)
 #define __PG_HWPOISON 0
 #endif
 
+<<<<<<< HEAD
 #ifdef CONFIG_SCFS_LOWER_PAGECACHE_INVALIDATION
 PAGEFLAG(Scfslower, scfslower)
 PAGEFLAG(Nocache, nocache)
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 u64 stable_page_flags(struct page *page);
 
 static inline int PageUptodate(struct page *page)

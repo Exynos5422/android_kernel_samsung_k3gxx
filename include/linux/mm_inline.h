@@ -2,9 +2,13 @@
 #define LINUX_MM_INLINE_H
 
 #include <linux/huge_mm.h>
+<<<<<<< HEAD
 #ifdef CONFIG_SCFS_LOWER_PAGECACHE_INVALIDATION
 #include <linux/page-flags.h>
 #endif
+=======
+#include <linux/swap.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /**
  * page_is_file_cache - should the page be on a file LRU or anon LRU?
@@ -29,6 +33,7 @@ static __always_inline void add_page_to_lru_list(struct page *page,
 {
 	int nr_pages = hpage_nr_pages(page);
 	mem_cgroup_update_lru_size(lruvec, lru, nr_pages);
+<<<<<<< HEAD
 #ifdef CONFIG_SCFS_LOWER_PAGECACHE_INVALIDATION
 	if (PageNocache(page))
 		list_add_tail(&page->lru, &lruvec->lists[lru]);
@@ -37,6 +42,9 @@ static __always_inline void add_page_to_lru_list(struct page *page,
 #else
 	list_add(&page->lru, &lruvec->lists[lru]);
 #endif
+=======
+	list_add(&page->lru, &lruvec->lists[lru]);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	__mod_zone_page_state(lruvec_zone(lruvec), NR_LRU_BASE + lru, nr_pages);
 }
 

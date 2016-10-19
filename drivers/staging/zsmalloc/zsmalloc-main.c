@@ -224,7 +224,11 @@ struct zs_pool {
  * performs VM mapping faster than copying, then it should be added here
  * so that USE_PGTABLE_MAPPING is defined. This causes zsmalloc to use
  * page table mapping rather than copying for object mapping.
+<<<<<<< HEAD
 */
+=======
+ */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #if defined(CONFIG_ARM) && !defined(MODULE)
 #define USE_PGTABLE_MAPPING
 #endif
@@ -423,14 +427,27 @@ static struct page *get_next_page(struct page *page)
 	if (is_last_page(page))
 		next = NULL;
 	else if (is_first_page(page))
+<<<<<<< HEAD
 		next = (struct page *)page->private;
+=======
+		next = (struct page *)page_private(page);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	else
 		next = list_entry(page->lru.next, struct page, lru);
 
 	return next;
 }
 
+<<<<<<< HEAD
 /* Encode <page, obj_idx> as a single handle value */
+=======
+/*
+ * Encode <page, obj_idx> as a single handle value.
+ * On hardware platforms with physical memory starting at 0x0 the pfn
+ * could be 0 so we ensure that the handle will never be 0 by adjusting the
+ * encoded obj_idx value before encoding.
+ */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static void *obj_location_to_handle(struct page *page, unsigned long obj_idx)
 {
 	unsigned long handle;
@@ -441,17 +458,33 @@ static void *obj_location_to_handle(struct page *page, unsigned long obj_idx)
 	}
 
 	handle = page_to_pfn(page) << OBJ_INDEX_BITS;
+<<<<<<< HEAD
 	handle |= (obj_idx & OBJ_INDEX_MASK);
+=======
+	handle |= ((obj_idx + 1) & OBJ_INDEX_MASK);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return (void *)handle;
 }
 
+<<<<<<< HEAD
 /* Decode <page, obj_idx> pair from the given object handle */
+=======
+/*
+ * Decode <page, obj_idx> pair from the given object handle. We adjust the
+ * decoded obj_idx back to its original value since it was adjusted in
+ * obj_location_to_handle().
+ */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static void obj_handle_to_location(unsigned long handle, struct page **page,
 				unsigned long *obj_idx)
 {
 	*page = pfn_to_page(handle >> OBJ_INDEX_BITS);
+<<<<<<< HEAD
 	*obj_idx = handle & OBJ_INDEX_MASK;
+=======
+	*obj_idx = (handle & OBJ_INDEX_MASK) - 1;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static unsigned long obj_idx_to_offset(struct page *page,
@@ -581,7 +614,11 @@ static struct page *alloc_zspage(struct size_class *class, gfp_t flags)
 			first_page->inuse = 0;
 		}
 		if (i == 1)
+<<<<<<< HEAD
 			first_page->private = (unsigned long)page;
+=======
+			set_page_private(first_page, (unsigned long)page);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (i >= 1)
 			page->first_page = first_page;
 		if (i >= 2)
@@ -844,8 +881,12 @@ void zs_destroy_pool(struct zs_pool *pool)
 
 		for (fg = 0; fg < _ZS_NR_FULLNESS_GROUPS; fg++) {
 			if (class->fullness_list[fg]) {
+<<<<<<< HEAD
 				pr_info("Freeing non-empty class with size "
 					"%db, fullness group %d\n",
+=======
+				pr_info("Freeing non-empty class with size %db, fullness group %d\n",
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 					class->size, fg);
 			}
 		}
@@ -968,7 +1009,11 @@ EXPORT_SYMBOL_GPL(zs_free);
  * against nested mappings.
  *
  * This function returns with preemption and page faults disabled.
+<<<<<<< HEAD
 */
+=======
+ */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 void *zs_map_object(struct zs_pool *pool, unsigned long handle,
 			enum zs_mapmode mm)
 {

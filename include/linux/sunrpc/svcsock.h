@@ -56,6 +56,10 @@ int		svc_recv(struct svc_rqst *, long);
 int		svc_send(struct svc_rqst *);
 void		svc_drop(struct svc_rqst *);
 void		svc_sock_update_bufs(struct svc_serv *serv);
+<<<<<<< HEAD
+=======
+bool		svc_alien_sock(struct net *net, int fd);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 int		svc_addsock(struct svc_serv *serv, const int fd,
 					char *name_return, const size_t len);
 void		svc_init_xprt_sock(void);

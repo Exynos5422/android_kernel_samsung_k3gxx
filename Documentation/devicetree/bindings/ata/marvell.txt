@@ -1,7 +1,11 @@
 * Marvell Orion SATA
 
 Required Properties:
+<<<<<<< HEAD
 - compatibility : "marvell,orion-sata"
+=======
+- compatibility : "marvell,orion-sata" or "marvell,armada-370-sata"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 - reg           : Address range of controller
 - interrupts    : Interrupt controller is using
 - nr-ports      : Number of SATA ports in use.

@@ -462,6 +462,11 @@ il3945_is_network_packet(struct il_priv *il, struct ieee80211_hdr *header)
 	}
 }
 
+<<<<<<< HEAD
+=======
+#define SMALL_PACKET_SIZE 256
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static void
 il3945_pass_packet_to_mac80211(struct il_priv *il, struct il_rx_buf *rxb,
 			       struct ieee80211_rx_status *stats)
@@ -470,6 +475,7 @@ il3945_pass_packet_to_mac80211(struct il_priv *il, struct il_rx_buf *rxb,
 	struct ieee80211_hdr *hdr = (struct ieee80211_hdr *)IL_RX_DATA(pkt);
 	struct il3945_rx_frame_hdr *rx_hdr = IL_RX_HDR(pkt);
 	struct il3945_rx_frame_end *rx_end = IL_RX_END(pkt);
+<<<<<<< HEAD
 	u16 len = le16_to_cpu(rx_hdr->len);
 	struct sk_buff *skb;
 	__le16 fc = hdr->frame_control;
@@ -478,6 +484,15 @@ il3945_pass_packet_to_mac80211(struct il_priv *il, struct il_rx_buf *rxb,
 	if (unlikely
 	    (len + IL39_RX_FRAME_SIZE >
 	     PAGE_SIZE << il->hw_params.rx_page_order)) {
+=======
+	u32 len = le16_to_cpu(rx_hdr->len);
+	struct sk_buff *skb;
+	__le16 fc = hdr->frame_control;
+	u32 fraglen = PAGE_SIZE << il->hw_params.rx_page_order;
+
+	/* We received data from the HW, so stop the watchdog */
+	if (unlikely(len + IL39_RX_FRAME_SIZE > fraglen)) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		D_DROP("Corruption detected!\n");
 		return;
 	}
@@ -488,13 +503,18 @@ il3945_pass_packet_to_mac80211(struct il_priv *il, struct il_rx_buf *rxb,
 		return;
 	}
 
+<<<<<<< HEAD
 	skb = dev_alloc_skb(128);
+=======
+	skb = dev_alloc_skb(SMALL_PACKET_SIZE);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (!skb) {
 		IL_ERR("dev_alloc_skb failed\n");
 		return;
 	}
 
 	if (!il3945_mod_params.sw_crypto)
+<<<<<<< HEAD
 		il_set_decrypted_flag(il, (struct ieee80211_hdr *)rxb_addr(rxb),
 				      le32_to_cpu(rx_end->status), stats);
 
@@ -502,12 +522,32 @@ il3945_pass_packet_to_mac80211(struct il_priv *il, struct il_rx_buf *rxb,
 			(void *)rx_hdr->payload - (void *)pkt, len,
 			len);
 
+=======
+		il_set_decrypted_flag(il, (struct ieee80211_hdr *)pkt,
+				      le32_to_cpu(rx_end->status), stats);
+
+	/* If frame is small enough to fit into skb->head, copy it
+	 * and do not consume a full page
+	 */
+	if (len <= SMALL_PACKET_SIZE) {
+		memcpy(skb_put(skb, len), rx_hdr->payload, len);
+	} else {
+		skb_add_rx_frag(skb, 0, rxb->page,
+				(void *)rx_hdr->payload - (void *)pkt, len,
+				fraglen);
+		il->alloc_rxb_page--;
+		rxb->page = NULL;
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	il_update_stats(il, false, fc, len);
 	memcpy(IEEE80211_SKB_RXCB(skb), stats, sizeof(*stats));
 
 	ieee80211_rx(il->hw, skb);
+<<<<<<< HEAD
 	il->alloc_rxb_page--;
 	rxb->page = NULL;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 #define IL_DELAY_NEXT_SCAN_AFTER_ASSOC (HZ*6)

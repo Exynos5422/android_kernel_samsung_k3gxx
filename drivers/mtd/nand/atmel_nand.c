@@ -1096,6 +1096,10 @@ static int __init atmel_pmecc_nand_init_params(struct platform_device *pdev,
 		goto err_pmecc_data_alloc;
 	}
 
+<<<<<<< HEAD
+=======
+	nand_chip->options |= NAND_NO_SUBPAGE_WRITE;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	nand_chip->ecc.read_page = atmel_nand_pmecc_read_page;
 	nand_chip->ecc.write_page = atmel_nand_pmecc_write_page;
 

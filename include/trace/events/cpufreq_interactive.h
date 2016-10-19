@@ -34,6 +34,7 @@ DEFINE_EVENT(set, cpufreq_interactive_setspeed,
 	TP_ARGS(cpu_id, targfreq, actualfreq)
 );
 
+<<<<<<< HEAD
 #ifdef CONFIG_ARCH_EXYNOS
 DEFINE_EVENT(set, cpufreq_interactive_cpu_min_qos,
 	TP_PROTO(u32 cpu_id, unsigned long targfreq,
@@ -61,6 +62,8 @@ DEFINE_EVENT(set, cpufreq_interactive_kfc_max_qos,
 #endif /* CONFIG_ARM_EXYNOS_MP_CPUFREQ */
 #endif /* CONFIG_ARCH_EXYNOS */
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 DECLARE_EVENT_CLASS(loadeval,
 	    TP_PROTO(unsigned long cpu_id, unsigned long load,
 		     unsigned long curtarg, unsigned long curactual,
@@ -108,6 +111,7 @@ DEFINE_EVENT(loadeval, cpufreq_interactive_notyet,
 		     unsigned long newtarg),
 	    TP_ARGS(cpu_id, load, curtarg, curactual, newtarg)
 );
+<<<<<<< HEAD
 #ifdef CONFIG_MODE_AUTO_CHANGE
 DECLARE_EVENT_CLASS(modeeval,
 	    TP_PROTO(unsigned long cpu_id, unsigned long total_load,
@@ -146,6 +150,9 @@ DEFINE_EVENT(modeeval, cpufreq_interactive_mode,
 	    TP_ARGS(cpu_id, total_load, single_enter, multi_enter, single_exit, multi_exit, mode)
 );
 #endif
+=======
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 TRACE_EVENT(cpufreq_interactive_boost,
 	    TP_PROTO(const char *s),
 	    TP_ARGS(s),
@@ -170,6 +177,21 @@ TRACE_EVENT(cpufreq_interactive_unboost,
 	    TP_printk("%s", __get_str(s))
 );
 
+<<<<<<< HEAD
+=======
+TRACE_EVENT(cpufreq_interactive_load_change,
+	    TP_PROTO(unsigned long cpu_id),
+	    TP_ARGS(cpu_id),
+	    TP_STRUCT__entry(
+		__field(unsigned long, cpu_id)
+	    ),
+	    TP_fast_assign(
+		__entry->cpu_id = cpu_id;
+	    ),
+	    TP_printk("re-evaluate for cpu=%lu", __entry->cpu_id)
+);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif /* _TRACE_CPUFREQ_INTERACTIVE_H */
 
 /* This part must be outside protection */

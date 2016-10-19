@@ -40,6 +40,7 @@ static ssize_t state_show(struct device *dev, struct device_attribute *attr,
 	return sprintf(buf, "%d\n", sdev->state);
 }
 
+<<<<<<< HEAD
 static ssize_t state_store(struct device *dev, struct device_attribute *attr,
 			   const char *buf, size_t count)
 {
@@ -56,6 +57,8 @@ static ssize_t state_store(struct device *dev, struct device_attribute *attr,
 	return count;
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static ssize_t name_show(struct device *dev, struct device_attribute *attr,
 		char *buf)
 {
@@ -70,8 +73,13 @@ static ssize_t name_show(struct device *dev, struct device_attribute *attr,
 	return sprintf(buf, "%s\n", sdev->name);
 }
 
+<<<<<<< HEAD
 static DEVICE_ATTR(state, S_IRUGO | S_IWUSR, state_show, state_store);
 static DEVICE_ATTR(name, S_IRUGO | S_IWUSR, name_show, state_store);
+=======
+static DEVICE_ATTR(state, S_IRUGO, state_show, NULL);
+static DEVICE_ATTR(name, S_IRUGO, name_show, NULL);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 void switch_set_state(struct switch_dev *sdev, int state)
 {
@@ -165,9 +173,15 @@ EXPORT_SYMBOL_GPL(switch_dev_register);
 
 void switch_dev_unregister(struct switch_dev *sdev)
 {
+<<<<<<< HEAD
 	dev_set_drvdata(sdev->dev, NULL);
 	device_remove_file(sdev->dev, &dev_attr_name);
 	device_remove_file(sdev->dev, &dev_attr_state);
+=======
+	device_remove_file(sdev->dev, &dev_attr_name);
+	device_remove_file(sdev->dev, &dev_attr_state);
+	dev_set_drvdata(sdev->dev, NULL);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	device_destroy(switch_class, MKDEV(0, sdev->index));
 }
 EXPORT_SYMBOL_GPL(switch_dev_unregister);

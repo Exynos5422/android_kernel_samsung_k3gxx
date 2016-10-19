@@ -2527,8 +2527,11 @@ static int prepend_path(const struct path *path,
 	struct dentry *dentry = path->dentry;
 	struct vfsmount *vfsmnt = path->mnt;
 	struct mount *mnt = real_mount(vfsmnt);
+<<<<<<< HEAD
 	char *orig_buffer = *buffer;
 	int orig_len = *buflen;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	bool slash = false;
 	int error = 0;
 
@@ -2536,6 +2539,7 @@ static int prepend_path(const struct path *path,
 		struct dentry * parent;
 
 		if (dentry == vfsmnt->mnt_root || IS_ROOT(dentry)) {
+<<<<<<< HEAD
 			/* Escaped? */
 			if (dentry != vfsmnt->mnt_root) {
 				*buffer = orig_buffer;
@@ -2544,6 +2548,8 @@ static int prepend_path(const struct path *path,
 				error = 3;
 				goto global_root;
 			}
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			/* Global root? */
 			if (!mnt_has_parent(mnt))
 				goto global_root;
@@ -2696,8 +2702,18 @@ char *d_path(const struct path *path, char *buf, int buflen)
 	 * thus don't need to be hashed.  They also don't need a name until a
 	 * user wants to identify the object in /proc/pid/fd/.  The little hack
 	 * below allows us to generate a name for these objects on demand:
+<<<<<<< HEAD
 	 */
 	if (path->dentry->d_op && path->dentry->d_op->d_dname)
+=======
+	 *
+	 * Some pseudo inodes are mountable.  When they are mounted
+	 * path->dentry == path->mnt->mnt_root.  In that case don't call d_dname
+	 * and instead have d_path return the mounted path.
+	 */
+	if (path->dentry->d_op && path->dentry->d_op->d_dname &&
+	    (!IS_ROOT(path->dentry) || path->dentry != path->mnt->mnt_root))
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return path->dentry->d_op->d_dname(path->dentry, buf, buflen);
 
 	get_fs_root(current->fs, &root);

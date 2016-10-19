@@ -79,11 +79,19 @@ static struct cpufreq_driver centrino_driver;
 
 /* Computes the correct form for IA32_PERF_CTL MSR for a particular
    frequency/voltage operating point; frequency in MHz, volts in mV.
+<<<<<<< HEAD
    This is stored as "index" in the structure. */
 #define OP(mhz, mv)							\
 	{								\
 		.frequency = (mhz) * 1000,				\
 		.index = (((mhz)/100) << 8) | ((mv - 700) / 16)		\
+=======
+   This is stored as "driver_data" in the structure. */
+#define OP(mhz, mv)							\
+	{								\
+		.frequency = (mhz) * 1000,				\
+		.driver_data = (((mhz)/100) << 8) | ((mv - 700) / 16)		\
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 /*
@@ -307,7 +315,11 @@ static unsigned extract_clock(unsigned msr, unsigned int cpu, int failsafe)
 		per_cpu(centrino_model, cpu)->op_points[i].frequency
 							!= CPUFREQ_TABLE_END;
 	     i++) {
+<<<<<<< HEAD
 		if (msr == per_cpu(centrino_model, cpu)->op_points[i].index)
+=======
+		if (msr == per_cpu(centrino_model, cpu)->op_points[i].driver_data)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			return per_cpu(centrino_model, cpu)->
 							op_points[i].frequency;
 	}
@@ -501,7 +513,11 @@ static int centrino_target (struct cpufreq_policy *policy,
 			break;
 		}
 
+<<<<<<< HEAD
 		msr = per_cpu(centrino_model, cpu)->op_points[newstate].index;
+=======
+		msr = per_cpu(centrino_model, cpu)->op_points[newstate].driver_data;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 		if (first_cpu) {
 			rdmsr_on_cpu(good_cpu, MSR_IA32_PERF_CTL, &oldmsr, &h);
@@ -575,7 +591,10 @@ static struct cpufreq_driver centrino_driver = {
 	.target		= centrino_target,
 	.get		= get_cur_freq,
 	.attr           = centrino_attr,
+<<<<<<< HEAD
 	.owner		= THIS_MODULE,
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 /*

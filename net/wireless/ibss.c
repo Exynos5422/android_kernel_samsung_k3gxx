@@ -172,6 +172,11 @@ static void __cfg80211_clear_ibss(struct net_device *dev, bool nowext)
 	kfree(wdev->connect_keys);
 	wdev->connect_keys = NULL;
 
+<<<<<<< HEAD
+=======
+	rdev_set_qos_map(rdev, dev, NULL);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/*
 	 * Delete all the keys ... pairwise keys can't really
 	 * exist any more anyway, but default keys might.
@@ -269,6 +274,11 @@ int cfg80211_ibss_wext_join(struct cfg80211_registered_device *rdev,
 				if (chan->flags & IEEE80211_CHAN_DISABLED)
 					continue;
 				wdev->wext.ibss.chandef.chan = chan;
+<<<<<<< HEAD
+=======
+				wdev->wext.ibss.chandef.center_freq1 =
+					chan->center_freq;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				break;
 			}
 
@@ -353,6 +363,10 @@ int cfg80211_ibss_wext_siwfreq(struct net_device *dev,
 	if (chan) {
 		wdev->wext.ibss.chandef.chan = chan;
 		wdev->wext.ibss.chandef.width = NL80211_CHAN_WIDTH_20_NOHT;
+<<<<<<< HEAD
+=======
+		wdev->wext.ibss.chandef.center_freq1 = freq;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		wdev->wext.ibss.channel_fixed = true;
 	} else {
 		/* cfg80211_ibss_wext_join will pick one if needed */

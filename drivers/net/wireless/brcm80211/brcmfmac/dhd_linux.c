@@ -1034,6 +1034,7 @@ u32 brcmf_get_chip_info(struct brcmf_if *ifp)
 	return bus->chip << 4 | bus->chiprev;
 }
 
+<<<<<<< HEAD
 static void brcmf_driver_init(struct work_struct *work)
 {
 	brcmf_debugfs_init();
@@ -1049,6 +1050,25 @@ static DECLARE_WORK(brcmf_driver_work, brcmf_driver_init);
 
 static int __init brcmfmac_module_init(void)
 {
+=======
+static void brcmf_driver_register(struct work_struct *work)
+{
+#ifdef CONFIG_BRCMFMAC_SDIO
+	brcmf_sdio_register();
+#endif
+#ifdef CONFIG_BRCMFMAC_USB
+	brcmf_usb_register();
+#endif
+}
+static DECLARE_WORK(brcmf_driver_work, brcmf_driver_register);
+
+static int __init brcmfmac_module_init(void)
+{
+	brcmf_debugfs_init();
+#ifdef CONFIG_BRCMFMAC_SDIO
+	brcmf_sdio_init();
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (!schedule_work(&brcmf_driver_work))
 		return -EBUSY;
 

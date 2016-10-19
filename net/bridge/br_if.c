@@ -172,6 +172,11 @@ void br_dev_delete(struct net_device *dev, struct list_head *head)
 		del_nbp(p);
 	}
 
+<<<<<<< HEAD
+=======
+	br_fdb_delete_by_port(br, NULL, 1);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	del_timer_sync(&br->gc_timer);
 
 	br_sysfs_delbr(br->dev);
@@ -382,6 +387,12 @@ int br_add_if(struct net_bridge *br, struct net_device *dev)
 
 	netdev_update_features(br->dev);
 
+<<<<<<< HEAD
+=======
+	if (br->dev->needed_headroom < dev->needed_headroom)
+		br->dev->needed_headroom = dev->needed_headroom;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	spin_lock_bh(&br->lock);
 	changed_addr = br_stp_recalculate_bridge_id(br);
 

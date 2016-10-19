@@ -141,6 +141,11 @@ static inline u8 FAN_TO_REG(long rpm, int div)
 {
 	if (rpm <= 0)
 		return 255;
+<<<<<<< HEAD
+=======
+	if (rpm > 1350000)
+		return 1;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return clamp_val((1350000 + rpm * div / 2) / (rpm * div), 1, 254);
 }
 

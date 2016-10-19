@@ -15,7 +15,11 @@
 
 #include <linux/device.h>
 #include <linux/notifier.h>
+<<<<<<< HEAD
 #include <linux/opp.h>
+=======
+#include <linux/pm_opp.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define DEVFREQ_NAME_LEN 16
 
@@ -38,8 +42,13 @@ struct devfreq;
  */
 struct devfreq_dev_status {
 	/* both since the last measure */
+<<<<<<< HEAD
 	unsigned long long total_time;
 	unsigned long long busy_time;
+=======
+	unsigned long total_time;
+	unsigned long busy_time;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	unsigned long current_frequency;
 	void *private_data;
 };
@@ -52,6 +61,13 @@ struct devfreq_dev_status {
  */
 #define DEVFREQ_FLAG_LEAST_UPPER_BOUND		0x1
 
+<<<<<<< HEAD
+=======
+#define DEVFREQ_FLAG_FAST_HINT			0x2
+#define DEVFREQ_FLAG_SLOW_HINT			0x4
+#define DEVFREQ_FLAG_WAKEUP_MAXFREQ		0x8
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /**
  * struct devfreq_dev_profile - Devfreq's user device profile
  * @initial_freq:	The operating frequency when devfreq_add_device() is
@@ -111,7 +127,12 @@ struct devfreq_governor {
 	struct list_head node;
 
 	const char name[DEVFREQ_NAME_LEN];
+<<<<<<< HEAD
 	int (*get_target_freq)(struct devfreq *this, unsigned long *freq);
+=======
+	int (*get_target_freq)(struct devfreq *this, unsigned long *freq,
+				u32 *flag);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	int (*event_handler)(struct devfreq *devfreq,
 				unsigned int event, void *data);
 };
@@ -192,6 +213,7 @@ extern int devfreq_register_opp_notifier(struct device *dev,
 extern int devfreq_unregister_opp_notifier(struct device *dev,
 					   struct devfreq *devfreq);
 
+<<<<<<< HEAD
 #if IS_ENABLED(CONFIG_DEVFREQ_GOV_SIMPLE_ONDEMAND) || IS_ENABLED(CONFIG_DEVFREQ_GOV_SIMPLE_USAGE)
 struct devfreq_notifier_block {
 	struct notifier_block nb;
@@ -199,6 +221,8 @@ struct devfreq_notifier_block {
 };
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #if IS_ENABLED(CONFIG_DEVFREQ_GOV_SIMPLE_ONDEMAND)
 /**
  * struct devfreq_simple_ondemand_data - void *data fed to struct devfreq
@@ -209,11 +233,18 @@ struct devfreq_notifier_block {
  *			the governor may consider slowing the frequency down.
  *			Specify 0 to use the default. Valid value = 0 to 100.
  *			downdifferential < upthreshold must hold.
+<<<<<<< HEAD
+=======
+ * @simple_scaling:	Setting this flag will scale the clocks up only if the
+ *			load is above @upthreshold and will scale the clocks
+ *			down only if the load is below @downdifferential.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  *
  * If the fed devfreq_simple_ondemand_data pointer is NULL to the governor,
  * the governor uses the default values.
  */
 struct devfreq_simple_ondemand_data {
+<<<<<<< HEAD
 	unsigned int multiplication_weight;
 	unsigned int upthreshold;
 	unsigned int downdifferential;
@@ -249,6 +280,11 @@ struct devfreq_simple_exynos_data {
 	unsigned long cal_qos_max;
 	bool en_monitoring;
 	struct devfreq_notifier_block nb;
+=======
+	unsigned int upthreshold;
+	unsigned int downdifferential;
+	unsigned int simple_scaling;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 #endif
 

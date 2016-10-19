@@ -161,6 +161,10 @@ phys_addr_t memblock_end_of_DRAM(void);
 void memblock_enforce_memory_limit(phys_addr_t memory_limit);
 int memblock_is_memory(phys_addr_t addr);
 int memblock_is_region_memory(phys_addr_t base, phys_addr_t size);
+<<<<<<< HEAD
+=======
+int memblock_overlaps_memory(phys_addr_t base, phys_addr_t size);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 int memblock_is_reserved(phys_addr_t addr);
 int memblock_is_region_reserved(phys_addr_t base, phys_addr_t size);
 
@@ -181,6 +185,11 @@ static inline void memblock_dump_all(void)
 void memblock_set_current_limit(phys_addr_t limit);
 
 
+<<<<<<< HEAD
+=======
+phys_addr_t memblock_get_current_limit(void);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * pfn conversion functions
  *
@@ -230,6 +239,15 @@ static inline unsigned long memblock_region_reserved_end_pfn(const struct memblo
 	     region < (memblock.memblock_type.regions + memblock.memblock_type.cnt);	\
 	     region++)
 
+<<<<<<< HEAD
+=======
+#define for_each_memblock_rev(memblock_type, region)	\
+	for (region = memblock.memblock_type.regions + \
+			memblock.memblock_type.cnt - 1;	\
+	     region >= memblock.memblock_type.regions;	\
+	     region--)
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #ifdef CONFIG_ARCH_DISCARD_MEMBLOCK
 #define __init_memblock __meminit

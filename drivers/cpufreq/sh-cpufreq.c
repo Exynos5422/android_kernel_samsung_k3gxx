@@ -87,15 +87,23 @@ static int sh_cpufreq_verify(struct cpufreq_policy *policy)
 	if (freq_table)
 		return cpufreq_frequency_table_verify(policy, freq_table);
 
+<<<<<<< HEAD
 	cpufreq_verify_within_limits(policy, policy->cpuinfo.min_freq,
 				     policy->cpuinfo.max_freq);
+=======
+	cpufreq_verify_within_cpu_limits(policy);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	policy->min = (clk_round_rate(cpuclk, 1) + 500) / 1000;
 	policy->max = (clk_round_rate(cpuclk, ~0UL) + 500) / 1000;
 
+<<<<<<< HEAD
 	cpufreq_verify_within_limits(policy, policy->cpuinfo.min_freq,
 				     policy->cpuinfo.max_freq);
 
+=======
+	cpufreq_verify_within_cpu_limits(policy);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 
@@ -160,7 +168,10 @@ static struct freq_attr *sh_freq_attr[] = {
 };
 
 static struct cpufreq_driver sh_cpufreq_driver = {
+<<<<<<< HEAD
 	.owner		= THIS_MODULE,
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	.name		= "sh",
 	.get		= sh_cpufreq_get,
 	.target		= sh_cpufreq_target,

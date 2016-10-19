@@ -1131,12 +1131,15 @@ ip_vs_out(unsigned int hooknum, struct sk_buff *skb, int af)
 	ip_vs_fill_iph_skb(af, skb, &iph);
 #ifdef CONFIG_IP_VS_IPV6
 	if (af == AF_INET6) {
+<<<<<<< HEAD
 		if (!iph.fragoffs && skb_nfct_reasm(skb)) {
 			struct sk_buff *reasm = skb_nfct_reasm(skb);
 			/* Save fw mark for coming frags */
 			reasm->ipvs_property = 1;
 			reasm->mark = skb->mark;
 		}
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (unlikely(iph.protocol == IPPROTO_ICMPV6)) {
 			int related;
 			int verdict = ip_vs_out_icmp_v6(skb, &related,
@@ -1390,15 +1393,28 @@ ip_vs_in_icmp(struct sk_buff *skb, int *related, unsigned int hooknum)
 
 	if (ipip) {
 		__be32 info = ic->un.gateway;
+<<<<<<< HEAD
+=======
+		__u8 type = ic->type;
+		__u8 code = ic->code;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 		/* Update the MTU */
 		if (ic->type == ICMP_DEST_UNREACH &&
 		    ic->code == ICMP_FRAG_NEEDED) {
 			struct ip_vs_dest *dest = cp->dest;
 			u32 mtu = ntohs(ic->un.frag.mtu);
+<<<<<<< HEAD
 
 			/* Strip outer IP and ICMP, go to IPIP header */
 			__skb_pull(skb, ihl + sizeof(_icmph));
+=======
+			__be16 frag_off = cih->frag_off;
+
+			/* Strip outer IP and ICMP, go to IPIP header */
+			if (pskb_pull(skb, ihl + sizeof(_icmph)) == NULL)
+				goto ignore_ipip;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			offset2 -= ihl + sizeof(_icmph);
 			skb_reset_network_header(skb);
 			IP_VS_DBG(12, "ICMP for IPIP %pI4->%pI4: mtu=%u\n",
@@ -1406,7 +1422,11 @@ ip_vs_in_icmp(struct sk_buff *skb, int *related, unsigned int hooknum)
 			ipv4_update_pmtu(skb, dev_net(skb->dev),
 					 mtu, 0, 0, 0, 0);
 			/* Client uses PMTUD? */
+<<<<<<< HEAD
 			if (!(cih->frag_off & htons(IP_DF)))
+=======
+			if (!(frag_off & htons(IP_DF)))
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				goto ignore_ipip;
 			/* Prefer the resulting PMTU */
 			if (dest) {
@@ -1425,12 +1445,22 @@ ip_vs_in_icmp(struct sk_buff *skb, int *related, unsigned int hooknum)
 		/* Strip outer IP, ICMP and IPIP, go to IP header of
 		 * original request.
 		 */
+<<<<<<< HEAD
 		__skb_pull(skb, offset2);
 		skb_reset_network_header(skb);
 		IP_VS_DBG(12, "Sending ICMP for %pI4->%pI4: t=%u, c=%u, i=%u\n",
 			&ip_hdr(skb)->saddr, &ip_hdr(skb)->daddr,
 			ic->type, ic->code, ntohl(info));
 		icmp_send(skb, ic->type, ic->code, info);
+=======
+		if (pskb_pull(skb, offset2) == NULL)
+			goto ignore_ipip;
+		skb_reset_network_header(skb);
+		IP_VS_DBG(12, "Sending ICMP for %pI4->%pI4: t=%u, c=%u, i=%u\n",
+			&ip_hdr(skb)->saddr, &ip_hdr(skb)->daddr,
+			type, code, ntohl(info));
+		icmp_send(skb, type, code, info);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		/* ICMP can be shorter but anyways, account it */
 		ip_vs_out_stats(cp, skb);
 
@@ -1606,12 +1636,15 @@ ip_vs_in(unsigned int hooknum, struct sk_buff *skb, int af)
 
 #ifdef CONFIG_IP_VS_IPV6
 	if (af == AF_INET6) {
+<<<<<<< HEAD
 		if (!iph.fragoffs && skb_nfct_reasm(skb)) {
 			struct sk_buff *reasm = skb_nfct_reasm(skb);
 			/* Save fw mark for coming frags. */
 			reasm->ipvs_property = 1;
 			reasm->mark = skb->mark;
 		}
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (unlikely(iph.protocol == IPPROTO_ICMPV6)) {
 			int related;
 			int verdict = ip_vs_in_icmp_v6(skb, &related, hooknum,
@@ -1663,9 +1696,14 @@ ip_vs_in(unsigned int hooknum, struct sk_buff *skb, int af)
 		/* sorry, all this trouble for a no-hit :) */
 		IP_VS_DBG_PKT(12, af, pp, skb, 0,
 			      "ip_vs_in: packet continues traversal as normal");
+<<<<<<< HEAD
 		if (iph.fragoffs && !skb_nfct_reasm(skb)) {
 			/* Fragment that couldn't be mapped to a conn entry
 			 * and don't have any pointer to a reasm skb
+=======
+		if (iph.fragoffs) {
+			/* Fragment that couldn't be mapped to a conn entry
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			 * is missing module nf_defrag_ipv6
 			 */
 			IP_VS_DBG_RL("Unhandled frag, load nf_defrag_ipv6\n");
@@ -1748,6 +1786,7 @@ ip_vs_local_request4(unsigned int hooknum, struct sk_buff *skb,
 #ifdef CONFIG_IP_VS_IPV6
 
 /*
+<<<<<<< HEAD
  * AF_INET6 fragment handling
  * Copy info from first fragment, to the rest of them.
  */
@@ -1780,6 +1819,8 @@ ip_vs_preroute_frag6(unsigned int hooknum, struct sk_buff *skb,
 }
 
 /*
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  *	AF_INET6 handler in NF_INET_LOCAL_IN chain
  *	Schedule and forward packets from remote clients
  */
@@ -1916,6 +1957,7 @@ static struct nf_hook_ops ip_vs_ops[] __read_mostly = {
 		.priority	= 100,
 	},
 #ifdef CONFIG_IP_VS_IPV6
+<<<<<<< HEAD
 	/* After mangle & nat fetch 2:nd fragment and following */
 	{
 		.hook		= ip_vs_preroute_frag6,
@@ -1924,6 +1966,8 @@ static struct nf_hook_ops ip_vs_ops[] __read_mostly = {
 		.hooknum	= NF_INET_PRE_ROUTING,
 		.priority	= NF_IP6_PRI_NAT_DST + 1,
 	},
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* After packet filtering, change source only for VS/NAT */
 	{
 		.hook		= ip_vs_reply6,

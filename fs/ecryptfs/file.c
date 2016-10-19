@@ -34,6 +34,7 @@
 #include <linux/aio.h>
 #include "ecryptfs_kernel.h"
 
+<<<<<<< HEAD
 #ifdef CONFIG_WTL_ENCRYPTION_FILTER
 #include <linux/ctype.h>
 #define ECRYPTFS_IOCTL_GET_ATTRIBUTES	_IOR('l', 0x10, __u32)
@@ -56,6 +57,8 @@
 #include <sdp/fs_request.h>
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /**
  * ecryptfs_read_update_atime
  *
@@ -173,6 +176,7 @@ static int read_or_initialize_metadata(struct dentry *dentry)
 	crypt_stat = &ecryptfs_inode_to_private(inode)->crypt_stat;
 	mount_crypt_stat = &ecryptfs_superblock_to_private(
 						inode->i_sb)->mount_crypt_stat;
+<<<<<<< HEAD
 
 #ifdef CONFIG_WTL_ENCRYPTION_FILTER
 	if (crypt_stat->flags & ECRYPTFS_STRUCT_INITIALIZED
@@ -214,6 +218,8 @@ static int read_or_initialize_metadata(struct dentry *dentry)
 	mutex_unlock(&crypt_stat->cs_mutex);
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	mutex_lock(&crypt_stat->cs_mutex);
 
 	if (crypt_stat->flags & ECRYPTFS_POLICY_APPLIED &&
@@ -226,6 +232,7 @@ static int read_or_initialize_metadata(struct dentry *dentry)
 	if (!rc)
 		goto out;
 
+<<<<<<< HEAD
 #ifdef CONFIG_SDP
 	/*
 	 * no passthrough/xattr for sensitive files
@@ -234,6 +241,8 @@ static int read_or_initialize_metadata(struct dentry *dentry)
 		goto out;
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (mount_crypt_stat->flags & ECRYPTFS_PLAINTEXT_PASSTHROUGH_ENABLED) {
 		crypt_stat->flags &= ~(ECRYPTFS_I_SIZE_INITIALIZED
 				       | ECRYPTFS_ENCRYPTED);
@@ -251,6 +260,7 @@ static int read_or_initialize_metadata(struct dentry *dentry)
 	rc = -EIO;
 out:
 	mutex_unlock(&crypt_stat->cs_mutex);
+<<<<<<< HEAD
 #ifdef CONFIG_SDP
 	if(!rc)
 	{
@@ -270,6 +280,8 @@ out:
 		}
 	}
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return rc;
 }
 
@@ -291,12 +303,15 @@ static int ecryptfs_open(struct inode *inode, struct file *file)
 	/* Private value of ecryptfs_dentry allocated in
 	 * ecryptfs_lookup() */
 	struct ecryptfs_file_info *file_info;
+<<<<<<< HEAD
 #ifdef CONFIG_DLP
 	sdp_fs_command_t *cmd = NULL;
 	ssize_t dlp_len = 0;
 	struct knox_dlp_data dlp_data;
 	struct timespec ts;
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	mount_crypt_stat = &ecryptfs_superblock_to_private(
 		ecryptfs_dentry->d_sb)->mount_crypt_stat;
@@ -345,6 +360,7 @@ static int ecryptfs_open(struct inode *inode, struct file *file)
 	ecryptfs_set_file_lower(
 		file, ecryptfs_inode_to_private(inode)->lower_file);
 	if (S_ISDIR(ecryptfs_dentry->d_inode->i_mode)) {
+<<<<<<< HEAD
 #ifdef CONFIG_SDP
 		/*
 		 * it's possible to have a sensitive directory. (vault)
@@ -352,6 +368,8 @@ static int ecryptfs_open(struct inode *inode, struct file *file)
 		if (mount_crypt_stat->flags & ECRYPTFS_MOUNT_SDP_ENABLED)
 			crypt_stat->flags |= ECRYPTFS_DEK_SDP_ENABLED;
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		ecryptfs_printk(KERN_DEBUG, "This is a directory\n");
 		mutex_lock(&crypt_stat->cs_mutex);
 		crypt_stat->flags &= ~(ECRYPTFS_ENCRYPTED);
@@ -360,6 +378,7 @@ static int ecryptfs_open(struct inode *inode, struct file *file)
 		goto out;
 	}
 	rc = read_or_initialize_metadata(ecryptfs_dentry);
+<<<<<<< HEAD
 	if (rc) {
 #ifdef CONFIG_SDP
 		if(file->f_flags & O_SDP){
@@ -477,6 +496,10 @@ static int ecryptfs_open(struct inode *inode, struct file *file)
 	}
 #endif
 
+=======
+	if (rc)
+		goto out_put;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ecryptfs_printk(KERN_DEBUG, "inode w/ addr = [0x%p], i_ino = "
 			"[0x%.16lx] size: [0x%.16llx]\n", inode, inode->i_ino,
 			(unsigned long long)i_size_read(inode));
@@ -487,12 +510,15 @@ out_free:
 	kmem_cache_free(ecryptfs_file_info_cache,
 			ecryptfs_file_to_private(file));
 out:
+<<<<<<< HEAD
 #ifdef CONFIG_DLP
 	if(cmd) {
 		sdp_fs_request(cmd, NULL);
 		sdp_fs_command_free(cmd);
 	}
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return rc;
 }
 
@@ -510,6 +536,7 @@ static int ecryptfs_flush(struct file *file, fl_owner_t td)
 
 static int ecryptfs_release(struct inode *inode, struct file *file)
 {
+<<<<<<< HEAD
 	struct ecryptfs_crypt_stat *crypt_stat;
 	crypt_stat = &ecryptfs_inode_to_private(inode)->crypt_stat;
 
@@ -520,6 +547,9 @@ static int ecryptfs_release(struct inode *inode, struct file *file)
 #ifdef CONFIG_SDP
 	mutex_unlock(&crypt_stat->cs_mutex);
 #endif
+=======
+	ecryptfs_put_lower_file(inode);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	kmem_cache_free(ecryptfs_file_info_cache,
 			ecryptfs_file_to_private(file));
 	return 0;
@@ -553,6 +583,7 @@ ecryptfs_unlocked_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 {
 	struct file *lower_file = NULL;
 	long rc = -ENOTTY;
+<<<<<<< HEAD
 #ifdef CONFIG_WTL_ENCRYPTION_FILTER
 	if (cmd == ECRYPTFS_IOCTL_GET_ATTRIBUTES) {
 		u32 __user *user_attr = (u32 __user *)arg;
@@ -599,6 +630,8 @@ ecryptfs_unlocked_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 #else
 	printk("%s CONFIG_SDP not enabled \n", __func__);
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (ecryptfs_file_to_private(file))
 		lower_file = ecryptfs_file_to_lower(file);
@@ -614,6 +647,7 @@ ecryptfs_compat_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 	struct file *lower_file = NULL;
 	long rc = -ENOIOCTLCMD;
 
+<<<<<<< HEAD
 #ifdef CONFIG_SDP
 	rc = ecryptfs_do_sdp_ioctl(file, cmd, arg);
 	if (rc != EOPNOTSUPP)
@@ -622,6 +656,8 @@ ecryptfs_compat_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 	printk("%s CONFIG_SDP not enabled \n", __func__);
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (ecryptfs_file_to_private(file))
 		lower_file = ecryptfs_file_to_lower(file);
 	if (lower_file && lower_file->f_op && lower_file->f_op->compat_ioctl)
@@ -630,6 +666,7 @@ ecryptfs_compat_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 }
 #endif
 
+<<<<<<< HEAD
 #ifdef CONFIG_WTL_ENCRYPTION_FILTER
 int is_file_name_match(struct ecryptfs_mount_crypt_stat *mcs,
 					struct dentry *fp_dentry)
@@ -712,6 +749,8 @@ int is_file_ext_match(struct ecryptfs_mount_crypt_stat *mcs, char *str)
 }
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 const struct file_operations ecryptfs_dir_fops = {
 	.readdir = ecryptfs_readdir,
 	.read = generic_read_dir,

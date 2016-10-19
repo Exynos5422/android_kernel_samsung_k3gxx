@@ -25,6 +25,10 @@
 #include <linux/delay.h>
 #include <linux/init.h>
 #include <linux/sched.h>
+<<<<<<< HEAD
+=======
+#include <linux/bug.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #include <linux/atomic.h>
 #include <asm/cacheflush.h>
@@ -35,9 +39,14 @@
 #include <asm/tls.h>
 #include <asm/system_misc.h>
 
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_DEBUG
 #include <linux/sec_debug.h>
 #endif
+=======
+#include <trace/events/exception.h>
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static const char *handler[]= {
 	"prefetch abort",
 	"data abort",
@@ -248,6 +257,7 @@ static int __die(const char *str, int err, struct pt_regs *regs)
 		return 1;
 
 	print_modules();
+<<<<<<< HEAD
 #if defined(CONFIG_SEC_DEBUG_UNHANDLED_FAULT_SAFE)
 	if (!strcmp("Unhandled fault", str))
 		__show_regs_without_extra(regs);
@@ -256,6 +266,9 @@ static int __die(const char *str, int err, struct pt_regs *regs)
 #else
 	__show_regs(regs);
 #endif
+=======
+	__show_regs(regs);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	printk(KERN_EMERG "Process %.*s (pid: %d, stack limit = 0x%p)\n",
 		TASK_COMM_LEN, tsk->comm, task_pid_nr(tsk), end_of_stack(tsk));
 
@@ -311,6 +324,7 @@ static void oops_end(unsigned long flags, struct pt_regs *regs, int signr)
 	raw_local_irq_restore(flags);
 	oops_exit();
 
+<<<<<<< HEAD
 #if defined(CONFIG_SEC_DEBUG)
 	if (in_interrupt())
 		panic("%-51s\nPC is at %-42pS\nLR is at %-42pS",
@@ -319,11 +333,16 @@ static void oops_end(unsigned long flags, struct pt_regs *regs, int signr)
 		panic("%-51s\nPC is at %-42pS\nLR is at %-42pS",
 				"Fatal exception", (void *)regs->ARM_pc, (void *)regs->ARM_lr);
 #else
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (in_interrupt())
 		panic("Fatal exception in interrupt");
 	if (panic_on_oops)
 		panic("Fatal exception");
+<<<<<<< HEAD
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (signr)
 		do_exit(signr);
 }
@@ -345,10 +364,13 @@ void die(const char *str, struct pt_regs *regs, int err)
 	if (__die(str, err, regs))
 		sig = 0;
 
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_DEBUG_SUBSYS
 	sec_debug_save_die_info(str, regs);
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	oops_end(flags, regs, sig);
 }
 
@@ -457,6 +479,11 @@ asmlinkage void __exception do_undefinstr(struct pt_regs *regs)
 		return;
 
 die_sig:
+<<<<<<< HEAD
+=======
+	trace_undef_instr(regs, (void *)pc);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifdef CONFIG_DEBUG_USER
 	if (user_debug & UDBG_UNDEFINED) {
 		printk(KERN_INFO "%s (%d): undefined instruction: pc=%p\n",
@@ -608,7 +635,11 @@ asmlinkage int arm_syscall(int no, struct pt_regs *regs)
 		return regs->ARM_r0;
 
 	case NR(set_tls):
+<<<<<<< HEAD
 		thread->tp_value = regs->ARM_r0;
+=======
+		thread->tp_value[0] = regs->ARM_r0;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (tls_emu)
 			return 0;
 		if (has_tls_reg) {
@@ -726,7 +757,11 @@ static int get_tp_trap(struct pt_regs *regs, unsigned int instr)
 	int reg = (instr >> 12) & 15;
 	if (reg == 15)
 		return 1;
+<<<<<<< HEAD
 	regs->uregs[reg] = current_thread_info()->tp_value;
+=======
+	regs->uregs[reg] = current_thread_info()->tp_value[0];
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	regs->ARM_pc += 4;
 	return 0;
 }
@@ -809,6 +844,10 @@ void __pgd_error(const char *file, int line, pgd_t pgd)
 asmlinkage void __div0(void)
 {
 	printk("Division by zero in kernel.\n");
+<<<<<<< HEAD
+=======
+	BUG_ON(PANIC_CORRUPTION);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	dump_stack();
 }
 EXPORT_SYMBOL(__div0);

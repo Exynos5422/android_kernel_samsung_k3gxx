@@ -47,6 +47,12 @@
 #define ARCH_LOW_ADDRESS_LIMIT	PHYS_MASK
 #endif /* __KERNEL__ */
 
+<<<<<<< HEAD
+=======
+extern unsigned int boot_reason;
+extern unsigned int cold_boot;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 struct debug_info {
 	/* Have we suspended stepping by a debugger? */
 	int			suspended_step;
@@ -79,6 +85,10 @@ struct thread_struct {
 	unsigned long		tp_value;
 	struct fpsimd_state	fpsimd_state;
 	unsigned long		fault_address;	/* fault info */
+<<<<<<< HEAD
+=======
+	unsigned long		fault_code;	/* ESR_EL1 value */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct debug_info	debug;		/* debugging */
 };
 
@@ -107,6 +117,14 @@ static inline void compat_start_thread(struct pt_regs *regs, unsigned long pc,
 	regs->pstate = COMPAT_PSR_MODE_USR;
 	if (pc & 1)
 		regs->pstate |= COMPAT_PSR_T_BIT;
+<<<<<<< HEAD
+=======
+
+#ifdef __AARCH64EB__
+	regs->pstate |= COMPAT_PSR_E_BIT;
+#endif
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	regs->compat_sp = sp;
 }
 #endif
@@ -132,7 +150,23 @@ extern struct task_struct *cpu_switch_to(struct task_struct *prev,
 	((struct pt_regs *)(THREAD_START_SP + task_stack_page(p)) - 1)
 
 #define KSTK_EIP(tsk)	task_pt_regs(tsk)->pc
+<<<<<<< HEAD
 #define KSTK_ESP(tsk)	task_pt_regs(tsk)->sp
+=======
+#ifndef CONFIG_COMPAT
+#define KSTK_ESP(tsk)	task_pt_regs(tsk)->sp
+#else
+#define KSTK_ESP(tsk)					\
+({							\
+	u64 ptr;					\
+	if (is_compat_thread(task_thread_info(tsk)))	\
+		ptr = task_pt_regs(tsk)->compat_sp;	\
+	else						\
+		ptr = task_pt_regs(tsk)->sp;		\
+	ptr;						\
+})
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /*
  * Prefetching support

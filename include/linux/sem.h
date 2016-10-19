@@ -12,10 +12,19 @@ struct task_struct;
 struct sem_array {
 	struct kern_ipc_perm	____cacheline_aligned_in_smp
 				sem_perm;	/* permissions .. see ipc.h */
+<<<<<<< HEAD
 	time_t			sem_otime;	/* last semop time */
 	time_t			sem_ctime;	/* last change time */
 	struct sem		*sem_base;	/* ptr to first semaphore in array */
 	struct list_head	sem_pending;	/* pending operations to be processed */
+=======
+	time_t			sem_ctime;	/* last change time */
+	struct sem		*sem_base;	/* ptr to first semaphore in array */
+	struct list_head	pending_alter;	/* pending operations */
+						/* that alter the array */
+	struct list_head	pending_const;	/* pending complex operations */
+						/* that do not alter semvals */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct list_head	list_id;	/* undo requests on this array */
 	int			sem_nsems;	/* no. of semaphores in array */
 	int			complex_count;	/* pending complex operations */

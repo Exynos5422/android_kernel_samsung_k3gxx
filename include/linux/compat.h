@@ -326,6 +326,7 @@ asmlinkage long compat_sys_keyctl(u32 option,
 			      u32 arg2, u32 arg3, u32 arg4, u32 arg5);
 asmlinkage long compat_sys_ustat(unsigned dev, struct compat_ustat __user *u32);
 
+<<<<<<< HEAD
 asmlinkage ssize_t compat_sys_readv(unsigned long fd,
 		const struct compat_iovec __user *vec, unsigned long vlen);
 asmlinkage ssize_t compat_sys_writev(unsigned long fd,
@@ -336,6 +337,18 @@ asmlinkage ssize_t compat_sys_preadv(unsigned long fd,
 asmlinkage ssize_t compat_sys_pwritev(unsigned long fd,
 		const struct compat_iovec __user *vec,
 		unsigned long vlen, u32 pos_low, u32 pos_high);
+=======
+asmlinkage ssize_t compat_sys_readv(compat_ulong_t fd,
+		const struct compat_iovec __user *vec, compat_ulong_t vlen);
+asmlinkage ssize_t compat_sys_writev(compat_ulong_t fd,
+		const struct compat_iovec __user *vec, compat_ulong_t vlen);
+asmlinkage ssize_t compat_sys_preadv(compat_ulong_t fd,
+		const struct compat_iovec __user *vec,
+		compat_ulong_t vlen, u32 pos_low, u32 pos_high);
+asmlinkage ssize_t compat_sys_pwritev(compat_ulong_t fd,
+		const struct compat_iovec __user *vec,
+		compat_ulong_t vlen, u32 pos_low, u32 pos_high);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 asmlinkage long comat_sys_lseek(unsigned int, compat_off_t, unsigned int);
 
 asmlinkage long compat_sys_execve(const char __user *filename, const compat_uptr_t __user *argv,
@@ -361,7 +374,11 @@ long compat_get_bitmap(unsigned long *mask, const compat_ulong_t __user *umask,
 long compat_put_bitmap(compat_ulong_t __user *umask, unsigned long *mask,
 		       unsigned long bitmap_size);
 int copy_siginfo_from_user32(siginfo_t *to, struct compat_siginfo __user *from);
+<<<<<<< HEAD
 int copy_siginfo_to_user32(struct compat_siginfo __user *to, siginfo_t *from);
+=======
+int copy_siginfo_to_user32(struct compat_siginfo __user *to, const siginfo_t *from);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 int get_compat_sigevent(struct sigevent *event,
 		const struct compat_sigevent __user *u_event);
 long compat_sys_rt_tgsigqueueinfo(compat_pid_t tgid, compat_pid_t pid, int sig,
@@ -421,7 +438,11 @@ extern long compat_arch_ptrace(struct task_struct *child, compat_long_t request,
 asmlinkage long compat_sys_ptrace(compat_long_t request, compat_long_t pid,
 				  compat_long_t addr, compat_long_t data);
 
+<<<<<<< HEAD
 asmlinkage long compat_sys_lookup_dcookie(u32, u32, char __user *, size_t);
+=======
+asmlinkage long compat_sys_lookup_dcookie(u32, u32, char __user *, compat_size_t);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * epoll (fs/eventpoll.c) compat bits follow ...
  */
@@ -501,9 +522,17 @@ asmlinkage long compat_sys_old_readdir(unsigned int fd,
 asmlinkage long compat_sys_getdents(unsigned int fd,
 				    struct compat_linux_dirent __user *dirent,
 				    unsigned int count);
+<<<<<<< HEAD
 asmlinkage long compat_sys_getdents64(unsigned int fd,
 				      struct linux_dirent64 __user *dirent,
 				      unsigned int count);
+=======
+#ifdef __ARCH_WANT_COMPAT_SYS_GETDENTS64
+asmlinkage long compat_sys_getdents64(unsigned int fd,
+				      struct linux_dirent64 __user *dirent,
+				      unsigned int count);
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 asmlinkage long compat_sys_vmsplice(int fd, const struct compat_iovec __user *,
 				    unsigned int nr_segs, unsigned int flags);
 asmlinkage long compat_sys_open(const char __user *filename, int flags,
@@ -669,6 +698,16 @@ asmlinkage long compat_sys_sigaltstack(const compat_stack_t __user *uss_ptr,
 
 int compat_restore_altstack(const compat_stack_t __user *uss);
 int __compat_save_altstack(compat_stack_t __user *, unsigned long);
+<<<<<<< HEAD
+=======
+#define compat_save_altstack_ex(uss, sp) do { \
+	compat_stack_t __user *__uss = uss; \
+	struct task_struct *t = current; \
+	put_user_ex(ptr_to_compat((void __user *)t->sas_ss_sp), &__uss->ss_sp); \
+	put_user_ex(sas_ss_flags(sp), &__uss->ss_flags); \
+	put_user_ex(t->sas_ss_size, &__uss->ss_size); \
+} while (0);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 asmlinkage long compat_sys_sched_rr_get_interval(compat_pid_t pid,
 						 struct compat_timespec __user *interval);

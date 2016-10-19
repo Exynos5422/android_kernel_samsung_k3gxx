@@ -37,8 +37,11 @@
 #define EXYNOS4_EINT40PEND		(S5P_VA_GPIO2 + 0xF40)
 #define S5P_EINT_PEND(x)		(EXYNOS4_EINT40PEND + ((x) * 0x4))
 
+<<<<<<< HEAD
 #define EXYNOS543x_EINT_PEND(b, x)	((b) + 0xA00 + (((x) >> 3) * 4))
 #define EXYNOS5433_EINT_PEND1(b, x)	((b) + 0x1A04 + (((x) >> 3) * 4 + \
 					((x) < 12 ? 0 : 4)))
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif /* __ASM_ARCH_REGS_GPIO_H */

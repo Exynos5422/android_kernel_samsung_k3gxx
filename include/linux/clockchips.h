@@ -30,6 +30,10 @@ enum clock_event_nofitiers {
 #include <linux/notifier.h>
 
 struct clock_event_device;
+<<<<<<< HEAD
+=======
+struct module;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /* Clock event mode commands */
 enum clock_event_mode {
@@ -59,6 +63,15 @@ enum clock_event_mode {
  * Core shall set the interrupt affinity dynamically in broadcast mode
  */
 #define CLOCK_EVT_FEAT_DYNIRQ		0x000020
+<<<<<<< HEAD
+=======
+#define CLOCK_EVT_FEAT_PERCPU		0x000040
+
+/*
+ * Clockevent device is based on a hrtimer for broadcast
+ */
+#define CLOCK_EVT_FEAT_HRTIMER		0x000080
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /**
  * struct clock_event_device - clock event device descriptor
@@ -81,8 +94,15 @@ enum clock_event_mode {
  * @name:		ptr to clock event name
  * @rating:		variable to rate clock event devices
  * @irq:		IRQ number (only for non CPU local devices)
+<<<<<<< HEAD
  * @cpumask:		cpumask to indicate for which CPUs this device works
  * @list:		list head for the management code
+=======
+ * @bound_on:		Bound on CPU
+ * @cpumask:		cpumask to indicate for which CPUs this device works
+ * @list:		list head for the management code
+ * @owner:		module reference
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  */
 struct clock_event_device {
 	void			(*event_handler)(struct clock_event_device *);
@@ -104,14 +124,26 @@ struct clock_event_device {
 					    struct clock_event_device *);
 	void			(*suspend)(struct clock_event_device *);
 	void			(*resume)(struct clock_event_device *);
+<<<<<<< HEAD
 	unsigned long		min_delta_ticks;
 	unsigned long		max_delta_ticks;
+=======
+	s64			min_delta_ticks;
+	s64			max_delta_ticks;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	const char		*name;
 	int			rating;
 	int			irq;
+<<<<<<< HEAD
 	const struct cpumask	*cpumask;
 	struct list_head	list;
+=======
+	int			bound_on;
+	const struct cpumask	*cpumask;
+	struct list_head	list;
+	struct module		*owner;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 } ____cacheline_aligned;
 
 /*
@@ -150,7 +182,10 @@ extern void clockevents_exchange_device(struct clock_event_device *old,
 					struct clock_event_device *new);
 extern void clockevents_set_mode(struct clock_event_device *dev,
 				 enum clock_event_mode mode);
+<<<<<<< HEAD
 extern int clockevents_register_notifier(struct notifier_block *nb);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 extern int clockevents_program_event(struct clock_event_device *dev,
 				     ktime_t expires, bool force);
 
@@ -176,6 +211,7 @@ extern int tick_receive_broadcast(void);
 #endif
 
 #if defined(CONFIG_GENERIC_CLOCKEVENTS_BROADCAST) && defined(CONFIG_TICK_ONESHOT)
+<<<<<<< HEAD
 extern int tick_check_broadcast_expired(void);
 #else
 static inline int tick_check_broadcast_expired(void) { return 0; }
@@ -185,6 +221,19 @@ static inline int tick_check_broadcast_expired(void) { return 0; }
 extern void clockevents_notify(unsigned long reason, void *arg);
 #else
 static inline void clockevents_notify(unsigned long reason, void *arg) {}
+=======
+extern void tick_setup_hrtimer_broadcast(void);
+extern int tick_check_broadcast_expired(void);
+#else
+static inline int tick_check_broadcast_expired(void) { return 0; }
+static inline void tick_setup_hrtimer_broadcast(void) {};
+#endif
+
+#ifdef CONFIG_GENERIC_CLOCKEVENTS
+extern int clockevents_notify(unsigned long reason, void *arg);
+#else
+static inline int clockevents_notify(unsigned long reason, void *arg) { return 0; }
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif
 
 #else /* CONFIG_GENERIC_CLOCKEVENTS_BUILD */
@@ -192,7 +241,11 @@ static inline void clockevents_notify(unsigned long reason, void *arg) {}
 static inline void clockevents_suspend(void) {}
 static inline void clockevents_resume(void) {}
 
+<<<<<<< HEAD
 static inline void clockevents_notify(unsigned long reason, void *arg) {}
+=======
+static inline int clockevents_notify(unsigned long reason, void *arg) { return 0; }
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static inline int tick_check_broadcast_expired(void) { return 0; }
 
 #endif

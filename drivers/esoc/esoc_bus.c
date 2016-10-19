@@ -179,6 +179,10 @@ int esoc_clink_register_ssr(struct esoc_clink *esoc_clink)
 		return PTR_ERR(subsys_name);
 	snprintf(subsys_name, len, "esoc%d", esoc_clink->id);
 	esoc_clink->subsys.name = subsys_name;
+<<<<<<< HEAD
+=======
+	esoc_clink->dev.of_node = esoc_clink->np;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	esoc_clink->subsys.dev = &esoc_clink->dev;
 	esoc_clink->subsys_dev = subsys_register(&esoc_clink->subsys);
 	if (IS_ERR(esoc_clink->subsys_dev)) {
@@ -367,7 +371,10 @@ static int __init esoc_init(void)
 {
 	int ret;
 
+<<<<<<< HEAD
 	pr_info("[MIF] %s\n", __func__);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ret = device_register(&esoc_bus);
 	if (ret) {
 		pr_err("esoc bus device register fail\n");

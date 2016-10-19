@@ -1196,6 +1196,7 @@ int radeon_device_init(struct radeon_device *rdev,
 			return r;
 	}
 	if ((radeon_testing & 1)) {
+<<<<<<< HEAD
 		radeon_test_moves(rdev);
 	}
 	if ((radeon_testing & 2)) {
@@ -1203,6 +1204,24 @@ int radeon_device_init(struct radeon_device *rdev,
 	}
 	if (radeon_benchmarking) {
 		radeon_benchmark(rdev, radeon_benchmarking);
+=======
+		if (rdev->accel_working)
+			radeon_test_moves(rdev);
+		else
+			DRM_INFO("radeon: acceleration disabled, skipping move tests\n");
+	}
+	if ((radeon_testing & 2)) {
+		if (rdev->accel_working)
+			radeon_test_syncing(rdev);
+		else
+			DRM_INFO("radeon: acceleration disabled, skipping sync tests\n");
+	}
+	if (radeon_benchmarking) {
+		if (rdev->accel_working)
+			radeon_benchmark(rdev, radeon_benchmarking);
+		else
+			DRM_INFO("radeon: acceleration disabled, skipping benchmarks\n");
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 	return 0;
 }

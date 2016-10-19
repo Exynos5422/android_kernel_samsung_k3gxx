@@ -392,7 +392,11 @@ scan:
 		}
 	}
 	offset = si->lowest_bit;
+<<<<<<< HEAD
 	while (offset < scan_base) {
+=======
+	while (++offset < scan_base) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (!si->swap_map[offset]) {
 			spin_lock(&si->lock);
 			goto checks;
@@ -405,7 +409,10 @@ scan:
 			cond_resched();
 			latency_ration = LATENCY_LIMIT;
 		}
+<<<<<<< HEAD
 		offset++;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 	spin_lock(&si->lock);
 
@@ -673,6 +680,7 @@ int page_swapcount(struct page *page)
 }
 
 /*
+<<<<<<< HEAD
  * How many references to @entry are currently swapped out?
  * This considers COUNT_CONTINUED so it returns exact answer.
  */
@@ -715,6 +723,8 @@ out:
 }
 
 /*
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  * We can write to an anon page without COW if there are no other references
  * to it.  And as a side-effect, free up its swap: because the old content
  * on disk will never be read, and seeking back there to write new content
@@ -943,10 +953,13 @@ static int unuse_pte(struct vm_area_struct *vma, pmd_t *pmd,
 
 	dec_mm_counter(vma->vm_mm, MM_SWAPENTS);
 	inc_mm_counter(vma->vm_mm, MM_ANONPAGES);
+<<<<<<< HEAD
 #ifdef CONFIG_ZOOM_KILLER
 	if (!PageHighMem(page))
 		inc_mm_counter(vma->vm_mm, MM_LOW_ANONPAGES);
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	get_page(page);
 	set_pte_at(vma->vm_mm, addr, pte,
 		   pte_mkold(mk_pte(page, vma->vm_page_prot)));

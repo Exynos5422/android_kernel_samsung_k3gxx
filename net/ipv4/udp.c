@@ -972,7 +972,11 @@ int udp_sendmsg(struct kiocb *iocb, struct sock *sk, struct msghdr *msg,
 			err = PTR_ERR(rt);
 			rt = NULL;
 			if (err == -ENETUNREACH)
+<<<<<<< HEAD
 				IP_INC_STATS_BH(net, IPSTATS_MIB_OUTNOROUTES);
+=======
+				IP_INC_STATS(net, IPSTATS_MIB_OUTNOROUTES);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			goto out;
 		}
 
@@ -1071,6 +1075,12 @@ int udp_sendpage(struct sock *sk, struct page *page, int offset,
 	struct udp_sock *up = udp_sk(sk);
 	int ret;
 
+<<<<<<< HEAD
+=======
+	if (flags & MSG_SENDPAGE_NOTLAST)
+		flags |= MSG_MORE;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (!up->pending) {
 		struct msghdr msg = {	.msg_flags = flags|MSG_MORE };
 
@@ -1208,6 +1218,7 @@ int udp_recvmsg(struct kiocb *iocb, struct sock *sk, struct msghdr *msg,
 	int is_udplite = IS_UDPLITE(sk);
 	bool slow;
 
+<<<<<<< HEAD
 	/*
 	 *	Check any passed addresses
 	 */
@@ -1216,6 +1227,10 @@ int udp_recvmsg(struct kiocb *iocb, struct sock *sk, struct msghdr *msg,
 
 	if (flags & MSG_ERRQUEUE)
 		return ip_recv_error(sk, msg, len);
+=======
+	if (flags & MSG_ERRQUEUE)
+		return ip_recv_error(sk, msg, len, addr_len);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 try_again:
 	skb = __skb_recv_datagram(sk, flags | (noblock ? MSG_DONTWAIT : 0),
@@ -1275,6 +1290,10 @@ try_again:
 		sin->sin_port = udp_hdr(skb)->source;
 		sin->sin_addr.s_addr = ip_hdr(skb)->saddr;
 		memset(sin->sin_zero, 0, sizeof(sin->sin_zero));
+<<<<<<< HEAD
+=======
+		*addr_len = sizeof(*sin);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 	if (inet->cmsg_flags)
 		ip_cmsg_recv(msg, skb);
@@ -1296,8 +1315,15 @@ csum_copy_err:
 	}
 	unlock_sock_fast(sk, slow);
 
+<<<<<<< HEAD
 	/* starting over for a new packet, but check if we need to yield */
 	cond_resched();
+=======
+	if (noblock)
+		return -EAGAIN;
+
+	/* starting over for a new packet */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	msg->msg_flags &= ~MSG_TRUNC;
 	goto try_again;
 }
@@ -2142,7 +2168,11 @@ EXPORT_SYMBOL(udp_proc_unregister);
 
 /* ------------------------------------------------------------------------ */
 static void udp4_format_sock(struct sock *sp, struct seq_file *f,
+<<<<<<< HEAD
 		int bucket, int *len)
+=======
+		int bucket)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	struct inet_sock *inet = inet_sk(sp);
 	__be32 dest = inet->inet_daddr;
@@ -2151,7 +2181,11 @@ static void udp4_format_sock(struct sock *sp, struct seq_file *f,
 	__u16 srcp	  = ntohs(inet->inet_sport);
 
 	seq_printf(f, "%5d: %08X:%04X %08X:%04X"
+<<<<<<< HEAD
 		" %02X %08X:%08X %02X:%08lX %08X %5d %8d %lu %d %pK %d%n",
+=======
+		" %02X %08X:%08X %02X:%08lX %08X %5d %8d %lu %d %pK %d",
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		bucket, src, srcp, dest, destp, sp->sk_state,
 		sk_wmem_alloc_get(sp),
 		sk_rmem_alloc_get(sp),
@@ -2159,23 +2193,40 @@ static void udp4_format_sock(struct sock *sp, struct seq_file *f,
 		from_kuid_munged(seq_user_ns(f), sock_i_uid(sp)),
 		0, sock_i_ino(sp),
 		atomic_read(&sp->sk_refcnt), sp,
+<<<<<<< HEAD
 		atomic_read(&sp->sk_drops), len);
+=======
+		atomic_read(&sp->sk_drops));
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 int udp4_seq_show(struct seq_file *seq, void *v)
 {
+<<<<<<< HEAD
 	if (v == SEQ_START_TOKEN)
 		seq_printf(seq, "%-127s\n",
 			   "  sl  local_address rem_address   st tx_queue "
+=======
+	seq_setwidth(seq, 127);
+	if (v == SEQ_START_TOKEN)
+		seq_puts(seq, "  sl  local_address rem_address   st tx_queue "
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			   "rx_queue tr tm->when retrnsmt   uid  timeout "
 			   "inode ref pointer drops");
 	else {
 		struct udp_iter_state *state = seq->private;
+<<<<<<< HEAD
 		int len;
 
 		udp4_format_sock(v, seq, state->bucket, &len);
 		seq_printf(seq, "%*s\n", 127 - len, "");
 	}
+=======
+
+		udp4_format_sock(v, seq, state->bucket);
+	}
+	seq_pad(seq, '\n');
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 

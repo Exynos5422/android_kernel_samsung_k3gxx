@@ -125,6 +125,7 @@ struct menu_device {
 
 #define LOAD_INT(x) ((x) >> FSHIFT)
 #define LOAD_FRAC(x) LOAD_INT(((x) & (FIXED_1-1)) * 100)
+<<<<<<< HEAD
 /*
 static int get_loadavg(void)
 {
@@ -134,6 +135,8 @@ static int get_loadavg(void)
 	return LOAD_INT(this) * 10 + LOAD_FRAC(this) / 10;
 }
 */
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 static inline int which_bucket(unsigned int duration)
 {
@@ -172,6 +175,7 @@ static inline int performance_multiplier(void)
 {
 	int mult = 1;
 
+<<<<<<< HEAD
 	/* for higher loadavg, we are more reluctant */
 
 	/*
@@ -181,6 +185,8 @@ static inline int performance_multiplier(void)
 	 */
 	/* mult += 2 * get_loadavg(); */
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* for IO wait tasks (per cpu!) we add 5x each */
 	mult += 10 * nr_iowait_cpu(smp_processor_id());
 
@@ -257,11 +263,14 @@ again:
 	}
 }
 
+<<<<<<< HEAD
 /* In some cases, idle should return RIGHT index to enter
  * correct idle states.
  */
 #define CONFIG_SKIP_IDLE_CORRELATION
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /**
  * menu_select - selects the next idle state to enter
  * @drv: cpuidle driver containing state data
@@ -297,11 +306,14 @@ static int menu_select(struct cpuidle_driver *drv, struct cpuidle_device *dev)
 
 	multiplier = performance_multiplier();
 
+<<<<<<< HEAD
 #ifdef CONFIG_SKIP_IDLE_CORRELATION
        if (dev->skip_idle_correlation)
                data->correction_factor[data->bucket] = RESOLUTION * DECAY;
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/*
 	 * if the correction factor is 0 (eg first time init or cpu hotplug
 	 * etc), we actually want to start out with a unity factor.
@@ -313,6 +325,7 @@ static int menu_select(struct cpuidle_driver *drv, struct cpuidle_device *dev)
 	data->predicted_us = div_round64(data->expected_us * data->correction_factor[data->bucket],
 					 RESOLUTION * DECAY);
 
+<<<<<<< HEAD
 	/* This patch is not checked */
 #ifndef CONFIG_CPU_THERMAL_IPA
 	get_typical_interval(data);
@@ -324,6 +337,9 @@ static int menu_select(struct cpuidle_driver *drv, struct cpuidle_device *dev)
 	if(data->predicted_us < MAX_INTERESTING)
 		get_typical_interval(data);
 #endif
+=======
+	get_typical_interval(data);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/*
 	 * We want to default to C1 (hlt), not to busy polling
@@ -370,7 +386,10 @@ static void menu_reflect(struct cpuidle_device *dev, int index)
 {
 	struct menu_device *data = &__get_cpu_var(menu_devices);
 	data->last_state_idx = index;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (index >= 0)
 		data->needs_update = 1;
 }

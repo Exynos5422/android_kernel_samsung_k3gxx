@@ -20,13 +20,21 @@
 
 #define pr_fmt(fmt) "hw-breakpoint: " fmt
 
+<<<<<<< HEAD
+=======
+#include <linux/compat.h>
+#include <linux/cpu_pm.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <linux/errno.h>
 #include <linux/hw_breakpoint.h>
 #include <linux/perf_event.h>
 #include <linux/ptrace.h>
 #include <linux/smp.h>
 
+<<<<<<< HEAD
 #include <asm/compat.h>
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <asm/current.h>
 #include <asm/debug-monitors.h>
 #include <asm/hw_breakpoint.h>
@@ -169,6 +177,7 @@ static enum debug_el debug_exception_level(int privilege)
 	}
 }
 
+<<<<<<< HEAD
 /*
  * Install a perf counter breakpoint.
  */
@@ -178,24 +187,97 @@ int arch_install_hw_breakpoint(struct perf_event *bp)
 	struct perf_event **slot, **slots;
 	struct debug_info *debug_info = &current->thread.debug;
 	int i, max_slots, ctrl_reg, val_reg, reg_enable;
+=======
+enum hw_breakpoint_ops {
+	HW_BREAKPOINT_INSTALL,
+	HW_BREAKPOINT_UNINSTALL,
+	HW_BREAKPOINT_RESTORE
+};
+
+/**
+ * hw_breakpoint_slot_setup - Find and setup a perf slot according to
+ *			      operations
+ *
+ * @slots: pointer to array of slots
+ * @max_slots: max number of slots
+ * @bp: perf_event to setup
+ * @ops: operation to be carried out on the slot
+ *
+ * Return:
+ *	slot index on success
+ *	-ENOSPC if no slot is available/matches
+ *	-EINVAL on wrong operations parameter
+ */
+static int hw_breakpoint_slot_setup(struct perf_event **slots, int max_slots,
+				    struct perf_event *bp,
+				    enum hw_breakpoint_ops ops)
+{
+	int i;
+	struct perf_event **slot;
+
+	for (i = 0; i < max_slots; ++i) {
+		slot = &slots[i];
+		switch (ops) {
+		case HW_BREAKPOINT_INSTALL:
+			if (!*slot) {
+				*slot = bp;
+				return i;
+			}
+			break;
+		case HW_BREAKPOINT_UNINSTALL:
+			if (*slot == bp) {
+				*slot = NULL;
+				return i;
+			}
+			break;
+		case HW_BREAKPOINT_RESTORE:
+			if (*slot == bp)
+				return i;
+			break;
+		default:
+			pr_warn_once("Unhandled hw breakpoint ops %d\n", ops);
+			return -EINVAL;
+		}
+	}
+	return -ENOSPC;
+}
+
+static int hw_breakpoint_control(struct perf_event *bp,
+				 enum hw_breakpoint_ops ops)
+{
+	struct arch_hw_breakpoint *info = counter_arch_bp(bp);
+	struct perf_event **slots;
+	struct debug_info *debug_info = &current->thread.debug;
+	int i, max_slots, ctrl_reg, val_reg, reg_enable;
+	enum debug_el dbg_el = debug_exception_level(info->ctrl.privilege);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	u32 ctrl;
 
 	if (info->ctrl.type == ARM_BREAKPOINT_EXECUTE) {
 		/* Breakpoint */
 		ctrl_reg = AARCH64_DBG_REG_BCR;
 		val_reg = AARCH64_DBG_REG_BVR;
+<<<<<<< HEAD
 		slots = __get_cpu_var(bp_on_reg);
+=======
+		slots = this_cpu_ptr(bp_on_reg);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		max_slots = core_num_brps;
 		reg_enable = !debug_info->bps_disabled;
 	} else {
 		/* Watchpoint */
 		ctrl_reg = AARCH64_DBG_REG_WCR;
 		val_reg = AARCH64_DBG_REG_WVR;
+<<<<<<< HEAD
 		slots = __get_cpu_var(wp_on_reg);
+=======
+		slots = this_cpu_ptr(wp_on_reg);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		max_slots = core_num_wrps;
 		reg_enable = !debug_info->wps_disabled;
 	}
 
+<<<<<<< HEAD
 	for (i = 0; i < max_slots; ++i) {
 		slot = &slots[i];
 
@@ -217,10 +299,46 @@ int arch_install_hw_breakpoint(struct perf_event *bp)
 	/* Setup the control register. */
 	ctrl = encode_ctrl_reg(info->ctrl);
 	write_wb_reg(ctrl_reg, i, reg_enable ? ctrl | 0x1 : ctrl & ~0x1);
+=======
+	i = hw_breakpoint_slot_setup(slots, max_slots, bp, ops);
+
+	if (WARN_ONCE(i < 0, "Can't find any breakpoint slot"))
+		return i;
+
+	switch (ops) {
+	case HW_BREAKPOINT_INSTALL:
+		/*
+		 * Ensure debug monitors are enabled at the correct exception
+		 * level.
+		 */
+		enable_debug_monitors(dbg_el);
+		/* Fall through */
+	case HW_BREAKPOINT_RESTORE:
+		/* Setup the address register. */
+		write_wb_reg(val_reg, i, info->address);
+
+		/* Setup the control register. */
+		ctrl = encode_ctrl_reg(info->ctrl);
+		write_wb_reg(ctrl_reg, i,
+			     reg_enable ? ctrl | 0x1 : ctrl & ~0x1);
+		break;
+	case HW_BREAKPOINT_UNINSTALL:
+		/* Reset the control register. */
+		write_wb_reg(ctrl_reg, i, 0);
+
+		/*
+		 * Release the debug monitors for the correct exception
+		 * level.
+		 */
+		disable_debug_monitors(dbg_el);
+		break;
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return 0;
 }
 
+<<<<<<< HEAD
 void arch_uninstall_hw_breakpoint(struct perf_event *bp)
 {
 	struct arch_hw_breakpoint *info = counter_arch_bp(bp);
@@ -257,6 +375,19 @@ void arch_uninstall_hw_breakpoint(struct perf_event *bp)
 
 	/* Release the debug monitors for the correct exception level.  */
 	disable_debug_monitors(debug_exception_level(info->ctrl.privilege));
+=======
+/*
+ * Install a perf counter breakpoint.
+ */
+int arch_install_hw_breakpoint(struct perf_event *bp)
+{
+	return hw_breakpoint_control(bp, HW_BREAKPOINT_INSTALL);
+}
+
+void arch_uninstall_hw_breakpoint(struct perf_event *bp)
+{
+	hw_breakpoint_control(bp, HW_BREAKPOINT_UNINSTALL);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static int get_hbp_len(u8 hbp_len)
@@ -505,11 +636,19 @@ static void toggle_bp_registers(int reg, enum debug_el el, int enable)
 
 	switch (reg) {
 	case AARCH64_DBG_REG_BCR:
+<<<<<<< HEAD
 		slots = __get_cpu_var(bp_on_reg);
 		max_slots = core_num_brps;
 		break;
 	case AARCH64_DBG_REG_WCR:
 		slots = __get_cpu_var(wp_on_reg);
+=======
+		slots = this_cpu_ptr(bp_on_reg);
+		max_slots = core_num_brps;
+		break;
+	case AARCH64_DBG_REG_WCR:
+		slots = this_cpu_ptr(wp_on_reg);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		max_slots = core_num_wrps;
 		break;
 	default:
@@ -546,7 +685,11 @@ static int breakpoint_handler(unsigned long unused, unsigned int esr,
 	struct debug_info *debug_info;
 	struct arch_hw_breakpoint_ctrl ctrl;
 
+<<<<<<< HEAD
 	slots = (struct perf_event **)__get_cpu_var(bp_on_reg);
+=======
+	slots = this_cpu_ptr(bp_on_reg);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	addr = instruction_pointer(regs);
 	debug_info = &current->thread.debug;
 
@@ -596,7 +739,11 @@ unlock:
 			user_enable_single_step(current);
 	} else {
 		toggle_bp_registers(AARCH64_DBG_REG_BCR, DBG_ACTIVE_EL1, 0);
+<<<<<<< HEAD
 		kernel_step = &__get_cpu_var(stepping_kernel_bp);
+=======
+		kernel_step = this_cpu_ptr(&stepping_kernel_bp);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 		if (*kernel_step != ARM_KERNEL_STEP_NONE)
 			return 0;
@@ -623,7 +770,11 @@ static int watchpoint_handler(unsigned long addr, unsigned int esr,
 	struct arch_hw_breakpoint *info;
 	struct arch_hw_breakpoint_ctrl ctrl;
 
+<<<<<<< HEAD
 	slots = (struct perf_event **)__get_cpu_var(wp_on_reg);
+=======
+	slots = this_cpu_ptr(wp_on_reg);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	debug_info = &current->thread.debug;
 
 	for (i = 0; i < core_num_wrps; ++i) {
@@ -698,7 +849,11 @@ unlock:
 			user_enable_single_step(current);
 	} else {
 		toggle_bp_registers(AARCH64_DBG_REG_WCR, DBG_ACTIVE_EL1, 0);
+<<<<<<< HEAD
 		kernel_step = &__get_cpu_var(stepping_kernel_bp);
+=======
+		kernel_step = this_cpu_ptr(&stepping_kernel_bp);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 		if (*kernel_step != ARM_KERNEL_STEP_NONE)
 			return 0;
@@ -722,7 +877,11 @@ int reinstall_suspended_bps(struct pt_regs *regs)
 	struct debug_info *debug_info = &current->thread.debug;
 	int handled_exception = 0, *kernel_step;
 
+<<<<<<< HEAD
 	kernel_step = &__get_cpu_var(stepping_kernel_bp);
+=======
+	kernel_step = this_cpu_ptr(&stepping_kernel_bp);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/*
 	 * Called from single-step exception handler.
@@ -806,6 +965,7 @@ void hw_breakpoint_thread_switch(struct task_struct *next)
 /*
  * CPU initialisation.
  */
+<<<<<<< HEAD
 static void reset_ctrl_regs(void *unused)
 {
 	int i;
@@ -818,6 +978,38 @@ static void reset_ctrl_regs(void *unused)
 	for (i = 0; i < core_num_wrps; ++i) {
 		write_wb_reg(AARCH64_DBG_REG_WCR, i, 0UL);
 		write_wb_reg(AARCH64_DBG_REG_WVR, i, 0UL);
+=======
+static void hw_breakpoint_reset(void *unused)
+{
+	int i;
+	struct perf_event **slots;
+	/*
+	 * When a CPU goes through cold-boot, it does not have any installed
+	 * slot, so it is safe to share the same function for restoring and
+	 * resetting breakpoints; when a CPU is hotplugged in, it goes
+	 * through the slots, which are all empty, hence it just resets control
+	 * and value for debug registers.
+	 * When this function is triggered on warm-boot through a CPU PM
+	 * notifier some slots might be initialized; if so they are
+	 * reprogrammed according to the debug slots content.
+	 */
+	for (slots = this_cpu_ptr(bp_on_reg), i = 0; i < core_num_brps; ++i) {
+		if (slots[i]) {
+			hw_breakpoint_control(slots[i], HW_BREAKPOINT_RESTORE);
+		} else {
+			write_wb_reg(AARCH64_DBG_REG_BCR, i, 0UL);
+			write_wb_reg(AARCH64_DBG_REG_BVR, i, 0UL);
+		}
+	}
+
+	for (slots = this_cpu_ptr(wp_on_reg), i = 0; i < core_num_wrps; ++i) {
+		if (slots[i]) {
+			hw_breakpoint_control(slots[i], HW_BREAKPOINT_RESTORE);
+		} else {
+			write_wb_reg(AARCH64_DBG_REG_WCR, i, 0UL);
+			write_wb_reg(AARCH64_DBG_REG_WVR, i, 0UL);
+		}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 }
 
@@ -827,7 +1019,11 @@ static int __cpuinit hw_breakpoint_reset_notify(struct notifier_block *self,
 {
 	int cpu = (long)hcpu;
 	if (action == CPU_ONLINE)
+<<<<<<< HEAD
 		smp_call_function_single(cpu, reset_ctrl_regs, NULL, 1);
+=======
+		smp_call_function_single(cpu, hw_breakpoint_reset, NULL, 1);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return NOTIFY_OK;
 }
 
@@ -835,6 +1031,17 @@ static struct notifier_block __cpuinitdata hw_breakpoint_reset_nb = {
 	.notifier_call = hw_breakpoint_reset_notify,
 };
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_ARM64_CPU_SUSPEND
+extern void cpu_suspend_set_dbg_restorer(void (*hw_bp_restore)(void *));
+#else
+static inline void cpu_suspend_set_dbg_restorer(void (*hw_bp_restore)(void *))
+{
+}
+#endif
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * One-time initialisation.
  */
@@ -846,12 +1053,22 @@ static int __init arch_hw_breakpoint_init(void)
 	pr_info("found %d breakpoint and %d watchpoint registers.\n",
 		core_num_brps, core_num_wrps);
 
+<<<<<<< HEAD
+=======
+	cpu_notifier_register_begin();
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/*
 	 * Reset the breakpoint resources. We assume that a halting
 	 * debugger will leave the world in a nice state for us.
 	 */
+<<<<<<< HEAD
 	smp_call_function(reset_ctrl_regs, NULL, 1);
 	reset_ctrl_regs(NULL);
+=======
+	smp_call_function(hw_breakpoint_reset, NULL, 1);
+	hw_breakpoint_reset(NULL);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/* Register debug fault handlers. */
 	hook_debug_fault_code(DBG_ESR_EVT_HWBP, breakpoint_handler, SIGTRAP,
@@ -860,7 +1077,16 @@ static int __init arch_hw_breakpoint_init(void)
 			      TRAP_HWBKPT, "hw-watchpoint handler");
 
 	/* Register hotplug notifier. */
+<<<<<<< HEAD
 	register_cpu_notifier(&hw_breakpoint_reset_nb);
+=======
+	__register_cpu_notifier(&hw_breakpoint_reset_nb);
+
+	cpu_notifier_register_done();
+
+	/* Register cpu_suspend hw breakpoint restore hook */
+	cpu_suspend_set_dbg_restorer(hw_breakpoint_reset);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return 0;
 }

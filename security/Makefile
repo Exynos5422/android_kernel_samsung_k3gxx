@@ -28,6 +28,7 @@ obj-$(CONFIG_CGROUP_DEVICE)		+= device_cgroup.o
 # Object integrity file lists
 subdir-$(CONFIG_INTEGRITY)		+= integrity
 obj-$(CONFIG_INTEGRITY)			+= integrity/built-in.o
+<<<<<<< HEAD
 
 # TIMA uevent 
 obj-$(CONFIG_TIMA)     += tima_uevent/tima_uevent.o
@@ -38,3 +39,5 @@ obj-$(CONFIG_TZ_ICCC)	  += tz_iccc/
 # Knox SDP
 obj-$(CONFIG_SDP) += sdp/
 obj-$(CONFIG_SDP) += sdp/built-in.o
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

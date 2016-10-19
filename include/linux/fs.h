@@ -121,12 +121,15 @@ typedef void (dio_iodone_t)(struct kiocb *iocb, loff_t offset,
 /* File is opened with O_PATH; almost nothing can be done with it */
 #define FMODE_PATH		((__force fmode_t)0x4000)
 
+<<<<<<< HEAD
 /* File hasn't page cache and can't be mmaped, for stackable filesystem */
 #define FMODE_NONMAPPABLE        ((__force fmode_t)0x400000)
 
 /* File page don't need to be cached, for stackable filesystem's lower file */
 #define FMODE_NONCACHEABLE     ((__force fmode_t)0x800000)
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /* File was opened by fanotify and shouldn't generate fanotify events */
 #define FMODE_NONOTIFY		((__force fmode_t)0x1000000)
 
@@ -386,6 +389,10 @@ struct address_space_operations {
 	int (*launder_page) (struct page *);
 	int (*is_partially_uptodate) (struct page *, read_descriptor_t *,
 					unsigned long);
+<<<<<<< HEAD
+=======
+	void (*is_dirty_writeback) (struct page *, bool *, bool *);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	int (*error_remove_page)(struct address_space *, struct page *);
 
 	/* swapfile support */
@@ -426,9 +433,12 @@ struct address_space {
 	spinlock_t		private_lock;	/* for use by the address_space */
 	struct list_head	private_list;	/* ditto */
 	void			*private_data;	/* ditto */
+<<<<<<< HEAD
 #ifdef CONFIG_SDP
 	int userid;
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 } __attribute__((aligned(sizeof(long))));
 	/*
 	 * On most architectures that alignment is already the case; but
@@ -1552,8 +1562,11 @@ struct file_operations {
 	long (*fallocate)(struct file *file, int mode, loff_t offset,
 			  loff_t len);
 	int (*show_fdinfo)(struct seq_file *m, struct file *f);
+<<<<<<< HEAD
 	/* get_lower_file is for stackable file system */
 	struct file* (*get_lower_file)(struct file *f);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 struct inode_operations {
@@ -1627,7 +1640,10 @@ struct super_operations {
 	int (*bdev_try_to_free_page)(struct super_block*, struct page*, gfp_t);
 	int (*nr_cached_objects)(struct super_block *);
 	void (*free_cached_objects)(struct super_block *, int);
+<<<<<<< HEAD
 	long (*unlink_callback)(struct super_block *, char *);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 /*
@@ -2434,6 +2450,11 @@ extern loff_t no_llseek(struct file *file, loff_t offset, int whence);
 extern loff_t generic_file_llseek(struct file *file, loff_t offset, int whence);
 extern loff_t generic_file_llseek_size(struct file *file, loff_t offset,
 		int whence, loff_t maxsize, loff_t eof);
+<<<<<<< HEAD
+=======
+extern loff_t fixed_size_llseek(struct file *file, loff_t offset,
+		int whence, loff_t size);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 extern int generic_file_open(struct inode * inode, struct file * filp);
 extern int nonseekable_open(struct inode * inode, struct file * filp);
 
@@ -2465,6 +2486,10 @@ enum {
 
 void dio_end_io(struct bio *bio, int error);
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 ssize_t __blockdev_direct_IO(int rw, struct kiocb *iocb, struct inode *inode,
 	struct block_device *bdev, const struct iovec *iov, loff_t offset,
 	unsigned long nr_segs, get_block_t get_block, dio_iodone_t end_io,
@@ -2482,6 +2507,10 @@ static inline ssize_t blockdev_direct_IO(int rw, struct kiocb *iocb,
 
 void inode_dio_wait(struct inode *inode);
 void inode_dio_done(struct inode *inode);
+<<<<<<< HEAD
+=======
+struct inode *dio_bio_get_inode(struct bio *bio);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 extern const struct file_operations generic_ro_fops;
 

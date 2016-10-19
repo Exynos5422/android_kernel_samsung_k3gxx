@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+#include <linux/cpufreq.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <linux/export.h>
 #include <linux/sched.h>
 #include <linux/tsacct_kern.h>
@@ -49,6 +53,10 @@ void irqtime_account_irq(struct task_struct *curr)
 	unsigned long flags;
 	s64 delta;
 	int cpu;
+<<<<<<< HEAD
+=======
+	u64 wallclock;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (!sched_clock_irqtime)
 		return;
@@ -56,7 +64,12 @@ void irqtime_account_irq(struct task_struct *curr)
 	local_irq_save(flags);
 
 	cpu = smp_processor_id();
+<<<<<<< HEAD
 	delta = sched_clock_cpu(cpu) - __this_cpu_read(irq_start_time);
+=======
+	wallclock = sched_clock_cpu(cpu);
+	delta = wallclock - __this_cpu_read(irq_start_time);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	__this_cpu_add(irq_start_time, delta);
 
 	irq_time_write_begin();
@@ -66,10 +79,21 @@ void irqtime_account_irq(struct task_struct *curr)
 	 * in that case, so as not to confuse scheduler with a special task
 	 * that do not consume any time, but still wants to run.
 	 */
+<<<<<<< HEAD
 	if (hardirq_count())
 		__this_cpu_add(cpu_hardirq_time, delta);
 	else if (in_serving_softirq() && curr != this_cpu_ksoftirqd())
 		__this_cpu_add(cpu_softirq_time, delta);
+=======
+	if (hardirq_count()) {
+		__this_cpu_add(cpu_hardirq_time, delta);
+		sched_account_irqtime(cpu, curr, delta, wallclock);
+	} else if (in_serving_softirq() && curr != this_cpu_ksoftirqd()) {
+		__this_cpu_add(cpu_softirq_time, delta);
+		sched_account_irqtime(cpu, curr, delta, wallclock);
+	}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	irq_time_write_end();
 	local_irq_restore(flags);
@@ -149,6 +173,14 @@ void account_user_time(struct task_struct *p, cputime_t cputime,
 
 	/* Account for user time used */
 	acct_account_cputime(p);
+<<<<<<< HEAD
+=======
+
+#ifdef CONFIG_CPU_FREQ_STAT
+	/* Account power usage for user time */
+	acct_update_power(p, cputime);
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 /*
@@ -199,6 +231,14 @@ void __account_system_time(struct task_struct *p, cputime_t cputime,
 
 	/* Account for system time used */
 	acct_account_cputime(p);
+<<<<<<< HEAD
+=======
+
+#ifdef CONFIG_CPU_FREQ_STAT
+	/* Account power usage for system time */
+	acct_update_power(p, cputime);
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 /*
@@ -326,24 +366,42 @@ out:
  * softirq as those do not count in task exec_runtime any more.
  */
 static void irqtime_account_process_tick(struct task_struct *p, int user_tick,
+<<<<<<< HEAD
 						struct rq *rq)
 {
 	cputime_t one_jiffy_scaled = cputime_to_scaled(cputime_one_jiffy);
+=======
+					 struct rq *rq, int ticks)
+{
+	cputime_t scaled = cputime_to_scaled(cputime_one_jiffy);
+	u64 cputime = (__force u64) cputime_one_jiffy;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	u64 *cpustat = kcpustat_this_cpu->cpustat;
 
 	if (steal_account_process_tick())
 		return;
 
+<<<<<<< HEAD
 	if (irqtime_account_hi_update()) {
 		cpustat[CPUTIME_IRQ] += (__force u64) cputime_one_jiffy;
 	} else if (irqtime_account_si_update()) {
 		cpustat[CPUTIME_SOFTIRQ] += (__force u64) cputime_one_jiffy;
+=======
+	cputime *= ticks;
+	scaled *= ticks;
+
+	if (irqtime_account_hi_update()) {
+		cpustat[CPUTIME_IRQ] += cputime;
+	} else if (irqtime_account_si_update()) {
+		cpustat[CPUTIME_SOFTIRQ] += cputime;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	} else if (this_cpu_ksoftirqd() == p) {
 		/*
 		 * ksoftirqd time do not get accounted in cpu_softirq_time.
 		 * So, we have to handle it separately here.
 		 * Also, p->stime needs to be updated for ksoftirqd.
 		 */
+<<<<<<< HEAD
 		__account_system_time(p, cputime_one_jiffy, one_jiffy_scaled,
 					CPUTIME_SOFTIRQ);
 	} else if (user_tick) {
@@ -355,21 +413,42 @@ static void irqtime_account_process_tick(struct task_struct *p, int user_tick,
 	} else {
 		__account_system_time(p, cputime_one_jiffy, one_jiffy_scaled,
 					CPUTIME_SYSTEM);
+=======
+		__account_system_time(p, cputime, scaled, CPUTIME_SOFTIRQ);
+	} else if (user_tick) {
+		account_user_time(p, cputime, scaled);
+	} else if (p == rq->idle) {
+		account_idle_time(cputime);
+	} else if (p->flags & PF_VCPU) { /* System time or guest time */
+		account_guest_time(p, cputime, scaled);
+	} else {
+		__account_system_time(p, cputime, scaled,	CPUTIME_SYSTEM);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 }
 
 static void irqtime_account_idle_ticks(int ticks)
 {
+<<<<<<< HEAD
 	int i;
 	struct rq *rq = this_rq();
 
 	for (i = 0; i < ticks; i++)
 		irqtime_account_process_tick(current, 0, rq);
+=======
+	struct rq *rq = this_rq();
+
+	irqtime_account_process_tick(current, 0, rq, ticks);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 #else /* CONFIG_IRQ_TIME_ACCOUNTING */
 static inline void irqtime_account_idle_ticks(int ticks) {}
 static inline void irqtime_account_process_tick(struct task_struct *p, int user_tick,
+<<<<<<< HEAD
 						struct rq *rq) {}
+=======
+						struct rq *rq, int nr_ticks) {}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif /* CONFIG_IRQ_TIME_ACCOUNTING */
 
 /*
@@ -464,7 +543,11 @@ void account_process_tick(struct task_struct *p, int user_tick)
 		return;
 
 	if (sched_clock_irqtime) {
+<<<<<<< HEAD
 		irqtime_account_process_tick(p, user_tick, rq);
+=======
+		irqtime_account_process_tick(p, user_tick, rq, 1);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return;
 	}
 
@@ -558,7 +641,11 @@ static void cputime_adjust(struct task_cputime *curr,
 			   struct cputime *prev,
 			   cputime_t *ut, cputime_t *st)
 {
+<<<<<<< HEAD
 	cputime_t rtime, stime, utime, total;
+=======
+	cputime_t rtime, stime, utime;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (vtime_accounting_enabled()) {
 		*ut = curr->utime;
@@ -566,9 +653,12 @@ static void cputime_adjust(struct task_cputime *curr,
 		return;
 	}
 
+<<<<<<< HEAD
 	stime = curr->stime;
 	total = stime + curr->utime;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/*
 	 * Tick based cputime accounting depend on random scheduling
 	 * timeslices of a task to be interrupted or not by the timer.
@@ -589,6 +679,7 @@ static void cputime_adjust(struct task_cputime *curr,
 	if (prev->stime + prev->utime >= rtime)
 		goto out;
 
+<<<<<<< HEAD
 	if (total) {
 		stime = scale_stime((__force u64)stime,
 				    (__force u64)rtime, (__force u64)total);
@@ -596,6 +687,21 @@ static void cputime_adjust(struct task_cputime *curr,
 	} else {
 		stime = rtime;
 		utime = 0;
+=======
+	stime = curr->stime;
+	utime = curr->utime;
+
+	if (utime == 0) {
+		stime = rtime;
+	} else if (stime == 0) {
+		utime = rtime;
+	} else {
+		cputime_t total = stime + utime;
+
+		stime = scale_stime((__force u64)stime,
+				    (__force u64)rtime, (__force u64)total);
+		utime = rtime - stime;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	/*

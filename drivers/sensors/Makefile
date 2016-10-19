@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #
 # Makefile for the sensors drivers.
 #
@@ -18,3 +19,7 @@ obj-$(CONFIG_SENSORS_SX9500)	+= sx9500.o
 obj-$(CONFIG_SENSORS_SX9310_INPUT)      +=sx9310.o
 obj-$(CONFIG_SENSORS_BMA2X2)	+= bma2x2.o
 obj-$(CONFIG_SENSORS_BMM050)	+= bmm050_driver.o bmm050.o
+=======
+obj-$(CONFIG_SENSORS)		+= sensors_class.o
+obj-$(CONFIG_SENSORS_SSC)	+= sensors_ssc.o
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

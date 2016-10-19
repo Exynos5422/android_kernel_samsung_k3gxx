@@ -12,6 +12,12 @@
 #include <linux/kconfig.h>
 #include "dibusb.h"
 
+<<<<<<< HEAD
+=======
+/* Max transfer size done by I2C transfer functions */
+#define MAX_XFER_SIZE  64
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int debug;
 module_param(debug, int, 0644);
 MODULE_PARM_DESC(debug, "set debugging level (1=info (|-able))." DVB_USB_DEBUG_STATUS);
@@ -105,11 +111,23 @@ EXPORT_SYMBOL(dibusb2_0_power_ctrl);
 static int dibusb_i2c_msg(struct dvb_usb_device *d, u8 addr,
 			  u8 *wbuf, u16 wlen, u8 *rbuf, u16 rlen)
 {
+<<<<<<< HEAD
 	u8 sndbuf[wlen+4]; /* lead(1) devaddr,direction(1) addr(2) data(wlen) (len(2) (when reading)) */
+=======
+	u8 sndbuf[MAX_XFER_SIZE]; /* lead(1) devaddr,direction(1) addr(2) data(wlen) (len(2) (when reading)) */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* write only ? */
 	int wo = (rbuf == NULL || rlen == 0),
 		len = 2 + wlen + (wo ? 0 : 2);
 
+<<<<<<< HEAD
+=======
+	if (4 + wlen > sizeof(sndbuf)) {
+		warn("i2c wr: len=%d is too big!\n", wlen);
+		return -EOPNOTSUPP;
+	}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	sndbuf[0] = wo ? DIBUSB_REQ_I2C_WRITE : DIBUSB_REQ_I2C_READ;
 	sndbuf[1] = (addr << 1) | (wo ? 0 : 1);
 

@@ -511,8 +511,14 @@ static int __begin_transaction_flags(struct dm_cache_metadata *cmd,
 	disk_super = dm_block_data(sblock);
 	update_flags(disk_super, mutator);
 	read_superblock_fields(cmd, disk_super);
+<<<<<<< HEAD
 
 	return dm_bm_flush_and_unlock(cmd->bm, sblock);
+=======
+	dm_bm_unlock(sblock);
+
+	return dm_bm_flush(cmd->bm);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static int __begin_transaction(struct dm_cache_metadata *cmd)

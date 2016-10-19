@@ -6,12 +6,20 @@ static inline pte_t mk_huge_pte(struct page *page, pgprot_t pgprot)
 	return mk_pte(page, pgprot);
 }
 
+<<<<<<< HEAD
 static inline int huge_pte_write(pte_t pte)
+=======
+static inline unsigned long huge_pte_write(pte_t pte)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	return pte_write(pte);
 }
 
+<<<<<<< HEAD
 static inline int huge_pte_dirty(pte_t pte)
+=======
+static inline unsigned long huge_pte_dirty(pte_t pte)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	return pte_dirty(pte);
 }

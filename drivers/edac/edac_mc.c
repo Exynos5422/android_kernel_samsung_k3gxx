@@ -559,7 +559,12 @@ static void edac_mc_workq_function(struct work_struct *work_req)
  *
  *		called with the mem_ctls_mutex held
  */
+<<<<<<< HEAD
 static void edac_mc_workq_setup(struct mem_ctl_info *mci, unsigned msec)
+=======
+static void edac_mc_workq_setup(struct mem_ctl_info *mci, unsigned msec,
+				bool init)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	edac_dbg(0, "\n");
 
@@ -567,7 +572,13 @@ static void edac_mc_workq_setup(struct mem_ctl_info *mci, unsigned msec)
 	if (mci->op_state != OP_RUNNING_POLL)
 		return;
 
+<<<<<<< HEAD
 	INIT_DELAYED_WORK(&mci->work, edac_mc_workq_function);
+=======
+	if (init)
+		INIT_DELAYED_WORK(&mci->work, edac_mc_workq_function);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	mod_delayed_work(edac_workqueue, &mci->work, msecs_to_jiffies(msec));
 }
 
@@ -601,7 +612,11 @@ static void edac_mc_workq_teardown(struct mem_ctl_info *mci)
  *	user space has updated our poll period value, need to
  *	reset our workq delays
  */
+<<<<<<< HEAD
 void edac_mc_reset_delay_period(int value)
+=======
+void edac_mc_reset_delay_period(unsigned long value)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	struct mem_ctl_info *mci;
 	struct list_head *item;
@@ -611,7 +626,11 @@ void edac_mc_reset_delay_period(int value)
 	list_for_each(item, &mc_devices) {
 		mci = list_entry(item, struct mem_ctl_info, link);
 
+<<<<<<< HEAD
 		edac_mc_workq_setup(mci, (unsigned long) value);
+=======
+		edac_mc_workq_setup(mci, value, false);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	mutex_unlock(&mem_ctls_mutex);
@@ -782,7 +801,11 @@ int edac_mc_add_mc(struct mem_ctl_info *mci)
 		/* This instance is NOW RUNNING */
 		mci->op_state = OP_RUNNING_POLL;
 
+<<<<<<< HEAD
 		edac_mc_workq_setup(mci, edac_mc_get_poll_msec());
+=======
+		edac_mc_workq_setup(mci, edac_mc_get_poll_msec(), true);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	} else {
 		mci->op_state = OP_RUNNING_INTERRUPT;
 	}

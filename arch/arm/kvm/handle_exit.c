@@ -40,6 +40,7 @@ static int handle_svc_hyp(struct kvm_vcpu *vcpu, struct kvm_run *run)
 
 static int handle_hvc(struct kvm_vcpu *vcpu, struct kvm_run *run)
 {
+<<<<<<< HEAD
 	trace_kvm_hvc(*vcpu_pc(vcpu), *vcpu_reg(vcpu, 0),
 		      kvm_vcpu_hvc_get_imm(vcpu));
 
@@ -48,6 +49,20 @@ static int handle_hvc(struct kvm_vcpu *vcpu, struct kvm_run *run)
 
 	kvm_inject_undefined(vcpu);
 	return 1;
+=======
+	int ret;
+
+	trace_kvm_hvc(*vcpu_pc(vcpu), *vcpu_reg(vcpu, 0),
+		      kvm_vcpu_hvc_get_imm(vcpu));
+
+	ret = kvm_psci_call(vcpu);
+	if (ret < 0) {
+		kvm_inject_undefined(vcpu);
+		return 1;
+	}
+
+	return ret;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static int handle_smc(struct kvm_vcpu *vcpu, struct kvm_run *run)

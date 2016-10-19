@@ -243,7 +243,15 @@ int iwl_mvm_mac_setup_register(struct iwl_mvm *mvm)
 	if (ret)
 		return ret;
 
+<<<<<<< HEAD
 	return ieee80211_register_hw(mvm->hw);
+=======
+	ret = ieee80211_register_hw(mvm->hw);
+	if (ret)
+		iwl_mvm_leds_exit(mvm);
+
+	return ret;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static void iwl_mvm_mac_tx(struct ieee80211_hw *hw,
@@ -274,6 +282,27 @@ static void iwl_mvm_mac_tx(struct ieee80211_hw *hw,
 	ieee80211_free_txskb(hw, skb);
 }
 
+<<<<<<< HEAD
+=======
+static inline bool iwl_enable_rx_ampdu(const struct iwl_cfg *cfg)
+{
+	if (iwlwifi_mod_params.disable_11n & IWL_DISABLE_HT_RXAGG)
+		return false;
+	return true;
+}
+
+static inline bool iwl_enable_tx_ampdu(const struct iwl_cfg *cfg)
+{
+	if (iwlwifi_mod_params.disable_11n & IWL_DISABLE_HT_TXAGG)
+		return false;
+	if (iwlwifi_mod_params.disable_11n & IWL_ENABLE_HT_TXAGG)
+		return true;
+
+	/* enabled by default */
+	return true;
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int iwl_mvm_mac_ampdu_action(struct ieee80211_hw *hw,
 				    struct ieee80211_vif *vif,
 				    enum ieee80211_ampdu_mlme_action action,
@@ -293,7 +322,11 @@ static int iwl_mvm_mac_ampdu_action(struct ieee80211_hw *hw,
 
 	switch (action) {
 	case IEEE80211_AMPDU_RX_START:
+<<<<<<< HEAD
 		if (iwlwifi_mod_params.disable_11n & IWL_DISABLE_HT_RXAGG) {
+=======
+		if (!iwl_enable_rx_ampdu(mvm->cfg)) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			ret = -EINVAL;
 			break;
 		}
@@ -303,7 +336,11 @@ static int iwl_mvm_mac_ampdu_action(struct ieee80211_hw *hw,
 		ret = iwl_mvm_sta_rx_agg(mvm, sta, tid, 0, false);
 		break;
 	case IEEE80211_AMPDU_TX_START:
+<<<<<<< HEAD
 		if (iwlwifi_mod_params.disable_11n & IWL_DISABLE_HT_TXAGG) {
+=======
+		if (!iwl_enable_tx_ampdu(mvm->cfg)) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			ret = -EINVAL;
 			break;
 		}

@@ -883,6 +883,10 @@ static void volume_control_quirks(struct usb_mixer_elem_info *cval,
 		}
 		break;
 
+<<<<<<< HEAD
+=======
+	case USB_ID(0x046d, 0x0807): /* Logitech Webcam C500 */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	case USB_ID(0x046d, 0x0808):
 	case USB_ID(0x046d, 0x0809):
 	case USB_ID(0x046d, 0x081b): /* HD Webcam c310 */
@@ -990,8 +994,15 @@ static int get_min_max_with_quirks(struct usb_mixer_elem_info *cval,
 	/* USB descriptions contain the dB scale in 1/256 dB unit
 	 * while ALSA TLV contains in 1/100 dB unit
 	 */
+<<<<<<< HEAD
 	cval->dBmin = (convert_signed_value(cval, cval->min) * 100) / 256;
 	cval->dBmax = (convert_signed_value(cval, cval->max) * 100) / 256;
+=======
+	cval->dBmin =
+		(convert_signed_value(cval, cval->min) * 100) / (cval->res);
+	cval->dBmax =
+		(convert_signed_value(cval, cval->max) * 100) / (cval->res);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (cval->dBmin > cval->dBmax) {
 		/* something is wrong; assume it's either from/to 0dB */
 		if (cval->dBmin < 0)

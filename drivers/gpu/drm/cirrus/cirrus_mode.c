@@ -273,8 +273,13 @@ static int cirrus_crtc_mode_set(struct drm_crtc *crtc,
 		sr07 |= 0x11;
 		break;
 	case 16:
+<<<<<<< HEAD
 		sr07 |= 0xc1;
 		hdr = 0xc0;
+=======
+		sr07 |= 0x17;
+		hdr = 0xc1;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		break;
 	case 24:
 		sr07 |= 0x15;
@@ -308,6 +313,12 @@ static int cirrus_crtc_mode_set(struct drm_crtc *crtc,
 
 	WREG_HDR(hdr);
 	cirrus_crtc_do_set_base(crtc, old_fb, x, y, 0);
+<<<<<<< HEAD
+=======
+
+	/* Unblank (needed on S3 resume, vgabios doesn't do it then) */
+	outb(0x20, 0x3c0);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 

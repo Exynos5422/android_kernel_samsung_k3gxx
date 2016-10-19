@@ -35,7 +35,11 @@
  *	ldp	x29, x30, [sp]
  *	add	sp, sp, #0x10
  */
+<<<<<<< HEAD
 int unwind_frame(struct stackframe *frame)
+=======
+int notrace unwind_frame(struct stackframe *frame)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	unsigned long high, low;
 	unsigned long fp = frame->fp;
@@ -43,12 +47,24 @@ int unwind_frame(struct stackframe *frame)
 	low  = frame->sp;
 	high = ALIGN(low, THREAD_SIZE);
 
+<<<<<<< HEAD
 	if (fp < low || fp > high || fp & 0xf)
+=======
+	if (fp < low || fp > high - 0x18 || fp & 0xf)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return -EINVAL;
 
 	frame->sp = fp + 0x10;
 	frame->fp = *(unsigned long *)(fp);
+<<<<<<< HEAD
 	frame->pc = *(unsigned long *)(fp + 8);
+=======
+	/*
+	 * -4 here because we care about the PC at time of bl,
+	 * not where the return will go.
+	 */
+	frame->pc = *(unsigned long *)(fp + 8) - 4;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return 0;
 }

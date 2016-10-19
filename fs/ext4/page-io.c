@@ -384,6 +384,20 @@ int ext4_bio_write_page(struct ext4_io_submit *io,
 	ClearPageError(page);
 
 	/*
+<<<<<<< HEAD
+=======
+	 * Comments copied from block_write_full_page_endio:
+	 *
+	 * The page straddles i_size.  It must be zeroed out on each and every
+	 * writepage invocation because it may be mmapped.  "A file is mapped
+	 * in multiples of the page size.  For a file that is not a multiple of
+	 * the page size, the remaining memory is zeroed when mapped, and
+	 * writes to that region are not written out to the file."
+	 */
+	if (len < PAGE_CACHE_SIZE)
+		zero_user_segment(page, len, PAGE_CACHE_SIZE);
+	/*
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	 * In the first loop we prepare and mark buffers to submit. We have to
 	 * mark all buffers in the page before submitting so that
 	 * end_page_writeback() cannot be called from ext4_bio_end_io() when IO
@@ -394,6 +408,7 @@ int ext4_bio_write_page(struct ext4_io_submit *io,
 	do {
 		block_start = bh_offset(bh);
 		if (block_start >= len) {
+<<<<<<< HEAD
 			/*
 			 * Comments copied from block_write_full_page_endio:
 			 *
@@ -407,6 +422,8 @@ int ext4_bio_write_page(struct ext4_io_submit *io,
 			 */
 			zero_user_segment(page, block_start,
 					  block_start + blocksize);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			clear_buffer_dirty(bh);
 			set_buffer_uptodate(bh);
 			continue;

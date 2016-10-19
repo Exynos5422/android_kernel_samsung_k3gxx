@@ -18,6 +18,10 @@
 #include <linux/module.h>
 #include <linux/ratelimit.h>
 
+<<<<<<< HEAD
+=======
+#define TTY_MAX_BUF 131072
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /**
  *	tty_buffer_free_all		-	free buffers used by a tty
  *	@tty: tty to free from
@@ -61,7 +65,11 @@ static struct tty_buffer *tty_buffer_alloc(struct tty_port *port, size_t size)
 {
 	struct tty_buffer *p;
 
+<<<<<<< HEAD
 	if (port->buf.memory_used + size > 65536)
+=======
+	if (port->buf.memory_used + size > TTY_MAX_BUF)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return NULL;
 	p = kmalloc(sizeof(struct tty_buffer) + 2 * size, GFP_ATOMIC);
 	if (p == NULL)
@@ -429,7 +437,11 @@ static void flush_to_ldisc(struct work_struct *work)
 		return;
 
 	disc = tty_ldisc_ref(tty);
+<<<<<<< HEAD
 	if (disc == NULL)	/*  !TTY_LDISC */
+=======
+	if (disc == NULL)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return;
 
 	spin_lock_irqsave(&buf->lock, flags);

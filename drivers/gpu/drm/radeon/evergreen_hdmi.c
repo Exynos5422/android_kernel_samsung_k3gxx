@@ -219,8 +219,12 @@ void evergreen_hdmi_setmode(struct drm_encoder *encoder, struct drm_display_mode
 	/* fglrx clears sth in AFMT_AUDIO_PACKET_CONTROL2 here */
 
 	WREG32(HDMI_ACR_PACKET_CONTROL + offset,
+<<<<<<< HEAD
 	       HDMI_ACR_AUTO_SEND | /* allow hw to sent ACR packets when required */
 	       HDMI_ACR_SOURCE); /* select SW CTS value */
+=======
+	       HDMI_ACR_AUTO_SEND); /* allow hw to sent ACR packets when required */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	evergreen_hdmi_update_ACR(encoder, mode->clock);
 

@@ -9,11 +9,17 @@
 #include <linux/miscdevice.h>
 #include <linux/device.h>
 #include <linux/workqueue.h>
+<<<<<<< HEAD
+=======
+#include <linux/cpumask.h>
+#include <linux/interrupt.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 enum {
 	PM_QOS_RESERVED = 0,
 	PM_QOS_CPU_DMA_LATENCY,
 	PM_QOS_NETWORK_LATENCY,
+<<<<<<< HEAD
 	PM_QOS_MEMORY_THROUGHPUT,
 	PM_QOS_DEVICE_THROUGHPUT,
 	PM_QOS_BUS_THROUGHPUT,
@@ -25,6 +31,9 @@ enum {
 	PM_QOS_KFC_FREQ_MAX,
 	PM_QOS_DISPLAY_THROUGHPUT,
 	PM_QOS_CAM_THROUGHPUT,
+=======
+	PM_QOS_NETWORK_THROUGHPUT,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/* insert new class ID */
 	PM_QOS_NUM_CLASSES,
@@ -41,6 +50,7 @@ enum pm_qos_flags_status {
 
 #define PM_QOS_CPU_DMA_LAT_DEFAULT_VALUE	(2000 * USEC_PER_SEC)
 #define PM_QOS_NETWORK_LAT_DEFAULT_VALUE	(2000 * USEC_PER_SEC)
+<<<<<<< HEAD
 #define PM_QOS_MEMORY_THROUGHPUT_DEFAULT_VALUE	0
 #define PM_QOS_DEVICE_THROUGHPUT_DEFAULT_VALUE	0
 #define PM_QOS_BUS_THROUGHPUT_DEFAULT_VALUE	0
@@ -53,15 +63,41 @@ enum pm_qos_flags_status {
 #define PM_QOS_CPU_FREQ_MAX_DEFAULT_VALUE	INT_MAX
 #define PM_QOS_KFC_FREQ_MIN_DEFAULT_VALUE	0
 #define PM_QOS_KFC_FREQ_MAX_DEFAULT_VALUE	INT_MAX
+=======
+#define PM_QOS_NETWORK_THROUGHPUT_DEFAULT_VALUE	0
+#define PM_QOS_DEV_LAT_DEFAULT_VALUE		0
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define PM_QOS_FLAG_NO_POWER_OFF	(1 << 0)
 #define PM_QOS_FLAG_REMOTE_WAKEUP	(1 << 1)
 
+<<<<<<< HEAD
 struct pm_qos_request {
 	struct plist_node node;
 	int pm_qos_class;
 	struct delayed_work work; /* for pm_qos_update_request_timeout */
 	unsigned long caller;	  /* for pm_qos_add_request and debugfs */
+=======
+enum pm_qos_req_type {
+	PM_QOS_REQ_ALL_CORES = 0,
+	PM_QOS_REQ_AFFINE_CORES,
+#ifdef CONFIG_SMP
+	PM_QOS_REQ_AFFINE_IRQ,
+#endif
+};
+
+struct pm_qos_request {
+	enum pm_qos_req_type type;
+	struct cpumask cpus_affine;
+#ifdef CONFIG_SMP
+	uint32_t irq;
+	/* Internal structure members */
+	struct irq_affinity_notify irq_notify;
+#endif
+	struct plist_node node;
+	int pm_qos_class;
+	struct delayed_work work; /* for pm_qos_update_request_timeout */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 struct pm_qos_flags_request {
@@ -77,7 +113,11 @@ enum dev_pm_qos_req_type {
 struct dev_pm_qos_request {
 	enum dev_pm_qos_req_type type;
 	union {
+<<<<<<< HEAD
 		struct plist_node pnode;
+=======
+		struct pm_qos_request lat;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		struct pm_qos_flags_request flr;
 	} data;
 	struct device *dev;
@@ -86,9 +126,13 @@ struct dev_pm_qos_request {
 enum pm_qos_type {
 	PM_QOS_UNITIALIZED,
 	PM_QOS_MAX,		/* return the largest value */
+<<<<<<< HEAD
 	PM_QOS_MIN,		/* return the smallest value */
 	PM_QOS_SUM,		/* return sum of values greater than zero */
 	PM_QOS_FORCE_MAX,
+=======
+	PM_QOS_MIN		/* return the smallest value */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 /*
@@ -99,6 +143,10 @@ enum pm_qos_type {
 struct pm_qos_constraints {
 	struct plist_head list;
 	s32 target_value;	/* Do not change to 64 bit */
+<<<<<<< HEAD
+=======
+	s32 target_per_cpu[NR_CPUS];
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	s32 default_value;
 	enum pm_qos_type type;
 	struct blocking_notifier_head *notifiers;
@@ -128,10 +176,16 @@ static inline int dev_pm_qos_request_active(struct dev_pm_qos_request *req)
 	return req->dev != NULL;
 }
 
+<<<<<<< HEAD
 int pm_qos_update_target(struct pm_qos_constraints *c, struct plist_node *node,
 			 enum pm_qos_req_action action, int value);
 int pm_qos_update_constraints(int pm_qos_class,
 			struct pm_qos_constraints *constraints);
+=======
+int pm_qos_update_target(struct pm_qos_constraints *c,
+				struct pm_qos_request *req,
+				enum pm_qos_req_action action, int value);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 bool pm_qos_update_flags(struct pm_qos_flags *pqf,
 			 struct pm_qos_flags_request *req,
 			 enum pm_qos_req_action action, s32 val);
@@ -144,6 +198,11 @@ void pm_qos_update_request_timeout(struct pm_qos_request *req,
 void pm_qos_remove_request(struct pm_qos_request *req);
 
 int pm_qos_request(int pm_qos_class);
+<<<<<<< HEAD
+=======
+int pm_qos_request_for_cpu(int pm_qos_class, int cpu);
+int pm_qos_request_for_cpumask(int pm_qos_class, struct cpumask *mask);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 int pm_qos_add_notifier(int pm_qos_class, struct notifier_block *notifier);
 int pm_qos_remove_notifier(int pm_qos_class, struct notifier_block *notifier);
 int pm_qos_request_active(struct pm_qos_request *req);
@@ -223,7 +282,11 @@ int dev_pm_qos_update_flags(struct device *dev, s32 mask, bool set);
 
 static inline s32 dev_pm_qos_requested_latency(struct device *dev)
 {
+<<<<<<< HEAD
 	return dev->power.qos->latency_req->data.pnode.prio;
+=======
+	return dev->power.qos->latency_req->data.lat.node.prio;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static inline s32 dev_pm_qos_requested_flags(struct device *dev)

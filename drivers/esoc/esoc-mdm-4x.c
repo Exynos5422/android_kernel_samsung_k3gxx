@@ -10,17 +10,31 @@
  * GNU General Public License for more details.
  */
 
+<<<<<<< HEAD
+=======
+#include <linux/coresight.h>
+#include <linux/coresight-cti.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <linux/delay.h>
 #include <linux/gpio.h>
 #include <linux/jiffies.h>
 #include <linux/module.h>
+<<<<<<< HEAD
+=======
+#include <linux/of_address.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <linux/of_gpio.h>
 #include <linux/pinctrl/consumer.h>
 #include <linux/platform_device.h>
 #include <linux/workqueue.h>
 #include <linux/sched.h>
+<<<<<<< HEAD
 #include <linux/sysmon.h>
 //#include <mach/gpiomux.h>
+=======
+#include <soc/qcom/sysmon.h>
+#include <mach/gpiomux.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include "esoc.h"
 
 #define MDM_PBLRDY_CNT			20
@@ -39,6 +53,14 @@
 #define RD_BUF_SIZE			100
 #define SFR_MAX_RETRIES			10
 #define SFR_RETRY_INTERVAL		1000
+<<<<<<< HEAD
+=======
+#define MDM_DBG_OFFSET			0x934
+#define MDM_DBG_MODE			0x53444247
+#define MDM_CTI_NAME			"coresight-cti-rpm-cpu0"
+#define MDM_CTI_TRIG			0
+#define MDM_CTI_CH			0
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 enum mdm_gpio {
 	AP2MDM_WAKEUP = 0,
@@ -49,7 +71,10 @@ enum mdm_gpio {
 	AP2MDM_ERRFATAL,
 	AP2MDM_VDDMIN,
 	AP2MDM_PMIC_PWR_EN,
+<<<<<<< HEAD
 	AP2MDM_HSIC_READY,
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	MDM2AP_WAKEUP,
 	MDM2AP_ERRFATAL,
 	MDM2AP_PBLRDY,
@@ -80,9 +105,13 @@ struct mdm_ctrl {
 	struct completion debug_done;
 	struct device *dev;
 	struct gpiomux_setting *mdm2ap_status_gpio_run_cfg;
+<<<<<<< HEAD
 #if defined(U5_TEMP)
 	struct gpiomux_setting mdm2ap_status_old_config;
 #endif
+=======
+	struct gpiomux_setting mdm2ap_status_old_config;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	int mdm2ap_status_valid_old_config;
 	int soft_reset_inverted;
 	int errfatal_irq;
@@ -93,14 +122,26 @@ struct mdm_ctrl {
 	bool debug_fail;
 	unsigned int dump_timeout_ms;
 	unsigned int ramdump_delay_ms;
+<<<<<<< HEAD
 	int sysmon_subsys_id;
 	struct esoc_clink *esoc;
 	bool get_restart_reason;
 	bool cp_crash_occurrence;
+=======
+	struct esoc_clink *esoc;
+	bool get_restart_reason;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	unsigned long irq_mask;
 	bool ready;
 	bool dual_interface;
 	u32 status;
+<<<<<<< HEAD
+=======
+	void __iomem *dbg_addr;
+	bool dbg_mode;
+	struct coresight_cti *cti;
+	int trig_cnt;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 struct mdm_ops {
@@ -119,6 +160,7 @@ static struct gpio_map {
 	{"qcom,mdm2ap-status-gpio",     MDM2AP_STATUS},
 	{"qcom,ap2mdm-status-gpio",     AP2MDM_STATUS},
 	{"qcom,mdm2ap-pblrdy-gpio",     MDM2AP_PBLRDY},
+<<<<<<< HEAD
 //	{"qcom,ap2mdm-wakeup-gpio",     AP2MDM_WAKEUP},
 	{"qcom,ap2mdm-soft-reset-gpio",     AP2MDM_SOFT_RESET},
 //	{"qcom,ap2mdm-chnlrdy-gpio",    AP2MDM_CHNLRDY},
@@ -128,6 +170,15 @@ static struct gpio_map {
 //	{"qcom,ap2mdm-pmic-pwr-en-gpio", AP2MDM_PMIC_PWR_EN},
 //	{"qcom,mdm-link-detect-gpio", MDM_LINK_DETECT},
 	{"qcom,ap2mdm-hsic-ready-gpio",     AP2MDM_HSIC_READY},
+=======
+	{"qcom,ap2mdm-wakeup-gpio",     AP2MDM_WAKEUP},
+	{"qcom,ap2mdm-chnlrdy-gpio",    AP2MDM_CHNLRDY},
+	{"qcom,mdm2ap-wakeup-gpio",     MDM2AP_WAKEUP},
+	{"qcom,ap2mdm-vddmin-gpio",     AP2MDM_VDDMIN},
+	{"qcom,mdm2ap-vddmin-gpio",     MDM2AP_VDDMIN},
+	{"qcom,ap2mdm-pmic-pwr-en-gpio", AP2MDM_PMIC_PWR_EN},
+	{"qcom,mdm-link-detect-gpio", MDM_LINK_DETECT},
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 /* Required gpios */
@@ -224,7 +275,10 @@ static void mdm_deconfigure_ipc(struct mdm_ctrl *mdm)
 static void mdm_update_gpio_configs(struct mdm_ctrl *mdm,
 				enum gpio_update_config gpio_config)
 {
+<<<<<<< HEAD
 #if defined(U5_TEMP)
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct device *dev = mdm->dev;
 	/* Some gpio configuration may need updating after modem bootup.*/
 	switch (gpio_config) {
@@ -252,7 +306,22 @@ static void mdm_update_gpio_configs(struct mdm_ctrl *mdm,
 		dev_err(dev, "%s: called with no config\n", __func__);
 		break;
 	}
+<<<<<<< HEAD
 #endif
+=======
+}
+
+static void mdm_trigger_dbg(struct mdm_ctrl *mdm)
+{
+	int ret;
+
+	if (mdm->dbg_mode && !mdm->trig_cnt) {
+		ret = coresight_cti_pulse_trig(mdm->cti, MDM_CTI_CH);
+		mdm->trig_cnt++;
+		if (ret)
+			dev_err(mdm->dev, "unable to trigger cti pulse on\n");
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 /* This function can be called from atomic context. */
@@ -261,13 +330,19 @@ static void mdm_toggle_soft_reset(struct mdm_ctrl *mdm)
 	int soft_reset_direction_assert = 0,
 	    soft_reset_direction_de_assert = 1;
 
+<<<<<<< HEAD
 	dev_info(mdm->dev, "%s\n", __func__);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (mdm->soft_reset_inverted) {
 		soft_reset_direction_assert = 1;
 		soft_reset_direction_de_assert = 0;
 	}
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	gpio_direction_output(MDM_GPIO(mdm, AP2MDM_SOFT_RESET),
 			soft_reset_direction_assert);
 	/*
@@ -284,7 +359,11 @@ static void mdm_do_first_power_on(struct mdm_ctrl *mdm)
 	int pblrdy;
 	struct device *dev = mdm->dev;
 
+<<<<<<< HEAD
 	dev_info(dev, "Powering on modem for the first time\n");
+=======
+	dev_dbg(dev, "Powering on modem for the first time\n");
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	mdm_toggle_soft_reset(mdm);
 	/* Add a delay to allow PON sequence to complete*/
 	msleep(50);
@@ -295,7 +374,11 @@ static void mdm_do_first_power_on(struct mdm_ctrl *mdm)
 			break;
 		usleep_range(5000, 6000);
 	}
+<<<<<<< HEAD
 	dev_info(dev, "pblrdy i:%d\n", i);
+=======
+	dev_dbg(dev, "pblrdy i:%d\n", i);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	msleep(200);
 }
 
@@ -305,10 +388,17 @@ static void mdm_power_down(struct mdm_ctrl *mdm)
 	int soft_reset_direction = mdm->soft_reset_inverted ? 1 : 0;
 	/* Assert the soft reset line whether mdm2ap_status went low or not */
 	gpio_direction_output(MDM_GPIO(mdm, AP2MDM_SOFT_RESET),
+<<<<<<< HEAD
 			soft_reset_direction);
 	dev_info(dev, "Doing a hard reset\n");
 	gpio_direction_output(MDM_GPIO(mdm, AP2MDM_SOFT_RESET),
 			soft_reset_direction);
+=======
+					soft_reset_direction);
+	dev_dbg(dev, "Doing a hard reset\n");
+	gpio_direction_output(MDM_GPIO(mdm, AP2MDM_SOFT_RESET),
+						soft_reset_direction);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/*
 	* Currently, there is a debounce timer on the charm PMIC. It is
 	* necessary to hold the PMIC RESET low for 400ms
@@ -320,11 +410,18 @@ static void mdm_power_down(struct mdm_ctrl *mdm)
 
 static int mdm_cmd_exe(enum esoc_cmd cmd, struct esoc_clink *esoc)
 {
+<<<<<<< HEAD
 	int ret;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	unsigned long end_time;
 	bool status_down = false;
 	struct mdm_ctrl *mdm = get_esoc_clink_data(esoc);
 	struct device *dev = mdm->dev;
+<<<<<<< HEAD
+=======
+	bool graceful_shutdown;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	switch (cmd) {
 	case ESOC_PWR_ON:
@@ -337,6 +434,7 @@ static int mdm_cmd_exe(enum esoc_cmd cmd, struct esoc_clink *esoc)
 		mdm_disable_irqs(mdm);
 		mdm->debug = 0;
 		mdm->ready = false;
+<<<<<<< HEAD
 		ret = sysmon_send_shutdown(mdm->sysmon_subsys_id);
 		device_lock(dev);
 		if (ret)
@@ -361,6 +459,38 @@ static int mdm_cmd_exe(enum esoc_cmd cmd, struct esoc_clink *esoc)
 				dev_err(mdm->dev, "graceful poff ipc fail\n");
 			}
 		}
+=======
+		mdm->trig_cnt = 0;
+		graceful_shutdown = true;
+
+		dev_dbg(mdm->dev, "Waiting for status gpio go low\n");
+		status_down = false;
+		end_time = jiffies + msecs_to_jiffies(10000);
+		while (time_before(jiffies, end_time)) {
+			if (gpio_get_value(MDM_GPIO(mdm, MDM2AP_STATUS))
+									== 0) {
+				dev_dbg(dev, "Status went low\n");
+				status_down = true;
+				break;
+			}
+			msleep(100);
+		}
+		if (status_down)
+			dev_dbg(dev, "shutdown successful\n");
+		else
+			dev_err(mdm->dev, "graceful poff ipc fail\n");
+	case ESOC_FORCE_PWR_OFF:
+		if (!graceful_shutdown) {
+			mdm_disable_irqs(mdm);
+			mdm->debug = 0;
+			mdm->ready = false;
+			mdm->trig_cnt = 0;
+
+			dev_err(mdm->dev, "Graceful shutdown fail, ret = %d\n",
+				esoc->subsys.sysmon_shutdown_ret);
+		}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		/*
 		 * Force a shutdown of the mdm. This is required in order
 		 * to prevent the mdm from immediately powering back on
@@ -370,7 +500,10 @@ static int mdm_cmd_exe(enum esoc_cmd cmd, struct esoc_clink *esoc)
 		esoc_clink_queue_request(ESOC_REQ_SHUTDOWN, esoc);
 		mdm_power_down(mdm);
 		mdm_update_gpio_configs(mdm, GPIO_UPDATE_BOOTING_CONFIG);
+<<<<<<< HEAD
 		device_unlock(dev);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		break;
 	case ESOC_RESET:
 		mdm_toggle_soft_reset(mdm);
@@ -384,11 +517,19 @@ static int mdm_cmd_exe(enum esoc_cmd cmd, struct esoc_clink *esoc)
 		mdm->ready = false;
 		cancel_delayed_work(&mdm->mdm2ap_status_check_work);
 		gpio_set_value(MDM_GPIO(mdm, AP2MDM_ERRFATAL), 1);
+<<<<<<< HEAD
 		dev_info(mdm->dev, "set ap2mdm errfatal to force reset\n");
+=======
+		dev_dbg(mdm->dev, "set ap2mdm errfatal to force reset\n");
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		msleep(mdm->ramdump_delay_ms);
 		break;
 	case ESOC_EXE_DEBUG:
 		mdm->debug = 1;
+<<<<<<< HEAD
+=======
+		mdm->trig_cnt = 0;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		mdm_toggle_soft_reset(mdm);
 		/*
 		 * wait for ramdumps to be collected
@@ -414,6 +555,7 @@ static int mdm_cmd_exe(enum esoc_cmd cmd, struct esoc_clink *esoc)
 		dev_dbg(mdm->dev, "exiting debug state after power on\n");
 		mdm->get_restart_reason = true;
 	      break;
+<<<<<<< HEAD
 	case ESOC_SET_CRASH_OCCURRENCE:
 	      mdm->cp_crash_occurrence= true;
 	      return mdm->cp_crash_occurrence;
@@ -424,6 +566,8 @@ static int mdm_cmd_exe(enum esoc_cmd cmd, struct esoc_clink *esoc)
 	      mdm->cp_crash_occurrence= false;
 	      return temp_for_reason;
 	      }
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	default:
 	      return -EINVAL;
 	};
@@ -450,7 +594,11 @@ static void mdm_status_fn(struct work_struct *work)
 	struct device *dev = mdm->dev;
 	int value = gpio_get_value(MDM_GPIO(mdm, MDM2AP_STATUS));
 
+<<<<<<< HEAD
 	dev_info(dev, "%s: status:%d\n", __func__, value);
+=======
+	dev_dbg(dev, "%s: status:%d\n", __func__, value);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* Update gpio configuration to "running" config. */
 	mdm_update_gpio_configs(mdm, GPIO_UPDATE_RUNNING_CONFIG);
 }
@@ -464,7 +612,11 @@ static void mdm_get_restart_reason(struct work_struct *work)
 	struct device *dev = mdm->dev;
 
 	do {
+<<<<<<< HEAD
 		ret = sysmon_get_reason(mdm->sysmon_subsys_id, sfr_buf,
+=======
+		ret = sysmon_get_reason(&mdm->esoc->subsys, sfr_buf,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 							sizeof(sfr_buf));
 		if (!ret) {
 			dev_err(dev, "mdm restart reason is %s\n", sfr_buf);
@@ -473,7 +625,11 @@ static void mdm_get_restart_reason(struct work_struct *work)
 		msleep(SFR_RETRY_INTERVAL);
 	} while (++ntries < SFR_MAX_RETRIES);
 	if (ntries == SFR_MAX_RETRIES)
+<<<<<<< HEAD
 		dev_err(dev, "%s: Error retrieving restart reason: %d\n",
+=======
+		dev_dbg(dev, "%s: Error retrieving restart reason: %d\n",
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 						__func__, ret);
 	mdm->get_restart_reason = false;
 }
@@ -488,7 +644,10 @@ static void mdm_notify(enum esoc_notify notify, struct esoc_clink *esoc)
 
 	switch (notify) {
 	case ESOC_IMG_XFER_DONE:
+<<<<<<< HEAD
 		dev_info(dev, "%s ESOC_IMG_XFER_DONE\n", __func__);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (gpio_get_value(MDM_GPIO(mdm, MDM2AP_STATUS)) ==  0)
 			schedule_delayed_work(&mdm->mdm2ap_status_check_work,
 				msecs_to_jiffies(MDM2AP_STATUS_TIMEOUT_MS));
@@ -520,7 +679,11 @@ static void mdm_notify(enum esoc_notify notify, struct esoc_clink *esoc)
 	case ESOC_PRIMARY_CRASH:
 		mdm_disable_irqs(mdm);
 		status_down = false;
+<<<<<<< HEAD
 		dev_info(dev, "signal apq err fatal for graceful restart\n");
+=======
+		dev_dbg(dev, "signal apq err fatal for graceful restart\n");
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		gpio_set_value(MDM_GPIO(mdm, AP2MDM_ERRFATAL), 1);
 		timeout = local_clock();
 		do_div(timeout, NSEC_PER_MSEC);
@@ -550,7 +713,11 @@ static void mdm_notify(enum esoc_notify notify, struct esoc_clink *esoc)
 		}
 		break;
 	case ESOC_PRIMARY_REBOOT:
+<<<<<<< HEAD
 		dev_info(mdm->dev, "Triggering mdm cold reset");
+=======
+		dev_dbg(mdm->dev, "Triggering mdm cold reset");
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		mdm->ready = 0;
 		gpio_direction_output(MDM_GPIO(mdm, AP2MDM_SOFT_RESET),
 				!!mdm->soft_reset_inverted);
@@ -601,8 +768,14 @@ static irqreturn_t mdm_status_change(int irq, void *dev_id)
 		esoc_clink_evt_notify(ESOC_UNEXPECTED_RESET, esoc);
 	} else if (value == 1) {
 		cancel_delayed_work(&mdm->mdm2ap_status_check_work);
+<<<<<<< HEAD
 		dev_info(dev, "status = 1: mdm is now ready\n");
 		mdm->ready = true;
+=======
+		dev_dbg(dev, "status = 1: mdm is now ready\n");
+		mdm->ready = true;
+		mdm_trigger_dbg(mdm);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		queue_work(mdm->mdm_queue, &mdm->mdm_status_work);
 		if (mdm->get_restart_reason)
 			queue_work(mdm->mdm_queue, &mdm->restart_reason_work);
@@ -621,11 +794,19 @@ static irqreturn_t mdm_pblrdy_change(int irq, void *dev_id)
 		return IRQ_HANDLED;
 	esoc = mdm->esoc;
 	dev = mdm->dev;
+<<<<<<< HEAD
 	dev_info(dev, "pbl ready %d:\n",
 			gpio_get_value(MDM_GPIO(mdm, MDM2AP_PBLRDY)));
 	if (mdm->init) {
 		mdm->init = 0;
 		dev_err(dev, "Signaling request engine for images\n");
+=======
+	dev_dbg(dev, "pbl ready %d:\n",
+			gpio_get_value(MDM_GPIO(mdm, MDM2AP_PBLRDY)));
+	if (mdm->init) {
+		mdm->init = 0;
+		mdm_trigger_dbg(mdm);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		esoc_clink_queue_request(ESOC_REQ_IMG, esoc);
 		return IRQ_HANDLED;
 	}
@@ -645,11 +826,52 @@ static int mdm_get_status(u32 *status, struct esoc_clink *esoc)
 	return 0;
 }
 
+<<<<<<< HEAD
 static void mdm_set_hsic_ready(struct esoc_clink *esoc)
 {
 	struct mdm_ctrl *mdm = get_esoc_clink_data(esoc);
 
 	gpio_set_value(MDM_GPIO(mdm, AP2MDM_HSIC_READY), 1);
+=======
+static void mdm_configure_debug(struct mdm_ctrl *mdm)
+{
+	void __iomem *addr;
+	unsigned val;
+	int ret;
+	struct device_node *node = mdm->dev->of_node;
+
+	addr = of_iomap(node, 0);
+	if (IS_ERR(addr)) {
+		dev_err(mdm->dev, "failed to get debug base addres\n");
+		return;
+	}
+	mdm->dbg_addr = addr + MDM_DBG_OFFSET;
+	val = readl_relaxed(mdm->dbg_addr);
+	if (val == MDM_DBG_MODE) {
+		mdm->dbg_mode = true;
+		mdm->cti = coresight_cti_get(MDM_CTI_NAME);
+		if (IS_ERR(mdm->cti)) {
+			dev_err(mdm->dev, "unable to get cti handle\n");
+			goto cti_get_err;
+		}
+		ret = coresight_cti_map_trigout(mdm->cti, MDM_CTI_TRIG,
+								MDM_CTI_CH);
+		if (ret) {
+			dev_err(mdm->dev, "unable to map trig to channel\n");
+			goto cti_map_err;
+		}
+		mdm->trig_cnt = 0;
+	} else {
+		dev_dbg(mdm->dev, "Not in debug mode. debug mode = %u\n", val);
+		mdm->dbg_mode = false;
+	}
+	return;
+cti_map_err:
+	coresight_cti_put(mdm->cti);
+cti_get_err:
+	mdm->dbg_mode = false;
+	return;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 /* Fail if any of the required gpios is absent. */
@@ -657,19 +879,29 @@ static int mdm_dt_parse_gpios(struct mdm_ctrl *mdm)
 {
 	int i, val, rc = 0;
 	struct device_node *node = mdm->dev->of_node;
+<<<<<<< HEAD
 //	enum of_gpio_flags flags = OF_GPIO_ACTIVE_LOW;
+=======
+	enum of_gpio_flags flags = OF_GPIO_ACTIVE_LOW;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	for (i = 0; i < NUM_GPIOS; i++)
 		mdm->gpios[i] = INVALID_GPIO;
 
 	for (i = 0; i < ARRAY_SIZE(gpio_map); i++) {
 		val = of_get_named_gpio(node, gpio_map[i].name, 0);
+<<<<<<< HEAD
 		if (val >= 0) {
 			MDM_GPIO(mdm, gpio_map[i].index) = val;
 			pr_info("[MIF] %s, gpio : %s\n", __func__, gpio_map[i].name);
 		}
 	}
 #if 0
+=======
+		if (val >= 0)
+			MDM_GPIO(mdm, gpio_map[i].index) = val;
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* These two are special because they can be inverted. */
 	val = of_get_named_gpio_flags(node, "qcom,ap2mdm-soft-reset-gpio",
 						0, &flags);
@@ -678,7 +910,10 @@ static int mdm_dt_parse_gpios(struct mdm_ctrl *mdm)
 		if (flags & OF_GPIO_ACTIVE_LOW)
 			mdm->soft_reset_inverted = 1;
 	}
+<<<<<<< HEAD
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* Verify that the required gpios have valid values */
 	for (i = 0; i < ARRAY_SIZE(required_gpios); i++) {
 		if (MDM_GPIO(mdm, required_gpios[i]) == INVALID_GPIO) {
@@ -750,10 +985,13 @@ static int mdm_configure_ipc(struct mdm_ctrl *mdm, struct platform_device *pdev)
 			goto fatal_err;
 		}
 	}
+<<<<<<< HEAD
 	ret = of_property_read_u32(node, "qcom,sysmon-subsys-id",
 						&mdm->sysmon_subsys_id);
 	if (ret < 0)
 		dev_info(dev, "sysmon_subsys_id not set.\n");
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	gpio_direction_output(MDM_GPIO(mdm, AP2MDM_STATUS), 0);
 	gpio_direction_output(MDM_GPIO(mdm, AP2MDM_ERRFATAL), 0);
@@ -765,6 +1003,7 @@ static int mdm_configure_ipc(struct mdm_ctrl *mdm, struct platform_device *pdev)
 	gpio_direction_input(MDM_GPIO(mdm, MDM2AP_ERRFATAL));
 
 	/* ERR_FATAL irq. */
+<<<<<<< HEAD
 	irq = gpio_to_irq(MDM_GPIO(mdm, MDM2AP_ERRFATAL));
 	if (irq < 0) {
 		pr_err("%s: bad MDM2AP_ERRFATAL IRQ resource, err = %d\n",
@@ -772,12 +1011,17 @@ static int mdm_configure_ipc(struct mdm_ctrl *mdm, struct platform_device *pdev)
 		goto errfatal_err;
 	}
 #if 0
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	irq = platform_get_irq_byname(pdev, "err_fatal_irq");
 	if (irq < 0) {
 		dev_err(dev, "bad MDM2AP_ERRFATAL IRQ resource\n");
 		goto errfatal_err;
 	}
+<<<<<<< HEAD
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ret = request_irq(irq, mdm_errfatal,
 			IRQF_TRIGGER_RISING , "mdm errfatal", mdm);
 
@@ -790,8 +1034,12 @@ static int mdm_configure_ipc(struct mdm_ctrl *mdm, struct platform_device *pdev)
 
 errfatal_err:
 	 /* status irq */
+<<<<<<< HEAD
 	irq = gpio_to_irq(MDM_GPIO(mdm, MDM2AP_STATUS));
 	/* irq = platform_get_irq_byname(pdev, "status_irq"); */
+=======
+	irq = platform_get_irq_byname(pdev, "status_irq");
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (irq < 0) {
 		dev_err(dev, "%s: bad MDM2AP_STATUS IRQ resource, err = %d\n",
 				__func__, irq);
@@ -808,8 +1056,12 @@ errfatal_err:
 	mdm->status_irq = irq;
 status_err:
 	if (gpio_is_valid(MDM_GPIO(mdm, MDM2AP_PBLRDY))) {
+<<<<<<< HEAD
 		irq = gpio_to_irq(MDM_GPIO(mdm, MDM2AP_PBLRDY));
 		/* irq =  platform_get_irq_byname(pdev, "plbrdy_irq"); */
+=======
+		irq =  platform_get_irq_byname(pdev, "plbrdy_irq");
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (irq < 0) {
 			dev_err(dev, "%s: MDM2AP_PBLRDY IRQ request failed\n",
 				 __func__);
@@ -826,7 +1078,11 @@ status_err:
 		}
 		mdm->pblrdy_irq = irq;
 	}
+<<<<<<< HEAD
 	//mdm_disable_irqs(mdm);
+=======
+	mdm_disable_irqs(mdm);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 pblrdy_err:
 	return 0;
 fatal_err:
@@ -842,7 +1098,10 @@ static int mdm9x25_setup_hw(struct mdm_ctrl *mdm,
 	int ret;
 	struct esoc_clink *esoc;
 
+<<<<<<< HEAD
 	pr_info("[MIF] %s\n", __func__);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	mdm->dev = &pdev->dev;
 	esoc = devm_kzalloc(mdm->dev, sizeof(*esoc), GFP_KERNEL);
 	if (IS_ERR(esoc)) {
@@ -863,6 +1122,10 @@ static int mdm9x25_setup_hw(struct mdm_ctrl *mdm,
 	ret = mdm_configure_ipc(mdm, pdev);
 	if (ret)
 		return ret;
+<<<<<<< HEAD
+=======
+	mdm_configure_debug(mdm);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	dev_err(mdm->dev, "ipc configure done\n");
 	esoc->name = MDM9x25_LABEL;
 	esoc->link_name = MDM9x25_HSIC;
@@ -882,11 +1145,17 @@ static int mdm9x25_setup_hw(struct mdm_ctrl *mdm,
 	INIT_WORK(&mdm->restart_reason_work, mdm_get_restart_reason);
 	INIT_DELAYED_WORK(&mdm->mdm2ap_status_check_work, mdm2ap_status_check);
 	mdm->get_restart_reason = false;
+<<<<<<< HEAD
 	mdm->cp_crash_occurrence= false;
 	mdm->debug_fail = false;
 	mdm->esoc = esoc;
 	mdm->init = 0;
 
+=======
+	mdm->debug_fail = false;
+	mdm->esoc = esoc;
+	mdm->init = 0;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 
@@ -919,6 +1188,10 @@ static int mdm9x35_setup_hw(struct mdm_ctrl *mdm,
 	ret = mdm_configure_ipc(mdm, pdev);
 	if (ret)
 		return ret;
+<<<<<<< HEAD
+=======
+	mdm_configure_debug(mdm);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	dev_dbg(mdm->dev, "ipc configure done\n");
 	esoc->name = MDM9x35_LABEL;
 	mdm->dual_interface = of_property_read_bool(node,
@@ -956,7 +1229,10 @@ static int mdm9x35_setup_hw(struct mdm_ctrl *mdm,
 	INIT_WORK(&mdm->restart_reason_work, mdm_get_restart_reason);
 	INIT_DELAYED_WORK(&mdm->mdm2ap_status_check_work, mdm2ap_status_check);
 	mdm->get_restart_reason = false;
+<<<<<<< HEAD
 	mdm->cp_crash_occurrence= false;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	mdm->debug_fail = false;
 	mdm->esoc = esoc;
 	mdm->init = 0;
@@ -966,7 +1242,10 @@ static int mdm9x35_setup_hw(struct mdm_ctrl *mdm,
 static struct esoc_clink_ops mdm_cops = {
 	.cmd_exe = mdm_cmd_exe,
 	.get_status = mdm_get_status,
+<<<<<<< HEAD
 	.set_hsic_ready = mdm_set_hsic_ready,
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	.notify = mdm_notify,
 };
 
@@ -980,13 +1259,22 @@ static struct mdm_ops mdm9x35_ops = {
 	.config_hw = mdm9x35_setup_hw,
 };
 
+<<<<<<< HEAD
 static struct of_device_id mdm_dt_match[] = {
 	{ .compatible = "qcom,ext-mdm9x25",
 		.data = &mdm9x25_ops, },
+=======
+static const struct of_device_id mdm_dt_match[] = {
+	{ .compatible = "qcom,ext-mdm9x25",
+		.data = &mdm9x25_ops, },
+	{ .compatible = "qcom,ext-mdm9x35",
+		.data = &mdm9x35_ops, },
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	{},
 };
 MODULE_DEVICE_TABLE(of, mdm_dt_match);
 
+<<<<<<< HEAD
 static int __init get_baseband(char *str)
 {
 	if(!strncasecmp(str, "mdm2", 4)) {
@@ -1002,6 +1290,8 @@ static int __init get_baseband(char *str)
 }
 __setup("androidboot.baseband=", get_baseband);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int mdm_probe(struct platform_device *pdev)
 {
 	const struct of_device_id *match;
@@ -1009,7 +1299,10 @@ static int mdm_probe(struct platform_device *pdev)
 	struct device_node *node = pdev->dev.of_node;
 	struct mdm_ctrl *mdm;
 
+<<<<<<< HEAD
 	pr_info("[MIF] %s\n", __func__);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	match = of_match_node(mdm_dt_match, node);
 	if (IS_ERR(match))
 		return PTR_ERR(match);
@@ -1031,7 +1324,10 @@ static struct platform_driver mdm_driver = {
 
 static int __init mdm_register(void)
 {
+<<<<<<< HEAD
 	pr_info("[MIF] %s\n", __func__);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return platform_driver_register(&mdm_driver);
 }
 module_init(mdm_register);

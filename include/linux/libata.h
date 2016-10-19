@@ -399,6 +399,12 @@ enum {
 	ATA_HORKAGE_BROKEN_FPDMA_AA	= (1 << 15),	/* skip AA */
 	ATA_HORKAGE_DUMP_ID	= (1 << 16),	/* dump IDENTIFY data */
 	ATA_HORKAGE_MAX_SEC_LBA48 = (1 << 17),	/* Set max sects to 65535 */
+<<<<<<< HEAD
+=======
+	ATA_HORKAGE_ATAPI_DMADIR = (1 << 18),	/* device requires dmadir */
+	ATA_HORKAGE_NOLPM	= (1 << 20),	/* don't use LPM */
+	ATA_HORKAGE_WD_BROKEN_LPM = (1 << 21),	/* some WDs have broken LPM */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	 /* DMA mask for user DMA control: User visible values; DO NOT
 	    renumber */
@@ -769,6 +775,10 @@ struct ata_port {
 	unsigned long		qc_allocated;
 	unsigned int		qc_active;
 	int			nr_active_links; /* #links with active qcs */
+<<<<<<< HEAD
+=======
+	unsigned int		last_tag;	/* track next tag hw expects */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	struct ata_link		link;		/* host default link */
 	struct ata_link		*slave_link;	/* see ata_slave_link_init() */

@@ -18,8 +18,15 @@
 #include <linux/fb.h>
 #include <linux/init.h>
 #include <linux/console.h>
+<<<<<<< HEAD
 
 #include <asm/sizes.h>
+=======
+#include <linux/mm.h>
+
+#include <asm/sizes.h>
+#include <asm/pgtable.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <mach/hardware.h>
 
 /* Platform_data reserved for unifb registers. */

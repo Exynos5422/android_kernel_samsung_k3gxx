@@ -77,11 +77,15 @@
 #define RTL_SLOT_TIME_9				9
 #define RTL_SLOT_TIME_20			20
 
+<<<<<<< HEAD
 /*related with tcp/ip. */
 /*if_ehther.h*/
 #define ETH_P_PAE		0x888E	/*Port Access Entity (IEEE 802.1X) */
 #define ETH_P_IP		0x0800	/*Internet Protocol packet */
 #define ETH_P_ARP		0x0806	/*Address Resolution packet */
+=======
+/*related to tcp/ip. */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define SNAP_SIZE		6
 #define PROTOC_TYPE_SIZE	2
 
@@ -1039,6 +1043,10 @@ struct rtl_ht_agg {
 
 struct rssi_sta {
 	long undec_sm_pwdb;
+<<<<<<< HEAD
+=======
+	long undec_sm_cck;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 struct rtl_tid_data {
@@ -1329,8 +1337,15 @@ struct fast_ant_training {
 struct rtl_dm {
 	/*PHY status for Dynamic Management */
 	long entry_min_undec_sm_pwdb;
+<<<<<<< HEAD
 	long undec_sm_pwdb;	/*out dm */
 	long entry_max_undec_sm_pwdb;
+=======
+	long undec_sm_cck;
+	long undec_sm_pwdb;	/*out dm */
+	long entry_max_undec_sm_pwdb;
+	s32 ofdm_pkt_cnt;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	bool dm_initialgain_enable;
 	bool dynamic_txpower_enable;
 	bool current_turbo_edca;
@@ -1345,6 +1360,10 @@ struct rtl_dm {
 	bool inform_fw_driverctrldm;
 	bool current_mrc_switch;
 	u8 txpowercount;
+<<<<<<< HEAD
+=======
+	u8 powerindex_backup[6];
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	u8 thermalvalue_rxgain;
 	u8 thermalvalue_iqk;
@@ -1356,7 +1375,13 @@ struct rtl_dm {
 	bool done_txpower;
 	u8 dynamic_txhighpower_lvl;	/*Tx high power level */
 	u8 dm_flag;		/*Indicate each dynamic mechanism's status. */
+<<<<<<< HEAD
 	u8 dm_type;
+=======
+	u8 dm_flag_tmp;
+	u8 dm_type;
+	u8 dm_rssi_sel;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	u8 txpower_track_control;
 	bool interrupt_migration;
 	bool disable_tx_int;
@@ -1810,6 +1835,10 @@ struct rtl_hal_cfg {
 	bool write_readback;
 	char *name;
 	char *fw_name;
+<<<<<<< HEAD
+=======
+	char *alt_fw_name;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct rtl_hal_ops *ops;
 	struct rtl_mod_params *mod_params;
 	struct rtl_hal_usbint_cfg *usb_interface_cfg;
@@ -1954,6 +1983,10 @@ struct dig_t {
 	u8 pre_ccastate;
 	u8 cur_ccasate;
 	u8 large_fa_hit;
+<<<<<<< HEAD
+=======
+	u8 dig_dynamic_min;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	u8 forbidden_igi;
 	u8 dig_state;
 	u8 dig_highpwrstate;
@@ -2034,6 +2067,7 @@ struct rtl_priv {
 	struct dig_t dm_digtable;
 	struct ps_t dm_pstable;
 
+<<<<<<< HEAD
 	/* section shared by individual drivers */
 	union {
 		struct {	/* data buffer pointer for USB reads */
@@ -2050,6 +2084,17 @@ struct rtl_priv {
 			bool bt_operation_on;
 		};
 	};
+=======
+	u32 reg_874;
+	u32 reg_c70;
+	u32 reg_85c;
+	u32 reg_a74;
+	bool reg_init;	/* true if regs saved */
+	bool bt_operation_on;
+	__le32 *usb_data;
+	int usb_data_index;
+	bool initialized;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	bool enter_ps;	/* true when entering PS */
 	u8 rate_mask[5];
 
@@ -2057,7 +2102,11 @@ struct rtl_priv {
 	   that it points to the data allocated
 	   beyond  this structure like:
 	   rtl_pci_priv or rtl_usb_priv */
+<<<<<<< HEAD
 	u8 priv[0];
+=======
+	u8 priv[0] __aligned(sizeof(void *));
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 #define rtl_priv(hw)		(((struct rtl_priv *)(hw)->priv))

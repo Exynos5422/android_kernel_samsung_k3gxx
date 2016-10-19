@@ -2419,10 +2419,30 @@ out_unlock:
 	return ret;
 }
 
+<<<<<<< HEAD
 static void relink_file_extents(struct new_sa_defrag_extent *new)
 {
 	struct btrfs_path *path;
 	struct old_sa_defrag_extent *old, *tmp;
+=======
+static void free_sa_defrag_extent(struct new_sa_defrag_extent *new)
+{
+	struct old_sa_defrag_extent *old, *tmp;
+
+	if (!new)
+		return;
+
+	list_for_each_entry_safe(old, tmp, &new->head, list) {
+		list_del(&old->list);
+		kfree(old);
+	}
+	kfree(new);
+}
+
+static void relink_file_extents(struct new_sa_defrag_extent *new)
+{
+	struct btrfs_path *path;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct sa_defrag_extent_backref *backref;
 	struct sa_defrag_extent_backref *prev = NULL;
 	struct inode *inode;
@@ -2465,6 +2485,7 @@ static void relink_file_extents(struct new_sa_defrag_extent *new)
 	kfree(prev);
 
 	btrfs_free_path(path);
+<<<<<<< HEAD
 
 	list_for_each_entry_safe(old, tmp, &new->head, list) {
 		list_del(&old->list);
@@ -2475,6 +2496,13 @@ out:
 	wake_up(&root->fs_info->transaction_wait);
 
 	kfree(new);
+=======
+out:
+	free_sa_defrag_extent(new);
+
+	atomic_dec(&root->fs_info->defrag_running);
+	wake_up(&root->fs_info->transaction_wait);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static struct new_sa_defrag_extent *
@@ -2484,7 +2512,11 @@ record_old_file_extents(struct inode *inode,
 	struct btrfs_root *root = BTRFS_I(inode)->root;
 	struct btrfs_path *path;
 	struct btrfs_key key;
+<<<<<<< HEAD
 	struct old_sa_defrag_extent *old, *tmp;
+=======
+	struct old_sa_defrag_extent *old;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct new_sa_defrag_extent *new;
 	int ret;
 
@@ -2532,7 +2564,11 @@ record_old_file_extents(struct inode *inode,
 		if (slot >= btrfs_header_nritems(l)) {
 			ret = btrfs_next_leaf(root, path);
 			if (ret < 0)
+<<<<<<< HEAD
 				goto out_free_list;
+=======
+				goto out_free_path;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			else if (ret > 0)
 				break;
 			continue;
@@ -2561,7 +2597,11 @@ record_old_file_extents(struct inode *inode,
 
 		old = kmalloc(sizeof(*old), GFP_NOFS);
 		if (!old)
+<<<<<<< HEAD
 			goto out_free_list;
+=======
+			goto out_free_path;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 		offset = max(new->file_pos, key.offset);
 		end = min(new->file_pos + new->len, key.offset + num_bytes);
@@ -2583,6 +2623,7 @@ next:
 
 	return new;
 
+<<<<<<< HEAD
 out_free_list:
 	list_for_each_entry_safe(old, tmp, &new->head, list) {
 		list_del(&old->list);
@@ -2592,6 +2633,12 @@ out_free_path:
 	btrfs_free_path(path);
 out_kfree:
 	kfree(new);
+=======
+out_free_path:
+	btrfs_free_path(path);
+out_kfree:
+	free_sa_defrag_extent(new);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return NULL;
 }
 
@@ -2652,7 +2699,11 @@ static int btrfs_finish_ordered_io(struct btrfs_ordered_extent *ordered_extent)
 			EXTENT_DEFRAG, 1, cached_state);
 	if (ret) {
 		u64 last_snapshot = btrfs_root_last_snapshot(&root->root_item);
+<<<<<<< HEAD
 		if (last_snapshot >= BTRFS_I(inode)->generation)
+=======
+		if (0 && last_snapshot >= BTRFS_I(inode)->generation)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			/* the inode is shared */
 			new = record_old_file_extents(inode, ordered_extent);
 
@@ -2743,8 +2794,19 @@ out:
 	btrfs_remove_ordered_extent(inode, ordered_extent);
 
 	/* for snapshot-aware defrag */
+<<<<<<< HEAD
 	if (new)
 		relink_file_extents(new);
+=======
+	if (new) {
+		if (ret) {
+			free_sa_defrag_extent(new);
+			atomic_dec(&root->fs_info->defrag_running);
+		} else {
+			relink_file_extents(new);
+		}
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/* once for us */
 	btrfs_put_ordered_extent(ordered_extent);
@@ -4518,8 +4580,17 @@ static int btrfs_setsize(struct inode *inode, struct iattr *attr)
 	 * these flags set.  For all other operations the VFS set these flags
 	 * explicitly if it wants a timestamp update.
 	 */
+<<<<<<< HEAD
 	if (newsize != oldsize && (!(mask & (ATTR_CTIME | ATTR_MTIME))))
 		inode->i_ctime = inode->i_mtime = current_fs_time(inode->i_sb);
+=======
+	if (newsize != oldsize) {
+		inode_inc_iversion(inode);
+		if (!(mask & (ATTR_CTIME | ATTR_MTIME)))
+			inode->i_ctime = inode->i_mtime =
+				current_fs_time(inode->i_sb);
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (newsize > oldsize) {
 		truncate_pagecache(inode, oldsize, newsize);
@@ -7070,7 +7141,11 @@ static void btrfs_end_dio_bio(struct bio *bio, int err)
 		 * before atomic variable goto zero, we must make sure
 		 * dip->errors is perceived to be set.
 		 */
+<<<<<<< HEAD
 		smp_mb__before_atomic_dec();
+=======
+		smp_mb__before_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	/* if there are more bios still pending for this dio, just exit */
@@ -7247,7 +7322,11 @@ out_err:
 	 * before atomic variable goto zero, we must
 	 * make sure dip->errors is perceived to be set.
 	 */
+<<<<<<< HEAD
 	smp_mb__before_atomic_dec();
+=======
+	smp_mb__before_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (atomic_dec_and_test(&dip->pending_bios))
 		bio_io_error(dip->orig_bio);
 
@@ -7388,7 +7467,11 @@ static ssize_t btrfs_direct_IO(int rw, struct kiocb *iocb,
 		return 0;
 
 	atomic_inc(&inode->i_dio_count);
+<<<<<<< HEAD
 	smp_mb__after_atomic_inc();
+=======
+	smp_mb__after_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (rw & WRITE) {
 		count = iov_length(iov, nr_segs);
@@ -8146,7 +8229,11 @@ static int btrfs_rename(struct inode *old_dir, struct dentry *old_dentry,
 
 
 	/* check for collisions, even if the  name isn't there */
+<<<<<<< HEAD
 	ret = btrfs_check_dir_item_collision(root, new_dir->i_ino,
+=======
+	ret = btrfs_check_dir_item_collision(dest, new_dir->i_ino,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			     new_dentry->d_name.name,
 			     new_dentry->d_name.len);
 

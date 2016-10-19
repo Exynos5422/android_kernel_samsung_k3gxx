@@ -1084,7 +1084,17 @@ int device_add(struct device *dev)
 	error = dpm_sysfs_add(dev);
 	if (error)
 		goto DPMError;
+<<<<<<< HEAD
 	device_pm_add(dev);
+=======
+	if ((dev->pm_domain) || (dev->type && dev->type->pm)
+		|| (dev->class && (dev->class->pm || dev->class->resume))
+		|| (dev->bus && (dev->bus->pm || dev->bus->resume)) ||
+		(dev->driver && dev->driver->pm)) {
+		device_pm_add(dev);
+	}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/* Notify clients of device addition.  This call must come
 	 * after dpm_sysfs_add() and before kobject_uevent().
@@ -1839,7 +1849,11 @@ EXPORT_SYMBOL_GPL(device_move);
  */
 void device_shutdown(void)
 {
+<<<<<<< HEAD
 	struct device *dev;
+=======
+	struct device *dev, *parent;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	spin_lock(&devices_kset->list_lock);
 	/*
@@ -1856,7 +1870,11 @@ void device_shutdown(void)
 		 * prevent it from being freed because parent's
 		 * lock is to be held
 		 */
+<<<<<<< HEAD
 		get_device(dev->parent);
+=======
+		parent = get_device(dev->parent);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		get_device(dev);
 		/*
 		 * Make sure the device is off the kset list, in the
@@ -1866,8 +1884,13 @@ void device_shutdown(void)
 		spin_unlock(&devices_kset->list_lock);
 
 		/* hold lock to avoid race with probe/release */
+<<<<<<< HEAD
 		if (dev->parent)
 			device_lock(dev->parent);
+=======
+		if (parent)
+			device_lock(parent);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		device_lock(dev);
 
 		/* Don't allow any more runtime suspends */
@@ -1885,11 +1908,19 @@ void device_shutdown(void)
 		}
 
 		device_unlock(dev);
+<<<<<<< HEAD
 		if (dev->parent)
 			device_unlock(dev->parent);
 
 		put_device(dev);
 		put_device(dev->parent);
+=======
+		if (parent)
+			device_unlock(parent);
+
+		put_device(dev);
+		put_device(parent);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 		spin_lock(&devices_kset->list_lock);
 	}
@@ -2032,11 +2063,15 @@ EXPORT_SYMBOL(func);
 define_dev_printk_level(dev_emerg, KERN_EMERG);
 define_dev_printk_level(dev_alert, KERN_ALERT);
 define_dev_printk_level(dev_crit, KERN_CRIT);
+<<<<<<< HEAD
 #if defined(CONFIG_SEC_BAT_AUT) && !defined(CONFIG_SAMSUNG_PRODUCT_SHIP)
 define_dev_printk_level(dev_err, BAT_AUTOMAION_TEST_PREFIX_ERR);
 #else
 define_dev_printk_level(dev_err, KERN_ERR);
 #endif
+=======
+define_dev_printk_level(dev_err, KERN_ERR);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 define_dev_printk_level(dev_warn, KERN_WARNING);
 define_dev_printk_level(dev_notice, KERN_NOTICE);
 define_dev_printk_level(_dev_info, KERN_INFO);

@@ -14,6 +14,7 @@
 #ifndef __ASM_PSCI_H
 #define __ASM_PSCI_H
 
+<<<<<<< HEAD
 #define PSCI_POWER_STATE_TYPE_STANDBY		0
 #define PSCI_POWER_STATE_TYPE_POWER_DOWN	1
 
@@ -33,6 +34,8 @@ struct psci_operations {
 
 extern struct psci_operations psci_ops;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 int psci_init(void);
 
 #endif /* __ASM_PSCI_H */

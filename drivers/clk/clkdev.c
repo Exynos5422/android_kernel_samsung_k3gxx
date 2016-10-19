@@ -24,7 +24,11 @@
 static LIST_HEAD(clocks);
 static DEFINE_MUTEX(clocks_mutex);
 
+<<<<<<< HEAD
 #if defined(CONFIG_OF) && defined(CONFIG_COMMON_CLK)
+=======
+#if defined(CONFIG_OF)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 struct clk *of_clk_get(struct device_node *np, int index)
 {
 	struct of_phandle_args clkspec;
@@ -72,11 +76,16 @@ struct clk *of_clk_get_by_name(struct device_node *np, const char *name)
 		clk = of_clk_get(np, index);
 		if (!IS_ERR(clk))
 			break;
+<<<<<<< HEAD
 		else if (name && index >= 0) {
 			pr_err("ERROR: could not get clock %s:%s(%i)\n",
 				np->full_name, name ? name : "", index);
 			return clk;
 		}
+=======
+		else if (name && index >= 0)
+			return clk;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 		/*
 		 * No matching clock found on this node.  If the parent node
@@ -146,7 +155,11 @@ struct clk *clk_get_sys(const char *dev_id, const char *con_id)
 		cl = NULL;
 	mutex_unlock(&clocks_mutex);
 
+<<<<<<< HEAD
 	return cl ? cl->clk : ERR_PTR(-ENOENT);
+=======
+	return cl ? cl->clk : ERR_PTR(-EPROBE_DEFER);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 EXPORT_SYMBOL(clk_get_sys);
 
@@ -179,7 +192,11 @@ void clkdev_add(struct clk_lookup *cl)
 }
 EXPORT_SYMBOL(clkdev_add);
 
+<<<<<<< HEAD
 void __init clkdev_add_table(struct clk_lookup *cl, size_t num)
+=======
+void clkdev_add_table(struct clk_lookup *cl, size_t num)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	mutex_lock(&clocks_mutex);
 	while (num--) {
@@ -190,7 +207,11 @@ void __init clkdev_add_table(struct clk_lookup *cl, size_t num)
 }
 
 #define MAX_DEV_ID	20
+<<<<<<< HEAD
 #define MAX_CON_ID	40
+=======
+#define MAX_CON_ID	16
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 struct clk_lookup_alloc {
 	struct clk_lookup cl;

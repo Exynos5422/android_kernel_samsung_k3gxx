@@ -347,13 +347,64 @@ static bool start_new_rx_buffer(int offset, unsigned long size, int head)
 	 * into multiple copies tend to give large frags their
 	 * own buffers as before.
 	 */
+<<<<<<< HEAD
 	if ((offset + size > MAX_BUFFER_OFFSET) &&
 	    (size <= MAX_BUFFER_OFFSET) && offset && !head)
+=======
+	BUG_ON(size > MAX_BUFFER_OFFSET);
+	if ((offset + size > MAX_BUFFER_OFFSET) && offset && !head)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return true;
 
 	return false;
 }
 
+<<<<<<< HEAD
+=======
+struct xenvif_count_slot_state {
+	unsigned long copy_off;
+	bool head;
+};
+
+unsigned int xenvif_count_frag_slots(struct xenvif *vif,
+				     unsigned long offset, unsigned long size,
+				     struct xenvif_count_slot_state *state)
+{
+	unsigned count = 0;
+
+	offset &= ~PAGE_MASK;
+
+	while (size > 0) {
+		unsigned long bytes;
+
+		bytes = PAGE_SIZE - offset;
+
+		if (bytes > size)
+			bytes = size;
+
+		if (start_new_rx_buffer(state->copy_off, bytes, state->head)) {
+			count++;
+			state->copy_off = 0;
+		}
+
+		if (state->copy_off + bytes > MAX_BUFFER_OFFSET)
+			bytes = MAX_BUFFER_OFFSET - state->copy_off;
+
+		state->copy_off += bytes;
+
+		offset += bytes;
+		size -= bytes;
+
+		if (offset == PAGE_SIZE)
+			offset = 0;
+
+		state->head = false;
+	}
+
+	return count;
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * Figure out how many ring slots we're going to need to send @skb to
  * the guest. This function is essentially a dry run of
@@ -361,6 +412,7 @@ static bool start_new_rx_buffer(int offset, unsigned long size, int head)
  */
 unsigned int xen_netbk_count_skb_slots(struct xenvif *vif, struct sk_buff *skb)
 {
+<<<<<<< HEAD
 	unsigned int count;
 	int i, copy_off;
 
@@ -403,6 +455,41 @@ unsigned int xen_netbk_count_skb_slots(struct xenvif *vif, struct sk_buff *skb)
 			if (offset == PAGE_SIZE)
 				offset = 0;
 		}
+=======
+	struct xenvif_count_slot_state state;
+	unsigned int count;
+	unsigned char *data;
+	unsigned i;
+
+	state.head = true;
+	state.copy_off = 0;
+
+	/* Slot for the first (partial) page of data. */
+	count = 1;
+
+	/* Need a slot for the GSO prefix for GSO extra data? */
+	if (skb_shinfo(skb)->gso_size)
+		count++;
+
+	data = skb->data;
+	while (data < skb_tail_pointer(skb)) {
+		unsigned long offset = offset_in_page(data);
+		unsigned long size = PAGE_SIZE - offset;
+
+		if (data + size > skb_tail_pointer(skb))
+			size = skb_tail_pointer(skb) - data;
+
+		count += xenvif_count_frag_slots(vif, offset, size, &state);
+
+		data += size;
+	}
+
+	for (i = 0; i < skb_shinfo(skb)->nr_frags; i++) {
+		unsigned long size = skb_frag_size(&skb_shinfo(skb)->frags[i]);
+		unsigned long offset = skb_shinfo(skb)->frags[i].page_offset;
+
+		count += xenvif_count_frag_slots(vif, offset, size, &state);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 	return count;
 }
@@ -1389,9 +1476,14 @@ out:
 
 static bool tx_credit_exceeded(struct xenvif *vif, unsigned size)
 {
+<<<<<<< HEAD
 	unsigned long now = jiffies;
 	unsigned long next_credit =
 		vif->credit_timeout.expires +
+=======
+	u64 now = get_jiffies_64();
+	u64 next_credit = vif->credit_window_start +
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		msecs_to_jiffies(vif->credit_usec / 1000);
 
 	/* Timer could already be pending in rare cases. */
@@ -1399,8 +1491,13 @@ static bool tx_credit_exceeded(struct xenvif *vif, unsigned size)
 		return true;
 
 	/* Passed the point where we can replenish credit? */
+<<<<<<< HEAD
 	if (time_after_eq(now, next_credit)) {
 		vif->credit_timeout.expires = now;
+=======
+	if (time_after_eq64(now, next_credit)) {
+		vif->credit_window_start = now;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		tx_add_credit(vif);
 	}
 
@@ -1412,6 +1509,10 @@ static bool tx_credit_exceeded(struct xenvif *vif, unsigned size)
 			tx_credit_callback;
 		mod_timer(&vif->credit_timeout,
 			  next_credit);
+<<<<<<< HEAD
+=======
+		vif->credit_window_start = next_credit;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 		return true;
 	}

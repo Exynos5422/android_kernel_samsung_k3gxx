@@ -150,7 +150,11 @@ int irq_do_set_affinity(struct irq_data *data, const struct cpumask *mask,
 	struct irq_chip *chip = irq_data_get_irq_chip(data);
 	int ret;
 
+<<<<<<< HEAD
 	ret = chip->irq_set_affinity(data, mask, false);
+=======
+	ret = chip->irq_set_affinity(data, mask, force);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	switch (ret) {
 	case IRQ_SET_MASK_OK:
 		cpumask_copy(data->affinity, mask);
@@ -162,7 +166,12 @@ int irq_do_set_affinity(struct irq_data *data, const struct cpumask *mask,
 	return ret;
 }
 
+<<<<<<< HEAD
 int __irq_set_affinity_locked(struct irq_data *data, const struct cpumask *mask)
+=======
+int irq_set_affinity_locked(struct irq_data *data, const struct cpumask *mask,
+			    bool force)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	struct irq_chip *chip = irq_data_get_irq_chip(data);
 	struct irq_desc *desc = irq_data_to_desc(data);
@@ -172,7 +181,11 @@ int __irq_set_affinity_locked(struct irq_data *data, const struct cpumask *mask)
 		return -EINVAL;
 
 	if (irq_can_move_pcntxt(data)) {
+<<<<<<< HEAD
 		ret = irq_do_set_affinity(data, mask, false);
+=======
+		ret = irq_do_set_affinity(data, mask, force);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	} else {
 		irqd_set_move_pending(data);
 		irq_copy_pending(desc, mask);
@@ -187,6 +200,7 @@ int __irq_set_affinity_locked(struct irq_data *data, const struct cpumask *mask)
 	return ret;
 }
 
+<<<<<<< HEAD
 /**
  *	irq_set_affinity - Set the irq affinity of a given irq
  *	@irq:		Interrupt to set affinity
@@ -194,6 +208,9 @@ int __irq_set_affinity_locked(struct irq_data *data, const struct cpumask *mask)
  *
  */
 int irq_set_affinity(unsigned int irq, const struct cpumask *mask)
+=======
+int __irq_set_affinity(unsigned int irq, const struct cpumask *mask, bool force)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	struct irq_desc *desc = irq_to_desc(irq);
 	unsigned long flags;
@@ -203,10 +220,18 @@ int irq_set_affinity(unsigned int irq, const struct cpumask *mask)
 		return -EINVAL;
 
 	raw_spin_lock_irqsave(&desc->lock, flags);
+<<<<<<< HEAD
 	ret =  __irq_set_affinity_locked(irq_desc_get_irq_data(desc), mask);
 	raw_spin_unlock_irqrestore(&desc->lock, flags);
 	return ret;
 }
+=======
+	ret = irq_set_affinity_locked(irq_desc_get_irq_data(desc), mask, force);
+	raw_spin_unlock_irqrestore(&desc->lock, flags);
+	return ret;
+}
+EXPORT_SYMBOL(irq_set_affinity);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 int irq_set_affinity_hint(unsigned int irq, const struct cpumask *m)
 {
@@ -540,6 +565,35 @@ int irq_set_irq_wake(unsigned int irq, unsigned int on)
 }
 EXPORT_SYMBOL(irq_set_irq_wake);
 
+<<<<<<< HEAD
+=======
+/**
+ *     irq_read_line - read the value on an irq line
+ *     @irq: Interrupt number representing a hardware line
+ *
+ *     This function is meant to be called from within the irq handler.
+ *     Slowbus irq controllers might sleep, but it is assumed that the irq
+ *     handler for slowbus interrupts will execute in thread context, so
+ *     sleeping is okay.
+ */
+int irq_read_line(unsigned int irq)
+{
+	struct irq_desc *desc = irq_to_desc(irq);
+	int val;
+
+	if (!desc || !desc->irq_data.chip->irq_read_line)
+		return -EINVAL;
+
+	chip_bus_lock(desc);
+	raw_spin_lock(&desc->lock);
+	val = desc->irq_data.chip->irq_read_line(&desc->irq_data);
+	raw_spin_unlock(&desc->lock);
+	chip_bus_sync_unlock(desc);
+	return val;
+}
+EXPORT_SYMBOL_GPL(irq_read_line);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * Internal function that tells the architecture code whether a
  * particular irq has been exclusively allocated or is available
@@ -802,8 +856,12 @@ static irqreturn_t irq_thread_fn(struct irq_desc *desc,
 
 static void wake_threads_waitq(struct irq_desc *desc)
 {
+<<<<<<< HEAD
 	if (atomic_dec_and_test(&desc->threads_active) &&
 	    waitqueue_active(&desc->wait_for_threads))
+=======
+	if (atomic_dec_and_test(&desc->threads_active))
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		wake_up(&desc->wait_for_threads);
 }
 
@@ -867,8 +925,13 @@ static int irq_thread(void *data)
 		irq_thread_check_affinity(desc, action);
 
 		action_ret = handler_fn(desc, action);
+<<<<<<< HEAD
 		if (!noirqdebug)
 			note_interrupt(action->irq, desc, action_ret);
+=======
+		if (action_ret == IRQ_HANDLED)
+			atomic_inc(&desc->threads_handled);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 		wake_threads_waitq(desc);
 	}
@@ -1261,9 +1324,22 @@ static struct irqaction *__free_irq(unsigned int irq, void *dev_id)
 	*action_ptr = action->next;
 
 	/* If this was the last handler, shut down the IRQ line: */
+<<<<<<< HEAD
 	if (!desc->action)
 		irq_shutdown(desc);
 
+=======
+	if (!desc->action) {
+		irq_shutdown(desc);
+
+		/* Explicitly mask the interrupt */
+		if (desc->irq_data.chip->irq_mask)
+			desc->irq_data.chip->irq_mask(&desc->irq_data);
+		else if (desc->irq_data.chip->irq_mask_ack)
+			desc->irq_data.chip->irq_mask_ack(&desc->irq_data);
+	}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifdef CONFIG_SMP
 	/* make sure affinity_hint is cleaned up */
 	if (WARN_ON_ONCE(desc->affinity_hint))
@@ -1500,6 +1576,22 @@ int request_any_context_irq(unsigned int irq, irq_handler_t handler,
 }
 EXPORT_SYMBOL_GPL(request_any_context_irq);
 
+<<<<<<< HEAD
+=======
+void irq_set_pending(unsigned int irq)
+{
+	struct irq_desc *desc = irq_to_desc(irq);
+	unsigned long flags;
+
+	if (desc) {
+		raw_spin_lock_irqsave(&desc->lock, flags);
+		desc->istate |= IRQS_PENDING;
+		raw_spin_unlock_irqrestore(&desc->lock, flags);
+	}
+}
+EXPORT_SYMBOL_GPL(irq_set_pending);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 void enable_percpu_irq(unsigned int irq, unsigned int type)
 {
 	unsigned int cpu = smp_processor_id();

@@ -310,7 +310,10 @@ static void free_ioctx(struct kioctx *ctx)
 
 		avail = (head <= ctx->tail ? ctx->tail : ctx->nr_events) - head;
 
+<<<<<<< HEAD
 		atomic_sub(avail, &ctx->reqs_active);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		head += avail;
 		head %= ctx->nr_events;
 	}
@@ -423,10 +426,19 @@ static void kill_ioctx_rcu(struct rcu_head *head)
  *	when the processes owning a context have all exited to encourage
  *	the rapid destruction of the kioctx.
  */
+<<<<<<< HEAD
 static void kill_ioctx(struct kioctx *ctx)
 {
 	if (!atomic_xchg(&ctx->dead, 1)) {
 		hlist_del_rcu(&ctx->list);
+=======
+static void kill_ioctx(struct mm_struct *mm, struct kioctx *ctx)
+{
+	if (!atomic_xchg(&ctx->dead, 1)) {
+		spin_lock(&mm->ioctx_lock);
+		hlist_del_rcu(&ctx->list);
+		spin_unlock(&mm->ioctx_lock);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 		/*
 		 * It'd be more correct to do this in free_ioctx(), after all
@@ -494,7 +506,11 @@ void exit_aio(struct mm_struct *mm)
 		 */
 		ctx->mmap_size = 0;
 
+<<<<<<< HEAD
 		kill_ioctx(ctx);
+=======
+		kill_ioctx(mm, ctx);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 }
 
@@ -676,6 +692,10 @@ void aio_complete(struct kiocb *iocb, long res, long res2)
 put_rq:
 	/* everything turned out well, dispose of the aiocb. */
 	aio_put_req(iocb);
+<<<<<<< HEAD
+=======
+	atomic_dec(&ctx->reqs_active);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/*
 	 * We have to order our ring_info tail store above and test
@@ -715,6 +735,11 @@ static long aio_read_events_ring(struct kioctx *ctx,
 	if (head == ctx->tail)
 		goto out;
 
+<<<<<<< HEAD
+=======
+	head %= ctx->nr_events;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	while (ret < nr) {
 		long avail;
 		struct io_event *ev;
@@ -753,8 +778,11 @@ static long aio_read_events_ring(struct kioctx *ctx,
 	flush_dcache_page(ctx->ring_pages[0]);
 
 	pr_debug("%li  h%u t%u\n", ret, head, ctx->tail);
+<<<<<<< HEAD
 
 	atomic_sub(ret, &ctx->reqs_active);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 out:
 	mutex_unlock(&ctx->ring_lock);
 
@@ -852,7 +880,11 @@ SYSCALL_DEFINE2(io_setup, unsigned, nr_events, aio_context_t __user *, ctxp)
 	if (!IS_ERR(ioctx)) {
 		ret = put_user(ioctx->user_id, ctxp);
 		if (ret)
+<<<<<<< HEAD
 			kill_ioctx(ioctx);
+=======
+			kill_ioctx(current->mm, ioctx);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		put_ioctx(ioctx);
 	}
 
@@ -870,7 +902,11 @@ SYSCALL_DEFINE1(io_destroy, aio_context_t, ctx)
 {
 	struct kioctx *ioctx = lookup_ioctx(ctx);
 	if (likely(NULL != ioctx)) {
+<<<<<<< HEAD
 		kill_ioctx(ioctx);
+=======
+		kill_ioctx(current->mm, ioctx);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		put_ioctx(ioctx);
 		return 0;
 	}
@@ -975,12 +1011,26 @@ static ssize_t aio_setup_vectored_rw(int rw, struct kiocb *kiocb, bool compat)
 
 static ssize_t aio_setup_single_vector(int rw, struct kiocb *kiocb)
 {
+<<<<<<< HEAD
 	if (unlikely(!access_ok(!rw, kiocb->ki_buf, kiocb->ki_nbytes)))
 		return -EFAULT;
 
 	kiocb->ki_iovec = &kiocb->ki_inline_vec;
 	kiocb->ki_iovec->iov_base = kiocb->ki_buf;
 	kiocb->ki_iovec->iov_len = kiocb->ki_nbytes;
+=======
+	size_t len = kiocb->ki_nbytes;
+
+	if (len > MAX_RW_COUNT)
+		len = MAX_RW_COUNT;
+
+	if (unlikely(!access_ok(!rw, kiocb->ki_buf, len)))
+                return -EFAULT;
+
+	kiocb->ki_iovec = &kiocb->ki_inline_vec;
+	kiocb->ki_iovec->iov_base = kiocb->ki_buf;
+	kiocb->ki_iovec->iov_len = len;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	kiocb->ki_nr_segs = 1;
 	return 0;
 }

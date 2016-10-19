@@ -86,6 +86,10 @@ static const struct sysfs_ops dm_sysfs_ops = {
 static struct kobj_type dm_ktype = {
 	.sysfs_ops	= &dm_sysfs_ops,
 	.default_attrs	= dm_attrs,
+<<<<<<< HEAD
+=======
+	.release	= dm_kobject_release,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 /*
@@ -104,5 +108,11 @@ int dm_sysfs_init(struct mapped_device *md)
  */
 void dm_sysfs_exit(struct mapped_device *md)
 {
+<<<<<<< HEAD
 	kobject_put(dm_kobject(md));
+=======
+	struct kobject *kobj = dm_kobject(md);
+	kobject_put(kobj);
+	wait_for_completion(dm_get_completion_from_kobject(kobj));
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }

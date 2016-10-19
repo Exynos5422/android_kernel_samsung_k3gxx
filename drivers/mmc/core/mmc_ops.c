@@ -404,15 +404,27 @@ int mmc_spi_set_crc(struct mmc_host *host, int use_crc)
  *	@timeout_ms: timeout (ms) for operation performed by register write,
  *                   timeout of zero implies maximum possible timeout
  *	@use_busy_signal: use the busy signal as response type
+<<<<<<< HEAD
+=======
+ *	@ignore_timeout: set this flag only for commands which can be HPIed
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  *
  *	Modifies the EXT_CSD register for selected card.
  */
 int __mmc_switch(struct mmc_card *card, u8 set, u8 index, u8 value,
+<<<<<<< HEAD
 	       unsigned int timeout_ms, bool use_busy_signal)
 {
 	int err;
 	struct mmc_command cmd = {0};
 	unsigned int ignore;
+=======
+		 unsigned int timeout_ms, bool use_busy_signal,
+		 bool ignore_timeout)
+{
+	int err;
+	struct mmc_command cmd = {0};
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	unsigned long timeout;
 	u32 status;
 
@@ -432,6 +444,10 @@ int __mmc_switch(struct mmc_card *card, u8 set, u8 index, u8 value,
 
 
 	cmd.cmd_timeout_ms = timeout_ms;
+<<<<<<< HEAD
+=======
+	cmd.ignore_timeout = ignore_timeout;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	err = mmc_wait_for_cmd(card->host, &cmd, MMC_CMD_RETRIES);
 	if (err)
@@ -443,10 +459,15 @@ int __mmc_switch(struct mmc_card *card, u8 set, u8 index, u8 value,
 
 	/* Must check status to be sure of no errors */
 	timeout = jiffies + msecs_to_jiffies(MMC_OPS_TIMEOUT_MS);
+<<<<<<< HEAD
 	ignore = (index == EXT_CSD_HS_TIMING) ? MMC_RSP_CRC : 0;
 
 	do {
 		err = mmc_send_status(card, &status, ignore);
+=======
+	do {
+		err = mmc_send_status(card, &status);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (err)
 			return err;
 		if (card->host->caps & MMC_CAP_WAIT_WHILE_BUSY)
@@ -480,11 +501,26 @@ EXPORT_SYMBOL_GPL(__mmc_switch);
 int mmc_switch(struct mmc_card *card, u8 set, u8 index, u8 value,
 		unsigned int timeout_ms)
 {
+<<<<<<< HEAD
 	return __mmc_switch(card, set, index, value, timeout_ms, true);
 }
 EXPORT_SYMBOL_GPL(mmc_switch);
 
 int mmc_send_status(struct mmc_card *card, u32 *status, unsigned int ignore)
+=======
+	return __mmc_switch(card, set, index, value, timeout_ms, true, false);
+}
+EXPORT_SYMBOL_GPL(mmc_switch);
+
+int mmc_switch_ignore_timeout(struct mmc_card *card, u8 set, u8 index, u8 value,
+		unsigned int timeout_ms)
+{
+	return __mmc_switch(card, set, index, value, timeout_ms, true, true);
+}
+EXPORT_SYMBOL(mmc_switch_ignore_timeout);
+
+int mmc_send_status(struct mmc_card *card, u32 *status)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	int err;
 	struct mmc_command cmd = {0};
@@ -496,7 +532,10 @@ int mmc_send_status(struct mmc_card *card, u32 *status, unsigned int ignore)
 	if (!mmc_host_is_spi(card->host))
 		cmd.arg = card->rca << 16;
 	cmd.flags = MMC_RSP_SPI_R2 | MMC_RSP_R1 | MMC_CMD_AC;
+<<<<<<< HEAD
 	cmd.flags &= ~ignore;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	err = mmc_wait_for_cmd(card->host, &cmd, MMC_CMD_RETRIES);
 	if (err)
@@ -567,6 +606,12 @@ mmc_send_bus_test(struct mmc_card *card, struct mmc_host *host, u8 opcode,
 
 	data.sg = &sg;
 	data.sg_len = 1;
+<<<<<<< HEAD
+=======
+	data.timeout_ns = 1000000;
+	data.timeout_clks = 0;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	sg_init_one(&sg, data_buf, len);
 	mmc_wait_for_req(host, &mrq);
 	err = 0;
@@ -615,7 +660,11 @@ int mmc_send_hpi_cmd(struct mmc_card *card, u32 *status)
 	unsigned int opcode;
 	int err;
 
+<<<<<<< HEAD
 	if (!card->ext_csd.hpi) {
+=======
+	if (!card->ext_csd.hpi_en) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		pr_warning("%s: Card didn't support HPI command\n",
 			   mmc_hostname(card->host));
 		return -EINVAL;
@@ -632,7 +681,11 @@ int mmc_send_hpi_cmd(struct mmc_card *card, u32 *status)
 
 	err = mmc_wait_for_cmd(card->host, &cmd, 0);
 	if (err) {
+<<<<<<< HEAD
 		pr_warn("%s: error %d interrupting operation. "
+=======
+		pr_debug("%s: error %d interrupting operation. "
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			"HPI command response %#x\n", mmc_hostname(card->host),
 			err, cmd.resp[0]);
 		return err;

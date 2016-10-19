@@ -32,8 +32,11 @@
 #include "w1_netlink.h"
 #include "w1_int.h"
 
+<<<<<<< HEAD
 struct w1_master *w1_gdev;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int w1_search_count = -1; /* Default is continual scan */
 module_param_named(search_count, w1_search_count, int, 0);
 
@@ -154,11 +157,16 @@ int w1_add_master_device(struct w1_bus_master *master)
 		return -ENOMEM;
 	}
 
+<<<<<<< HEAD
 	retval = w1_create_master_attributes(dev);
+=======
+	retval =  w1_create_master_attributes(dev);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (retval) {
 		mutex_unlock(&w1_mlock);
 		goto err_out_free_dev;
 	}
+<<<<<<< HEAD
 	if (master->irq_mode) {
 		retval = w1_create_additional_attributes(dev);
 		if (retval) {
@@ -166,10 +174,14 @@ int w1_add_master_device(struct w1_bus_master *master)
 			goto err_out_rm_master_attr;
 		}
 	}
+=======
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	memcpy(dev->bus_master, master, sizeof(struct w1_bus_master));
 
 	dev->initialized = 1;
 
+<<<<<<< HEAD
 	if (!master->irq_mode) {
 #ifdef CONFIG_W1_KTHREAD
 		printk(KERN_INFO "%s : W1 kthread will start\n", __func__);
@@ -190,6 +202,16 @@ int w1_add_master_device(struct w1_bus_master *master)
 
 		schedule_delayed_work(&dev->w1_dwork, HZ / 20);
 #endif
+=======
+	dev->thread = kthread_run(&w1_process, dev, "%s", dev->name);
+	if (IS_ERR(dev->thread)) {
+		retval = PTR_ERR(dev->thread);
+		dev_err(&dev->dev,
+			 "Failed to create new kernel thread. err=%d\n",
+			 retval);
+		mutex_unlock(&w1_mlock);
+		goto err_out_rm_attr;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	list_add(&dev->w1_master_entry, &w1_masters);
@@ -200,20 +222,27 @@ int w1_add_master_device(struct w1_bus_master *master)
 	msg.type = W1_MASTER_ADD;
 	w1_netlink_send(dev, &msg);
 
+<<<<<<< HEAD
 	w1_gdev = dev;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 
 #if 0 /* Thread cleanup code, not required currently. */
 err_out_kill_thread:
 	kthread_stop(dev->thread);
 #endif
+<<<<<<< HEAD
 #ifdef CONFIG_W1_KTHREAD
 err_out_rm_attr:
 	if(master->irq_mode)
 		w1_destroy_additional_attributes(dev);
 #endif
 err_out_rm_master_attr:
+=======
+err_out_rm_attr:
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	w1_destroy_master_attributes(dev);
 err_out_free_dev:
 	w1_free_dev(dev);

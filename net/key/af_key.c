@@ -99,7 +99,11 @@ static void pfkey_sock_destruct(struct sock *sk)
 	skb_queue_purge(&sk->sk_receive_queue);
 
 	if (!sock_flag(sk, SOCK_DEAD)) {
+<<<<<<< HEAD
 		pr_err("Attempt to release alive pfkey socket: %p\n", sk);
+=======
+		WARN(1, "Attempt to release alive pfkey socket: %p\n", sk);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return;
 	}
 
@@ -3623,7 +3627,10 @@ static int pfkey_recvmsg(struct kiocb *kiocb,
 	if (flags & ~(MSG_PEEK|MSG_DONTWAIT|MSG_TRUNC|MSG_CMSG_COMPAT))
 		goto out;
 
+<<<<<<< HEAD
 	msg->msg_namelen = 0;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	skb = skb_recv_datagram(sk, flags, flags & MSG_DONTWAIT, &err);
 	if (skb == NULL)
 		goto out;

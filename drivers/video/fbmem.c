@@ -1122,6 +1122,13 @@ static long do_fb_ioctl(struct fb_info *info, unsigned int cmd,
 		if (copy_from_user(&cmap, argp, sizeof(cmap)))
 			return -EFAULT;
 		ret = fb_set_user_cmap(&cmap, info);
+<<<<<<< HEAD
+=======
+		if (ret) {
+			if (info)
+				fb_dealloc_cmap(&info->cmap);
+		}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		break;
 	case FBIOGETCMAP:
 		if (copy_from_user(&cmap, argp, sizeof(cmap)))
@@ -1194,14 +1201,20 @@ static long do_fb_ioctl(struct fb_info *info, unsigned int cmd,
 		unlock_fb_info(info);
 		break;
 	default:
+<<<<<<< HEAD
 		if (!lock_fb_info(info))
 			return -ENODEV;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		fb = info->fbops;
 		if (fb->fb_ioctl)
 			ret = fb->fb_ioctl(info, cmd, arg);
 		else
 			ret = -ENOTTY;
+<<<<<<< HEAD
 		unlock_fb_info(info);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 	return ret;
 }
@@ -1440,6 +1453,10 @@ __releases(&info->lock)
 		goto out;
 	}
 	file->private_data = info;
+<<<<<<< HEAD
+=======
+	info->file = file;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (info->fbops->fb_open) {
 		res = info->fbops->fb_open(info,1);
 		if (res)
@@ -1464,6 +1481,10 @@ __releases(&info->lock)
 	struct fb_info * const info = file->private_data;
 
 	mutex_lock(&info->lock);
+<<<<<<< HEAD
+=======
+	info->file = file;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (info->fbops->fb_release)
 		info->fbops->fb_release(info,1);
 	module_put(info->fbops->owner);

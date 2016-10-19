@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 /* Copyright (c) 2015 Samsung Electronics Co., Ltd. */
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  *	Definitions for the 'struct sk_buff' memory handlers.
  *
@@ -11,6 +14,7 @@
  *	as published by the Free Software Foundation; either version
  *	2 of the License, or (at your option) any later version.
  */
+<<<<<<< HEAD
 /*
  *  Changes:
  *  KwnagHyun Kim <kh0304.kim@samsung.com> 2015/07/08
@@ -19,6 +23,8 @@
  *    Add codes to share UID/PID information
  *
  */
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #ifndef _LINUX_SKBUFF_H
 #define _LINUX_SKBUFF_H
@@ -286,12 +292,15 @@ struct skb_shared_info {
 	 * remains valid until skb destructor */
 	void *		destructor_arg;
 
+<<<<<<< HEAD
 // ------------- START of KNOX_VPN ------------------//
    uid_t uid;
    pid_t pid;
    u_int32_t knox_mark;
 // ------------- END of KNOX_VPN -------------------//
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* must be last field, see pskb_expand_head() */
 	skb_frag_t	frags[MAX_SKB_FRAGS];
 };
@@ -346,11 +355,14 @@ typedef unsigned int sk_buff_data_t;
 typedef unsigned char *sk_buff_data_t;
 #endif
 
+<<<<<<< HEAD
 #if defined(CONFIG_NF_DEFRAG_IPV4) || defined(CONFIG_NF_DEFRAG_IPV4_MODULE) || \
     defined(CONFIG_NF_DEFRAG_IPV6) || defined(CONFIG_NF_DEFRAG_IPV6_MODULE)
 #define NET_SKBUFF_NF_DEFRAG_NEEDED 1
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /** 
  *	struct sk_buff - socket buffer
  *	@next: Next buffer in list
@@ -383,7 +395,10 @@ typedef unsigned char *sk_buff_data_t;
  *	@protocol: Packet protocol from driver
  *	@destructor: Destruct function
  *	@nfct: Associated connection, if any
+<<<<<<< HEAD
  *	@nfct_reasm: netfilter conntrack re-assembly pointer
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  *	@nf_bridge: Saved data about a bridged frame - see br_netfilter.c
  *	@skb_iif: ifindex of device we arrived on
  *	@tc_index: Traffic control index
@@ -470,9 +485,12 @@ struct sk_buff {
 #if defined(CONFIG_NF_CONNTRACK) || defined(CONFIG_NF_CONNTRACK_MODULE)
 	struct nf_conntrack	*nfct;
 #endif
+<<<<<<< HEAD
 #ifdef NET_SKBUFF_NF_DEFRAG_NEEDED
 	struct sk_buff		*nfct_reasm;
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifdef CONFIG_BRIDGE_NETFILTER
 	struct nf_bridge_info	*nf_bridge;
 #endif
@@ -1323,6 +1341,14 @@ static inline int skb_pagelen(const struct sk_buff *skb)
 	return len + skb_headlen(skb);
 }
 
+<<<<<<< HEAD
+=======
+static inline bool skb_has_frags(const struct sk_buff *skb)
+{
+	return skb_shinfo(skb)->nr_frags;
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /**
  * __skb_fill_page_desc - initialise a paged fragment in an skb
  * @skb: buffer containing fragment to be initialised
@@ -1760,6 +1786,14 @@ static inline void skb_set_mac_header(struct sk_buff *skb, const int offset)
 }
 #endif /* NET_SKBUFF_DATA_USES_OFFSET */
 
+<<<<<<< HEAD
+=======
+static inline void skb_pop_mac_header(struct sk_buff *skb)
+{
+	skb->mac_header = skb->network_header;
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static inline void skb_probe_transport_header(struct sk_buff *skb,
 					      const int offset_hint)
 {
@@ -2502,6 +2536,11 @@ extern int	       skb_shift(struct sk_buff *tgt, struct sk_buff *skb,
 extern struct sk_buff *skb_segment(struct sk_buff *skb,
 				   netdev_features_t features);
 
+<<<<<<< HEAD
+=======
+unsigned int skb_gso_transport_seglen(const struct sk_buff *skb);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static inline void *skb_header_pointer(const struct sk_buff *skb, int offset,
 				       int len, void *buffer)
 {
@@ -2710,6 +2749,7 @@ static inline void nf_conntrack_get(struct nf_conntrack *nfct)
 		atomic_inc(&nfct->use);
 }
 #endif
+<<<<<<< HEAD
 #ifdef NET_SKBUFF_NF_DEFRAG_NEEDED
 static inline void nf_conntrack_get_reasm(struct sk_buff *skb)
 {
@@ -2722,6 +2762,8 @@ static inline void nf_conntrack_put_reasm(struct sk_buff *skb)
 		kfree_skb(skb);
 }
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifdef CONFIG_BRIDGE_NETFILTER
 static inline void nf_bridge_put(struct nf_bridge_info *nf_bridge)
 {
@@ -2740,10 +2782,13 @@ static inline void nf_reset(struct sk_buff *skb)
 	nf_conntrack_put(skb->nfct);
 	skb->nfct = NULL;
 #endif
+<<<<<<< HEAD
 #ifdef NET_SKBUFF_NF_DEFRAG_NEEDED
 	nf_conntrack_put_reasm(skb->nfct_reasm);
 	skb->nfct_reasm = NULL;
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifdef CONFIG_BRIDGE_NETFILTER
 	nf_bridge_put(skb->nf_bridge);
 	skb->nf_bridge = NULL;
@@ -2765,10 +2810,13 @@ static inline void __nf_copy(struct sk_buff *dst, const struct sk_buff *src)
 	nf_conntrack_get(src->nfct);
 	dst->nfctinfo = src->nfctinfo;
 #endif
+<<<<<<< HEAD
 #ifdef NET_SKBUFF_NF_DEFRAG_NEEDED
 	dst->nfct_reasm = src->nfct_reasm;
 	nf_conntrack_get_reasm(src->nfct_reasm);
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifdef CONFIG_BRIDGE_NETFILTER
 	dst->nf_bridge  = src->nf_bridge;
 	nf_bridge_get(src->nf_bridge);
@@ -2780,9 +2828,12 @@ static inline void nf_copy(struct sk_buff *dst, const struct sk_buff *src)
 #if defined(CONFIG_NF_CONNTRACK) || defined(CONFIG_NF_CONNTRACK_MODULE)
 	nf_conntrack_put(dst->nfct);
 #endif
+<<<<<<< HEAD
 #ifdef NET_SKBUFF_NF_DEFRAG_NEEDED
 	nf_conntrack_put_reasm(dst->nfct_reasm);
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifdef CONFIG_BRIDGE_NETFILTER
 	nf_bridge_put(dst->nf_bridge);
 #endif
@@ -2948,5 +2999,25 @@ static inline bool skb_head_is_locked(const struct sk_buff *skb)
 {
 	return !skb->head_frag || skb_cloned(skb);
 }
+<<<<<<< HEAD
+=======
+
+/**
+ * skb_gso_network_seglen - Return length of individual segments of a gso packet
+ *
+ * @skb: GSO skb
+ *
+ * skb_gso_network_seglen is used to determine the real size of the
+ * individual segments, including Layer3 (IP, IPv6) and L4 headers (TCP/UDP).
+ *
+ * The MAC/L2 header is not accounted for.
+ */
+static inline unsigned int skb_gso_network_seglen(const struct sk_buff *skb)
+{
+	unsigned int hdr_len = skb_transport_header(skb) -
+			       skb_network_header(skb);
+	return hdr_len + skb_gso_transport_seglen(skb);
+}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif	/* __KERNEL__ */
 #endif	/* _LINUX_SKBUFF_H */

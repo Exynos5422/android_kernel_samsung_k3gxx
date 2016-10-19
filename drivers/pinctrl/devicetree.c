@@ -92,11 +92,15 @@ static int dt_remember_or_free_map(struct pinctrl *p, const char *statename,
 	dt_map->num_maps = num_maps;
 	list_add_tail(&dt_map->node, &p->dt_maps);
 
+<<<<<<< HEAD
 #ifdef CONFIG_MULTITHREAD_PROBE
 	return pinctrl_register_map(map, num_maps, false, false);
 #else
 	return pinctrl_register_map(map, num_maps, false, true);
 #endif
+=======
+	return pinctrl_register_map(map, num_maps, false);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 struct pinctrl_dev *of_pinctrl_get(struct device_node *np)
@@ -203,8 +207,18 @@ int pinctrl_dt_to_map(struct pinctrl *p)
 		propname = kasprintf(GFP_KERNEL, "pinctrl-%d", state);
 		prop = of_find_property(np, propname, &size);
 		kfree(propname);
+<<<<<<< HEAD
 		if (!prop)
 			break;
+=======
+		if (!prop) {
+			if (!state) {
+				ret = -EINVAL;
+				goto err;
+			}
+			break;
+		}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		list = prop->value;
 		size /= sizeof(*list);
 

@@ -1166,7 +1166,11 @@ alloc:
 
 	if (unlikely(!new_page)) {
 		count_vm_event(THP_FAULT_FALLBACK);
+<<<<<<< HEAD
 		if (is_huge_zero_pmd(orig_pmd)) {
+=======
+		if (!page) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			ret = do_huge_pmd_wp_zero_page_fallback(mm, vma,
 					address, pmd, orig_pmd, haddr);
 		} else {
@@ -1190,7 +1194,11 @@ alloc:
 		goto out;
 	}
 
+<<<<<<< HEAD
 	if (is_huge_zero_pmd(orig_pmd))
+=======
+	if (!page)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		clear_huge_page(new_page, haddr, HPAGE_PMD_NR);
 	else
 		copy_user_huge_page(new_page, page, haddr, vma, HPAGE_PMD_NR);
@@ -1215,7 +1223,11 @@ alloc:
 		page_add_new_anon_rmap(new_page, vma, haddr);
 		set_pmd_at(mm, haddr, pmd, entry);
 		update_mmu_cache_pmd(vma, address, pmd);
+<<<<<<< HEAD
 		if (is_huge_zero_pmd(orig_pmd)) {
+=======
+		if (!page) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			add_mm_counter(mm, MM_ANONPAGES, HPAGE_PMD_NR);
 			put_huge_zero_page();
 		} else {
@@ -1288,17 +1300,28 @@ out:
 int do_huge_pmd_numa_page(struct mm_struct *mm, struct vm_area_struct *vma,
 				unsigned long addr, pmd_t pmd, pmd_t *pmdp)
 {
+<<<<<<< HEAD
 	struct page *page;
 	unsigned long haddr = addr & HPAGE_PMD_MASK;
 	int target_nid;
 	int current_nid = -1;
 	bool migrated;
+=======
+	struct anon_vma *anon_vma = NULL;
+	struct page *page;
+	unsigned long haddr = addr & HPAGE_PMD_MASK;
+	int page_nid = -1, this_nid = numa_node_id();
+	int target_nid;
+	bool page_locked;
+	bool migrated = false;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	spin_lock(&mm->page_table_lock);
 	if (unlikely(!pmd_same(pmd, *pmdp)))
 		goto out_unlock;
 
 	page = pmd_page(pmd);
+<<<<<<< HEAD
 	get_page(page);
 	current_nid = page_to_nid(page);
 	count_vm_numa_event(NUMA_HINT_FAULTS);
@@ -1314,12 +1337,48 @@ int do_huge_pmd_numa_page(struct mm_struct *mm, struct vm_area_struct *vma,
 	/* Acquire the page lock to serialise THP migrations */
 	spin_unlock(&mm->page_table_lock);
 	lock_page(page);
+=======
+	page_nid = page_to_nid(page);
+	count_vm_numa_event(NUMA_HINT_FAULTS);
+	if (page_nid == this_nid)
+		count_vm_numa_event(NUMA_HINT_FAULTS_LOCAL);
+
+	/*
+	 * Acquire the page lock to serialise THP migrations but avoid dropping
+	 * page_table_lock if at all possible
+	 */
+	page_locked = trylock_page(page);
+	target_nid = mpol_misplaced(page, vma, haddr);
+	if (target_nid == -1) {
+		/* If the page was locked, there are no parallel migrations */
+		if (page_locked)
+			goto clear_pmdnuma;
+
+		/*
+		 * Otherwise wait for potential migrations and retry. We do
+		 * relock and check_same as the page may no longer be mapped.
+		 * As the fault is being retried, do not account for it.
+		 */
+		spin_unlock(&mm->page_table_lock);
+		wait_on_page_locked(page);
+		page_nid = -1;
+		goto out;
+	}
+
+	/* Page is misplaced, serialise migrations and parallel THP splits */
+	get_page(page);
+	spin_unlock(&mm->page_table_lock);
+	if (!page_locked)
+		lock_page(page);
+	anon_vma = page_lock_anon_vma_read(page);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/* Confirm the PTE did not while locked */
 	spin_lock(&mm->page_table_lock);
 	if (unlikely(!pmd_same(pmd, *pmdp))) {
 		unlock_page(page);
 		put_page(page);
+<<<<<<< HEAD
 		goto out_unlock;
 	}
 	spin_unlock(&mm->page_table_lock);
@@ -1338,14 +1397,61 @@ check_same:
 	if (unlikely(!pmd_same(pmd, *pmdp)))
 		goto out_unlock;
 clear_pmdnuma:
+=======
+		page_nid = -1;
+		goto out_unlock;
+	}
+
+	/* Bail if we fail to protect against THP splits for any reason */
+	if (unlikely(!anon_vma)) {
+		put_page(page);
+		page_nid = -1;
+		goto clear_pmdnuma;
+	}
+
+	/*
+	 * The page_table_lock above provides a memory barrier
+	 * with change_protection_range.
+	 */
+	if (mm_tlb_flush_pending(mm))
+		flush_tlb_range(vma, haddr, haddr + HPAGE_PMD_SIZE);
+
+	/*
+	 * Migrate the THP to the requested node, returns with page unlocked
+	 * and pmd_numa cleared.
+	 */
+	spin_unlock(&mm->page_table_lock);
+	migrated = migrate_misplaced_transhuge_page(mm, vma,
+				pmdp, pmd, addr, page, target_nid);
+	if (migrated)
+		page_nid = target_nid;
+
+	goto out;
+clear_pmdnuma:
+	BUG_ON(!PageLocked(page));
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	pmd = pmd_mknonnuma(pmd);
 	set_pmd_at(mm, haddr, pmdp, pmd);
 	VM_BUG_ON(pmd_numa(*pmdp));
 	update_mmu_cache_pmd(vma, addr, pmdp);
+<<<<<<< HEAD
 out_unlock:
 	spin_unlock(&mm->page_table_lock);
 	if (current_nid != -1)
 		task_numa_fault(current_nid, HPAGE_PMD_NR, false);
+=======
+	unlock_page(page);
+out_unlock:
+	spin_unlock(&mm->page_table_lock);
+
+out:
+	if (anon_vma)
+		page_unlock_anon_vma_read(anon_vma);
+
+	if (page_nid != -1)
+		task_numa_fault(page_nid, HPAGE_PMD_NR, migrated);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 
@@ -2286,6 +2392,11 @@ static void collapse_huge_page(struct mm_struct *mm,
 		goto out;
 
 	vma = find_vma(mm, address);
+<<<<<<< HEAD
+=======
+	if (!vma)
+		goto out;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	hstart = (vma->vm_start + ~HPAGE_PMD_MASK) & HPAGE_PMD_MASK;
 	hend = vma->vm_end & HPAGE_PMD_MASK;
 	if (address < hstart || address + HPAGE_PMD_SIZE > hend)
@@ -2697,6 +2808,10 @@ void __split_huge_page_pmd(struct vm_area_struct *vma, unsigned long address,
 
 	mmun_start = haddr;
 	mmun_end   = haddr + HPAGE_PMD_SIZE;
+<<<<<<< HEAD
+=======
+again:
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	mmu_notifier_invalidate_range_start(mm, mmun_start, mmun_end);
 	spin_lock(&mm->page_table_lock);
 	if (unlikely(!pmd_trans_huge(*pmd))) {
@@ -2719,7 +2834,18 @@ void __split_huge_page_pmd(struct vm_area_struct *vma, unsigned long address,
 	split_huge_page(page);
 
 	put_page(page);
+<<<<<<< HEAD
 	BUG_ON(pmd_trans_huge(*pmd));
+=======
+
+	/*
+	 * We don't always have down_write of mmap_sem here: a racing
+	 * do_huge_pmd_wp_page() might have copied-on-write to another
+	 * huge page before our split_huge_page() got the anon_vma lock.
+	 */
+	if (unlikely(pmd_trans_huge(*pmd)))
+		goto again;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 void split_huge_page_pmd_mm(struct mm_struct *mm, unsigned long address,

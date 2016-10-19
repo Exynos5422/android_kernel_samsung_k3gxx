@@ -220,6 +220,15 @@ config INLINE_WRITE_UNLOCK_IRQRESTORE
 
 endif
 
+<<<<<<< HEAD
 config MUTEX_SPIN_ON_OWNER
 	def_bool y
 	depends on SMP && !DEBUG_MUTEXES
+=======
+config ARCH_SUPPORTS_ATOMIC_RMW
+	bool
+
+config MUTEX_SPIN_ON_OWNER
+	def_bool y
+	depends on SMP && !DEBUG_MUTEXES && ARCH_SUPPORTS_ATOMIC_RMW
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

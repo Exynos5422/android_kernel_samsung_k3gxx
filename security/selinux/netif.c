@@ -28,6 +28,10 @@
 #include "security.h"
 #include "objsec.h"
 #include "netif.h"
+<<<<<<< HEAD
+=======
+#include "avc.h"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define SEL_NETIF_HASH_SIZE	64
 #define SEL_NETIF_HASH_MAX	1024
@@ -240,7 +244,11 @@ static void sel_netif_kill(int ifindex)
  * Remove all entries from the network interface table.
  *
  */
+<<<<<<< HEAD
 static void sel_netif_flush(void)
+=======
+void sel_netif_flush(void)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	int idx;
 	struct sel_netif *netif;
@@ -252,6 +260,7 @@ static void sel_netif_flush(void)
 	spin_unlock_bh(&sel_netif_lock);
 }
 
+<<<<<<< HEAD
 static int sel_netif_avc_callback(u32 event)
 {
 	if (event == AVC_CALLBACK_RESET) {
@@ -261,6 +270,8 @@ static int sel_netif_avc_callback(u32 event)
 	return 0;
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int sel_netif_netdev_notifier_handler(struct notifier_block *this,
 					     unsigned long event, void *ptr)
 {
@@ -291,10 +302,13 @@ static __init int sel_netif_init(void)
 
 	register_netdevice_notifier(&sel_netif_netdev_notifier);
 
+<<<<<<< HEAD
 	err = avc_add_callback(sel_netif_avc_callback, AVC_CALLBACK_RESET);
 	if (err)
 		panic("avc_add_callback() failed, error %d\n", err);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return err;
 }
 

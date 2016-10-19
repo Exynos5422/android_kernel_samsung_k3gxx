@@ -68,8 +68,11 @@
 #include <linux/capability.h>
 #include <linux/fs_struct.h>
 #include <linux/compat.h>
+<<<<<<< HEAD
 #include <linux/ctype.h>
 #include <asm/unistd.h>
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #include "audit.h"
 
@@ -81,11 +84,16 @@
 /* no execve audit message should be longer than this (userspace limits) */
 #define MAX_EXECVE_AUDIT_LEN 7500
 
+<<<<<<< HEAD
 /* max length to print of cmdline/proctitle value during audit */
 #define MAX_PROCTITLE_AUDIT_LEN 128
 
 /* number of audit rules */
 int audit_n_rules = 1;
+=======
+/* number of audit rules */
+int audit_n_rules;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /* determines whether we collect data for signals sent */
 int audit_signals;
@@ -869,6 +877,7 @@ static inline struct audit_context *audit_get_context(struct task_struct *tsk,
 	return context;
 }
 
+<<<<<<< HEAD
 static inline void audit_proctitle_free(struct audit_context *context)
 {
 	kfree(context->proctitle.value);
@@ -876,6 +885,8 @@ static inline void audit_proctitle_free(struct audit_context *context)
 	context->proctitle.len = 0;
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static inline void audit_free_names(struct audit_context *context)
 {
 	struct audit_names *n, *next;
@@ -987,7 +998,10 @@ static inline void audit_free_context(struct audit_context *context)
 	audit_free_aux(context);
 	kfree(context->filterkey);
 	kfree(context->sockaddr);
+<<<<<<< HEAD
 	audit_proctitle_free(context);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	kfree(context);
 }
 
@@ -1305,6 +1319,7 @@ static void show_special(struct audit_context *context, int *call_panic)
 	audit_log_end(ab);
 }
 
+<<<<<<< HEAD
 static inline int audit_proctitle_rtrim(char *proctitle, int len)
 {
 	char *end = proctitle + len - 1;
@@ -1358,6 +1373,8 @@ out:
 	audit_log_end(ab);
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static void audit_log_exit(struct audit_context *context, struct task_struct *tsk)
 {
 	int i, call_panic = 0;
@@ -1368,7 +1385,10 @@ static void audit_log_exit(struct audit_context *context, struct task_struct *ts
 	/* tsk == current */
 	context->personality = tsk->personality;
 
+<<<<<<< HEAD
 	if (context->major != __NR_setsockopt) {
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	ab = audit_log_start(context, GFP_KERNEL, AUDIT_SYSCALL);
 	if (!ab)
 		return;		/* audit_panic has been called */
@@ -1392,7 +1412,10 @@ static void audit_log_exit(struct audit_context *context, struct task_struct *ts
 	audit_log_task_info(ab, tsk);
 	audit_log_key(ab, context->filterkey);
 	audit_log_end(ab);
+<<<<<<< HEAD
 	}
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	for (aux = context->aux; aux; aux = aux->next) {
 
@@ -1476,12 +1499,21 @@ static void audit_log_exit(struct audit_context *context, struct task_struct *ts
 	}
 
 	i = 0;
+<<<<<<< HEAD
 	list_for_each_entry(n, &context->names_list, list)
 		audit_log_name(context, n, NULL, i++, &call_panic);
 
 	if (context->major != __NR_setsockopt) {
 	audit_log_proctitle(tsk, context);
 	}
+=======
+	list_for_each_entry(n, &context->names_list, list) {
+		if (n->hidden)
+			continue;
+		audit_log_name(context, n, NULL, i++, &call_panic);
+	}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* Send end of event record to help user space know we are finished */
 	ab = audit_log_start(context, GFP_KERNEL, AUDIT_EOE);
 	if (ab)
@@ -1849,14 +1881,25 @@ void audit_putname(struct filename *name)
  * __audit_inode - store the inode and device from a lookup
  * @name: name being audited
  * @dentry: dentry being audited
+<<<<<<< HEAD
  * @parent: does this dentry represent the parent?
  */
 void __audit_inode(struct filename *name, const struct dentry *dentry,
 		   unsigned int parent)
+=======
+ * @flags: attributes for this particular entry
+ */
+void __audit_inode(struct filename *name, const struct dentry *dentry,
+		   unsigned int flags)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	struct audit_context *context = current->audit_context;
 	const struct inode *inode = dentry->d_inode;
 	struct audit_names *n;
+<<<<<<< HEAD
+=======
+	bool parent = flags & AUDIT_INODE_PARENT;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (!context->in_syscall)
 		return;
@@ -1911,6 +1954,11 @@ out:
 	if (parent) {
 		n->name_len = n->name ? parent_len(n->name->name) : AUDIT_NAME_FULL;
 		n->type = AUDIT_TYPE_PARENT;
+<<<<<<< HEAD
+=======
+		if (flags & AUDIT_INODE_HIDDEN)
+			n->hidden = true;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	} else {
 		n->name_len = AUDIT_NAME_FULL;
 		n->type = AUDIT_TYPE_NORMAL;

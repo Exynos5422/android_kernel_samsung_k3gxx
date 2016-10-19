@@ -29,6 +29,10 @@
 #include <linux/dma-mapping.h>
 #include <sound/core.h>
 #include <sound/control.h>
+<<<<<<< HEAD
+=======
+#include <sound/compress_offload.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <sound/info.h>
 #include <sound/pcm.h>
 #include <sound/pcm_params.h>
@@ -456,7 +460,12 @@ static int snd_pcm_hw_params(struct snd_pcm_substream *substream,
 	runtime->silence_threshold = 0;
 	runtime->silence_size = 0;
 	runtime->boundary = runtime->buffer_size;
+<<<<<<< HEAD
 	while (runtime->boundary * 2 <= LONG_MAX - runtime->buffer_size)
+=======
+	while (runtime->boundary * 2 * runtime->channels <=
+					LONG_MAX - runtime->buffer_size)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		runtime->boundary *= 2;
 
 	snd_pcm_timer_resolution_change(substream);
@@ -853,6 +862,10 @@ static int snd_pcm_pre_start(struct snd_pcm_substream *substream, int state)
 	if (runtime->status->state != SNDRV_PCM_STATE_PREPARED)
 		return -EBADFD;
 	if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK &&
+<<<<<<< HEAD
+=======
+	    !substream->hw_no_buffer &&
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	    !snd_pcm_playback_data(substream))
 		return -EPIPE;
 	runtime->trigger_master = substream;
@@ -1557,6 +1570,36 @@ static int snd_pcm_drain(struct snd_pcm_substream *substream,
 	return result;
 }
 
+<<<<<<< HEAD
+=======
+static int snd_compressed_ioctl(struct snd_pcm_substream *substream,
+				 unsigned int cmd, void __user *arg)
+{
+	struct snd_pcm_runtime *runtime;
+	int err = 0;
+
+	if (PCM_RUNTIME_CHECK(substream))
+		return -ENXIO;
+	runtime = substream->runtime;
+	pr_debug("%s called with cmd = %d\n", __func__, cmd);
+	err = substream->ops->ioctl(substream, cmd, arg);
+	return err;
+}
+
+static int snd_user_ioctl(struct snd_pcm_substream *substream,
+			  unsigned int cmd, void __user *arg)
+{
+	struct snd_pcm_runtime *runtime;
+	int err = 0;
+
+	if (PCM_RUNTIME_CHECK(substream))
+		return -ENXIO;
+	runtime = substream->runtime;
+	err = substream->ops->ioctl(substream, cmd, arg);
+	return err;
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * drop ioctl
  *
@@ -2506,6 +2549,10 @@ static int snd_pcm_sync_ptr(struct snd_pcm_substream *substream,
 	volatile struct snd_pcm_mmap_status *status;
 	volatile struct snd_pcm_mmap_control *control;
 	int err;
+<<<<<<< HEAD
+=======
+	snd_pcm_uframes_t hw_avail;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	memset(&sync_ptr, 0, sizeof(sync_ptr));
 	if (get_user(sync_ptr.flags, (unsigned __user *)&(_sync_ptr->flags)))
@@ -2528,6 +2575,19 @@ static int snd_pcm_sync_ptr(struct snd_pcm_substream *substream,
 		control->avail_min = sync_ptr.c.control.avail_min;
 	else
 		sync_ptr.c.control.avail_min = control->avail_min;
+<<<<<<< HEAD
+=======
+
+	if (runtime->render_flag & SNDRV_NON_DMA_MODE) {
+		hw_avail = snd_pcm_playback_hw_avail(runtime);
+		if ((hw_avail >= runtime->start_threshold)
+			&& (runtime->render_flag &
+				SNDRV_RENDER_STOPPED)) {
+			if (substream->ops->restart)
+				substream->ops->restart(substream);
+		}
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	sync_ptr.s.status.state = status->state;
 	sync_ptr.s.status.hw_ptr = status->hw_ptr;
 	sync_ptr.s.status.tstamp = status->tstamp;
@@ -2552,7 +2612,11 @@ static int snd_pcm_tstamp(struct snd_pcm_substream *substream, int __user *_arg)
 		runtime->tstamp_type = SNDRV_PCM_TSTAMP_TYPE_MONOTONIC;
 	return 0;
 }
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int snd_pcm_common_ioctl1(struct file *file,
 				 struct snd_pcm_substream *substream,
 				 unsigned int cmd, void __user *arg)
@@ -2616,6 +2680,20 @@ static int snd_pcm_common_ioctl1(struct file *file,
 		snd_pcm_stream_unlock_irq(substream);
 		return res;
 	}
+<<<<<<< HEAD
+=======
+	case SNDRV_COMPRESS_GET_CAPS:
+	case SNDRV_COMPRESS_GET_CODEC_CAPS:
+	case SNDRV_COMPRESS_SET_PARAMS:
+	case SNDRV_COMPRESS_GET_PARAMS:
+	case SNDRV_COMPRESS_TSTAMP:
+	case SNDRV_COMPRESS_DRAIN:
+	case SNDRV_COMPRESS_METADATA_MODE:
+		return snd_compressed_ioctl(substream, cmd, arg);
+	default:
+		if (((cmd >> 8) & 0xff) == 'U')
+			return snd_user_ioctl(substream, cmd, arg);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 	snd_printd("unknown ioctl = 0x%x\n", cmd);
 	return -ENOTTY;
@@ -2788,7 +2866,11 @@ static long snd_pcm_playback_ioctl(struct file *file, unsigned int cmd,
 
 	pcm_file = file->private_data;
 
+<<<<<<< HEAD
 	if (((cmd >> 8) & 0xff) != 'A')
+=======
+	if ((((cmd >> 8) & 0xff) != 'A') && (((cmd >> 8) & 0xff) != 'C'))
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return -ENOTTY;
 
 	return snd_pcm_playback_ioctl1(file, pcm_file->substream, cmd,
@@ -2799,10 +2881,19 @@ static long snd_pcm_capture_ioctl(struct file *file, unsigned int cmd,
 				  unsigned long arg)
 {
 	struct snd_pcm_file *pcm_file;
+<<<<<<< HEAD
 
 	pcm_file = file->private_data;
 
 	if (((cmd >> 8) & 0xff) != 'A')
+=======
+	unsigned char ioctl_magic;
+
+	pcm_file = file->private_data;
+	ioctl_magic = ((cmd >> 8) & 0xff);
+
+	if (ioctl_magic != 'A' && ioctl_magic != 'C' && ioctl_magic != 'U')
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return -ENOTTY;
 
 	return snd_pcm_capture_ioctl1(file, pcm_file->substream, cmd,

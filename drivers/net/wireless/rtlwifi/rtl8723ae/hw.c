@@ -880,14 +880,34 @@ int rtl8723ae_hw_init(struct ieee80211_hw *hw)
 	bool rtstatus = true;
 	int err;
 	u8 tmp_u1b;
+<<<<<<< HEAD
 
 	rtlpriv->rtlhal.being_init_adapter = true;
+=======
+	unsigned long flags;
+
+	rtlpriv->rtlhal.being_init_adapter = true;
+	/* As this function can take a very long time (up to 350 ms)
+	 * and can be called with irqs disabled, reenable the irqs
+	 * to let the other devices continue being serviced.
+	 *
+	 * It is safe doing so since our own interrupts will only be enabled
+	 * in a subsequent step.
+	 */
+	local_save_flags(flags);
+	local_irq_enable();
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	rtlpriv->intf_ops->disable_aspm(hw);
 	rtstatus = _rtl8712e_init_mac(hw);
 	if (rtstatus != true) {
 		RT_TRACE(rtlpriv, COMP_ERR, DBG_EMERG, "Init MAC failed\n");
 		err = 1;
+<<<<<<< HEAD
 		return err;
+=======
+		goto exit;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	err = rtl8723ae_download_fw(hw);
@@ -895,8 +915,12 @@ int rtl8723ae_hw_init(struct ieee80211_hw *hw)
 		RT_TRACE(rtlpriv, COMP_ERR, DBG_WARNING,
 			 "Failed to download FW. Init HW without FW now..\n");
 		err = 1;
+<<<<<<< HEAD
 		rtlhal->fw_ready = false;
 		return err;
+=======
+		goto exit;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	} else {
 		rtlhal->fw_ready = true;
 	}
@@ -971,6 +995,11 @@ int rtl8723ae_hw_init(struct ieee80211_hw *hw)
 		RT_TRACE(rtlpriv, COMP_INIT, DBG_TRACE, "under 1.5V\n");
 	}
 	rtl8723ae_dm_init(hw);
+<<<<<<< HEAD
+=======
+exit:
+	local_irq_restore(flags);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	rtlpriv->rtlhal.being_init_adapter = false;
 	return err;
 }

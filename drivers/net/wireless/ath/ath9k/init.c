@@ -767,7 +767,12 @@ void ath9k_set_hw_capab(struct ath_softc *sc, struct ieee80211_hw *hw)
 		IEEE80211_HW_PS_NULLFUNC_STACK |
 		IEEE80211_HW_SPECTRUM_MGMT |
 		IEEE80211_HW_REPORTS_TX_ACK_STATUS |
+<<<<<<< HEAD
 		IEEE80211_HW_SUPPORTS_RC_TABLE;
+=======
+		IEEE80211_HW_SUPPORTS_RC_TABLE |
+		IEEE80211_HW_SUPPORTS_HT_CCK_RATES;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (sc->sc_ah->caps.hw_caps & ATH9K_HW_CAP_HT)
 		 hw->flags |= IEEE80211_HW_AMPDU_AGGREGATION;

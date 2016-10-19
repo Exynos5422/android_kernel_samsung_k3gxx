@@ -17,10 +17,24 @@ thermal_sys-$(CONFIG_CPU_THERMAL)	+= cpu_cooling.o
 obj-$(CONFIG_SPEAR_THERMAL)	+= spear_thermal.o
 obj-$(CONFIG_RCAR_THERMAL)	+= rcar_thermal.o
 obj-$(CONFIG_KIRKWOOD_THERMAL)  += kirkwood_thermal.o
+<<<<<<< HEAD
 obj-$(CONFIG_EXYNOS_THERMAL)	+= exynos_thermal.o cal_tmu.o
+=======
+obj-$(CONFIG_EXYNOS_THERMAL)	+= exynos_thermal.o
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 obj-$(CONFIG_DOVE_THERMAL)  	+= dove_thermal.o
 obj-$(CONFIG_DB8500_THERMAL)	+= db8500_thermal.o
 obj-$(CONFIG_ARMADA_THERMAL)	+= armada_thermal.o
 obj-$(CONFIG_DB8500_CPUFREQ_COOLING)	+= db8500_cpufreq_cooling.o
 obj-$(CONFIG_INTEL_POWERCLAMP)	+= intel_powerclamp.o
+<<<<<<< HEAD
 obj-$(CONFIG_CPU_THERMAL_IPA)	+= ipa.o
+=======
+obj-$(CONFIG_THERMAL_TSENS8974)	+= msm8974-tsens.o
+obj-$(CONFIG_THERMAL_QPNP)	+= qpnp-temp-alarm.o
+obj-$(CONFIG_THERMAL_QPNP_ADC_TM)	+= qpnp-adc-tm.o
+obj-$(CONFIG_THERMAL_MONITOR)	+= msm_thermal.o msm_thermal-dev.o
+obj-$(CONFIG_LIMITS_MONITOR)	+= lmh_interface.o
+obj-$(CONFIG_LIMITS_LITE_HW)	+= lmh_lite.o
+obj-$(CONFIG_SUPPLY_LM_MONITOR)	+= supply_lm_core.o
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

@@ -153,6 +153,10 @@ static struct reg_default wm8962_reg[] = {
 	{ 40, 0x0000 },   /* R40    - SPKOUTL volume */
 	{ 41, 0x0000 },   /* R41    - SPKOUTR volume */
 
+<<<<<<< HEAD
+=======
+	{ 49, 0x0010 },   /* R49    - Class D Control 1 */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	{ 51, 0x0003 },   /* R51    - Class D Control 2 */
 
 	{ 56, 0x0506 },   /* R56    - Clocking 4 */
@@ -794,7 +798,10 @@ static bool wm8962_volatile_register(struct device *dev, unsigned int reg)
 	case WM8962_ALC2:
 	case WM8962_THERMAL_SHUTDOWN_STATUS:
 	case WM8962_ADDITIONAL_CONTROL_4:
+<<<<<<< HEAD
 	case WM8962_CLASS_D_CONTROL_1:
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	case WM8962_DC_SERVO_6:
 	case WM8962_INTERRUPT_STATUS_1:
 	case WM8962_INTERRUPT_STATUS_2:
@@ -2901,6 +2908,7 @@ static int wm8962_set_fll(struct snd_soc_codec *codec, int fll_id, int source,
 static int wm8962_mute(struct snd_soc_dai *dai, int mute)
 {
 	struct snd_soc_codec *codec = dai->codec;
+<<<<<<< HEAD
 	int val;
 
 	if (mute)
@@ -2908,6 +2916,24 @@ static int wm8962_mute(struct snd_soc_dai *dai, int mute)
 	else
 		val = 0;
 
+=======
+	int val, ret;
+
+	if (mute)
+		val = WM8962_DAC_MUTE | WM8962_DAC_MUTE_ALT;
+	else
+		val = 0;
+
+	/**
+	 * The DAC mute bit is mirrored in two registers, update both to keep
+	 * the register cache consistent.
+	 */
+	ret = snd_soc_update_bits(codec, WM8962_CLASS_D_CONTROL_1,
+				  WM8962_DAC_MUTE_ALT, val);
+	if (ret < 0)
+		return ret;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return snd_soc_update_bits(codec, WM8962_ADC_DAC_CONTROL_1,
 				   WM8962_DAC_MUTE, val);
 }
@@ -3686,6 +3712,11 @@ static int wm8962_i2c_probe(struct i2c_client *i2c,
 	if (ret < 0)
 		goto err_enable;
 
+<<<<<<< HEAD
+=======
+	regcache_cache_only(wm8962->regmap, true);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* The drivers should power up as needed */
 	regulator_bulk_disable(ARRAY_SIZE(wm8962->supplies), wm8962->supplies);
 

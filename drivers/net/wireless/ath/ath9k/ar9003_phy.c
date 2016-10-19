@@ -1076,6 +1076,13 @@ static bool ar9003_hw_ani_control(struct ath_hw *ah,
 		 * is_on == 0 means MRC CCK is OFF (more noise imm)
 		 */
 		bool is_on = param ? 1 : 0;
+<<<<<<< HEAD
+=======
+
+		if (ah->caps.rx_chainmask == 1)
+			break;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		REG_RMW_FIELD(ah, AR_PHY_MRC_CCK_CTRL,
 			      AR_PHY_MRC_CCK_ENABLE, is_on);
 		REG_RMW_FIELD(ah, AR_PHY_MRC_CCK_CTRL,

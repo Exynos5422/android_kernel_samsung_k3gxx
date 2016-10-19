@@ -524,6 +524,10 @@ rx_status_loop:
 					 PCI_DMA_FROMDEVICE);
 		if (dma_mapping_error(&cp->pdev->dev, new_mapping)) {
 			dev->stats.rx_dropped++;
+<<<<<<< HEAD
+=======
+			kfree_skb(new_skb);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			goto rx_next;
 		}
 
@@ -677,9 +681,12 @@ static void cp_tx (struct cp_private *cp)
 				 le32_to_cpu(txd->opts1) & 0xffff,
 				 PCI_DMA_TODEVICE);
 
+<<<<<<< HEAD
 		bytes_compl += skb->len;
 		pkts_compl++;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (status & LastFrag) {
 			if (status & (TxError | TxFIFOUnder)) {
 				netif_dbg(cp, tx_err, cp->dev,
@@ -701,6 +708,11 @@ static void cp_tx (struct cp_private *cp)
 				netif_dbg(cp, tx_done, cp->dev,
 					  "tx done, slot %d\n", tx_tail);
 			}
+<<<<<<< HEAD
+=======
+			bytes_compl += skb->len;
+			pkts_compl++;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			dev_kfree_skb_irq(skb);
 		}
 

@@ -668,6 +668,15 @@ static void ops_run_io(struct stripe_head *sh, struct stripe_head_state *s)
 			bi->bi_io_vec[0].bv_len = STRIPE_SIZE;
 			bi->bi_io_vec[0].bv_offset = 0;
 			bi->bi_size = STRIPE_SIZE;
+<<<<<<< HEAD
+=======
+			/*
+			 * If this is discard request, set bi_vcnt 0. We don't
+			 * want to confuse SCSI because SCSI will replace payload
+			 */
+			if (rw & REQ_DISCARD)
+				bi->bi_vcnt = 0;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			if (rrdev)
 				set_bit(R5_DOUBLE_LOCKED, &sh->dev[i].flags);
 
@@ -706,6 +715,15 @@ static void ops_run_io(struct stripe_head *sh, struct stripe_head_state *s)
 			rbi->bi_io_vec[0].bv_len = STRIPE_SIZE;
 			rbi->bi_io_vec[0].bv_offset = 0;
 			rbi->bi_size = STRIPE_SIZE;
+<<<<<<< HEAD
+=======
+			/*
+			 * If this is discard request, set bi_vcnt 0. We don't
+			 * want to confuse SCSI because SCSI will replace payload
+			 */
+			if (rw & REQ_DISCARD)
+				rbi->bi_vcnt = 0;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			if (conf->mddev->gendisk)
 				trace_block_bio_remap(bdev_get_queue(rbi->bi_bdev),
 						      rbi, disk_devt(conf->mddev->gendisk),
@@ -1881,6 +1899,10 @@ static void raid5_end_write_request(struct bio *bi, int error)
 			set_bit(R5_MadeGoodRepl, &sh->dev[i].flags);
 	} else {
 		if (!uptodate) {
+<<<<<<< HEAD
+=======
+			set_bit(STRIPE_DEGRADED, &sh->state);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			set_bit(WriteErrorSeen, &rdev->flags);
 			set_bit(R5_WriteError, &sh->dev[i].flags);
 			if (!test_and_set_bit(WantReplacement, &rdev->flags))
@@ -2800,6 +2822,17 @@ static void handle_stripe_clean_event(struct r5conf *conf,
 		}
 		/* now that discard is done we can proceed with any sync */
 		clear_bit(STRIPE_DISCARD, &sh->state);
+<<<<<<< HEAD
+=======
+		/*
+		 * SCSI discard will change some bio fields and the stripe has
+		 * no updated data, so remove it from hash list and the stripe
+		 * will be reinitialized
+		 */
+		spin_lock_irq(&conf->device_lock);
+		remove_hash(sh);
+		spin_unlock_irq(&conf->device_lock);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (test_bit(STRIPE_SYNC_REQUESTED, &sh->state))
 			set_bit(STRIPE_HANDLE, &sh->state);
 
@@ -3371,7 +3404,11 @@ static void analyse_stripe(struct stripe_head *sh, struct stripe_head_state *s)
 			 */
 			set_bit(R5_Insync, &dev->flags);
 
+<<<<<<< HEAD
 		if (rdev && test_bit(R5_WriteError, &dev->flags)) {
+=======
+		if (test_bit(R5_WriteError, &dev->flags)) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			/* This flag does not apply to '.replacement'
 			 * only to .rdev, so make sure to check that*/
 			struct md_rdev *rdev2 = rcu_dereference(
@@ -3384,7 +3421,11 @@ static void analyse_stripe(struct stripe_head *sh, struct stripe_head_state *s)
 			} else
 				clear_bit(R5_WriteError, &dev->flags);
 		}
+<<<<<<< HEAD
 		if (rdev && test_bit(R5_MadeGood, &dev->flags)) {
+=======
+		if (test_bit(R5_MadeGood, &dev->flags)) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			/* This flag does not apply to '.replacement'
 			 * only to .rdev, so make sure to check that*/
 			struct md_rdev *rdev2 = rcu_dereference(
@@ -4125,7 +4166,11 @@ static void raid5_unplug(struct blk_plug_cb *blk_cb, bool from_schedule)
 			 * STRIPE_ON_UNPLUG_LIST clear but the stripe
 			 * is still in our list
 			 */
+<<<<<<< HEAD
 			smp_mb__before_clear_bit();
+=======
+			smp_mb__before_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			clear_bit(STRIPE_ON_UNPLUG_LIST, &sh->state);
 			__release_stripe(conf, sh);
 			cnt++;
@@ -5016,14 +5061,43 @@ raid5_size(struct mddev *mddev, sector_t sectors, int raid_disks)
 	return sectors * (raid_disks - conf->max_degraded);
 }
 
+<<<<<<< HEAD
 static void raid5_free_percpu(struct r5conf *conf)
 {
 	struct raid5_percpu *percpu;
+=======
+static void free_scratch_buffer(struct r5conf *conf, struct raid5_percpu *percpu)
+{
+	safe_put_page(percpu->spare_page);
+	kfree(percpu->scribble);
+	percpu->spare_page = NULL;
+	percpu->scribble = NULL;
+}
+
+static int alloc_scratch_buffer(struct r5conf *conf, struct raid5_percpu *percpu)
+{
+	if (conf->level == 6 && !percpu->spare_page)
+		percpu->spare_page = alloc_page(GFP_KERNEL);
+	if (!percpu->scribble)
+		percpu->scribble = kmalloc(conf->scribble_len, GFP_KERNEL);
+
+	if (!percpu->scribble || (conf->level == 6 && !percpu->spare_page)) {
+		free_scratch_buffer(conf, percpu);
+		return -ENOMEM;
+	}
+
+	return 0;
+}
+
+static void raid5_free_percpu(struct r5conf *conf)
+{
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	unsigned long cpu;
 
 	if (!conf->percpu)
 		return;
 
+<<<<<<< HEAD
 	get_online_cpus();
 	for_each_possible_cpu(cpu) {
 		percpu = per_cpu_ptr(conf->percpu, cpu);
@@ -5033,6 +5107,15 @@ static void raid5_free_percpu(struct r5conf *conf)
 #ifdef CONFIG_HOTPLUG_CPU
 	unregister_cpu_notifier(&conf->cpu_notify);
 #endif
+=======
+#ifdef CONFIG_HOTPLUG_CPU
+	unregister_cpu_notifier(&conf->cpu_notify);
+#endif
+
+	get_online_cpus();
+	for_each_possible_cpu(cpu)
+		free_scratch_buffer(conf, per_cpu_ptr(conf->percpu, cpu));
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	put_online_cpus();
 
 	free_percpu(conf->percpu);
@@ -5058,6 +5141,7 @@ static int raid456_cpu_notify(struct notifier_block *nfb, unsigned long action,
 	switch (action) {
 	case CPU_UP_PREPARE:
 	case CPU_UP_PREPARE_FROZEN:
+<<<<<<< HEAD
 		if (conf->level == 6 && !percpu->spare_page)
 			percpu->spare_page = alloc_page(GFP_KERNEL);
 		if (!percpu->scribble)
@@ -5067,6 +5151,9 @@ static int raid456_cpu_notify(struct notifier_block *nfb, unsigned long action,
 		    (conf->level == 6 && !percpu->spare_page)) {
 			safe_put_page(percpu->spare_page);
 			kfree(percpu->scribble);
+=======
+		if (alloc_scratch_buffer(conf, percpu)) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			pr_err("%s: failed memory allocation for cpu%ld\n",
 			       __func__, cpu);
 			return notifier_from_errno(-ENOMEM);
@@ -5074,10 +5161,14 @@ static int raid456_cpu_notify(struct notifier_block *nfb, unsigned long action,
 		break;
 	case CPU_DEAD:
 	case CPU_DEAD_FROZEN:
+<<<<<<< HEAD
 		safe_put_page(percpu->spare_page);
 		kfree(percpu->scribble);
 		percpu->spare_page = NULL;
 		percpu->scribble = NULL;
+=======
+		free_scratch_buffer(conf, per_cpu_ptr(conf->percpu, cpu));
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		break;
 	default:
 		break;
@@ -5089,6 +5180,7 @@ static int raid456_cpu_notify(struct notifier_block *nfb, unsigned long action,
 static int raid5_alloc_percpu(struct r5conf *conf)
 {
 	unsigned long cpu;
+<<<<<<< HEAD
 	struct page *spare_page;
 	struct raid5_percpu __percpu *allcpus;
 	void *scribble;
@@ -5123,6 +5215,31 @@ static int raid5_alloc_percpu(struct r5conf *conf)
 	if (err == 0)
 		err = register_cpu_notifier(&conf->cpu_notify);
 #endif
+=======
+	int err = 0;
+
+	conf->percpu = alloc_percpu(struct raid5_percpu);
+	if (!conf->percpu)
+		return -ENOMEM;
+
+#ifdef CONFIG_HOTPLUG_CPU
+	conf->cpu_notify.notifier_call = raid456_cpu_notify;
+	conf->cpu_notify.priority = 0;
+	err = register_cpu_notifier(&conf->cpu_notify);
+	if (err)
+		return err;
+#endif
+
+	get_online_cpus();
+	for_each_present_cpu(cpu) {
+		err = alloc_scratch_buffer(conf, per_cpu_ptr(conf->percpu, cpu));
+		if (err) {
+			pr_err("%s: failed memory allocation for cpu%ld\n",
+			       __func__, cpu);
+			break;
+		}
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	put_online_cpus();
 
 	return err;

@@ -152,6 +152,7 @@ config PM_RUNTIME
 	  responsible for the actual handling of the autosuspend requests and
 	  wake-up events.
 
+<<<<<<< HEAD
 config PM_RUNTIME_TEST_SYSFS
 	bool "Runtime PM test interface in sysfs" if PM_RUNTIME
 	depends on SYSFS
@@ -164,6 +165,8 @@ config PM_RUNTIME_TEST_SYSFS
 config PM_DOMAIN_DEBUG
 	bool "Runtime PM debug message" if PM_RUNTIME
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 config PM
 	def_bool y
 	depends on PM_SLEEP || PM_RUNTIME
@@ -262,8 +265,12 @@ config ARCH_HAS_OPP
 	bool
 
 config PM_OPP
+<<<<<<< HEAD
 	bool "Operating Performance Point (OPP) Layer library"
 	depends on ARCH_HAS_OPP
+=======
+	bool
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	---help---
 	  SOCs have a standard set of tuples consisting of frequency and
 	  voltage pairs that the device will support per voltage domain. This

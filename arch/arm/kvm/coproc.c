@@ -146,7 +146,15 @@ static bool pm_fake(struct kvm_vcpu *vcpu,
 #define access_pmintenclr pm_fake
 
 /* Architected CP15 registers.
+<<<<<<< HEAD
  * Important: Must be sorted ascending by CRn, CRM, Op1, Op2
+=======
+ * CRn denotes the primary register number, but is copied to the CRm in the
+ * user space API for 64-bit register access in line with the terminology used
+ * in the ARM ARM.
+ * Important: Must be sorted ascending by CRn, CRM, Op1, Op2 and with 64-bit
+ *            registers preceding 32-bit ones.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  */
 static const struct coproc_reg cp15_regs[] = {
 	/* CSSELR: swapped by interrupt.S. */
@@ -154,8 +162,13 @@ static const struct coproc_reg cp15_regs[] = {
 			NULL, reset_unknown, c0_CSSELR },
 
 	/* TTBR0/TTBR1: swapped by interrupt.S. */
+<<<<<<< HEAD
 	{ CRm( 2), Op1( 0), is64, NULL, reset_unknown64, c2_TTBR0 },
 	{ CRm( 2), Op1( 1), is64, NULL, reset_unknown64, c2_TTBR1 },
+=======
+	{ CRm64( 2), Op1( 0), is64, NULL, reset_unknown64, c2_TTBR0 },
+	{ CRm64( 2), Op1( 1), is64, NULL, reset_unknown64, c2_TTBR1 },
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/* TTBCR: swapped by interrupt.S. */
 	{ CRn( 2), CRm( 0), Op1( 0), Op2( 2), is32,
@@ -182,7 +195,11 @@ static const struct coproc_reg cp15_regs[] = {
 			NULL, reset_unknown, c6_IFAR },
 
 	/* PAR swapped by interrupt.S */
+<<<<<<< HEAD
 	{ CRn( 7), Op1( 0), is64, NULL, reset_unknown64, c7_PAR },
+=======
+	{ CRm64( 7), Op1( 0), is64, NULL, reset_unknown64, c7_PAR },
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/*
 	 * DC{C,I,CI}SW operations:
@@ -399,12 +416,21 @@ static bool index_to_params(u64 id, struct coproc_params *params)
 			      | KVM_REG_ARM_OPC1_MASK))
 			return false;
 		params->is_64bit = true;
+<<<<<<< HEAD
 		params->CRm = ((id & KVM_REG_ARM_CRM_MASK)
+=======
+		/* CRm to CRn: see cp15_to_index for details */
+		params->CRn = ((id & KVM_REG_ARM_CRM_MASK)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			       >> KVM_REG_ARM_CRM_SHIFT);
 		params->Op1 = ((id & KVM_REG_ARM_OPC1_MASK)
 			       >> KVM_REG_ARM_OPC1_SHIFT);
 		params->Op2 = 0;
+<<<<<<< HEAD
 		params->CRn = 0;
+=======
+		params->CRm = 0;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return true;
 	default:
 		return false;
@@ -898,7 +924,18 @@ static u64 cp15_to_index(const struct coproc_reg *reg)
 	if (reg->is_64) {
 		val |= KVM_REG_SIZE_U64;
 		val |= (reg->Op1 << KVM_REG_ARM_OPC1_SHIFT);
+<<<<<<< HEAD
 		val |= (reg->CRm << KVM_REG_ARM_CRM_SHIFT);
+=======
+		/*
+		 * CRn always denotes the primary coproc. reg. nr. for the
+		 * in-kernel representation, but the user space API uses the
+		 * CRm for the encoding, because it is modelled after the
+		 * MRRC/MCRR instructions: see the ARM ARM rev. c page
+		 * B3-1445
+		 */
+		val |= (reg->CRn << KVM_REG_ARM_CRM_SHIFT);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	} else {
 		val |= KVM_REG_SIZE_U32;
 		val |= (reg->Op1 << KVM_REG_ARM_OPC1_SHIFT);

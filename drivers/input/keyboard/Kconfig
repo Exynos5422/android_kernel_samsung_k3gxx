@@ -2,7 +2,11 @@
 # Input core configuration
 #
 menuconfig INPUT_KEYBOARD
+<<<<<<< HEAD
 	bool "Keyboards" if EXPERT || !X86
+=======
+	bool "Keyboards"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	default y
 	help
 	  Say Y here, and a list of supported keyboards will be displayed.
@@ -12,6 +16,7 @@ menuconfig INPUT_KEYBOARD
 
 if INPUT_KEYBOARD
 
+<<<<<<< HEAD
 config KEYBOARD_ABOV_TOUCH
 	tristate "Abov FT16XX touchkey"
 	depends on I2C
@@ -24,6 +29,8 @@ config KEYBOARD_ABOV_TOUCH_A8
 	help
 	  Say Y here if you want to use ABOV MC96FT16XX chip as touchkey.
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 config KEYBOARD_ADP5520
 	tristate "Keypad Support for ADP5520 PMIC"
 	depends on PMIC_ADP5520
@@ -79,7 +86,11 @@ config KEYBOARD_ATARI
 	  module will be called atakbd.
 
 config KEYBOARD_ATKBD
+<<<<<<< HEAD
 	tristate "AT keyboard" if EXPERT || !X86
+=======
+	tristate "AT keyboard"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	default y
 	select SERIO
 	select SERIO_LIBPS2
@@ -236,7 +247,11 @@ config KEYBOARD_TCA6416
 
 config KEYBOARD_TCA8418
 	tristate "TCA8418 Keypad Support"
+<<<<<<< HEAD
 	depends on I2C && GENERIC_HARDIRQS
+=======
+	depends on I2C
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	select INPUT_MATRIXKMAP
 	help
 	  This driver implements basic keypad functionality
@@ -315,7 +330,11 @@ config KEYBOARD_HP7XX
 
 config KEYBOARD_LM8323
 	tristate "LM8323 keypad chip"
+<<<<<<< HEAD
 	depends on I2C && GENERIC_HARDIRQS
+=======
+	depends on I2C
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	depends on LEDS_CLASS
 	help
 	  If you say yes here you get support for the National Semiconductor
@@ -481,6 +500,20 @@ config KEYBOARD_PMIC8XXX
 	  To compile this driver as a module, choose M here: the module will
 	  be called pmic8xxx-keypad.
 
+<<<<<<< HEAD
+=======
+config KEYBOARD_QPNP
+	tristate "Qualcomm QPNP PMIC keypad support"
+	depends on OF_SPMI && SPMI && MSM_QPNP_INT
+	help
+	  Say Y here if you want to enable the driver for the QPNP PMIC
+	  keypad provided as a reference design from Qualcomm. This is intended
+	  to support upto 10 x 8 matrix based keypad design.
+
+	  To compile this driver as a module, choose M here: the module will
+	  be called qpnp-keypad.
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 config KEYBOARD_SAMSUNG
 	tristate "Samsung keypad support"
 	depends on HAVE_CLK
@@ -630,6 +663,25 @@ config KEYBOARD_XTKBD
 	  To compile this driver as a module, choose M here: the
 	  module will be called xtkbd.
 
+<<<<<<< HEAD
+=======
+config KEYBOARD_QCIKBD_REPEAT
+	bool "Enable Quanta Computer Inc. keyboard key repeat feature"
+	depends on KEYBOARD_QCIKBD
+	default n
+	help
+	  Say Y here if you want to enable Quanta keyboard driver's key repeat
+	  feature.
+
+config KEYBOARD_QCIKBD_LID
+	bool "Enable lid event for Quanta Computer Inc. keyboard"
+	depends on KEYBOARD_QCIKBD
+	default n
+	help
+	  Say Y here if you want to register lid event in Quanta keyboard
+	  driver.
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 config KEYBOARD_W90P910
 	tristate "W90P910 Matrix Keypad support"
 	depends on ARCH_W90X900
@@ -653,6 +705,7 @@ config KEYBOARD_CROS_EC
 	  To compile this driver as a module, choose M here: the
 	  module will be called cros_ec_keyb.
 
+<<<<<<< HEAD
 config KEYBOARD_TC300K
 	tristate "Coreriver TC300K touchkey"
 	depends on I2C
@@ -675,4 +728,6 @@ source "drivers/input/keyboard/cypress/Kconfig"
 source "drivers/input/keyboard/cypress_20055/Kconfig"
 source "drivers/input/keyboard/cypress_20075/Kconfig"
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 endif

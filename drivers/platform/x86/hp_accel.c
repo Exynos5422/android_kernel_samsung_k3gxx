@@ -77,6 +77,10 @@ static inline void delayed_sysfs_set(struct led_classdev *led_cdev,
 static struct acpi_device_id lis3lv02d_device_ids[] = {
 	{"HPQ0004", 0}, /* HP Mobile Data Protection System PNP */
 	{"HPQ6000", 0}, /* HP Mobile Data Protection System PNP */
+<<<<<<< HEAD
+=======
+	{"HPQ6007", 0}, /* HP Mobile Data Protection System PNP */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	{"", 0},
 };
 MODULE_DEVICE_TABLE(acpi, lis3lv02d_device_ids);

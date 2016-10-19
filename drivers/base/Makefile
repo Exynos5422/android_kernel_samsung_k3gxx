@@ -6,7 +6,11 @@ obj-y			:= core.o bus.o dd.o syscore.o \
 			   attribute_container.o transport_class.o \
 			   topology.o
 obj-$(CONFIG_DEVTMPFS)	+= devtmpfs.o
+<<<<<<< HEAD
 obj-$(CONFIG_CMA) += dma-contiguous.o
+=======
+obj-$(CONFIG_CMA) += dma-contiguous.o dma-removed.o
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 obj-y			+= power/
 obj-$(CONFIG_HAS_DMA)	+= dma-mapping.o
 obj-$(CONFIG_HAVE_GENERIC_DMA_COHERENT) += dma-coherent.o

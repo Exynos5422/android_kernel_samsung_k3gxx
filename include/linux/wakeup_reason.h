@@ -19,8 +19,11 @@
 #define _LINUX_WAKEUP_REASON_H
 
 void log_wakeup_reason(int irq);
+<<<<<<< HEAD
 #ifdef CONFIG_ARCH_EXYNOS
 void update_wakeup_reason_stats(int irq, int eint);
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #endif /* _LINUX_WAKEUP_REASON_H */

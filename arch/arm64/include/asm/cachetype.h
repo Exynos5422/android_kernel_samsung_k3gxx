@@ -20,12 +20,22 @@
 
 #define CTR_L1IP_SHIFT		14
 #define CTR_L1IP_MASK		3
+<<<<<<< HEAD
+=======
+#define CTR_CWG_SHIFT		24
+#define CTR_CWG_MASK		15
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define ICACHE_POLICY_RESERVED	0
 #define ICACHE_POLICY_AIVIVT	1
 #define ICACHE_POLICY_VIPT	2
 #define ICACHE_POLICY_PIPT	3
 
+<<<<<<< HEAD
+=======
+#ifndef __ASSEMBLY__
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static inline u32 icache_policy(void)
 {
 	return (read_cpuid_cachetype() >> CTR_L1IP_SHIFT) & CTR_L1IP_MASK;
@@ -45,4 +55,14 @@ static inline int icache_is_aivivt(void)
 	return icache_policy() == ICACHE_POLICY_AIVIVT;
 }
 
+<<<<<<< HEAD
+=======
+static inline u32 cache_type_cwg(void)
+{
+	return (read_cpuid_cachetype() >> CTR_CWG_SHIFT) & CTR_CWG_MASK;
+}
+
+#endif	/* __ASSEMBLY__ */
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif	/* __ASM_CACHETYPE_H */

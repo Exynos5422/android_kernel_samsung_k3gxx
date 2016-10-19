@@ -97,7 +97,11 @@ u32 seccomp_bpf_load(int off)
 	if (off == BPF_DATA(nr))
 		return syscall_get_nr(current, regs);
 	if (off == BPF_DATA(arch))
+<<<<<<< HEAD
 		return syscall_get_arch();
+=======
+		return syscall_get_arch(current, regs);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (off >= BPF_DATA(args[0]) && off < BPF_DATA(args[6])) {
 		unsigned long value;
 		int arg = (off - BPF_DATA(args[0])) / sizeof(u64);
@@ -210,7 +214,11 @@ static u32 seccomp_run_filters(int syscall)
 	if (unlikely(WARN_ON(f == NULL)))
 		return SECCOMP_RET_KILL;
 
+<<<<<<< HEAD
 /* Make sure cross-thread synced filter points somewhere sane. */
+=======
+	/* Make sure cross-thread synced filter points somewhere sane. */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	smp_read_barrier_depends();
 
 	/*
@@ -219,13 +227,20 @@ static u32 seccomp_run_filters(int syscall)
 	 */
 	for (; f; f = f->prev) {
 		u32 cur_ret = sk_run_filter(NULL, f->insns);
+<<<<<<< HEAD
 
+=======
+		
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if ((cur_ret & SECCOMP_RET_ACTION) < (ret & SECCOMP_RET_ACTION))
 			ret = cur_ret;
 	}
 	return ret;
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif /* CONFIG_SECCOMP_FILTER */
 
 static inline bool seccomp_may_assign_mode(unsigned long seccomp_mode)
@@ -367,7 +382,11 @@ static inline void seccomp_sync_threads(void)
  *
  * Returns filter on success or an ERR_PTR on failure.
  */
+<<<<<<< HEAD
 static struct seccomp_filter * seccomp_prepare_filter(struct sock_fprog *fprog)
+=======
+static struct seccomp_filter *seccomp_prepare_filter(struct sock_fprog *fprog)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	struct seccomp_filter *filter;
 	unsigned long fp_size = fprog->len * sizeof(struct sock_filter);
@@ -389,7 +408,11 @@ static struct seccomp_filter * seccomp_prepare_filter(struct sock_fprog *fprog)
 	 * This avoids scenarios where unprivileged tasks can affect the
 	 * behavior of privileged children.
 	 */
+<<<<<<< HEAD
 	if (!task_no_new_privs(current)	 &&
+=======
+	if (!task_no_new_privs(current) &&
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	    security_capable_noaudit(current_cred(), current_user_ns(),
 				     CAP_SYS_ADMIN) != 0)
 		return ERR_PTR(-EACCES);
@@ -398,7 +421,11 @@ static struct seccomp_filter * seccomp_prepare_filter(struct sock_fprog *fprog)
 	filter = kzalloc(sizeof(struct seccomp_filter) + fp_size,
 			 GFP_KERNEL|__GFP_NOWARN);
 	if (!filter)
+<<<<<<< HEAD
 		return ERR_PTR(-ENOMEM);
+=======
+		return ERR_PTR(-ENOMEM);;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	atomic_set(&filter->usage, 1);
 	filter->len = fprog->len;
 
@@ -418,6 +445,10 @@ static struct seccomp_filter * seccomp_prepare_filter(struct sock_fprog *fprog)
 		goto fail;
 
 	return filter;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 fail:
 	kfree(filter);
 	return ERR_PTR(ret);
@@ -542,7 +573,11 @@ static void seccomp_send_sigsys(int syscall, int reason)
 	info.si_code = SYS_SECCOMP;
 	info.si_call_addr = (void __user *)KSTK_EIP(current);
 	info.si_errno = reason;
+<<<<<<< HEAD
 	info.si_arch = syscall_get_arch();
+=======
+	info.si_arch = syscall_get_arch(current, task_pt_regs(current));
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	info.si_syscall = syscall;
 	force_sig_info(SIGSYS, &info, current);
 }
@@ -576,7 +611,11 @@ int __secure_computing(int this_syscall)
 	 * been seen after TIF_SECCOMP was seen.
 	 */
 	rmb();
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	switch (current->seccomp.mode) {
 	case SECCOMP_MODE_STRICT:
 		syscall = mode1_syscalls;
@@ -712,7 +751,11 @@ static long seccomp_set_mode_filter(unsigned int flags,
 	struct seccomp_filter *prepared = NULL;
 	long ret = -EINVAL;
 
+<<<<<<< HEAD
 		/* Validate flags. */
+=======
+	/* Validate flags. */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (flags & ~SECCOMP_FILTER_FLAG_MASK)
 		return -EINVAL;
 
@@ -737,8 +780,12 @@ static long seccomp_set_mode_filter(unsigned int flags,
 	ret = seccomp_attach_filter(flags, prepared);
 	if (ret)
 		goto out;
+<<<<<<< HEAD
 
 		/* Do not free the successfully attached filter. */
+=======
+	/* Do not free the successfully attached filter. */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	prepared = NULL;
 
 	seccomp_assign_mode(current, seccomp_mode);
@@ -813,4 +860,7 @@ long prctl_set_seccomp(unsigned long seccomp_mode, char __user *filter)
 	/* prctl interface doesn't have flags, so they are always zero. */
 	return do_seccomp(op, 0, uargs);
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

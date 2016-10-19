@@ -726,7 +726,11 @@ static irqreturn_t tegra_uart_isr(int irq, void *data)
 static void tegra_uart_stop_rx(struct uart_port *u)
 {
 	struct tegra_uart_port *tup = to_tegra_uport(u);
+<<<<<<< HEAD
 	struct tty_struct *tty = tty_port_tty_get(&tup->uport.state->port);
+=======
+	struct tty_struct *tty;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct tty_port *port = &u->state->port;
 	struct dma_tx_state state;
 	unsigned long ier;
@@ -738,6 +742,11 @@ static void tegra_uart_stop_rx(struct uart_port *u)
 	if (!tup->rx_in_progress)
 		return;
 
+<<<<<<< HEAD
+=======
+	tty = tty_port_tty_get(&tup->uport.state->port);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	tegra_uart_wait_sym_time(tup, 1); /* wait a character interval */
 
 	ier = tup->ier_shadow;

@@ -11,6 +11,11 @@
 #include <linux/rmap.h>
 #include <linux/swap.h>
 #include <linux/swapops.h>
+<<<<<<< HEAD
+=======
+#include <linux/mm_inline.h>
+#include <linux/ctype.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #include <asm/elf.h>
 #include <asm/uaccess.h>
@@ -82,6 +87,7 @@ unsigned long task_statm(struct mm_struct *mm,
 	return mm->total_vm;
 }
 
+<<<<<<< HEAD
 static void pad_len_spaces(struct seq_file *m, int len)
 {
 	len = 25 + sizeof(void*) * 6 - len;
@@ -90,6 +96,8 @@ static void pad_len_spaces(struct seq_file *m, int len)
 	seq_printf(m, "%*c", len, ' ');
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifdef CONFIG_NUMA
 /*
  * These functions are for numa_maps but called in generic **maps seq_file
@@ -317,7 +325,10 @@ show_map_vma(struct seq_file *m, struct vm_area_struct *vma, int is_pid)
 	unsigned long long pgoff = 0;
 	unsigned long start, end;
 	dev_t dev = 0;
+<<<<<<< HEAD
 	int len;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	const char *name = NULL;
 
 	if (file) {
@@ -335,7 +346,12 @@ show_map_vma(struct seq_file *m, struct vm_area_struct *vma, int is_pid)
 	if (stack_guard_page_end(vma, end))
 		end -= PAGE_SIZE;
 
+<<<<<<< HEAD
 	seq_printf(m, "%08lx-%08lx %c%c%c%c %08llx %02x:%02x %lu %n",
+=======
+	seq_setwidth(m, 25 + sizeof(void *) * 6 - 1);
+	seq_printf(m, "%08lx-%08lx %c%c%c%c %08llx %02x:%02x %lu ",
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			start,
 			end,
 			flags & VM_READ ? 'r' : '-',
@@ -343,14 +359,22 @@ show_map_vma(struct seq_file *m, struct vm_area_struct *vma, int is_pid)
 			flags & VM_EXEC ? 'x' : '-',
 			flags & VM_MAYSHARE ? 's' : 'p',
 			pgoff,
+<<<<<<< HEAD
 			MAJOR(dev), MINOR(dev), ino, &len);
+=======
+			MAJOR(dev), MINOR(dev), ino);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/*
 	 * Print the dentry name for named mappings, and a
 	 * special [heap] marker for the heap:
 	 */
 	if (file) {
+<<<<<<< HEAD
 		pad_len_spaces(m, len);
+=======
+		seq_pad(m, ' ');
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		seq_path(m, &file->f_path, "\n");
 		goto done;
 	}
@@ -382,21 +406,33 @@ show_map_vma(struct seq_file *m, struct vm_area_struct *vma, int is_pid)
 				name = "[stack]";
 			} else {
 				/* Thread stack in /proc/PID/maps */
+<<<<<<< HEAD
 				pad_len_spaces(m, len);
+=======
+				seq_pad(m, ' ');
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				seq_printf(m, "[stack:%d]", tid);
 			}
 			goto done;
 		}
 
 		if (vma_get_anon_name(vma)) {
+<<<<<<< HEAD
 			pad_len_spaces(m, len);
+=======
+			seq_pad(m, ' ');
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			seq_print_vma_name(m, vma);
 		}
 	}
 
 done:
 	if (name) {
+<<<<<<< HEAD
 		pad_len_spaces(m, len);
+=======
+		seq_pad(m, ' ');
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		seq_puts(m, name);
 	}
 	seq_putc(m, '\n');
@@ -497,7 +533,10 @@ struct mem_size_stats {
 	unsigned long swap;
 	unsigned long nonlinear;
 	u64 pss;
+<<<<<<< HEAD
 	u64 swap_pss;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 
@@ -515,6 +554,7 @@ static void smaps_pte_entry(pte_t ptent, unsigned long addr,
 	} else if (is_swap_pte(ptent)) {
 		swp_entry_t swpent = pte_to_swp_entry(ptent);
 
+<<<<<<< HEAD
 		if (!non_swap_entry(swpent)) {
 			int mapcount;
 
@@ -529,6 +569,11 @@ static void smaps_pte_entry(pte_t ptent, unsigned long addr,
 				mss->swap_pss += (u64)ptent_size << PSS_SHIFT;
 			}
 		} else if (is_migration_entry(swpent))
+=======
+		if (!non_swap_entry(swpent))
+			mss->swap += ptent_size;
+		else if (is_migration_entry(swpent))
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			page = migration_entry_to_page(swpent);
 	} else if (pte_file(ptent)) {
 		if (pte_to_pgoff(ptent) != pgoff)
@@ -677,7 +722,10 @@ static int show_smap(struct seq_file *m, void *v, int is_pid)
 		   "Anonymous:      %8lu kB\n"
 		   "AnonHugePages:  %8lu kB\n"
 		   "Swap:           %8lu kB\n"
+<<<<<<< HEAD
 		   "SwapPss:        %8lu kB\n"
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		   "KernelPageSize: %8lu kB\n"
 		   "MMUPageSize:    %8lu kB\n"
 		   "Locked:         %8lu kB\n",
@@ -692,7 +740,10 @@ static int show_smap(struct seq_file *m, void *v, int is_pid)
 		   mss.anonymous >> 10,
 		   mss.anonymous_thp >> 10,
 		   mss.swap >> 10,
+<<<<<<< HEAD
 		   (unsigned long)(mss.swap_pss >> (10 + PSS_SHIFT)),
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		   vma_kernel_pagesize(vma) >> 10,
 		   vma_mmu_pagesize(vma) >> 10,
 		   (vma->vm_flags & VM_LOCKED) ?
@@ -757,6 +808,7 @@ const struct file_operations proc_pid_smaps_operations = {
 	.release	= seq_release_private,
 };
 
+<<<<<<< HEAD
 static int proc_pid_smaps_simple_show(struct seq_file *m, void *v)
 {
 	struct pid *pid = (struct pid *)m->private;
@@ -827,6 +879,8 @@ const struct file_operations proc_pid_smaps_simple_operations = {
 	.release	= single_release,
 };
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 const struct file_operations proc_tid_smaps_operations = {
 	.open		= tid_smaps_open,
 	.read		= seq_read,
@@ -868,6 +922,10 @@ static int clear_refs_pte_range(pmd_t *pmd, unsigned long addr,
 #define CLEAR_REFS_ALL 1
 #define CLEAR_REFS_ANON 2
 #define CLEAR_REFS_MAPPED 3
+<<<<<<< HEAD
+=======
+#define CLEAR_REFS_MM_HIWATER_RSS 5
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 static ssize_t clear_refs_write(struct file *file, const char __user *buf,
 				size_t count, loff_t *ppos)
@@ -887,7 +945,12 @@ static ssize_t clear_refs_write(struct file *file, const char __user *buf,
 	rv = kstrtoint(strstrip(buffer), 10, &type);
 	if (rv < 0)
 		return rv;
+<<<<<<< HEAD
 	if (type < CLEAR_REFS_ALL || type > CLEAR_REFS_MAPPED)
+=======
+	if ((type < CLEAR_REFS_ALL || type > CLEAR_REFS_MAPPED) &&
+	    type != CLEAR_REFS_MM_HIWATER_RSS)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return -EINVAL;
 	task = get_proc_task(file_inode(file));
 	if (!task)
@@ -898,6 +961,21 @@ static ssize_t clear_refs_write(struct file *file, const char __user *buf,
 			.pmd_entry = clear_refs_pte_range,
 			.mm = mm,
 		};
+<<<<<<< HEAD
+=======
+
+		if (type == CLEAR_REFS_MM_HIWATER_RSS) {
+			/*
+			 * Writing 5 to /proc/pid/clear_refs resets the peak
+			 * resident set size to this mm's current rss value.
+			 */
+			down_write(&mm->mmap_sem);
+			reset_mm_hiwater_rss(mm);
+			up_write(&mm->mmap_sem);
+			goto out_mm;
+		}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		down_read(&mm->mmap_sem);
 		for (vma = mm->mmap; vma; vma = vma->vm_next) {
 			clear_refs_walk.private = vma;
@@ -921,6 +999,10 @@ static ssize_t clear_refs_write(struct file *file, const char __user *buf,
 		}
 		flush_tlb_mm(mm);
 		up_read(&mm->mmap_sem);
+<<<<<<< HEAD
+=======
+out_mm:
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		mmput(mm);
 	}
 	put_task_struct(task);
@@ -1271,6 +1353,241 @@ const struct file_operations proc_pagemap_operations = {
 };
 #endif /* CONFIG_PROC_PAGE_MONITOR */
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_PROCESS_RECLAIM
+static int reclaim_pte_range(pmd_t *pmd, unsigned long addr,
+				unsigned long end, struct mm_walk *walk)
+{
+	struct reclaim_param *rp = walk->private;
+	struct vm_area_struct *vma = rp->vma;
+	pte_t *pte, ptent;
+	spinlock_t *ptl;
+	struct page *page;
+	LIST_HEAD(page_list);
+	int isolated;
+	int reclaimed;
+
+	split_huge_page_pmd(vma, addr, pmd);
+	if (pmd_trans_unstable(pmd) || !rp->nr_to_reclaim)
+		return 0;
+cont:
+	isolated = 0;
+	pte = pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
+	for (; addr != end; pte++, addr += PAGE_SIZE) {
+		ptent = *pte;
+		if (!pte_present(ptent))
+			continue;
+
+		page = vm_normal_page(vma, addr, ptent);
+		if (!page)
+			continue;
+
+		if (isolate_lru_page(page))
+			continue;
+
+		list_add(&page->lru, &page_list);
+		inc_zone_page_state(page, NR_ISOLATED_ANON +
+				page_is_file_cache(page));
+		isolated++;
+		rp->nr_scanned++;
+		if ((isolated >= SWAP_CLUSTER_MAX) || !rp->nr_to_reclaim)
+			break;
+	}
+	pte_unmap_unlock(pte - 1, ptl);
+	reclaimed = reclaim_pages_from_list(&page_list, vma);
+	rp->nr_reclaimed += reclaimed;
+	rp->nr_to_reclaim -= reclaimed;
+	if (rp->nr_to_reclaim < 0)
+		rp->nr_to_reclaim = 0;
+
+	if (rp->nr_to_reclaim && (addr != end))
+		goto cont;
+
+	cond_resched();
+	return 0;
+}
+
+enum reclaim_type {
+	RECLAIM_FILE,
+	RECLAIM_ANON,
+	RECLAIM_ALL,
+	RECLAIM_RANGE,
+};
+
+struct reclaim_param reclaim_task_anon(struct task_struct *task,
+		int nr_to_reclaim)
+{
+	struct mm_struct *mm;
+	struct vm_area_struct *vma;
+	struct mm_walk reclaim_walk = {};
+	struct reclaim_param rp;
+
+	rp.nr_reclaimed = 0;
+	rp.nr_scanned = 0;
+	get_task_struct(task);
+	mm = get_task_mm(task);
+	if (!mm)
+		goto out;
+
+	reclaim_walk.mm = mm;
+	reclaim_walk.pmd_entry = reclaim_pte_range;
+
+	rp.nr_to_reclaim = nr_to_reclaim;
+	reclaim_walk.private = &rp;
+
+	down_read(&mm->mmap_sem);
+	for (vma = mm->mmap; vma; vma = vma->vm_next) {
+		if (is_vm_hugetlb_page(vma))
+			continue;
+
+		if (vma->vm_file)
+			continue;
+
+		if (!rp.nr_to_reclaim)
+			break;
+
+		rp.vma = vma;
+		walk_page_range(vma->vm_start, vma->vm_end,
+			&reclaim_walk);
+	}
+
+	flush_tlb_mm(mm);
+	up_read(&mm->mmap_sem);
+	mmput(mm);
+out:
+	put_task_struct(task);
+	return rp;
+}
+
+static ssize_t reclaim_write(struct file *file, const char __user *buf,
+				size_t count, loff_t *ppos)
+{
+	struct task_struct *task;
+	char buffer[200];
+	struct mm_struct *mm;
+	struct vm_area_struct *vma;
+	enum reclaim_type type;
+	char *type_buf;
+	struct mm_walk reclaim_walk = {};
+	unsigned long start = 0;
+	unsigned long end = 0;
+	struct reclaim_param rp;
+
+	memset(buffer, 0, sizeof(buffer));
+	if (count > sizeof(buffer) - 1)
+		count = sizeof(buffer) - 1;
+
+	if (copy_from_user(buffer, buf, count))
+		return -EFAULT;
+
+	type_buf = strstrip(buffer);
+	if (!strcmp(type_buf, "file"))
+		type = RECLAIM_FILE;
+	else if (!strcmp(type_buf, "anon"))
+		type = RECLAIM_ANON;
+	else if (!strcmp(type_buf, "all"))
+		type = RECLAIM_ALL;
+	else if (isdigit(*type_buf))
+		type = RECLAIM_RANGE;
+	else
+		goto out_err;
+
+	if (type == RECLAIM_RANGE) {
+		char *token;
+		unsigned long long len, len_in, tmp;
+		token = strsep(&type_buf, " ");
+		if (!token)
+			goto out_err;
+		tmp = memparse(token, &token);
+		if (tmp & ~PAGE_MASK || tmp > ULONG_MAX)
+			goto out_err;
+		start = tmp;
+
+		token = strsep(&type_buf, " ");
+		if (!token)
+			goto out_err;
+		len_in = memparse(token, &token);
+		len = (len_in + ~PAGE_MASK) & PAGE_MASK;
+		if (len > ULONG_MAX)
+			goto out_err;
+		/*
+		 * Check to see whether len was rounded up from small -ve
+		 * to zero.
+		 */
+		if (len_in && !len)
+			goto out_err;
+
+		end = start + len;
+		if (end < start)
+			goto out_err;
+	}
+
+	task = get_proc_task(file->f_path.dentry->d_inode);
+	if (!task)
+		return -ESRCH;
+
+	mm = get_task_mm(task);
+	if (!mm)
+		goto out;
+
+	reclaim_walk.mm = mm;
+	reclaim_walk.pmd_entry = reclaim_pte_range;
+
+	rp.nr_to_reclaim = ~0;
+	rp.nr_reclaimed = 0;
+	reclaim_walk.private = &rp;
+
+	down_read(&mm->mmap_sem);
+	if (type == RECLAIM_RANGE) {
+		vma = find_vma(mm, start);
+		while (vma) {
+			if (vma->vm_start > end)
+				break;
+			if (is_vm_hugetlb_page(vma))
+				continue;
+
+			rp.vma = vma;
+			walk_page_range(max(vma->vm_start, start),
+					min(vma->vm_end, end),
+					&reclaim_walk);
+			vma = vma->vm_next;
+		}
+	} else {
+		for (vma = mm->mmap; vma; vma = vma->vm_next) {
+			if (is_vm_hugetlb_page(vma))
+				continue;
+
+			if (type == RECLAIM_ANON && vma->vm_file)
+				continue;
+
+			if (type == RECLAIM_FILE && !vma->vm_file)
+				continue;
+
+			rp.vma = vma;
+			walk_page_range(vma->vm_start, vma->vm_end,
+				&reclaim_walk);
+		}
+	}
+
+	flush_tlb_mm(mm);
+	up_read(&mm->mmap_sem);
+	mmput(mm);
+out:
+	put_task_struct(task);
+	return count;
+
+out_err:
+	return -EINVAL;
+}
+
+const struct file_operations proc_reclaim_operations = {
+	.write		= reclaim_write,
+	.llseek		= noop_llseek,
+};
+#endif
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifdef CONFIG_NUMA
 
 struct numa_maps {

@@ -22,8 +22,12 @@
 #include <linux/module.h>
 #include <linux/syscalls.h>
 #include <linux/uaccess.h>
+<<<<<<< HEAD
 
 #include "sw_sync.h"
+=======
+#include <linux/sw_sync.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 static int sw_sync_cmp(u32 a, u32 b)
 {
@@ -40,9 +44,12 @@ struct sync_pt *sw_sync_pt_create(struct sw_sync_timeline *obj, u32 value)
 	pt = (struct sw_sync_pt *)
 		sync_pt_create(&obj->obj, sizeof(struct sw_sync_pt));
 
+<<<<<<< HEAD
 	if (!pt)
 		return NULL;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	pt->value = value;
 
 	return (struct sync_pt *)pt;

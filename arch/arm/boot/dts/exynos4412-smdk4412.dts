@@ -13,7 +13,11 @@
 */
 
 /dts-v1/;
+<<<<<<< HEAD
 #include "exynos4412.dtsi"
+=======
+/include/ "exynos4412.dtsi"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 / {
 	model = "Samsung SMDK evaluation board based on Exynos4412";
@@ -31,6 +35,7 @@
 		status = "okay";
 	};
 
+<<<<<<< HEAD
 	pinctrl@11000000 {
 		keypad_rows: keypad-rows {
 			samsung,pins = "gpx2-0", "gpx2-1", "gpx2-2";
@@ -116,6 +121,10 @@
 			keypad,column = <7>;
 			linux,code = <18>;
 		};
+=======
+	g2d@10800000 {
+		status = "okay";
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	};
 
 	sdhci@12530000 {

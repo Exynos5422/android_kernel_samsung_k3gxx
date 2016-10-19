@@ -2001,7 +2001,11 @@ static void sge_rx_timer_cb(unsigned long data)
 			struct sge_fl *fl = s->egr_map[id];
 
 			clear_bit(id, s->starving_fl);
+<<<<<<< HEAD
 			smp_mb__after_clear_bit();
+=======
+			smp_mb__after_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 			if (fl_starving(fl)) {
 				rxq = container_of(fl, struct sge_eth_rxq, fl);

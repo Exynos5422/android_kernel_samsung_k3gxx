@@ -671,7 +671,11 @@ static void rxrpc_sock_destructor(struct sock *sk)
 	WARN_ON(sk->sk_socket);
 
 	if (!sock_flag(sk, SOCK_DEAD)) {
+<<<<<<< HEAD
 		printk("Attempt to release alive rxrpc socket: %p\n", sk);
+=======
+		WARN(1, "Attempt to release alive rxrpc socket: %p\n", sk);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return;
 	}
 }

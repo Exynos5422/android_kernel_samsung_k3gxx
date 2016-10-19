@@ -39,6 +39,7 @@ Required Properties:
 
 Optional properties:
 
+<<<<<<< HEAD
 * clocks: from common clock binding: handle to biu and ciu clocks for the
   bus interface unit clock and the card interface unit clock.
 
@@ -52,6 +53,8 @@ Optional properties:
   is specified and the ciu clock is specified then we'll try to set the ciu
   clock to this at probe time.
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 * num-slots: specifies the number of slots supported by the controller.
   The number of physical slots actually used could be equal or less than the
   value specified by num-slots. If this property is not specified, the value
@@ -68,8 +71,11 @@ Optional properties:
 
 * broken-cd: as documented in mmc core bindings.
 
+<<<<<<< HEAD
 * bypass-smu: Bypass Security Management Unit of eMMC channel 0 and channel 1
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 Aliases:
 
 - All the MSHC controller nodes should be represented in the aliases node using
@@ -82,8 +88,11 @@ board specific portions as listed below.
 
 	dwmmc0@12200000 {
 		compatible = "snps,dw-mshc";
+<<<<<<< HEAD
 		clocks = <&clock 351>, <&clock 132>;
 		clock-names = "biu", "ciu";
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		reg = <0x12200000 0x1000>;
 		interrupts = <0 75 0>;
 		#address-cells = <1>;
@@ -91,7 +100,10 @@ board specific portions as listed below.
 	};
 
 	dwmmc0@12200000 {
+<<<<<<< HEAD
 		clock-frequency = <400000000>;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		num-slots = <1>;
 		supports-highspeed;
 		broken-cd;

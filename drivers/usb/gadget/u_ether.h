@@ -54,6 +54,7 @@ struct gether {
 	bool				is_fixed;
 	u32				fixed_out_len;
 	u32				fixed_in_len;
+<<<<<<< HEAD
 #ifdef CONFIG_USB_RNDIS_MULTIPACKET
 	unsigned			ul_max_pkts_per_xfer;
 	unsigned			dl_max_pkts_per_xfer;
@@ -61,6 +62,15 @@ struct gether {
 
 	struct rndis_packet_msg_type	*header;
 #endif
+=======
+
+	unsigned			ul_max_pkts_per_xfer;
+	uint32_t			dl_max_pkts_per_xfer;
+	uint32_t			dl_max_xfer_size;
+	bool				multi_pkt_xfer;
+	bool				rx_trigger_enabled;
+	bool				rx_triggered;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct sk_buff			*(*wrap)(struct gether *port,
 						struct sk_buff *skb);
 	int				(*unwrap)(struct gether *port,
@@ -70,6 +80,11 @@ struct gether {
 	/* called on network open/close */
 	void				(*open)(struct gether *);
 	void				(*close)(struct gether *);
+<<<<<<< HEAD
+=======
+	struct rndis_packet_msg_type	*header;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 #define	DEFAULT_FILTER	(USB_CDC_PACKET_TYPE_BROADCAST \
@@ -105,6 +120,12 @@ void gether_cleanup(struct eth_dev *dev);
 /* connect/disconnect is handled by individual functions */
 struct net_device *gether_connect(struct gether *);
 void gether_disconnect(struct gether *);
+<<<<<<< HEAD
+=======
+int gether_up(struct gether *);
+void gether_update_dl_max_pkts_per_xfer(struct gether *link, uint32_t n);
+void gether_update_dl_max_xfer_size(struct gether *link, uint32_t s);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /* Some controllers can't support CDC Ethernet (ECM) ... */
 static inline bool can_support_ecm(struct usb_gadget *gadget)
@@ -132,6 +153,10 @@ int eem_bind_config(struct usb_configuration *c, struct eth_dev *dev);
 
 int rndis_bind_config_vendor(struct usb_configuration *c, u8 ethaddr[ETH_ALEN],
 		u32 vendorID, const char *manufacturer, struct eth_dev *dev);
+<<<<<<< HEAD
+=======
+int rndis_rx_trigger(void);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #else
 
@@ -142,6 +167,15 @@ rndis_bind_config_vendor(struct usb_configuration *c, u8 ethaddr[ETH_ALEN],
 	return 0;
 }
 
+<<<<<<< HEAD
+=======
+static inline int
+rndis_rx_trigger(void)
+{
+	return 0;
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif
 
 /**
@@ -162,5 +196,8 @@ static inline int rndis_bind_config(struct usb_configuration *c,
 	return rndis_bind_config_vendor(c, ethaddr, 0, NULL, dev);
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif /* __U_ETHER_H */

@@ -55,6 +55,69 @@ struct sched_param {
 
 #include <asm/processor.h>
 
+<<<<<<< HEAD
+=======
+#define SCHED_ATTR_SIZE_VER0	48	/* sizeof first published struct */
+
+/*
+ * Extended scheduling parameters data structure.
+ *
+ * This is needed because the original struct sched_param can not be
+ * altered without introducing ABI issues with legacy applications
+ * (e.g., in sched_getparam()).
+ *
+ * However, the possibility of specifying more than just a priority for
+ * the tasks may be useful for a wide variety of application fields, e.g.,
+ * multimedia, streaming, automation and control, and many others.
+ *
+ * This variant (sched_attr) is meant at describing a so-called
+ * sporadic time-constrained task. In such model a task is specified by:
+ *  - the activation period or minimum instance inter-arrival time;
+ *  - the maximum (or average, depending on the actual scheduling
+ *    discipline) computation time of all instances, a.k.a. runtime;
+ *  - the deadline (relative to the actual activation time) of each
+ *    instance.
+ * Very briefly, a periodic (sporadic) task asks for the execution of
+ * some specific computation --which is typically called an instance--
+ * (at most) every period. Moreover, each instance typically lasts no more
+ * than the runtime and must be completed by time instant t equal to
+ * the instance activation time + the deadline.
+ *
+ * This is reflected by the actual fields of the sched_attr structure:
+ *
+ *  @size		size of the structure, for fwd/bwd compat.
+ *
+ *  @sched_policy	task's scheduling policy
+ *  @sched_flags	for customizing the scheduler behaviour
+ *  @sched_nice		task's nice value      (SCHED_NORMAL/BATCH)
+ *  @sched_priority	task's static priority (SCHED_FIFO/RR)
+ *  @sched_deadline	representative of the task's deadline
+ *  @sched_runtime	representative of the task's runtime
+ *  @sched_period	representative of the task's period
+ *
+ * Given this task model, there are a multiplicity of scheduling algorithms
+ * and policies, that can be used to ensure all the tasks will make their
+ * timing constraints.
+ */
+struct sched_attr {
+	u32 size;
+
+	u32 sched_policy;
+	u64 sched_flags;
+
+	/* SCHED_NORMAL, SCHED_BATCH */
+	s32 sched_nice;
+
+	/* SCHED_FIFO, SCHED_RR */
+	u32 sched_priority;
+
+	/* SCHED_DEADLINE */
+	u64 sched_runtime;
+	u64 sched_deadline;
+	u64 sched_period;
+};
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 struct exec_domain;
 struct futex_pi_state;
 struct robust_list_head;
@@ -102,6 +165,7 @@ extern unsigned long nr_running(void);
 extern unsigned long nr_iowait(void);
 extern unsigned long nr_iowait_cpu(int cpu);
 extern unsigned long this_cpu_load(void);
+<<<<<<< HEAD
 #ifdef CONFIG_SCHED_HMP
 extern unsigned long nr_running_cpu(unsigned int cpu);
 extern int register_hmp_task_migration_notifier(struct notifier_block *nb);
@@ -109,6 +173,11 @@ extern int register_hmp_task_migration_notifier(struct notifier_block *nb);
 #define HMP_DOWN_MIGRATION     1
 #endif
 
+=======
+
+extern void sched_update_nr_prod(int cpu, unsigned long nr, bool inc);
+extern void sched_get_nr_running_avg(int *avg, int *iowait_avg);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 extern void calc_global_load(unsigned long ticks);
 extern void update_cpu_load_nohz(void);
@@ -212,6 +281,20 @@ extern char ___assert_task_state[1 - 2*!!(
 /* Task command name length */
 #define TASK_COMM_LEN 16
 
+<<<<<<< HEAD
+=======
+extern const char *sched_window_reset_reasons[];
+
+enum task_event {
+	PUT_PREV_TASK   = 0,
+	PICK_NEXT_TASK  = 1,
+	TASK_WAKE       = 2,
+	TASK_MIGRATE    = 3,
+	TASK_UPDATE     = 4,
+	IRQ_UPDATE	= 5,
+};
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <linux/spinlock.h>
 
 /*
@@ -320,7 +403,10 @@ struct nsproxy;
 struct user_namespace;
 
 #ifdef CONFIG_MMU
+<<<<<<< HEAD
 extern unsigned long mmap_legacy_base(void);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 extern void arch_pick_mmap_layout(struct mm_struct *mm);
 extern unsigned long
 arch_get_unmapped_area(struct file *, unsigned long, unsigned long,
@@ -329,8 +415,11 @@ extern unsigned long
 arch_get_unmapped_area_topdown(struct file *filp, unsigned long addr,
 			  unsigned long len, unsigned long pgoff,
 			  unsigned long flags);
+<<<<<<< HEAD
 extern void arch_unmap_area(struct mm_struct *, unsigned long);
 extern void arch_unmap_area_topdown(struct mm_struct *, unsigned long);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #else
 static inline void arch_pick_mmap_layout(struct mm_struct *mm) {}
 #endif
@@ -339,6 +428,13 @@ static inline void arch_pick_mmap_layout(struct mm_struct *mm) {}
 extern void set_dumpable(struct mm_struct *mm, int value);
 extern int get_dumpable(struct mm_struct *mm);
 
+<<<<<<< HEAD
+=======
+#define SUID_DUMP_DISABLE	0	/* No setuid dumping */
+#define SUID_DUMP_USER		1	/* Dump as user of process */
+#define SUID_DUMP_ROOT		2	/* Dump as root */
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /* mm flags */
 /* dumpable bits */
 #define MMF_DUMPABLE      0  /* core dump is permitted */
@@ -893,6 +989,7 @@ void free_sched_domains(cpumask_var_t doms[], unsigned int ndoms);
 
 bool cpus_share_cache(int this_cpu, int that_cpu);
 
+<<<<<<< HEAD
 #ifdef CONFIG_SCHED_HMP
 struct hmp_domain {
 	struct cpumask cpus;
@@ -911,6 +1008,8 @@ extern int set_active_down_migration(int enable);
 extern int set_hmp_aggressive_up_migration(int enable);
 extern int set_hmp_aggressive_yield(int enable);
 #endif /* CONFIG_SCHED_HMP */
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #else /* CONFIG_SMP */
 
 struct sched_domain_attr;
@@ -954,6 +1053,7 @@ struct sched_avg {
 	 * choices of y < 1-2^(-32)*1024.
 	 */
 	u32 runnable_avg_sum, runnable_avg_period;
+<<<<<<< HEAD
 	u32 remainder;
 	u64 last_runnable_update;
 	s64 decay_count;
@@ -964,6 +1064,14 @@ struct sched_avg {
 	u64 hmp_last_down_migration;
 #endif
 	u32 usage_avg_sum;
+=======
+#ifdef CONFIG_SCHED_HMP
+	u32 runnable_avg_sum_scaled;
+#endif
+	u64 last_runnable_update;
+	s64 decay_count;
+	unsigned long load_avg_contrib;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 #ifdef CONFIG_SCHEDSTATS
@@ -1002,6 +1110,43 @@ struct sched_statistics {
 };
 #endif
 
+<<<<<<< HEAD
+=======
+#define RAVG_HIST_SIZE_MAX  5
+
+/* ravg represents frequency scaled cpu-demand of tasks */
+struct ravg {
+	/*
+	 * 'mark_start' marks the beginning of an event (task waking up, task
+	 * starting to execute, task being preempted) within a window
+	 *
+	 * 'sum' represents how runnable a task has been within current
+	 * window. It incorporates both running time and wait time and is
+	 * frequency scaled.
+	 *
+	 * 'sum_history' keeps track of history of 'sum' seen over previous
+	 * RAVG_HIST_SIZE windows. Windows where task was entirely sleeping are
+	 * ignored.
+	 *
+	 * 'demand' represents maximum sum seen over previous
+	 * sysctl_sched_ravg_hist_size windows. 'demand' could drive frequency
+	 * demand for tasks.
+	 *
+	 * 'curr_window' represents task's contribution to cpu busy time
+	 * statistics (rq->curr_runnable_sum) in current window
+	 *
+	 * 'prev_window' represents task's contribution to cpu busy time
+	 * statistics (rq->prev_runnable_sum) in previous window
+	 */
+	u64 mark_start;
+	u32 sum, demand;
+	u32 sum_history[RAVG_HIST_SIZE_MAX];
+#ifdef CONFIG_SCHED_FREQ_INPUT
+	u32 curr_window, prev_window;
+#endif
+};
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 struct sched_entity {
 	struct load_weight	load;		/* for load-balancing */
 	struct rb_node		run_node;
@@ -1082,6 +1227,12 @@ struct task_struct {
 	const struct sched_class *sched_class;
 	struct sched_entity se;
 	struct sched_rt_entity rt;
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_SCHED_HMP
+	struct ravg ravg;
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifdef CONFIG_CGROUP_SCHED
 	struct task_group *sched_task_group;
 #endif
@@ -1153,7 +1304,11 @@ struct task_struct {
 	/* Revert to default priority/policy when forking */
 	unsigned sched_reset_on_fork:1;
 	unsigned sched_contributes_to_load:1;
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	unsigned long atomic_flags; /* Flags needing atomic access. */
 
 	pid_t pid;
@@ -1196,6 +1351,10 @@ struct task_struct {
 
 	cputime_t utime, stime, utimescaled, stimescaled;
 	cputime_t gtime;
+<<<<<<< HEAD
+=======
+	unsigned long long cpu_power;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifndef CONFIG_VIRT_CPU_ACCOUNTING_NATIVE
 	struct cputime prev_cputime;
 #endif
@@ -1449,9 +1608,12 @@ struct task_struct {
 	unsigned int	sequential_io;
 	unsigned int	sequential_io_avg;
 #endif
+<<<<<<< HEAD
 #ifdef CONFIG_SDP
 	unsigned int sensitive;
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 /* Future-safe accessor for struct task_struct's cpus_allowed. */
@@ -1644,6 +1806,24 @@ extern void thread_group_cputime_adjusted(struct task_struct *p, cputime_t *ut, 
 
 extern int task_free_register(struct notifier_block *n);
 extern int task_free_unregister(struct notifier_block *n);
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_SCHED_FREQ_INPUT
+extern int sched_set_window(u64 window_start, unsigned int window_size);
+extern unsigned long sched_get_busy(int cpu);
+extern void sched_set_io_is_busy(int val);
+#else
+static inline int sched_set_window(u64 window_start, unsigned int window_size)
+{
+	return -EINVAL;
+}
+static inline unsigned long sched_get_busy(int cpu)
+{
+	return 0;
+}
+static inline void sched_set_io_is_busy(int val) {};
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /*
  * Per process flags
@@ -1806,6 +1986,11 @@ extern void do_set_cpus_allowed(struct task_struct *p,
 
 extern int set_cpus_allowed_ptr(struct task_struct *p,
 				const struct cpumask *new_mask);
+<<<<<<< HEAD
+=======
+extern void sched_set_cpu_cstate(int cpu, int cstate,
+			 int wakeup_energy, int wakeup_latency);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #else
 static inline void do_set_cpus_allowed(struct task_struct *p,
 				      const struct cpumask *new_mask)
@@ -1818,6 +2003,31 @@ static inline int set_cpus_allowed_ptr(struct task_struct *p,
 		return -EINVAL;
 	return 0;
 }
+<<<<<<< HEAD
+=======
+static inline void
+sched_set_cpu_cstate(int cpu, int cstate, int wakeup_energy, int wakeup_latency)
+{
+}
+#endif
+
+#ifdef CONFIG_SCHED_HMP
+
+extern int sched_set_boost(int enable);
+extern int sched_set_cpu_mostly_idle_load(int cpu, int mostly_idle_pct);
+extern int sched_get_cpu_mostly_idle_load(int cpu);
+extern int sched_set_cpu_mostly_idle_nr_run(int cpu, int nr_run);
+extern int sched_get_cpu_mostly_idle_nr_run(int cpu);
+extern int
+sched_set_cpu_mostly_idle_freq(int cpu, unsigned int mostly_idle_freq);
+extern unsigned int sched_get_cpu_mostly_idle_freq(int cpu);
+
+#else
+static inline int sched_set_boost(int enable)
+{
+	return -EINVAL;
+}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif
 
 #ifdef CONFIG_NO_HZ_COMMON
@@ -1905,7 +2115,11 @@ extern unsigned long long
 task_sched_runtime(struct task_struct *task);
 
 /* sched_exec is called by processes performing an exec */
+<<<<<<< HEAD
 #ifdef CONFIG_SMP
+=======
+#if defined(CONFIG_SMP)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 extern void sched_exec(void);
 #else
 #define sched_exec()   {}
@@ -1960,6 +2174,11 @@ extern int sched_setscheduler(struct task_struct *, int,
 			      const struct sched_param *);
 extern int sched_setscheduler_nocheck(struct task_struct *, int,
 				      const struct sched_param *);
+<<<<<<< HEAD
+=======
+extern int sched_setattr(struct task_struct *,
+			 const struct sched_attr *);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 extern struct task_struct *idle_task(int cpu);
 /**
  * is_idle_task - is the specified task an idle task?
@@ -2041,6 +2260,14 @@ extern void wake_up_new_task(struct task_struct *tsk);
 #endif
 extern void sched_fork(struct task_struct *p);
 extern void sched_dead(struct task_struct *p);
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_SCHED_HMP
+extern void sched_exit(struct task_struct *p);
+#else
+static inline void sched_exit(struct task_struct *p) { }
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 extern void proc_caches_init(void);
 extern void flush_signals(struct task_struct *);
@@ -2154,7 +2381,11 @@ static inline void mmdrop(struct mm_struct * mm)
 }
 
 /* mmput gets rid of the mappings and all user-space */
+<<<<<<< HEAD
 extern void mmput(struct mm_struct *);
+=======
+extern int mmput(struct mm_struct *);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /* Grab a reference to a task's mm, if it is not already going away */
 extern struct mm_struct *get_task_mm(struct task_struct *task);
 /*
@@ -2540,26 +2771,68 @@ static inline int tsk_is_polling(struct task_struct *p)
 {
 	return task_thread_info(p)->status & TS_POLLING;
 }
+<<<<<<< HEAD
 static inline void current_set_polling(void)
+=======
+static inline void __current_set_polling(void)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	current_thread_info()->status |= TS_POLLING;
 }
 
+<<<<<<< HEAD
 static inline void current_clr_polling(void)
 {
 	current_thread_info()->status &= ~TS_POLLING;
 	smp_mb__after_clear_bit();
+=======
+static inline bool __must_check current_set_polling_and_test(void)
+{
+	__current_set_polling();
+
+	/*
+	 * Polling state must be visible before we test NEED_RESCHED,
+	 * paired by resched_task()
+	 */
+	smp_mb();
+
+	return unlikely(tif_need_resched());
+}
+
+static inline void __current_clr_polling(void)
+{
+	current_thread_info()->status &= ~TS_POLLING;
+}
+
+static inline bool __must_check current_clr_polling_and_test(void)
+{
+	__current_clr_polling();
+
+	/*
+	 * Polling state must be visible before we test NEED_RESCHED,
+	 * paired by resched_task()
+	 */
+	smp_mb();
+
+	return unlikely(tif_need_resched());
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 #elif defined(TIF_POLLING_NRFLAG)
 static inline int tsk_is_polling(struct task_struct *p)
 {
 	return test_tsk_thread_flag(p, TIF_POLLING_NRFLAG);
 }
+<<<<<<< HEAD
 static inline void current_set_polling(void)
+=======
+
+static inline void __current_set_polling(void)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	set_thread_flag(TIF_POLLING_NRFLAG);
 }
 
+<<<<<<< HEAD
 static inline void current_clr_polling(void)
 {
 	clear_thread_flag(TIF_POLLING_NRFLAG);
@@ -2568,6 +2841,52 @@ static inline void current_clr_polling(void)
 static inline int tsk_is_polling(struct task_struct *p) { return 0; }
 static inline void current_set_polling(void) { }
 static inline void current_clr_polling(void) { }
+=======
+static inline bool __must_check current_set_polling_and_test(void)
+{
+	__current_set_polling();
+
+	/*
+	 * Polling state must be visible before we test NEED_RESCHED,
+	 * paired by resched_task()
+	 */
+	smp_mb__after_atomic();
+
+	return unlikely(tif_need_resched());
+}
+
+static inline void __current_clr_polling(void)
+{
+	clear_thread_flag(TIF_POLLING_NRFLAG);
+}
+
+static inline bool __must_check current_clr_polling_and_test(void)
+{
+	__current_clr_polling();
+
+	/*
+	 * Polling state must be visible before we test NEED_RESCHED,
+	 * paired by resched_task()
+	 */
+	smp_mb__after_atomic();
+
+	return unlikely(tif_need_resched());
+}
+
+#else
+static inline int tsk_is_polling(struct task_struct *p) { return 0; }
+static inline void __current_set_polling(void) { }
+static inline void __current_clr_polling(void) { }
+
+static inline bool __must_check current_set_polling_and_test(void)
+{
+	return unlikely(tif_need_resched());
+}
+static inline bool __must_check current_clr_polling_and_test(void)
+{
+	return unlikely(tif_need_resched());
+}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif
 
 /*
@@ -2626,6 +2945,18 @@ static inline void set_task_cpu(struct task_struct *p, unsigned int cpu)
 
 #endif /* CONFIG_SMP */
 
+<<<<<<< HEAD
+=======
+extern struct atomic_notifier_head migration_notifier_head;
+struct migration_notify_data {
+	int src_cpu;
+	int dest_cpu;
+	int load;
+};
+
+extern struct atomic_notifier_head load_alert_notifier_head;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 extern long sched_setaffinity(pid_t pid, const struct cpumask *new_mask);
 extern long sched_getaffinity(pid_t pid, struct cpumask *mask);
 

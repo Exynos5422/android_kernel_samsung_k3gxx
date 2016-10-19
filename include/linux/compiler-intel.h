@@ -28,8 +28,11 @@
 
 #endif
 
+<<<<<<< HEAD
 #define uninitialized_var(x) x
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifndef __HAVE_BUILTIN_BSWAP16__
 /* icc has this, but it's called _bswap16 */
 #define __HAVE_BUILTIN_BSWAP16__

@@ -32,6 +32,10 @@ static inline void copy_siginfo(struct siginfo *to, struct siginfo *from)
 
 #endif
 
+<<<<<<< HEAD
 extern int copy_siginfo_to_user(struct siginfo __user *to, struct siginfo *from);
+=======
+extern int copy_siginfo_to_user(struct siginfo __user *to, const struct siginfo *from);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #endif

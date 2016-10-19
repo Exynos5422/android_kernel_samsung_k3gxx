@@ -26,6 +26,10 @@
 #include <linux/atomic.h>
 #include <linux/ratelimit.h>
 #include <linux/uidgid.h>
+<<<<<<< HEAD
+=======
+#include <linux/gfp.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <asm/device.h>
 
 struct device;
@@ -232,9 +236,12 @@ struct device_driver {
 	const struct dev_pm_ops *pm;
 
 	struct driver_private *p;
+<<<<<<< HEAD
 #ifdef CONFIG_MULTITHREAD_PROBE
 	unsigned int multithread_probe;
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 
@@ -571,9 +578,38 @@ extern void devres_close_group(struct device *dev, void *id);
 extern void devres_remove_group(struct device *dev, void *id);
 extern int devres_release_group(struct device *dev, void *id);
 
+<<<<<<< HEAD
 /* managed kzalloc/kfree for device drivers, no kmalloc, always use kzalloc */
 extern void *devm_kzalloc(struct device *dev, size_t size, gfp_t gfp);
 extern void devm_kfree(struct device *dev, void *p);
+=======
+/* managed devm_k.alloc/kfree for device drivers */
+extern void *devm_kmalloc(struct device *dev, size_t size, gfp_t gfp);
+static inline void *devm_kzalloc(struct device *dev, size_t size, gfp_t gfp)
+{
+	return devm_kmalloc(dev, size, gfp | __GFP_ZERO);
+}
+static inline void *devm_kmalloc_array(struct device *dev,
+				       size_t n, size_t size, gfp_t flags)
+{
+	if (size != 0 && n > SIZE_MAX / size)
+		return NULL;
+	return devm_kmalloc(dev, n * size, flags);
+}
+static inline void *devm_kcalloc(struct device *dev,
+				 size_t n, size_t size, gfp_t flags)
+{
+	return devm_kmalloc_array(dev, n, size, flags | __GFP_ZERO);
+}
+extern void devm_kfree(struct device *dev, void *p);
+extern char *devm_kstrdup(struct device *dev, const char *s, gfp_t gfp);
+extern void *devm_kmemdup(struct device *dev, const void *src, size_t len,
+			  gfp_t gfp);
+
+extern unsigned long devm_get_free_pages(struct device *dev,
+					 gfp_t gfp_mask, unsigned int order);
+extern void devm_free_pages(struct device *dev, unsigned long addr);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 void __iomem *devm_ioremap_resource(struct device *dev, struct resource *res);
 void __iomem *devm_request_and_ioremap(struct device *dev,

@@ -776,16 +776,35 @@ raw3270_setup_device(struct ccw_device *cdev, struct raw3270 *rp, char *ascebc)
 }
 
 #ifdef CONFIG_TN3270_CONSOLE
+<<<<<<< HEAD
 /*
  * Setup 3270 device configured as console.
  */
 struct raw3270 __init *raw3270_setup_console(struct ccw_device *cdev)
 {
+=======
+/* Tentative definition - see below for actual definition. */
+static struct ccw_driver raw3270_ccw_driver;
+
+/*
+ * Setup 3270 device configured as console.
+ */
+struct raw3270 __init *raw3270_setup_console(void)
+{
+	struct ccw_device *cdev;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	unsigned long flags;
 	struct raw3270 *rp;
 	char *ascebc;
 	int rc;
 
+<<<<<<< HEAD
+=======
+	cdev = ccw_device_probe_console(&raw3270_ccw_driver);
+	if (IS_ERR(cdev))
+		return ERR_CAST(cdev);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	rp = kzalloc(sizeof(struct raw3270), GFP_KERNEL | GFP_DMA);
 	ascebc = kzalloc(256, GFP_KERNEL);
 	rc = raw3270_setup_device(cdev, rp, ascebc);

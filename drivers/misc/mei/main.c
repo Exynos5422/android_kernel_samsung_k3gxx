@@ -262,19 +262,29 @@ static ssize_t mei_read(struct file *file, char __user *ubuf,
 		mutex_unlock(&dev->device_lock);
 
 		if (wait_event_interruptible(cl->rx_wait,
+<<<<<<< HEAD
 			(MEI_READ_COMPLETE == cl->reading_state ||
 			 MEI_FILE_INITIALIZING == cl->state ||
 			 MEI_FILE_DISCONNECTED == cl->state ||
 			 MEI_FILE_DISCONNECTING == cl->state))) {
+=======
+				MEI_READ_COMPLETE == cl->reading_state ||
+				mei_cl_is_transitioning(cl))) {
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			if (signal_pending(current))
 				return -EINTR;
 			return -ERESTARTSYS;
 		}
 
 		mutex_lock(&dev->device_lock);
+<<<<<<< HEAD
 		if (MEI_FILE_INITIALIZING == cl->state ||
 		    MEI_FILE_DISCONNECTED == cl->state ||
 		    MEI_FILE_DISCONNECTING == cl->state) {
+=======
+		if (mei_cl_is_transitioning(cl)) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			rets = -EBUSY;
 			goto out;
 		}

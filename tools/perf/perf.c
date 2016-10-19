@@ -43,6 +43,10 @@ static struct cmd_struct commands[] = {
 	{ "report",	cmd_report,	0 },
 	{ "bench",	cmd_bench,	0 },
 	{ "stat",	cmd_stat,	0 },
+<<<<<<< HEAD
+=======
+	{ "periodic",   cmd_periodic,   0 },
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	{ "timechart",	cmd_timechart,	0 },
 	{ "top",	cmd_top,	0 },
 	{ "annotate",	cmd_annotate,	0 },

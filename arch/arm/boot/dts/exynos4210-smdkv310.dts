@@ -15,7 +15,11 @@
 */
 
 /dts-v1/;
+<<<<<<< HEAD
 #include "exynos4210.dtsi"
+=======
+/include/ "exynos4210.dtsi"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 / {
 	model = "Samsung smdkv310 evaluation board based on Exynos4210";

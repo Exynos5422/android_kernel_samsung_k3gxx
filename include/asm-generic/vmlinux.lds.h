@@ -171,6 +171,18 @@
 #define CLK_OF_TABLES()
 #endif
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_OF
+#define CPU_METHOD_OF_TABLES() . = ALIGN(8);				\
+		VMLINUX_SYMBOL(__cpu_method_of_table) = .;		\
+		*(__cpu_method_of_table)				\
+		VMLINUX_SYMBOL(__cpu_method_of_table_end) = .;
+#else
+#define CPU_METHOD_OF_TABLES()
+#endif
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define KERNEL_DTB()							\
 	STRUCT_ALIGN();							\
 	VMLINUX_SYMBOL(__dtb_start) = .;				\
@@ -515,6 +527,10 @@
 	CPU_DISCARD(init.rodata)					\
 	MEM_DISCARD(init.rodata)					\
 	CLK_OF_TABLES()							\
+<<<<<<< HEAD
+=======
+	CPU_METHOD_OF_TABLES()						\
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	CLKSRC_OF_TABLES()						\
 	KERNEL_DTB()							\
 	IRQCHIP_OF_MATCH_TABLE()
@@ -654,6 +670,7 @@
 		*(.initcall##level##.init)				\
 		*(.initcall##level##s.init)				\
 
+<<<<<<< HEAD
 #ifdef CONFIG_DEFERRED_INITCALLS
 #define DEFERRED_INITCALLS						\
 		VMLINUX_SYMBOL(__deferred_initcall_start) = .;		\
@@ -677,6 +694,8 @@
 		VMLINUX_SYMBOL(__initcall_end) = .;			\
 		DEFERRED_INITCALLS
 #else
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define INIT_CALLS							\
 		VMLINUX_SYMBOL(__initcall_start) = .;			\
 		*(.initcallearly.init)					\
@@ -690,7 +709,10 @@
 		INIT_CALLS_LEVEL(6)					\
 		INIT_CALLS_LEVEL(7)					\
 		VMLINUX_SYMBOL(__initcall_end) = .;
+<<<<<<< HEAD
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #define CON_INITCALL							\
 		VMLINUX_SYMBOL(__con_initcall_start) = .;		\
@@ -702,6 +724,14 @@
 		*(.security_initcall.init)				\
 		VMLINUX_SYMBOL(__security_initcall_end) = .;
 
+<<<<<<< HEAD
+=======
+#define COMPAT_EXPORTS							\
+		VMLINUX_SYMBOL(__compat_exports_start) = .;		\
+		*(.exportcompat.init)					\
+		VMLINUX_SYMBOL(__compat_exports_end) = .;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifdef CONFIG_BLK_DEV_INITRD
 #define INIT_RAM_FS							\
 	. = ALIGN(4);							\

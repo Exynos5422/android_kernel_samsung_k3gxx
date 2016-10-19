@@ -9,6 +9,10 @@
 #include <linux/list.h>
 #include <linux/sysctl.h>
 
+<<<<<<< HEAD
+=======
+#include <net/flow.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <net/netns/core.h>
 #include <net/netns/mib.h>
 #include <net/netns/unix.h>
@@ -120,6 +124,7 @@ struct net {
 	atomic_t		rt_genid;
 };
 
+<<<<<<< HEAD
 /*
  * ifindex generation is per-net namespace, and loopback is
  * always the 1st device in ns (see net_dev_init), thus any
@@ -128,6 +133,8 @@ struct net {
 
 #define LOOPBACK_IFINDEX	1
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <linux/seq_file_net.h>
 
 /* Init's network namespace */

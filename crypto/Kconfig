@@ -23,7 +23,11 @@ comment "Crypto core or helper"
 
 config CRYPTO_FIPS
 	bool "FIPS 200 compliance"
+<<<<<<< HEAD
 	depends on (CRYPTO_ANSI_CPRNG || CRYPTO_DRBG) && !CRYPTO_MANAGER_DISABLE_TESTS
+=======
+	depends on CRYPTO_ANSI_CPRNG && !CRYPTO_MANAGER_DISABLE_TESTS
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	help
 	  This options enables the fips boot option which is
 	  required if you want to system to operate in a FIPS 200
@@ -169,7 +173,11 @@ config CRYPTO_AUTHENC
 
 config CRYPTO_TEST
 	tristate "Testing module"
+<<<<<<< HEAD
 	default n
+=======
+	depends on m
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	select CRYPTO_MANAGER
 	help
 	  Quick & dirty crypto test module.
@@ -526,6 +534,7 @@ config CRYPTO_SHA1_ARM
 	  SHA-1 secure hash standard (FIPS 180-1/DFIPS 180-2) implemented
 	  using optimized ARM assembler.
 
+<<<<<<< HEAD
 if ARM64_CRYPTO
 
 config CRYPTO_SHA1_ARM64_CE
@@ -546,6 +555,8 @@ config CRYPTO_SHA2_ARM64_CE
 
 endif # ARM64_CRYPTO
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 config CRYPTO_SHA1_PPC
 	tristate "SHA1 digest algorithm (powerpc)"
 	depends on PPC
@@ -553,6 +564,20 @@ config CRYPTO_SHA1_PPC
 	  This is the powerpc hardware accelerated implementation of the
 	  SHA-1 secure hash standard (FIPS 180-1/DFIPS 180-2).
 
+<<<<<<< HEAD
+=======
+config CRYPTO_SHA1_ARM_NEON
+	tristate "SHA1 digest algorithm (ARM NEON)"
+	depends on ARM && KERNEL_MODE_NEON && !CPU_BIG_ENDIAN
+	select CRYPTO_SHA1_ARM
+	select CRYPTO_SHA1
+	select CRYPTO_HASH
+	help
+	  SHA-1 secure hash standard (FIPS 180-1/DFIPS 180-2) implemented
+	  using optimized ARM NEON assembly, when NEON instructions are
+	  available.
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 config CRYPTO_SHA256
 	tristate "SHA224 and SHA256 digest algorithm"
 	select CRYPTO_HASH
@@ -586,6 +611,24 @@ config CRYPTO_SHA512
 	  This code also includes SHA-384, a 384 bit hash with 192 bits
 	  of security against collision attacks.
 
+<<<<<<< HEAD
+=======
+config CRYPTO_SHA512_ARM_NEON
+	tristate "SHA384 and SHA512 digest algorithm (ARM NEON)"
+	depends on ARM && KERNEL_MODE_NEON && !CPU_BIG_ENDIAN
+	select CRYPTO_SHA512
+	select CRYPTO_HASH
+	help
+	  SHA-512 secure hash standard (DFIPS 180-2) implemented
+	  using ARM NEON instructions, when available.
+
+	  This version of SHA implements a 512 bit hash with 256 bits of
+	  security against collision attacks.
+
+	  This code also includes SHA-384, a 384 bit hash with 192 bits
+	  of security against collision attacks.
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 config CRYPTO_SHA512_SPARC64
 	tristate "SHA384 and SHA512 digest algorithm (SPARC64)"
 	depends on SPARC64
@@ -781,6 +824,7 @@ config CRYPTO_AES_ARM
 
 	  See <http://csrc.nist.gov/encryption/aes/> for more information.
 
+<<<<<<< HEAD
 if ARM64_CRYPTO
 
 config CRYPTO_AES_ARM64_CE
@@ -808,6 +852,23 @@ config CRYPTO_AES_ARM64_CE
 	  See <http://csrc.nist.gov/encryption/aes/> for more information.
 
 endif # ARM64_CRYPTO
+=======
+config CRYPTO_AES_ARM_BS
+	tristate "Bit sliced AES using NEON instructions"
+	depends on ARM && KERNEL_MODE_NEON
+	select CRYPTO_ALGAPI
+	select CRYPTO_AES_ARM
+	select CRYPTO_ABLK_HELPER
+	help
+	  Use a faster and more secure NEON based implementation of AES in CBC,
+	  CTR and XTS modes
+
+	  Bit sliced AES gives around 45% speedup on Cortex-A15 for CTR mode
+	  and for XTS mode encryption, CBC and XTS mode decryption speedup is
+	  around 25%. (CBC encryption speed is not affected by this driver.)
+	  This implementation does not rely on any lookup tables so it is
+	  believed to be invulnerable to cache timing attacks.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 config CRYPTO_ANUBIS
 	tristate "Anubis cipher algorithm"
@@ -1417,7 +1478,11 @@ comment "Random Number Generation"
 
 config CRYPTO_ANSI_CPRNG
 	tristate "Pseudo Random Number Generation for Cryptographic modules"
+<<<<<<< HEAD
 	default n
+=======
+	default m
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	select CRYPTO_AES
 	select CRYPTO_RNG
 	help
@@ -1426,6 +1491,7 @@ config CRYPTO_ANSI_CPRNG
 	  ANSI X9.31 A.2.4. Note that this option must be enabled if
 	  CRYPTO_FIPS is selected
 
+<<<<<<< HEAD
 menuconfig CRYPTO_DRBG_MENU
 	tristate "NIST SP800-90A DRBG"
 	help
@@ -1460,6 +1526,8 @@ config CRYPTO_DRBG
 
 endif	# if CRYPTO_DRBG_MENU
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 config CRYPTO_USER_API
 	tristate
 

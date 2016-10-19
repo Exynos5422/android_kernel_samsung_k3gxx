@@ -980,7 +980,11 @@ asmlinkage long compat_sys_getdents(unsigned int fd,
 	return error;
 }
 
+<<<<<<< HEAD
 #ifndef __ARCH_OMIT_COMPAT_SYS_GETDENTS64
+=======
+#ifdef __ARCH_WANT_COMPAT_SYS_GETDENTS64
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 struct compat_getdents_callback64 {
 	struct linux_dirent64 __user *current_dir;
@@ -1065,7 +1069,11 @@ asmlinkage long compat_sys_getdents64(unsigned int fd,
 	fdput(f);
 	return error;
 }
+<<<<<<< HEAD
 #endif /* ! __ARCH_OMIT_COMPAT_SYS_GETDENTS64 */
+=======
+#endif /* __ARCH_WANT_COMPAT_SYS_GETDENTS64 */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /*
  * Exactly like fs/open.c:sys_open(), except that it doesn't set the

@@ -27,8 +27,13 @@
 #include <linux/of_address.h>
 #include <linux/irq.h>
 #include <linux/module.h>
+<<<<<<< HEAD
 
 #include <asm/sched_clock.h>
+=======
+#include <linux/sched_clock.h>
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <asm/localtimer.h>
 #include <linux/percpu.h>
 /*

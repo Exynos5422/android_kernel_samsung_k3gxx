@@ -115,8 +115,16 @@ void rfkill_pause_polling(struct rfkill *rfkill);
  * NOTE: not necessary for suspend/resume -- in that case the
  * core stops polling anyway
  */
+<<<<<<< HEAD
 void rfkill_resume_polling(struct rfkill *rfkill);
 
+=======
+#ifdef CONFIG_RFKILL_PM
+void rfkill_resume_polling(struct rfkill *rfkill);
+#else
+static inline void rfkill_resume_polling(struct rfkill *rfkill) { }
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /**
  * rfkill_unregister - Unregister a rfkill structure.

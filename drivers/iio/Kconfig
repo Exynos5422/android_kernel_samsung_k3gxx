@@ -4,7 +4,10 @@
 
 menuconfig IIO
 	tristate "Industrial I/O support"
+<<<<<<< HEAD
 	depends on GENERIC_HARDIRQS
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	help
 	  The industrial I/O subsystem provides a unified framework for
 	  drivers for many different types of embedded sensors using a
@@ -68,8 +71,14 @@ source "drivers/iio/dac/Kconfig"
 source "drivers/iio/frequency/Kconfig"
 source "drivers/iio/gyro/Kconfig"
 source "drivers/iio/imu/Kconfig"
+<<<<<<< HEAD
 source "drivers/iio/inv_test/Kconfig"
 source "drivers/iio/light/Kconfig"
 source "drivers/iio/magnetometer/Kconfig"
 source "drivers/iio/grip/Kconfig"
+=======
+source "drivers/iio/light/Kconfig"
+source "drivers/iio/magnetometer/Kconfig"
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 endif # IIO

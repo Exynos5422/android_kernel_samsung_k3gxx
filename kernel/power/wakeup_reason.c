@@ -26,6 +26,7 @@
 #include <linux/spinlock.h>
 #include <linux/notifier.h>
 #include <linux/suspend.h>
+<<<<<<< HEAD
 #include <linux/debugfs.h>
 
 #ifdef CONFIG_SOC_EXYNOS5433
@@ -33,6 +34,11 @@
 #else
 #define MAX_WAKEUP_REASON_IRQS 32
 #endif
+=======
+
+
+#define MAX_WAKEUP_REASON_IRQS 32
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int irq_list[MAX_WAKEUP_REASON_IRQS];
 static int irqcount;
 static struct kobject *wakeup_reason;
@@ -141,6 +147,7 @@ int __init wakeup_reason_init(void)
 }
 
 late_initcall(wakeup_reason_init);
+<<<<<<< HEAD
 
 #ifdef CONFIG_ARCH_EXYNOS
 #ifdef CONFIG_SOC_EXYNOS5433
@@ -211,3 +218,5 @@ static int __init wakeup_reason_debugfs_init(void)
 late_initcall(wakeup_reason_debugfs_init);
 #endif /* CONFIG_DEBUG_FS */
 #endif /* CONFIG_ARCH_EXYNOS */
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

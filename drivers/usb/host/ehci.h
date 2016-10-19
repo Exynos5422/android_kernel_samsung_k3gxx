@@ -88,7 +88,10 @@ enum ehci_hrtimer_event {
 	EHCI_HRTIMER_POLL_DEAD,		/* Wait for dead controller to stop */
 	EHCI_HRTIMER_UNLINK_INTR,	/* Wait for interrupt QH unlink */
 	EHCI_HRTIMER_FREE_ITDS,		/* Wait for unused iTDs and siTDs */
+<<<<<<< HEAD
 	EHCI_HRTIMER_START_UNLINK_INTR,  /* Unlink empty interrupt QHs */
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	EHCI_HRTIMER_ASYNC_UNLINKS,	/* Unlink empty async QHs */
 	EHCI_HRTIMER_IAA_WATCHDOG,	/* Handle lost IAA interrupts */
 	EHCI_HRTIMER_DISABLE_PERIODIC,	/* Wait to disable periodic sched */
@@ -144,9 +147,13 @@ struct ehci_hcd {			/* one per controller */
 	unsigned		i_thresh;	/* uframes HC might cache */
 
 	union ehci_shadow	*pshadow;	/* mirror hw periodic table */
+<<<<<<< HEAD
 	struct list_head	intr_unlink_wait;
 	struct list_head	intr_unlink;
 	unsigned		intr_unlink_wait_cycle;
+=======
+	struct list_head	intr_unlink;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	unsigned		intr_unlink_cycle;
 	unsigned		now_frame;	/* frame from HC hardware */
 	unsigned		last_iso_frame;	/* last frame scanned for iso */
@@ -190,6 +197,11 @@ struct ehci_hcd {			/* one per controller */
 	ktime_t			last_periodic_enable;
 	u32			command;
 
+<<<<<<< HEAD
+=======
+	unsigned		log2_irq_thresh;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* SILICON QUIRKS */
 	unsigned		no_selective_suspend:1;
 	unsigned		has_fsl_port_bug:1; /* FreeScale */
@@ -203,6 +215,16 @@ struct ehci_hcd {			/* one per controller */
 	unsigned		has_synopsys_hc_bug:1; /* Synopsys HC */
 	unsigned		frame_index_bug:1; /* MosChip (AKA NetMos) */
 	unsigned		need_oc_pp_cycle:1; /* MPC834X port power */
+<<<<<<< HEAD
+=======
+	unsigned		susp_sof_bug:1; /*Chip Idea HC*/
+	unsigned		resume_sof_bug:1;/*Chip Idea HC*/
+	unsigned		reset_sof_bug:1; /*Chip Idea HC*/
+	bool			disable_cerr;
+	bool			no_testmode_suspend; /* MSM Chipidea HC */
+	u32			reset_delay;
+	unsigned		imx28_write_fix:1; /* For Freescale i.MX28 */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/* required for usb32 quirk */
 	#define OHCI_CTRL_HCFS          (3 << 6)
@@ -214,6 +236,10 @@ struct ehci_hcd {			/* one per controller */
 	__hc32			*ohci_hcctrl_reg;
 	unsigned		has_hostpc:1;
 	unsigned		has_ppcd:1; /* support per-port change bits */
+<<<<<<< HEAD
+=======
+	unsigned		pool_64_bit_align:1; /* for 64 bit alignment */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	u8			sbrn;		/* packed release number */
 
 	/* irq statistics */
@@ -395,12 +421,16 @@ struct ehci_qh {
 #define	QH_STATE_COMPLETING	5		/* don't touch token.HALT */
 
 	u8			xacterrs;	/* XactErr retry counter */
+<<<<<<< HEAD
 
 #if defined(CONFIG_LINK_DEVICE_HSIC) || defined(CONFIG_MDM_HSIC_PM)
 #define	QH_XACTERR_MAX		4		/* XactErr retry limit */
 #else
 #define	QH_XACTERR_MAX		32		/* XactErr retry limit */
 #endif
+=======
+#define	QH_XACTERR_MAX		32		/* XactErr retry limit */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/* periodic schedule info */
 	u8			usecs;		/* intr bandwidth */
@@ -683,6 +713,21 @@ static inline unsigned int ehci_readl(const struct ehci_hcd *ehci,
 #endif
 }
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_SOC_IMX28
+static inline void imx28_ehci_writel(const unsigned int val,
+		volatile __u32 __iomem *addr)
+{
+	__asm__ ("swp %0, %0, [%1]" : : "r"(val), "r"(addr));
+}
+#else
+static inline void imx28_ehci_writel(const unsigned int val,
+		volatile __u32 __iomem *addr)
+{
+}
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static inline void ehci_writel(const struct ehci_hcd *ehci,
 		const unsigned int val, __u32 __iomem *regs)
 {
@@ -691,7 +736,14 @@ static inline void ehci_writel(const struct ehci_hcd *ehci,
 		writel_be(val, regs) :
 		writel(val, regs);
 #else
+<<<<<<< HEAD
 	writel(val, regs);
+=======
+	if (ehci->imx28_write_fix)
+		imx28_ehci_writel(val, regs);
+	else
+		writel(val, regs);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif
 }
 
@@ -802,7 +854,14 @@ static inline u32 hc32_to_cpup (const struct ehci_hcd *ehci, const __hc32 *x)
 
 struct ehci_driver_overrides {
 	size_t		extra_priv_size;
+<<<<<<< HEAD
 	int		(*reset)(struct usb_hcd *hcd);
+=======
+	int		flags;
+	int		(*reset)(struct usb_hcd *hcd);
+	int		(*bus_suspend)(struct usb_hcd *hcd);
+	int		(*bus_resume)(struct usb_hcd *hcd);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 extern void	ehci_init_driver(struct hc_driver *drv,
@@ -810,6 +869,11 @@ extern void	ehci_init_driver(struct hc_driver *drv,
 extern int	ehci_setup(struct usb_hcd *hcd);
 
 #ifdef CONFIG_PM
+<<<<<<< HEAD
+=======
+extern int ehci_bus_suspend(struct usb_hcd *hcd);
+extern int ehci_bus_resume(struct usb_hcd *hcd);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 extern int	ehci_suspend(struct usb_hcd *hcd, bool do_wakeup);
 extern int	ehci_resume(struct usb_hcd *hcd, bool hibernated);
 #endif	/* CONFIG_PM */

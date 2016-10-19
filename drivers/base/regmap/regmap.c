@@ -1319,6 +1319,7 @@ out:
 }
 EXPORT_SYMBOL_GPL(regmap_bulk_write);
 
+<<<<<<< HEAD
 static int _regmap_multi_reg_write(struct regmap *map,
 				   const struct reg_default *regs,
 				   int num_regs)
@@ -1409,6 +1410,8 @@ int regmap_multi_reg_write_bypassed(struct regmap *map,
 }
 EXPORT_SYMBOL_GPL(regmap_multi_reg_write_bypassed);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /**
  * regmap_raw_write_async(): Write raw values to one or more registers
  *                           asynchronously

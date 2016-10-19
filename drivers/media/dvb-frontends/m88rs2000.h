@@ -53,6 +53,11 @@ static inline struct dvb_frontend *m88rs2000_attach(
 }
 #endif /* CONFIG_DVB_M88RS2000 */
 
+<<<<<<< HEAD
+=======
+#define RS2000_FE_CRYSTAL_KHZ 27000
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 enum {
 	DEMOD_WRITE = 0x1,
 	WRITE_DELAY = 0x10,

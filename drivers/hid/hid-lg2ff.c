@@ -64,6 +64,7 @@ int lg2ff_init(struct hid_device *hid)
 	struct hid_report *report;
 	struct hid_input *hidinput = list_entry(hid->inputs.next,
 						struct hid_input, list);
+<<<<<<< HEAD
 	struct list_head *report_list =
 			&hid->report_enum[HID_OUTPUT_REPORT].report_list;
 	struct input_dev *dev = hidinput->input;
@@ -84,6 +85,15 @@ int lg2ff_init(struct hid_device *hid)
 		hid_err(hid, "not enough values in the field\n");
 		return -ENODEV;
 	}
+=======
+	struct input_dev *dev = hidinput->input;
+	int error;
+
+	/* Check that the report looks ok */
+	report = hid_validate_values(hid, HID_OUTPUT_REPORT, 0, 0, 7);
+	if (!report)
+		return -ENODEV;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	lg2ff = kmalloc(sizeof(struct lg2ff_device), GFP_KERNEL);
 	if (!lg2ff)
@@ -108,7 +118,11 @@ int lg2ff_init(struct hid_device *hid)
 
 	hid_hw_request(hid, report, HID_REQ_SET_REPORT);
 
+<<<<<<< HEAD
 	hid_info(hid, "Force feedback for Logitech RumblePad/Rumblepad 2 by Anssi Hannula <anssi.hannula@gmail.com>\n");
+=======
+	hid_info(hid, "Force feedback for Logitech variant 2 rumble devices by Anssi Hannula <anssi.hannula@gmail.com>\n");
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return 0;
 }

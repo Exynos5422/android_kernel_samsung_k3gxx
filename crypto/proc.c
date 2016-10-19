@@ -26,7 +26,12 @@
 #ifdef CONFIG_CRYPTO_FIPS
 static struct ctl_table crypto_sysctl_table[] = {
 	{
+<<<<<<< HEAD
 		.procname       = "fips_status",
+=======
+		.procname       = "fips_enabled",
+		.data           = &fips_enabled,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		.maxlen         = sizeof(int),
 		.mode           = 0444,
 		.proc_handler   = proc_dointvec
@@ -141,6 +146,7 @@ static const struct file_operations proc_crypto_ops = {
 	.release	= seq_release
 };
 
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_FIPS
 void crypto_init_proc(int *fips_error)
 {
@@ -149,12 +155,17 @@ void crypto_init_proc(int *fips_error)
 	crypto_proc_fips_init();
 }
 #else
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 void __init crypto_init_proc(void)
 {
 	proc_create("crypto", 0, NULL, &proc_crypto_ops);
 	crypto_proc_fips_init();
 }
+<<<<<<< HEAD
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 void __exit crypto_exit_proc(void)
 {

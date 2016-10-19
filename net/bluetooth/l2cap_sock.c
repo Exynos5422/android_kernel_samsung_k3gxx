@@ -949,13 +949,24 @@ static struct l2cap_chan *l2cap_sock_new_connection_cb(struct l2cap_chan *chan)
 	/* Check for backlog size */
 	if (sk_acceptq_is_full(parent)) {
 		BT_DBG("backlog full %d", parent->sk_ack_backlog);
+<<<<<<< HEAD
+=======
+		release_sock(parent);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return NULL;
 	}
 
 	sk = l2cap_sock_alloc(sock_net(parent), NULL, BTPROTO_L2CAP,
 			      GFP_ATOMIC);
+<<<<<<< HEAD
 	if (!sk)
 		return NULL;
+=======
+	if (!sk) {
+		release_sock(parent);
+		return NULL;
+        }
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	bt_sock_reclassify_lock(sk, BTPROTO_L2CAP);
 

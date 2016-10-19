@@ -53,8 +53,13 @@
 #define NTB_LINK_WIDTH_MASK	0x03f0
 
 #define SNB_MSIX_CNT		4
+<<<<<<< HEAD
 #define SNB_MAX_SPADS		16
 #define SNB_MAX_COMPAT_SPADS	8
+=======
+#define SNB_MAX_B2B_SPADS	16
+#define SNB_MAX_COMPAT_SPADS	16
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /* Reserve the uppermost bit for link interrupt */
 #define SNB_MAX_DB_BITS		15
 #define SNB_DB_BITS_PER_VEC	5

@@ -435,7 +435,11 @@ static int snd_bt87x_pcm_open(struct snd_pcm_substream *substream)
 
 _error:
 	clear_bit(0, &chip->opened);
+<<<<<<< HEAD
 	smp_mb__after_clear_bit();
+=======
+	smp_mb__after_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return err;
 }
 
@@ -450,7 +454,11 @@ static int snd_bt87x_close(struct snd_pcm_substream *substream)
 
 	chip->substream = NULL;
 	clear_bit(0, &chip->opened);
+<<<<<<< HEAD
 	smp_mb__after_clear_bit();
+=======
+	smp_mb__after_atomic();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 

@@ -34,6 +34,7 @@
 #include <linux/prefetch.h>
 #include <linux/memcontrol.h>
 
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_RO_CRED
 #include <linux/security.h>
 #endif /*CONFIG_TIMA_RKP_RO_CRED*/
@@ -49,6 +50,8 @@ do {							\
 #endif  /* CONFIG_TIMA_RKP_RO_CRED */
 
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <trace/events/kmem.h>
 
 #include "internal.h"
@@ -129,8 +132,11 @@ do {							\
  * 			the fast path and disables lockless freelists.
  */
 
+<<<<<<< HEAD
 extern int boot_mode_security;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static inline int kmem_cache_debug(struct kmem_cache *s)
 {
 #ifdef CONFIG_SLUB_DEBUG
@@ -140,6 +146,7 @@ static inline int kmem_cache_debug(struct kmem_cache *s)
 #endif
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_RO_CRED
 void v7_flush_kern_dcache_area(void *addr, size_t size);
 spinlock_t ro_pages_lock = __SPIN_LOCK_UNLOCKED();
@@ -212,6 +219,8 @@ void free_ro_pages(struct page *page, int order)
 }
 #endif  /* CONFIG_TIMA_RKP_RO_CRED */
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * Issues still to be resolved:
  *
@@ -357,6 +366,7 @@ static inline void *get_freepointer_safe(struct kmem_cache *s, void *object)
 	return p;
 }
 
+<<<<<<< HEAD
 static void set_freepointer(struct kmem_cache *s, void *object, void *fp)
 {
 
@@ -370,6 +380,10 @@ static void set_freepointer(struct kmem_cache *s, void *object, void *fp)
 	}
 	else 
 #endif /*CONFIG_TIMA_RKP_RO_CRED*/
+=======
+static inline void set_freepointer(struct kmem_cache *s, void *object, void *fp)
+{
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	*(void **)(object + s->offset) = fp;
 }
 
@@ -534,7 +548,11 @@ static void get_map(struct kmem_cache *s, struct page *page, unsigned long *map)
 {
 	void *p;
 	void *addr = page_address(page);
+<<<<<<< HEAD
 	check_cred_cache(s, );
+=======
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	for (p = page->freelist; p; p = get_freepointer(s, p))
 		set_bit(slab_index(p, s, addr), map);
 }
@@ -578,7 +596,10 @@ static void set_track(struct kmem_cache *s, void *object,
 {
 	struct track *p = get_track(s, object, alloc);
 
+<<<<<<< HEAD
 	check_cred_cache(s, );
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (addr) {
 #ifdef CONFIG_STACKTRACE
 		struct stack_trace trace;
@@ -714,14 +735,30 @@ static void print_trailer(struct kmem_cache *s, struct page *page, u8 *p)
 	dump_stack();
 }
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_SLUB_DEBUG_PANIC_ON
+static void slab_panic(const char *cause)
+{
+	panic("%s\n", cause);
+}
+#else
+static inline void slab_panic(const char *cause) {}
+#endif
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static void object_err(struct kmem_cache *s, struct page *page,
 			u8 *object, char *reason)
 {
 	slab_bug(s, "%s", reason);
 	print_trailer(s, page, object);
+<<<<<<< HEAD
 
 	if (slub_debug)
 		panic("SLUB ERROR: object_err");
+=======
+	slab_panic(reason);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static void slab_err(struct kmem_cache *s, struct page *page, const char *fmt, ...)
@@ -735,6 +772,7 @@ static void slab_err(struct kmem_cache *s, struct page *page, const char *fmt, .
 	slab_bug(s, "%s", buf);
 	print_page_info(page);
 	dump_stack();
+<<<<<<< HEAD
 
 	if (slub_debug)
 		panic("SLUB ERROR: slab_err");
@@ -751,13 +789,19 @@ static void slab_err_nopanic(struct kmem_cache *s, struct page *page, const char
 	slab_bug(s, "%s", buf);
 	print_page_info(page);
 	dump_stack();
+=======
+	slab_panic("slab error");
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static void init_object(struct kmem_cache *s, void *object, u8 val)
 {
 	u8 *p = object;
 
+<<<<<<< HEAD
 	check_cred_cache(s, );
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (s->flags & __OBJECT_POISON) {
 		memset(p, POISON_FREE, s->object_size - 1);
 		p[s->object_size - 1] = POISON_END;
@@ -770,6 +814,10 @@ static void init_object(struct kmem_cache *s, void *object, u8 val)
 static void restore_bytes(struct kmem_cache *s, char *message, u8 data,
 						void *from, void *to)
 {
+<<<<<<< HEAD
+=======
+	slab_panic("object poison overwritten");
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	slab_fix(s, "Restoring 0x%p-0x%p=0x%x\n", from, to - 1, data);
 	memset(from, data, to - from);
 }
@@ -781,7 +829,10 @@ static int check_bytes_and_report(struct kmem_cache *s, struct page *page,
 	u8 *fault;
 	u8 *end;
 
+<<<<<<< HEAD
 	check_cred_cache(s,1);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	fault = memchr_inv(start, value, bytes);
 	if (!fault)
 		return 1;
@@ -795,11 +846,15 @@ static int check_bytes_and_report(struct kmem_cache *s, struct page *page,
 					fault, end - 1, fault[0], value);
 	print_trailer(s, page, object);
 
+<<<<<<< HEAD
 	if (slub_debug)
 		panic("SLUB ERROR: check_bytes_and_report. Can it be restored?");
 
 	restore_bytes(s, what, value, fault, end);
 
+=======
+	restore_bytes(s, what, value, fault, end);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 
@@ -872,7 +927,10 @@ static int slab_pad_check(struct kmem_cache *s, struct page *page)
 	if (!(s->flags & SLAB_POISON))
 		return 1;
 
+<<<<<<< HEAD
 	check_cred_cache(s,1);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	start = page_address(page);
 	length = (PAGE_SIZE << compound_order(page)) - s->reserved;
 	end = start + length;
@@ -886,12 +944,18 @@ static int slab_pad_check(struct kmem_cache *s, struct page *page)
 	while (end > fault && end[-1] == POISON_INUSE)
 		end--;
 
+<<<<<<< HEAD
 	slab_err_nopanic(s, page, "Padding overwritten. 0x%p-0x%p", fault, end - 1);
 	print_section("Padding ", end - remainder, remainder);
 
 	if (slub_debug)
 		panic("SLUB ERROR: slab_pad_check. Can it be restored?");
 
+=======
+	slab_err(s, page, "Padding overwritten. 0x%p-0x%p", fault, end - 1);
+	print_section("Padding ", end - remainder, remainder);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	restore_bytes(s, "slab padding", POISON_INUSE, end - remainder, end);
 	return 0;
 }
@@ -957,6 +1021,7 @@ static int check_slab(struct kmem_cache *s, struct page *page)
 		slab_err(s, page, "Not a valid slab page");
 		return 0;
 	}
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_RO_CRED
 	/*
 	 * Skip this function for now
@@ -964,6 +1029,9 @@ static int check_slab(struct kmem_cache *s, struct page *page)
 	if (s->name && !strcmp(s->name, "cred_jar_ro")) 
 		return 1;
 #endif /*CONFIG_TIMA_RKP_RO_CRED*/
+=======
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	maxobj = order_objects(compound_order(page), s->size, s->reserved);
 	if (page->objects > maxobj) {
 		slab_err(s, page, "objects %u > max %u",
@@ -992,7 +1060,10 @@ static int on_freelist(struct kmem_cache *s, struct page *page, void *search)
 	unsigned long max_objects;
 
 	fp = page->freelist;
+<<<<<<< HEAD
 	check_cred_cache(s,0);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	while (fp && nr <= page->objects) {
 		if (fp == search)
 			return 1;
@@ -1103,7 +1174,10 @@ static inline void slab_free_hook(struct kmem_cache *s, void *x)
 static void add_full(struct kmem_cache *s,
 	struct kmem_cache_node *n, struct page *page)
 {
+<<<<<<< HEAD
 	check_cred_cache(s, );
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (!(s->flags & SLAB_STORE_USER))
 		return;
 
@@ -1115,7 +1189,10 @@ static void add_full(struct kmem_cache *s,
  */
 static void remove_full(struct kmem_cache *s, struct page *page)
 {
+<<<<<<< HEAD
 	check_cred_cache(s, );
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (!(s->flags & SLAB_STORE_USER))
 		return;
 
@@ -1172,7 +1249,10 @@ static void setup_object_debug(struct kmem_cache *s, struct page *page,
 static noinline int alloc_debug_processing(struct kmem_cache *s, struct page *page,
 					void *object, unsigned long addr)
 {
+<<<<<<< HEAD
 	check_cred_cache(s,0);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (!check_slab(s, page))
 		goto bad;
 
@@ -1211,7 +1291,10 @@ static noinline struct kmem_cache_node *free_debug_processing(
 {
 	struct kmem_cache_node *n = get_node(s, page_to_nid(page));
 
+<<<<<<< HEAD
 	check_cred_cache(s,NULL);
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	spin_lock_irqsave(&n->list_lock, *flags);
 	slab_lock(page);
 
@@ -1342,6 +1425,7 @@ static unsigned long kmem_cache_flags(unsigned long object_size,
 	/*
 	 * Enable debugging if selected on the kernel commandline.
 	 */
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_RO_CRED
 	return flags;
 #else
@@ -1352,6 +1436,13 @@ static unsigned long kmem_cache_flags(unsigned long object_size,
 
 	return flags;
 #endif 
+=======
+	if (slub_debug && (!slub_debug_slabs || (name &&
+		!strncmp(slub_debug_slabs, name, strlen(slub_debug_slabs)))))
+		flags |= slub_debug;
+
+	return flags;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 #else
 static inline void setup_object_debug(struct kmem_cache *s,
@@ -1435,6 +1526,7 @@ static struct page *allocate_slab(struct kmem_cache *s, gfp_t flags, int node)
 	 */
 	alloc_gfp = (flags | __GFP_NOWARN | __GFP_NORETRY) & ~__GFP_NOFAIL;
 
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_RO_CRED
 	/*
 	 * We modify the following so that slab alloc for protected data
@@ -1444,6 +1536,8 @@ static struct page *allocate_slab(struct kmem_cache *s, gfp_t flags, int node)
 		page = alloc_ro_pages(oo_order(oo));
 	} else {
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	page = alloc_slab_page(alloc_gfp, node, oo);
 	if (unlikely(!page)) {
 		oo = s->min;
@@ -1456,9 +1550,12 @@ static struct page *allocate_slab(struct kmem_cache *s, gfp_t flags, int node)
 		if (page)
 			stat(s, ORDER_FALLBACK);
 	}
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_RO_CRED
 	}
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (kmemcheck_enabled && page
 		&& !(s->flags & (SLAB_NOTRACK | DEBUG_DEFAULT_FLAGS))) {
@@ -1498,7 +1595,10 @@ static void setup_object(struct kmem_cache *s, struct page *page,
 		s->ctor(object);
 }
 
+<<<<<<< HEAD
 extern int boot_mode_security;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static struct page *new_slab(struct kmem_cache *s, gfp_t flags, int node)
 {
 	struct page *page;
@@ -1535,6 +1635,7 @@ static struct page *new_slab(struct kmem_cache *s, gfp_t flags, int node)
 	}
 	setup_object(s, page, last);
 	set_freepointer(s, last, NULL);
+<<<<<<< HEAD
 #ifdef CONFIG_RKP_DBLMAP_PROT
 	if (boot_mode_security){
 		unsigned long pa = page_to_phys(page);
@@ -1548,6 +1649,9 @@ static struct page *new_slab(struct kmem_cache *s, gfp_t flags, int node)
 	if(rkp_cred_enable)
 		tima_send_cmd3(page_to_phys(page), compound_order(page), 1, 0x26);
 #endif
+=======
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	page->freelist = start;
 	page->inuse = page->objects;
 	page->frozen = 1;
@@ -1560,6 +1664,7 @@ static void __free_slab(struct kmem_cache *s, struct page *page)
 	int order = compound_order(page);
 	int pages = 1 << order;
 
+<<<<<<< HEAD
 #ifdef CONFIG_RKP_DBLMAP_PROT
 	if (boot_mode_security){
 		unsigned long pa = page_to_phys(page);
@@ -1569,6 +1674,8 @@ static void __free_slab(struct kmem_cache *s, struct page *page)
 	}
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (kmem_cache_debug(s)) {
 		void *p;
 
@@ -1592,6 +1699,7 @@ static void __free_slab(struct kmem_cache *s, struct page *page)
 	page_mapcount_reset(page);
 	if (current->reclaim_state)
 		current->reclaim_state->reclaimed_slab += pages;
+<<<<<<< HEAD
 	
 #ifdef CONFIG_TIMA_RKP_RO_CRED
 	/* We free the protected pages here. */
@@ -1599,6 +1707,8 @@ static void __free_slab(struct kmem_cache *s, struct page *page)
 		free_ro_pages(page, order);
 	else
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	__free_memcg_kmem_pages(page, order);
 }
 
@@ -1619,10 +1729,13 @@ static void rcu_free_slab(struct rcu_head *h)
 
 static void free_slab(struct kmem_cache *s, struct page *page)
 {
+<<<<<<< HEAD
 #ifdef TIMA_RKP_KDATA_PROT
 	if(rkp_cred_enable)
 		tima_send_cmd3(page_to_phys(page), compound_order(page), 0, 0x26);
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (unlikely(s->flags & SLAB_DESTROY_BY_RCU)) {
 		struct rcu_head *head;
 
@@ -3290,7 +3403,11 @@ static void list_slab_objects(struct kmem_cache *s, struct page *page,
 				     sizeof(long), GFP_ATOMIC);
 	if (!map)
 		return;
+<<<<<<< HEAD
 	slab_err_nopanic(s, page, text, s->name);
+=======
+	slab_err(s, page, text, s->name);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	slab_lock(page);
 
 	get_map(s, page, map);
@@ -3302,9 +3419,12 @@ static void list_slab_objects(struct kmem_cache *s, struct page *page,
 			print_tracking(s, p);
 		}
 	}
+<<<<<<< HEAD
 
 	if (slub_debug)
 		panic("SLUB ERROR: list_slab_objects.");
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	slab_unlock(page);
 	kfree(map);
 #endif
@@ -3771,10 +3891,15 @@ static struct kmem_cache * __init bootstrap(struct kmem_cache *static_cache)
 				p->slab_cache = s;
 
 #ifdef CONFIG_SLUB_DEBUG
+<<<<<<< HEAD
 #ifndef CONFIG_TIMA_RKP_RO_CRED
 			list_for_each_entry(p, &n->full, lru)
 				p->slab_cache = s;
 #endif /*CONFIG_TIMA_RKP_RO_CRED*/
+=======
+			list_for_each_entry(p, &n->full, lru)
+				p->slab_cache = s;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif
 		}
 	}
@@ -4481,7 +4606,17 @@ static ssize_t show_slab_objects(struct kmem_cache *s,
 
 			page = ACCESS_ONCE(c->partial);
 			if (page) {
+<<<<<<< HEAD
 				x = page->pobjects;
+=======
+				node = page_to_nid(page);
+				if (flags & SO_TOTAL)
+					WARN_ON_ONCE(1);
+				else if (flags & SO_OBJECTS)
+					WARN_ON_ONCE(1);
+				else
+					x = page->pages;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				total += x;
 				nodes[node] += x;
 			}

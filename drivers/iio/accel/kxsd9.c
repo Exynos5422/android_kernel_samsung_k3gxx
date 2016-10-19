@@ -112,9 +112,16 @@ static int kxsd9_read(struct iio_dev *indio_dev, u8 address)
 	mutex_lock(&st->buf_lock);
 	st->tx[0] = KXSD9_READ(address);
 	ret = spi_sync_transfer(st->us, xfers, ARRAY_SIZE(xfers));
+<<<<<<< HEAD
 	if (ret)
 		return ret;
 	return (((u16)(st->rx[0])) << 8) | (st->rx[1] & 0xF0);
+=======
+	if (!ret)
+		ret = (((u16)(st->rx[0])) << 8) | (st->rx[1] & 0xF0);
+	mutex_unlock(&st->buf_lock);
+	return ret;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static IIO_CONST_ATTR(accel_scale_available,

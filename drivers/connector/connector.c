@@ -157,17 +157,30 @@ static int cn_call_callback(struct sk_buff *skb)
 static void cn_rx_skb(struct sk_buff *__skb)
 {
 	struct nlmsghdr *nlh;
+<<<<<<< HEAD
 	int err;
 	struct sk_buff *skb;
+=======
+	struct sk_buff *skb;
+	int len, err;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	skb = skb_get(__skb);
 
 	if (skb->len >= NLMSG_HDRLEN) {
 		nlh = nlmsg_hdr(skb);
+<<<<<<< HEAD
 
 		if (nlh->nlmsg_len < sizeof(struct cn_msg) ||
 		    skb->len < nlh->nlmsg_len ||
 		    nlh->nlmsg_len > CONNECTOR_MAX_MSG_SIZE) {
+=======
+		len = nlmsg_len(nlh);
+
+		if (len < (int)sizeof(struct cn_msg) ||
+		    skb->len < nlh->nlmsg_len ||
+		    len > CONNECTOR_MAX_MSG_SIZE) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			kfree_skb(skb);
 			return;
 		}

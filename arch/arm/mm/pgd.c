@@ -27,8 +27,11 @@
 #define __pgd_free(pgd)	free_pages((unsigned long)pgd, 2)
 #endif
 
+<<<<<<< HEAD
 extern int boot_mode_security;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * need to get a 16k page for level 1
  */
@@ -107,14 +110,18 @@ no_pgd:
 	return NULL;
 }
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 void pgd_free(struct mm_struct *mm, pgd_t *pgd_base)
 {
 	pgd_t *pgd;
 	pud_t *pud;
 	pmd_t *pmd;
 	pgtable_t pte;
+<<<<<<< HEAD
 #ifdef  CONFIG_TIMA_RKP_L1_TABLES
 	unsigned long cmd_id = 0x8380b000;
 
@@ -129,6 +136,8 @@ void pgd_free(struct mm_struct *mm, pgd_t *pgd_base)
 #endif
 
 #endif //CONFIG_TIMA_RKP_L1_TABLES
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (!pgd_base)
 		return;
@@ -174,6 +183,7 @@ no_pgd:
 		pud_free(mm, pud);
 	}
 #endif
+<<<<<<< HEAD
 #ifdef  CONFIG_TIMA_RKP_L1_TABLES
 	if(boot_mode_security) {
 		__asm__ __volatile__ (
@@ -190,5 +200,7 @@ no_pgd:
 			::"r"(cmd_id),"r"(pgd):"r0","r1","r2","cc");
 	}
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	__pgd_free(pgd_base);
 }

@@ -21,6 +21,10 @@
 #include <linux/of_gpio.h>
 #include <linux/pinctrl/pinctrl.h>
 #include <linux/slab.h>
+<<<<<<< HEAD
+=======
+#include <linux/err.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /* Private data structure for of_gpiochip_find_and_xlate */
 struct gg_data {
@@ -77,16 +81,25 @@ int of_get_named_gpio_flags(struct device_node *np, const char *propname,
 					 &gg_data.gpiospec);
 	if (ret) {
 		pr_debug("%s: can't parse gpios property\n", __func__);
+<<<<<<< HEAD
 #if !defined(CONFIG_SAMSUNG_PRODUCT_SHIP)
 		dump_stack();
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return ret;
 	}
 
 	gpiochip_find(&gg_data, of_gpiochip_find_and_xlate);
 
 	of_node_put(gg_data.gpiospec.np);
+<<<<<<< HEAD
 	pr_debug("%s exited with status %d\n", __func__, gg_data.out_gpio);
+=======
+	if (IS_ERR_VALUE(gg_data.out_gpio))
+		pr_debug("%s exited with status %d\n", __func__,
+			 gg_data.out_gpio);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return gg_data.out_gpio;
 }
 EXPORT_SYMBOL(of_get_named_gpio_flags);

@@ -15,6 +15,12 @@
 #if defined(CONFIG_OF_I2C) || defined(CONFIG_OF_I2C_MODULE)
 #include <linux/i2c.h>
 
+<<<<<<< HEAD
+=======
+struct i2c_client *
+of_i2c_register_device(struct i2c_adapter *adap, struct device_node *node);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 extern void of_i2c_register_devices(struct i2c_adapter *adap);
 
 /* must call put_device() when done with returned i2c_client device */
@@ -25,6 +31,17 @@ extern struct i2c_adapter *of_find_i2c_adapter_by_node(
 						struct device_node *node);
 
 #else
+<<<<<<< HEAD
+=======
+
+static inline struct i2c_client *
+of_i2c_register_device(struct i2c_adapter *adap,
+		struct device_node *node)
+{
+	return ERR_PTR(-ENODEV);
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static inline void of_i2c_register_devices(struct i2c_adapter *adap)
 {
 	return;

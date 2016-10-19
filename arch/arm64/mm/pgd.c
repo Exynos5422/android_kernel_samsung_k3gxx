@@ -32,6 +32,7 @@
 
 pgd_t *pgd_alloc(struct mm_struct *mm)
 {
+<<<<<<< HEAD
 	pgd_t *new_pgd;
 
 	if (PGD_SIZE == PAGE_SIZE)
@@ -43,6 +44,12 @@ pgd_t *pgd_alloc(struct mm_struct *mm)
 		return NULL;
 
 	return new_pgd;
+=======
+	if (PGD_SIZE == PAGE_SIZE)
+		return (pgd_t *)get_zeroed_page(GFP_KERNEL);
+	else
+		return kzalloc(PGD_SIZE, GFP_KERNEL);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 void pgd_free(struct mm_struct *mm, pgd_t *pgd)

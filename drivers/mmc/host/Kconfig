@@ -104,6 +104,22 @@ config MMC_SDHCI_PLTFM
 
 	  If unsure, say N.
 
+<<<<<<< HEAD
+=======
+config MMC_SDHCI_MSM
+	tristate "Qualcomm SDHCI Controller Support"
+	depends on ARCH_MSM
+	depends on MMC_SDHCI_PLTFM
+	help
+	  This selects the Secure Digital Host Controller Interface (SDHCI)
+	  support present in MSM SOCs from Qualcomm. The controller
+	  supports SD/MMC/SDIO devices.
+
+	  If you have a controller with this interface, say Y or M here.
+
+	  If unsure, say N.
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 config MMC_SDHCI_OF_ESDHC
 	tristate "SDHCI OF support for the Freescale eSDHC controller"
 	depends on MMC_SDHCI_PLTFM
@@ -311,6 +327,7 @@ config MMC_ATMELMCI
 
 	  If unsure, say N.
 
+<<<<<<< HEAD
 config MMC_MSM
 	tristate "Qualcomm SDCC Controller Support"
 	depends on MMC && ARCH_MSM
@@ -319,6 +336,8 @@ config MMC_MSM
 	  MSM and QSD SOCs from Qualcomm. The controller also has
 	  support for SDIO devices.
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 config MMC_MXC
 	tristate "Freescale i.MX21/27/31 or MPC512x Multimedia Card support"
 	depends on ARCH_MXC || PPC_MPC512x
@@ -476,7 +495,11 @@ config MMC_SDHI
 
 config MMC_CB710
 	tristate "ENE CB710 MMC/SD Interface support"
+<<<<<<< HEAD
 	depends on PCI && GENERIC_HARDIRQS
+=======
+	depends on PCI
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	select CB710_CORE
 	help
 	  This option enables support for MMC/SD part of ENE CB710/720 Flash
@@ -525,6 +548,7 @@ config MMC_DW
 	  block, this provides host support for SD and MMC interfaces, in both
 	  PIO and external DMA modes.
 
+<<<<<<< HEAD
 choice
 	prompt "Flash Memory Protector Support"
 	depends on MMC_DW
@@ -549,6 +573,8 @@ config MMC_DW_FMP_DM_CRYPT
 	  If unsure, choose "Bypass FMP" over this option.
 endchoice
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 config MMC_DW_IDMAC
 	bool "Internal DMAC interface"
 	depends on MMC_DW
@@ -557,6 +583,7 @@ config MMC_DW_IDMAC
 	  Designware Mobile Storage IP block. This disables the external DMA
 	  interface.
 
+<<<<<<< HEAD
 config MMC_DW_64_IDMAC
 	bool "64bit Internal DMAC interface"
 	depends on MMC_DW_IDMAC
@@ -565,6 +592,8 @@ config MMC_DW_64_IDMAC
 	  Designware Mobile Storage IP block. This disables the 32bit internal DMA
 	  interface.
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 config MMC_DW_PLTFM
 	tristate "Synopsys Designware MCI Support as platform device"
 	depends on MMC_DW
@@ -588,6 +617,7 @@ config MMC_DW_EXYNOS
 	  Synopsys DesignWare Memory Card Interface driver. Select this option
 	  for platforms based on Exynos4 and Exynos5 SoC's.
 
+<<<<<<< HEAD
 config MMC_DW_DEBUG
 	bool "Samsung DWMCI debug feature"
 	depends on MMC_DW
@@ -602,6 +632,8 @@ config MMC_DW_SKIP_CACHE_OP
 	  This selects support for skipping operations for cache coherency
 	  to reduce I/O overhead if file system layer do same thing.
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 config MMC_DW_PCI
 	tristate "Synopsys Designware MCI support on PCI bus"
 	depends on MMC_DW && PCI

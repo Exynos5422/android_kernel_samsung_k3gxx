@@ -433,9 +433,15 @@ static int mqueue_create(struct inode *dir, struct dentry *dentry,
 		error = -EACCES;
 		goto out_unlock;
 	}
+<<<<<<< HEAD
 	if (ipc_ns->mq_queues_count >= HARD_QUEUESMAX ||
 	    (ipc_ns->mq_queues_count >= ipc_ns->mq_queues_max &&
 	     !capable(CAP_SYS_RESOURCE))) {
+=======
+
+	if (ipc_ns->mq_queues_count >= ipc_ns->mq_queues_max &&
+	    !capable(CAP_SYS_RESOURCE)) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		error = -ENOSPC;
 		goto out_unlock;
 	}
@@ -823,6 +829,10 @@ SYSCALL_DEFINE4(mq_open, const char __user *, u_name, int, oflag, umode_t, mode,
 				error = ro;
 				goto out;
 			}
+<<<<<<< HEAD
+=======
+			audit_inode_parent_hidden(name, root);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			filp = do_create(ipc_ns, root->d_inode,
 						&path, oflag, mode,
 						u_attr ? &attr : NULL);
@@ -868,6 +878,10 @@ SYSCALL_DEFINE1(mq_unlink, const char __user *, u_name)
 	if (IS_ERR(name))
 		return PTR_ERR(name);
 
+<<<<<<< HEAD
+=======
+	audit_inode_parent_hidden(name, mnt->mnt_root);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	err = mnt_want_write(mnt);
 	if (err)
 		goto out_name;

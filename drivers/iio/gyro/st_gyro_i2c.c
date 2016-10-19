@@ -61,7 +61,10 @@ static const struct i2c_device_id st_gyro_id_table[] = {
 	{ LSM330DL_GYRO_DEV_NAME },
 	{ LSM330DLC_GYRO_DEV_NAME },
 	{ L3GD20_GYRO_DEV_NAME },
+<<<<<<< HEAD
 	{ L3GD20H_GYRO_DEV_NAME },
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	{ L3G4IS_GYRO_DEV_NAME },
 	{ LSM330_GYRO_DEV_NAME },
 	{},

@@ -364,7 +364,11 @@ int genl_unregister_ops(struct genl_family *family, struct genl_ops *ops)
 EXPORT_SYMBOL(genl_unregister_ops);
 
 /**
+<<<<<<< HEAD
  * genl_register_family - register a generic netlink family
+=======
+ * __genl_register_family - register a generic netlink family
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  * @family: generic netlink family
  *
  * Registers the specified family after validating it first. Only one
@@ -374,7 +378,11 @@ EXPORT_SYMBOL(genl_unregister_ops);
  *
  * Return 0 on success or a negative error code.
  */
+<<<<<<< HEAD
 int genl_register_family(struct genl_family *family)
+=======
+int __genl_register_family(struct genl_family *family)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	int err = -EINVAL;
 
@@ -430,10 +438,17 @@ errout_locked:
 errout:
 	return err;
 }
+<<<<<<< HEAD
 EXPORT_SYMBOL(genl_register_family);
 
 /**
  * genl_register_family_with_ops - register a generic netlink family
+=======
+EXPORT_SYMBOL(__genl_register_family);
+
+/**
+ * __genl_register_family_with_ops - register a generic netlink family
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  * @family: generic netlink family
  * @ops: operations to be registered
  * @n_ops: number of elements to register
@@ -457,12 +472,20 @@ EXPORT_SYMBOL(genl_register_family);
  *
  * Return 0 on success or a negative error code.
  */
+<<<<<<< HEAD
 int genl_register_family_with_ops(struct genl_family *family,
+=======
+int __genl_register_family_with_ops(struct genl_family *family,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct genl_ops *ops, size_t n_ops)
 {
 	int err, i;
 
+<<<<<<< HEAD
 	err = genl_register_family(family);
+=======
+	err = __genl_register_family(family);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (err)
 		return err;
 
@@ -476,7 +499,11 @@ err_out:
 	genl_unregister_family(family);
 	return err;
 }
+<<<<<<< HEAD
 EXPORT_SYMBOL(genl_register_family_with_ops);
+=======
+EXPORT_SYMBOL(__genl_register_family_with_ops);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /**
  * genl_unregister_family - unregister generic netlink family
@@ -544,6 +571,33 @@ void *genlmsg_put(struct sk_buff *skb, u32 portid, u32 seq,
 }
 EXPORT_SYMBOL(genlmsg_put);
 
+<<<<<<< HEAD
+=======
+static int genl_lock_dumpit(struct sk_buff *skb, struct netlink_callback *cb)
+{
+	struct genl_ops *ops = cb->data;
+	int rc;
+
+	genl_lock();
+	rc = ops->dumpit(skb, cb);
+	genl_unlock();
+	return rc;
+}
+
+static int genl_lock_done(struct netlink_callback *cb)
+{
+	struct genl_ops *ops = cb->data;
+	int rc = 0;
+
+	if (ops->done) {
+		genl_lock();
+		rc = ops->done(cb);
+		genl_unlock();
+	}
+	return rc;
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static int genl_family_rcv_msg(struct genl_family *family,
 			       struct sk_buff *skb,
 			       struct nlmsghdr *nlh)
@@ -568,6 +622,7 @@ static int genl_family_rcv_msg(struct genl_family *family,
 		return -EOPNOTSUPP;
 
 	if ((ops->flags & GENL_ADMIN_PERM) &&
+<<<<<<< HEAD
 	    !capable(CAP_NET_ADMIN))
 		return -EPERM;
 
@@ -576,11 +631,44 @@ static int genl_family_rcv_msg(struct genl_family *family,
 			.dump = ops->dumpit,
 			.done = ops->done,
 		};
+=======
+	    !netlink_capable(skb, CAP_NET_ADMIN))
+		return -EPERM;
+
+	if ((nlh->nlmsg_flags & NLM_F_DUMP) == NLM_F_DUMP) {
+		int rc;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 		if (ops->dumpit == NULL)
 			return -EOPNOTSUPP;
 
+<<<<<<< HEAD
 		return netlink_dump_start(net->genl_sock, skb, nlh, &c);
+=======
+		if (!family->parallel_ops) {
+			struct netlink_dump_control c = {
+				.module = family->module,
+				.data = ops,
+				.dump = genl_lock_dumpit,
+				.done = genl_lock_done,
+			};
+
+			genl_unlock();
+			rc = __netlink_dump_start(net->genl_sock, skb, nlh, &c);
+			genl_lock();
+
+		} else {
+			struct netlink_dump_control c = {
+				.module = family->module,
+				.dump = ops->dumpit,
+				.done = ops->done,
+			};
+
+			rc = __netlink_dump_start(net->genl_sock, skb, nlh, &c);
+		}
+
+		return rc;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	if (ops->doit == NULL)

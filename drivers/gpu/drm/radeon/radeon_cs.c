@@ -80,9 +80,17 @@ static int radeon_cs_parser_relocs(struct radeon_cs_parser *p)
 		p->relocs[i].lobj.bo = p->relocs[i].robj;
 		p->relocs[i].lobj.written = !!r->write_domain;
 
+<<<<<<< HEAD
 		/* the first reloc of an UVD job is the
 		   msg and that must be in VRAM */
 		if (p->ring == R600_RING_TYPE_UVD_INDEX && i == 0) {
+=======
+		/* the first reloc of an UVD job is the msg and that must be in
+		   VRAM, also but everything into VRAM on AGP cards to avoid
+		   image corruptions */
+		if (p->ring == R600_RING_TYPE_UVD_INDEX &&
+		    (i == 0 || drm_pci_device_is_agp(p->rdev->ddev))) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			/* TODO: is this still needed for NI+ ? */
 			p->relocs[i].lobj.domain =
 				RADEON_GEM_DOMAIN_VRAM;
@@ -94,6 +102,15 @@ static int radeon_cs_parser_relocs(struct radeon_cs_parser *p)
 			uint32_t domain = r->write_domain ?
 				r->write_domain : r->read_domains;
 
+<<<<<<< HEAD
+=======
+			if (domain & RADEON_GEM_DOMAIN_CPU) {
+				DRM_ERROR("RADEON_GEM_DOMAIN_CPU is not valid "
+					  "for command submission\n");
+				return -EINVAL;
+			}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			p->relocs[i].lobj.domain = domain;
 			if (domain == RADEON_GEM_DOMAIN_VRAM)
 				domain |= RADEON_GEM_DOMAIN_GTT;

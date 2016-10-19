@@ -61,6 +61,10 @@
 MODULE_AUTHOR("Ville Nuorvala");
 MODULE_DESCRIPTION("IPv6 tunneling device");
 MODULE_LICENSE("GPL");
+<<<<<<< HEAD
+=======
+MODULE_ALIAS_RTNL_LINK("ip6tnl");
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 MODULE_ALIAS_NETDEV("ip6tnl0");
 
 #ifdef IP6_TNL_DEBUG
@@ -1531,7 +1535,11 @@ static int ip6_tnl_validate(struct nlattr *tb[], struct nlattr *data[])
 {
 	u8 proto;
 
+<<<<<<< HEAD
 	if (!data)
+=======
+	if (!data || !data[IFLA_IPTUN_PROTO])
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return 0;
 
 	proto = nla_get_u8(data[IFLA_IPTUN_PROTO]);
@@ -1617,6 +1625,18 @@ static int ip6_tnl_changelink(struct net_device *dev, struct nlattr *tb[],
 	return ip6_tnl_update(t, &p);
 }
 
+<<<<<<< HEAD
+=======
+static void ip6_tnl_dellink(struct net_device *dev, struct list_head *head)
+{
+	struct net *net = dev_net(dev);
+	struct ip6_tnl_net *ip6n = net_generic(net, ip6_tnl_net_id);
+
+	if (dev != ip6n->fb_tnl_dev)
+		unregister_netdevice_queue(dev, head);
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static size_t ip6_tnl_get_size(const struct net_device *dev)
 {
 	return
@@ -1646,9 +1666,15 @@ static int ip6_tnl_fill_info(struct sk_buff *skb, const struct net_device *dev)
 
 	if (nla_put_u32(skb, IFLA_IPTUN_LINK, parm->link) ||
 	    nla_put(skb, IFLA_IPTUN_LOCAL, sizeof(struct in6_addr),
+<<<<<<< HEAD
 		    &parm->raddr) ||
 	    nla_put(skb, IFLA_IPTUN_REMOTE, sizeof(struct in6_addr),
 		    &parm->laddr) ||
+=======
+		    &parm->laddr) ||
+	    nla_put(skb, IFLA_IPTUN_REMOTE, sizeof(struct in6_addr),
+		    &parm->raddr) ||
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	    nla_put_u8(skb, IFLA_IPTUN_TTL, parm->hop_limit) ||
 	    nla_put_u8(skb, IFLA_IPTUN_ENCAP_LIMIT, parm->encap_limit) ||
 	    nla_put_be32(skb, IFLA_IPTUN_FLOWINFO, parm->flowinfo) ||
@@ -1681,6 +1707,10 @@ static struct rtnl_link_ops ip6_link_ops __read_mostly = {
 	.validate	= ip6_tnl_validate,
 	.newlink	= ip6_tnl_newlink,
 	.changelink	= ip6_tnl_changelink,
+<<<<<<< HEAD
+=======
+	.dellink	= ip6_tnl_dellink,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	.get_size	= ip6_tnl_get_size,
 	.fill_info	= ip6_tnl_fill_info,
 };
@@ -1732,6 +1762,10 @@ static int __net_init ip6_tnl_init_net(struct net *net)
 	if (!ip6n->fb_tnl_dev)
 		goto err_alloc_dev;
 	dev_net_set(ip6n->fb_tnl_dev, net);
+<<<<<<< HEAD
+=======
+	ip6n->fb_tnl_dev->rtnl_link_ops = &ip6_link_ops;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	err = ip6_fb_tnl_dev_init(ip6n->fb_tnl_dev);
 	if (err < 0)

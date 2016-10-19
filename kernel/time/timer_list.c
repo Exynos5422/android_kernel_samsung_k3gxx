@@ -265,10 +265,16 @@ static inline void timer_list_header(struct seq_file *m, u64 now)
 static int timer_list_show(struct seq_file *m, void *v)
 {
 	struct timer_list_iter *iter = v;
+<<<<<<< HEAD
 	u64 now = ktime_to_ns(ktime_get());
 
 	if (iter->cpu == -1 && !iter->second_pass)
 		timer_list_header(m, now);
+=======
+
+	if (iter->cpu == -1 && !iter->second_pass)
+		timer_list_header(m, iter->now);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	else if (!iter->second_pass)
 		print_cpu(m, iter->cpu, iter->now);
 #ifdef CONFIG_GENERIC_CLOCKEVENTS
@@ -298,6 +304,7 @@ void sysrq_timer_list_show(void)
 	return;
 }
 
+<<<<<<< HEAD
 static void *timer_list_start(struct seq_file *file, loff_t *offset)
 {
 	struct timer_list_iter *iter = file->private;
@@ -315,16 +322,52 @@ static void *timer_list_start(struct seq_file *file, loff_t *offset)
 #else
 		return NULL;
 #endif
+=======
+static void *move_iter(struct timer_list_iter *iter, loff_t offset)
+{
+	for (; offset; offset--) {
+		iter->cpu = cpumask_next(iter->cpu, cpu_online_mask);
+		if (iter->cpu >= nr_cpu_ids) {
+#ifdef CONFIG_GENERIC_CLOCKEVENTS
+			if (!iter->second_pass) {
+				iter->cpu = -1;
+				iter->second_pass = true;
+			} else
+				return NULL;
+#else
+			return NULL;
+#endif
+		}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 	return iter;
 }
 
+<<<<<<< HEAD
 static void *timer_list_next(struct seq_file *file, void *v, loff_t *offset)
 {
 	struct timer_list_iter *iter = file->private;
 	iter->cpu = cpumask_next(iter->cpu, cpu_online_mask);
 	++*offset;
 	return timer_list_start(file, offset);
+=======
+static void *timer_list_start(struct seq_file *file, loff_t *offset)
+{
+	struct timer_list_iter *iter = file->private;
+
+	if (!*offset)
+		iter->now = ktime_to_ns(ktime_get());
+	iter->cpu = -1;
+	iter->second_pass = false;
+	return move_iter(iter, *offset);
+}
+
+static void *timer_list_next(struct seq_file *file, void *v, loff_t *offset)
+{
+	struct timer_list_iter *iter = file->private;
+	++*offset;
+	return move_iter(iter, 1);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static void timer_list_stop(struct seq_file *seq, void *v)

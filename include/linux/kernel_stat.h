@@ -36,9 +36,12 @@ struct kernel_cpustat {
 };
 
 struct kernel_stat {
+<<<<<<< HEAD
 #ifndef CONFIG_GENERIC_HARDIRQS
        unsigned int irqs[NR_IRQS];
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	unsigned long irqs_sum;
 	unsigned int softirqs[NR_SOFTIRQS];
 };
@@ -54,6 +57,7 @@ DECLARE_PER_CPU(struct kernel_cpustat, kernel_cpustat);
 
 extern unsigned long long nr_context_switches(void);
 
+<<<<<<< HEAD
 #ifndef CONFIG_GENERIC_HARDIRQS
 
 struct irq_desc;
@@ -70,6 +74,8 @@ static inline unsigned int kstat_irqs_cpu(unsigned int irq, int cpu)
        return kstat_cpu(cpu).irqs[irq];
 }
 #else
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #include <linux/irq.h>
 extern unsigned int kstat_irqs_cpu(unsigned int irq, int cpu);
 
@@ -79,8 +85,11 @@ do {							\
 	__this_cpu_inc(kstat.irqs_sum);			\
 } while (0)
 
+<<<<<<< HEAD
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static inline void kstat_incr_softirqs_this_cpu(unsigned int irq)
 {
 	__this_cpu_inc(kstat.softirqs[irq]);
@@ -94,6 +103,7 @@ static inline unsigned int kstat_softirqs_cpu(unsigned int irq, int cpu)
 /*
  * Number of interrupts per specific IRQ source, since bootup
  */
+<<<<<<< HEAD
 #ifndef CONFIG_GENERIC_HARDIRQS
 static inline unsigned int kstat_irqs(unsigned int irq)
 {
@@ -108,6 +118,9 @@ static inline unsigned int kstat_irqs(unsigned int irq)
 #else
 extern unsigned int kstat_irqs(unsigned int irq);
 #endif
+=======
+extern unsigned int kstat_irqs(unsigned int irq);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /*
  * Number of interrupts per cpu, since bootup

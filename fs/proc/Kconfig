@@ -67,8 +67,11 @@ config PROC_PAGE_MONITOR
 	  /proc/pid/smaps, /proc/pid/clear_refs, /proc/pid/pagemap,
 	  /proc/kpagecount, and /proc/kpageflags. Disabling these
           interfaces will reduce the size of the kernel by approximately 4kb.
+<<<<<<< HEAD
 
 config PROC_STLOG
 	bool "Enable Storage log"
 	depends on PROC_FS
 	default y
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

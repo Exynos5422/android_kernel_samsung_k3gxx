@@ -14,7 +14,12 @@
 #include "governor.h"
 
 static int devfreq_performance_func(struct devfreq *df,
+<<<<<<< HEAD
 				    unsigned long *freq)
+=======
+				    unsigned long *freq,
+				u32 *flag)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	/*
 	 * target callback should be able to get floor value as
@@ -31,6 +36,7 @@ static int devfreq_performance_handler(struct devfreq *devfreq,
 				unsigned int event, void *data)
 {
 	int ret = 0;
+<<<<<<< HEAD
 
 	if (event == DEVFREQ_GOV_START) {
 		mutex_lock(&devfreq->lock);
@@ -38,6 +44,28 @@ static int devfreq_performance_handler(struct devfreq *devfreq,
 		mutex_unlock(&devfreq->lock);
 	}
 
+=======
+	unsigned long freq;
+
+	mutex_lock(&devfreq->lock);
+	freq = devfreq->previous_freq;
+	switch (event) {
+	case DEVFREQ_GOV_START:
+		devfreq->profile->target(devfreq->dev.parent,
+				&freq,
+				DEVFREQ_FLAG_WAKEUP_MAXFREQ);
+		/* fall through */
+	case DEVFREQ_GOV_RESUME:
+		ret = update_devfreq(devfreq);
+		break;
+	case DEVFREQ_GOV_SUSPEND:
+		devfreq->profile->target(devfreq->dev.parent,
+				&freq,
+				DEVFREQ_FLAG_WAKEUP_MAXFREQ);
+		break;
+	}
+	mutex_unlock(&devfreq->lock);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return ret;
 }
 

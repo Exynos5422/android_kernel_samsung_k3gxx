@@ -98,10 +98,17 @@ static int setup_freqs_table(struct cpufreq_policy *policy,
 		return -ENOMEM;
 
 	for (i = 0; i < num; i++) {
+<<<<<<< HEAD
 		table[i].index = i;
 		table[i].frequency = freqs[i].cpufreq_mhz * 1000;
 	}
 	table[num].index = i;
+=======
+		table[i].driver_data = i;
+		table[i].frequency = freqs[i].cpufreq_mhz * 1000;
+	}
+	table[num].driver_data = i;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	table[num].frequency = CPUFREQ_TABLE_END;
 
 	pxa3xx_freqs = freqs;

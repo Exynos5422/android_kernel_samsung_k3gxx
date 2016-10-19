@@ -19,6 +19,10 @@
 
 enum llcp_state {
 	LLCP_CONNECTED = 1, /* wait_for_packet() wants that */
+<<<<<<< HEAD
+=======
+	LLCP_CONNECTING,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	LLCP_CLOSED,
 	LLCP_BOUND,
 	LLCP_LISTEN,

@@ -66,10 +66,18 @@ static int hid_lg3ff_play(struct input_dev *dev, void *data,
 	int x, y;
 
 /*
+<<<<<<< HEAD
  * Maxusage should always be 63 (maximum fields)
  * likely a better way to ensure this data is clean
  */
 	memset(report->field[0]->value, 0, sizeof(__s32)*report->field[0]->maxusage);
+=======
+ * Available values in the field should always be 63, but we only use up to
+ * 35. Instead, clear the entire area, however big it is.
+ */
+	memset(report->field[0]->value, 0,
+	       sizeof(__s32) * report->field[0]->report_count);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	switch (effect->type) {
 	case FF_CONSTANT:
@@ -129,14 +137,19 @@ static const signed short ff3_joystick_ac[] = {
 int lg3ff_init(struct hid_device *hid)
 {
 	struct hid_input *hidinput = list_entry(hid->inputs.next, struct hid_input, list);
+<<<<<<< HEAD
 	struct list_head *report_list = &hid->report_enum[HID_OUTPUT_REPORT].report_list;
 	struct input_dev *dev = hidinput->input;
 	struct hid_report *report;
 	struct hid_field *field;
+=======
+	struct input_dev *dev = hidinput->input;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	const signed short *ff_bits = ff3_joystick_ac;
 	int error;
 	int i;
 
+<<<<<<< HEAD
 	/* Find the report to use */
 	if (list_empty(report_list)) {
 		hid_err(hid, "No output report found\n");
@@ -155,6 +168,11 @@ int lg3ff_init(struct hid_device *hid)
 		hid_err(hid, "NULL field\n");
 		return -1;
 	}
+=======
+	/* Check that the report looks ok */
+	if (!hid_validate_values(hid, HID_OUTPUT_REPORT, 0, 0, 35))
+		return -ENODEV;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/* Assume single fixed device G940 */
 	for (i = 0; ff_bits[i] >= 0; i++)

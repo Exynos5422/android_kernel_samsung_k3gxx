@@ -21,6 +21,10 @@
 #include <linux/pm.h>
 #include <linux/msm_ipc.h>
 #include <linux/device.h>
+<<<<<<< HEAD
+=======
+#include <linux/kref.h>
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 /* Maximum Wakeup Source Name Size */
 #define MAX_WS_NAME_SZ 32
@@ -77,14 +81,25 @@ struct comm_mode_info {
 /**
  * msm_ipc_port - Definition of IPC Router port
  * @list: List(local/control ports) in which this port is present.
+<<<<<<< HEAD
+=======
+ * @ref: Reference count for this port.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  * @this_port: Contains port's node_id and port_id information.
  * @port_name: Contains service & instance info if the port hosts a service.
  * @type: Type of the port - Client, Service, Control or Security Config.
  * @flags: Flags to identify the port state.
+<<<<<<< HEAD
  * @port_lock_lhb1: Lock to protect access to the port information.
  * @mode_info: Communication mode of the port owner.
  * @port_rx_q: Receive queue where incoming messages are queued.
  * @port_rx_q_lock_lhb3: Lock to protect access to the port's rx_q.
+=======
+ * @port_lock_lhc3: Lock to protect access to the port information.
+ * @mode_info: Communication mode of the port owner.
+ * @port_rx_q: Receive queue where incoming messages are queued.
+ * @port_rx_q_lock_lhc3: Lock to protect access to the port's rx_q.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  * @rx_ws_name: Name of the receive wakeup source.
  * @port_rx_ws: Wakeup source to prevent suspend until the rx_q is empty.
  * @port_rx_wait_q: Wait queue to wait for the incoming messages.
@@ -102,11 +117,16 @@ struct comm_mode_info {
  */
 struct msm_ipc_port {
 	struct list_head list;
+<<<<<<< HEAD
+=======
+	struct kref ref;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	struct msm_ipc_port_addr this_port;
 	struct msm_ipc_port_name port_name;
 	uint32_t type;
 	unsigned flags;
+<<<<<<< HEAD
 	struct mutex port_lock_lhb1;
 	struct comm_mode_info mode_info;
 
@@ -115,11 +135,29 @@ struct msm_ipc_port {
 	char rx_ws_name[MAX_WS_NAME_SZ];
 	struct wakeup_source port_rx_ws;
 	wait_queue_head_t port_rx_wait_q;
+=======
+	struct mutex port_lock_lhc3;
+	struct comm_mode_info mode_info;
+
+	struct msm_ipc_port_addr dest_addr;
+	int conn_status;
+
+	struct list_head port_rx_q;
+	struct mutex port_rx_q_lock_lhc3;
+	char rx_ws_name[MAX_WS_NAME_SZ];
+	struct wakeup_source port_rx_ws;
+	wait_queue_head_t port_rx_wait_q;
+	wait_queue_head_t port_tx_wait_q;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	int restart_state;
 	spinlock_t restart_lock;
 	wait_queue_head_t restart_wait;
 
+<<<<<<< HEAD
+=======
+	void *rport_info;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	void *endpoint;
 	void (*notify)(unsigned event, void *oob_data,
 		       size_t oob_data_len, void *priv);

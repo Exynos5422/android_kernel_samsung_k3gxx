@@ -117,7 +117,11 @@ static int xfrm4_mode_tunnel_output(struct xfrm_state *x, struct sk_buff *skb)
 
 	top_iph->frag_off = (flags & XFRM_STATE_NOPMTUDISC) ?
 		0 : (XFRM_MODE_SKB_CB(skb)->frag_off & htons(IP_DF));
+<<<<<<< HEAD
 	ip_select_ident(top_iph, dst->child, NULL);
+=======
+	ip_select_ident(skb, dst->child, NULL);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	top_iph->ttl = ip4_dst_hoplimit(dst->child);
 

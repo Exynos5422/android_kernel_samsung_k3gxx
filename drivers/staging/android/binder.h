@@ -20,6 +20,7 @@
 #ifndef _LINUX_BINDER_H
 #define _LINUX_BINDER_H
 
+<<<<<<< HEAD
 #include <linux/ioctl.h>
 
 #define B_PACK_CHARS(c1, c2, c3, c4) \
@@ -329,6 +330,13 @@ enum binder_driver_command_protocol {
 	 * void *: cookie
 	 */
 };
+=======
+#ifdef CONFIG_ANDROID_BINDER_IPC_32BIT
+#define BINDER_IPC_32BIT 1
+#endif
+
+#include "uapi/binder.h"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #endif /* _LINUX_BINDER_H */
 

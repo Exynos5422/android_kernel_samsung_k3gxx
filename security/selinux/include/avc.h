@@ -102,7 +102,11 @@ static inline u32 avc_audit_required(u32 requested,
 }
 
 int slow_avc_audit(u32 ssid, u32 tsid, u16 tclass,
+<<<<<<< HEAD
 		   u32 requested, u32 audited, u32 denied,
+=======
+		   u32 requested, u32 audited, u32 denied, int result,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		   struct common_audit_data *a,
 		   unsigned flags);
 
@@ -137,12 +141,21 @@ static inline int avc_audit(u32 ssid, u32 tsid,
 	if (likely(!audited))
 		return 0;
 	return slow_avc_audit(ssid, tsid, tclass,
+<<<<<<< HEAD
 			      requested, audited, 0,
 			      a, flags);
 }
 
 #define AVC_STRICT 0
 #define AVC_OPERATION_CMD 2 
+=======
+			      requested, audited, denied, result,
+			      a, flags);
+}
+
+#define AVC_STRICT 1 /* Ignore permissive mode. */
+#define AVC_OPERATION_CMD 2	/* ignore command when updating operations */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 int avc_has_perm_noaudit(u32 ssid, u32 tsid,
 			 u16 tclass, u32 requested,
 			 unsigned flags,

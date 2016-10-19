@@ -148,7 +148,11 @@ static u32 map_id_range_down(struct uid_gid_map *map, u32 id, u32 count)
 
 	/* Find the matching extent */
 	extents = map->nr_extents;
+<<<<<<< HEAD
 	smp_read_barrier_depends();
+=======
+	smp_rmb();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	for (idx = 0; idx < extents; idx++) {
 		first = map->extent[idx].first;
 		last = first + map->extent[idx].count - 1;
@@ -172,7 +176,11 @@ static u32 map_id_down(struct uid_gid_map *map, u32 id)
 
 	/* Find the matching extent */
 	extents = map->nr_extents;
+<<<<<<< HEAD
 	smp_read_barrier_depends();
+=======
+	smp_rmb();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	for (idx = 0; idx < extents; idx++) {
 		first = map->extent[idx].first;
 		last = first + map->extent[idx].count - 1;
@@ -195,7 +203,11 @@ static u32 map_id_up(struct uid_gid_map *map, u32 id)
 
 	/* Find the matching extent */
 	extents = map->nr_extents;
+<<<<<<< HEAD
 	smp_read_barrier_depends();
+=======
+	smp_rmb();
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	for (idx = 0; idx < extents; idx++) {
 		first = map->extent[idx].lower_first;
 		last = first + map->extent[idx].count - 1;
@@ -611,9 +623,14 @@ static ssize_t map_write(struct file *file, const char __user *buf,
 	 * were written before the count of the extents.
 	 *
 	 * To achieve this smp_wmb() is used on guarantee the write
+<<<<<<< HEAD
 	 * order and smp_read_barrier_depends() is guaranteed that we
 	 * don't have crazy architectures returning stale data.
 	 *
+=======
+	 * order and smp_rmb() is guaranteed that we don't have crazy
+	 * architectures returning stale data.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	 */
 	mutex_lock(&id_map_mutex);
 
@@ -801,6 +818,7 @@ static bool new_idmap_permitted(const struct file *file,
 				struct user_namespace *ns, int cap_setid,
 				struct uid_gid_map *new_map)
 {
+<<<<<<< HEAD
 	const struct cred *cred = file->f_cred;
 	/* Don't allow mappings that would allow anything that wouldn't
 	 * be allowed without the establishment of unprivileged mappings.
@@ -811,6 +829,19 @@ static bool new_idmap_permitted(const struct file *file,
 		if (cap_setid == CAP_SETUID) {
 			kuid_t uid = make_kuid(ns->parent, id);
 			if (uid_eq(uid, cred->euid))
+=======
+	/* Allow mapping to your own filesystem ids */
+	if ((new_map->nr_extents == 1) && (new_map->extent[0].count == 1)) {
+		u32 id = new_map->extent[0].lower_first;
+		if (cap_setid == CAP_SETUID) {
+			kuid_t uid = make_kuid(ns->parent, id);
+			if (uid_eq(uid, file->f_cred->fsuid))
+				return true;
+		}
+		else if (cap_setid == CAP_SETGID) {
+			kgid_t gid = make_kgid(ns->parent, id);
+			if (gid_eq(gid, file->f_cred->fsgid))
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 				return true;
 		}
 	}
@@ -830,6 +861,7 @@ static bool new_idmap_permitted(const struct file *file,
 	return false;
 }
 
+<<<<<<< HEAD
 bool userns_may_setgroups(const struct user_namespace *ns)
 {
 	bool allowed;
@@ -844,6 +876,8 @@ bool userns_may_setgroups(const struct user_namespace *ns)
 	return allowed;
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static void *userns_get(struct task_struct *task)
 {
 	struct user_namespace *user_ns;

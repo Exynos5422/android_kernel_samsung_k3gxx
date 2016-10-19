@@ -474,6 +474,11 @@ static int kvaser_usb_get_card_info(struct kvaser_usb *dev)
 		return err;
 
 	dev->nchannels = msg.u.cardinfo.nchannels;
+<<<<<<< HEAD
+=======
+	if (dev->nchannels > MAX_NET_DEVICES)
+		return -EINVAL;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return 0;
 }
@@ -1544,9 +1549,15 @@ static int kvaser_usb_init_one(struct usb_interface *intf,
 	return 0;
 }
 
+<<<<<<< HEAD
 static void kvaser_usb_get_endpoints(const struct usb_interface *intf,
 				     struct usb_endpoint_descriptor **in,
 				     struct usb_endpoint_descriptor **out)
+=======
+static int kvaser_usb_get_endpoints(const struct usb_interface *intf,
+				    struct usb_endpoint_descriptor **in,
+				    struct usb_endpoint_descriptor **out)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	const struct usb_host_interface *iface_desc;
 	struct usb_endpoint_descriptor *endpoint;
@@ -1557,12 +1568,27 @@ static void kvaser_usb_get_endpoints(const struct usb_interface *intf,
 	for (i = 0; i < iface_desc->desc.bNumEndpoints; ++i) {
 		endpoint = &iface_desc->endpoint[i].desc;
 
+<<<<<<< HEAD
 		if (usb_endpoint_is_bulk_in(endpoint))
 			*in = endpoint;
 
 		if (usb_endpoint_is_bulk_out(endpoint))
 			*out = endpoint;
 	}
+=======
+		if (!*in && usb_endpoint_is_bulk_in(endpoint))
+			*in = endpoint;
+
+		if (!*out && usb_endpoint_is_bulk_out(endpoint))
+			*out = endpoint;
+
+		/* use first bulk endpoint for in and out */
+		if (*in && *out)
+			return 0;
+	}
+
+	return -ENODEV;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static int kvaser_usb_probe(struct usb_interface *intf,
@@ -1576,8 +1602,13 @@ static int kvaser_usb_probe(struct usb_interface *intf,
 	if (!dev)
 		return -ENOMEM;
 
+<<<<<<< HEAD
 	kvaser_usb_get_endpoints(intf, &dev->bulk_in, &dev->bulk_out);
 	if (!dev->bulk_in || !dev->bulk_out) {
+=======
+	err = kvaser_usb_get_endpoints(intf, &dev->bulk_in, &dev->bulk_out);
+	if (err) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		dev_err(&intf->dev, "Cannot get usb endpoint(s)");
 		return err;
 	}

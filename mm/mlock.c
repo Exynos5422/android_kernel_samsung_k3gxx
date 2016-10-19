@@ -23,10 +23,17 @@
 
 int can_do_mlock(void)
 {
+<<<<<<< HEAD
 	if (capable(CAP_IPC_LOCK))
 		return 1;
 	if (rlimit(RLIMIT_MEMLOCK) != 0)
 		return 1;
+=======
+	if (rlimit(RLIMIT_MEMLOCK) != 0)
+		return 1;
+	if (capable(CAP_IPC_LOCK))
+		return 1;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 EXPORT_SYMBOL(can_do_mlock);
@@ -284,7 +291,13 @@ static int mlock_fixup(struct vm_area_struct *vma, struct vm_area_struct **prev,
 	int lock = !!(newflags & VM_LOCKED);
 
 	if (newflags == vma->vm_flags || (vma->vm_flags & VM_SPECIAL) ||
+<<<<<<< HEAD
 	    is_vm_hugetlb_page(vma) || vma == get_gate_vma(current->mm))
+=======
+	    is_vm_hugetlb_page(vma) || vma == get_gate_vma(current->mm) ||
+	    ((use_user_accessible_timers()) &&
+		(vma == get_user_timers_vma(current->mm))))
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		goto out;	/* don't set VM_LOCKED,  don't count */
 
 	pgoff = vma->vm_pgoff + ((start - vma->vm_start) >> PAGE_SHIFT);

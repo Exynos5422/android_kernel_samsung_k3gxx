@@ -64,7 +64,11 @@ int of_dma_controller_register(struct device_node *np,
 				void *data)
 {
 	struct of_dma	*ofdma;
+<<<<<<< HEAD
 	int		nbcells = 0;
+=======
+	int		nbcells;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	const __be32	*prop;
 
 	if (!np || !of_dma_xlate) {
@@ -154,6 +158,7 @@ static int of_dma_match_channel(struct device_node *np, const char *name,
 }
 
 /**
+<<<<<<< HEAD
  * of_dma_get_mcode_addr - Get the DMA micro code buffer address.
  * @np:		device node of DMA controller
  *
@@ -192,6 +197,8 @@ bool of_dma_secure_mode(struct device_node *np)
 EXPORT_SYMBOL_GPL(of_dma_secure_mode);
 
 /**
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  * of_dma_request_slave_channel - Get the DMA slave channel
  * @np:		device node to get DMA request from
  * @name:	name of desired channel

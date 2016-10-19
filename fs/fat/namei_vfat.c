@@ -1043,12 +1043,15 @@ static const struct inode_operations vfat_dir_inode_operations = {
 	.rename		= vfat_rename,
 	.setattr	= fat_setattr,
 	.getattr	= fat_getattr,
+<<<<<<< HEAD
 #ifdef CONFIG_FAT_VIRTUAL_XATTR
 	.setxattr	= fat_setxattr,
 	.getxattr	= fat_getxattr,
 	.listxattr	= fat_listxattr,
 	.removexattr	= fat_removexattr,
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 static void setup(struct super_block *sb)

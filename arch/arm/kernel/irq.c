@@ -41,7 +41,10 @@
 #include <asm/mach/arch.h>
 #include <asm/mach/irq.h>
 #include <asm/mach/time.h>
+<<<<<<< HEAD
 #include <mach/exynos-ss.h>
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 unsigned long irq_err_count;
 
@@ -66,9 +69,13 @@ int arch_show_interrupts(struct seq_file *p, int prec)
 void handle_IRQ(unsigned int irq, struct pt_regs *regs)
 {
 	struct pt_regs *old_regs = set_irq_regs(regs);
+<<<<<<< HEAD
 	unsigned long long start_time;
 
 	exynos_ss_irq_exit_var(start_time);
+=======
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	irq_enter();
 
 	/*
@@ -84,8 +91,11 @@ void handle_IRQ(unsigned int irq, struct pt_regs *regs)
 	}
 
 	irq_exit();
+<<<<<<< HEAD
 	exynos_ss_irq_exit(irq, start_time);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	set_irq_regs(old_regs);
 }
 
@@ -150,8 +160,11 @@ static bool migrate_one_irq(struct irq_desc *desc)
 {
 	struct irq_data *d = irq_desc_get_irq_data(desc);
 	const struct cpumask *affinity = d->affinity;
+<<<<<<< HEAD
 	struct irq_chip *c;
 	bool ret = false;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/*
 	 * If this is a per-CPU interrupt, or the affinity does not
@@ -160,6 +173,7 @@ static bool migrate_one_irq(struct irq_desc *desc)
 	if (irqd_is_per_cpu(d) || !cpumask_test_cpu(smp_processor_id(), affinity))
 		return false;
 
+<<<<<<< HEAD
 	if (cpumask_any_and(affinity, cpu_online_mask) >= nr_cpu_ids) {
 		affinity = cpu_online_mask;
 		ret = true;
@@ -172,6 +186,12 @@ static bool migrate_one_irq(struct irq_desc *desc)
 		cpumask_copy(d->affinity, affinity);
 
 	return ret;
+=======
+	if (cpumask_any_and(affinity, cpu_online_mask) >= nr_cpu_ids)
+		affinity = cpu_online_mask;
+
+	return irq_set_affinity_locked(d, affinity, 0) == 0;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 /*

@@ -19,6 +19,7 @@
 #ifndef __ASM_TLB_H
 #define __ASM_TLB_H
 
+<<<<<<< HEAD
 #include <linux/pagemap.h>
 #include <linux/swap.h>
 
@@ -65,12 +66,38 @@ static inline void tlb_flush(struct mmu_gather *tlb)
 		flush_tlb_range(tlb->vma, tlb->range_start, tlb->range_end);
 		tlb->range_start = TASK_SIZE;
 		tlb->range_end = 0;
+=======
+#define  __tlb_remove_pmd_tlb_entry __tlb_remove_pmd_tlb_entry
+
+#include <asm-generic/tlb.h>
+
+/*
+ * There's three ways the TLB shootdown code is used:
+ *  1. Unmapping a range of vmas.  See zap_page_range(), unmap_region().
+ *     tlb->fullmm = 0, and tlb_start_vma/tlb_end_vma will be called.
+ *  2. Unmapping all vmas.  See exit_mmap().
+ *     tlb->fullmm = 1, and tlb_start_vma/tlb_end_vma will be called.
+ *     Page tables will be freed.
+ *  3. Unmapping argument pages.  See shift_arg_pages().
+ *     tlb->fullmm = 0, but tlb_start_vma/tlb_end_vma will not be called.
+ */
+static inline void tlb_flush(struct mmu_gather *tlb)
+{
+	if (tlb->fullmm) {
+		flush_tlb_mm(tlb->mm);
+	} else if (tlb->end > 0) {
+		struct vm_area_struct vma = { .vm_mm = tlb->mm, };
+		flush_tlb_range(&vma, tlb->start, tlb->end);
+		tlb->start = TASK_SIZE;
+		tlb->end = 0;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 }
 
 static inline void tlb_add_flush(struct mmu_gather *tlb, unsigned long addr)
 {
 	if (!tlb->fullmm) {
+<<<<<<< HEAD
 		if (addr < tlb->range_start)
 			tlb->range_start = addr;
 		if (addr + PAGE_SIZE > tlb->range_end)
@@ -128,6 +155,18 @@ tlb_finish_mmu(struct mmu_gather *tlb, unsigned long start, unsigned long end)
  */
 static inline void
 tlb_remove_tlb_entry(struct mmu_gather *tlb, pte_t *ptep, unsigned long addr)
+=======
+		tlb->start = min(tlb->start, addr);
+		tlb->end = max(tlb->end, addr + PAGE_SIZE);
+	}
+}
+
+/*
+ * Memorize the range for the TLB flush.
+ */
+static inline void __tlb_remove_tlb_entry(struct mmu_gather *tlb, pte_t *ptep,
+					  unsigned long addr)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	tlb_add_flush(tlb, addr);
 }
@@ -137,6 +176,7 @@ tlb_remove_tlb_entry(struct mmu_gather *tlb, pte_t *ptep, unsigned long addr)
  * case where we're doing a full MM flush.  When we're doing a munmap,
  * the vmas are adjusted to only cover the region to be torn down.
  */
+<<<<<<< HEAD
 static inline void
 tlb_start_vma(struct mmu_gather *tlb, struct vm_area_struct *vma)
 {
@@ -149,11 +189,25 @@ tlb_start_vma(struct mmu_gather *tlb, struct vm_area_struct *vma)
 
 static inline void
 tlb_end_vma(struct mmu_gather *tlb, struct vm_area_struct *vma)
+=======
+static inline void tlb_start_vma(struct mmu_gather *tlb,
+				 struct vm_area_struct *vma)
+{
+	if (!tlb->fullmm) {
+		tlb->start = TASK_SIZE;
+		tlb->end = 0;
+	}
+}
+
+static inline void tlb_end_vma(struct mmu_gather *tlb,
+			       struct vm_area_struct *vma)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	if (!tlb->fullmm)
 		tlb_flush(tlb);
 }
 
+<<<<<<< HEAD
 static inline int __tlb_remove_page(struct mmu_gather *tlb, struct page *page)
 {
 	tlb->pages[tlb->nr++] = page;
@@ -169,6 +223,10 @@ static inline void tlb_remove_page(struct mmu_gather *tlb, struct page *page)
 
 static inline void __pte_free_tlb(struct mmu_gather *tlb, pgtable_t pte,
 	unsigned long addr)
+=======
+static inline void __pte_free_tlb(struct mmu_gather *tlb, pgtable_t pte,
+				  unsigned long addr)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	pgtable_page_dtor(pte);
 	tlb_add_flush(tlb, addr);
@@ -184,10 +242,18 @@ static inline void __pmd_free_tlb(struct mmu_gather *tlb, pmd_t *pmdp,
 }
 #endif
 
+<<<<<<< HEAD
 #define pte_free_tlb(tlb, ptep, addr)	__pte_free_tlb(tlb, ptep, addr)
 #define pmd_free_tlb(tlb, pmdp, addr)	__pmd_free_tlb(tlb, pmdp, addr)
 #define pud_free_tlb(tlb, pudp, addr)	pud_free((tlb)->mm, pudp)
 
 #define tlb_migrate_finish(mm)		do { } while (0)
+=======
+static inline void __tlb_remove_pmd_tlb_entry(struct mmu_gather *tlb, pmd_t *pmdp,
+						unsigned long address)
+{
+	tlb_add_flush(tlb, address);
+}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #endif

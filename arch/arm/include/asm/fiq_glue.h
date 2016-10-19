@@ -18,8 +18,16 @@ struct fiq_glue_handler {
 	void (*fiq)(struct fiq_glue_handler *h, void *regs, void *svc_sp);
 	void (*resume)(struct fiq_glue_handler *h);
 };
+<<<<<<< HEAD
 
 int fiq_glue_register_handler(struct fiq_glue_handler *handler);
+=======
+typedef void (*fiq_return_handler_t)(void);
+
+int fiq_glue_register_handler(struct fiq_glue_handler *handler);
+int fiq_glue_set_return_handler(fiq_return_handler_t fiq_return);
+int fiq_glue_clear_return_handler(fiq_return_handler_t fiq_return);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #ifdef CONFIG_FIQ_GLUE
 void fiq_glue_resume(void);

@@ -370,6 +370,19 @@ struct smb_version_operations {
 	void (*new_lease_key)(struct cifs_fid *fid);
 	int (*calc_signature)(struct smb_rqst *rqst,
 				   struct TCP_Server_Info *server);
+<<<<<<< HEAD
+=======
+	ssize_t (*query_all_EAs)(const unsigned int, struct cifs_tcon *,
+			const unsigned char *, const unsigned char *, char *,
+			size_t, const struct nls_table *, int);
+	int (*set_EA)(const unsigned int, struct cifs_tcon *, const char *,
+			const char *, const void *, const __u16,
+			const struct nls_table *, int);
+	struct cifs_ntsd * (*get_acl)(struct cifs_sb_info *, struct inode *,
+			const char *, u32 *);
+	int (*set_acl)(struct cifs_ntsd *, __u32, struct inode *, const char *,
+			int);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 struct smb_version_values {

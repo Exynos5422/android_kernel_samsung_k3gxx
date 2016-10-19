@@ -54,6 +54,7 @@ ssize_t iio_buffer_read_first_n_outer(struct file *filp, char __user *buf,
 {
 	struct iio_dev *indio_dev = filp->private_data;
 	struct iio_buffer *rb = indio_dev->buffer;
+<<<<<<< HEAD
 	ssize_t ret;
 
 	if (!rb || !rb->access->read_first_n)
@@ -63,6 +64,12 @@ ssize_t iio_buffer_read_first_n_outer(struct file *filp, char __user *buf,
 	ret = rb->access->read_first_n(rb, n, buf);
 	mutex_unlock(&indio_dev->mlock);
 	return ret;
+=======
+
+	if (!rb || !rb->access->read_first_n)
+		return -EINVAL;
+	return rb->access->read_first_n(rb, n, buf);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 /**
@@ -74,9 +81,12 @@ unsigned int iio_buffer_poll(struct file *filp,
 	struct iio_dev *indio_dev = filp->private_data;
 	struct iio_buffer *rb = indio_dev->buffer;
 
+<<<<<<< HEAD
 	if (rb->stufftoread)
 		return POLLIN | POLLRDNORM;
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	poll_wait(filp, &rb->pollq, wait);
 	if (rb->stufftoread)
 		return POLLIN | POLLRDNORM;
@@ -127,7 +137,12 @@ static ssize_t iio_scan_el_show(struct device *dev,
 	int ret;
 	struct iio_dev *indio_dev = dev_to_iio_dev(dev);
 
+<<<<<<< HEAD
 	ret = test_bit(to_iio_dev_attr(attr)->address,
+=======
+	/* Ensure ret is 0 or 1. */
+	ret = !!test_bit(to_iio_dev_attr(attr)->address,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		       indio_dev->buffer->scan_mask);
 
 	return sprintf(buf, "%d\n", ret);
@@ -770,7 +785,12 @@ int iio_scan_mask_query(struct iio_dev *indio_dev,
 	if (!buffer->scan_mask)
 		return 0;
 
+<<<<<<< HEAD
 	return test_bit(bit, buffer->scan_mask);
+=======
+	/* Ensure return value is 0 or 1. */
+	return !!test_bit(bit, buffer->scan_mask);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 EXPORT_SYMBOL_GPL(iio_scan_mask_query);
 

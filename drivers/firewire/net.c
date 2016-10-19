@@ -929,8 +929,11 @@ static void fwnet_write_complete(struct fw_card *card, int rcode,
 	if (rcode == RCODE_COMPLETE) {
 		fwnet_transmit_packet_done(ptask);
 	} else {
+<<<<<<< HEAD
 		fwnet_transmit_packet_failed(ptask);
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (printk_timed_ratelimit(&j,  1000) || rcode != last_rcode) {
 			dev_err(&ptask->dev->netdev->dev,
 				"fwnet_write_complete failed: %x (skipped %d)\n",
@@ -938,8 +941,15 @@ static void fwnet_write_complete(struct fw_card *card, int rcode,
 
 			errors_skipped = 0;
 			last_rcode = rcode;
+<<<<<<< HEAD
 		} else
 			errors_skipped++;
+=======
+		} else {
+			errors_skipped++;
+		}
+		fwnet_transmit_packet_failed(ptask);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 }
 

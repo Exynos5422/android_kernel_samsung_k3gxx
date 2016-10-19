@@ -203,9 +203,12 @@
 
 #include <linux/sched.h>
 
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_LAZY_MMU
 extern void flush_tlb_l2_page(pmd_t *pmd);
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 struct cpu_tlb_fns {
 	void (*flush_user_range)(unsigned long, unsigned long, struct vm_area_struct *);
 	void (*flush_kern_range)(unsigned long, unsigned long);
@@ -395,7 +398,11 @@ local_flush_tlb_page(struct vm_area_struct *vma, unsigned long uaddr)
 	tlb_op(TLB_V6_U_PAGE, "c8, c7, 1", uaddr);
 	tlb_op(TLB_V6_D_PAGE, "c8, c6, 1", uaddr);
 	tlb_op(TLB_V6_I_PAGE, "c8, c5, 1", uaddr);
+<<<<<<< HEAD
 #ifdef CONFIG_ARM_ERRATA_720789
+=======
+#if defined(CONFIG_ARM_ERRATA_720789) || defined(CONFIG_ARCH_MSM8X60)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	tlb_op(TLB_V7_UIS_PAGE, "c8, c3, 3", uaddr & PAGE_MASK);
 #else
 	tlb_op(TLB_V7_UIS_PAGE, "c8, c3, 1", uaddr);
@@ -424,7 +431,15 @@ static inline void local_flush_tlb_kernel_page(unsigned long kaddr)
 	tlb_op(TLB_V6_U_PAGE, "c8, c7, 1", kaddr);
 	tlb_op(TLB_V6_D_PAGE, "c8, c6, 1", kaddr);
 	tlb_op(TLB_V6_I_PAGE, "c8, c5, 1", kaddr);
+<<<<<<< HEAD
 	tlb_op(TLB_V7_UIS_PAGE, "c8, c3, 1", kaddr);
+=======
+#ifdef CONFIG_ARCH_MSM8X60
+	tlb_op(TLB_V7_UIS_PAGE, "c8, c3, 3", kaddr);
+#else
+	tlb_op(TLB_V7_UIS_PAGE, "c8, c3, 1", kaddr);
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	if (tlb_flag(TLB_BARRIER)) {
 		dsb();
@@ -501,6 +516,7 @@ static inline void clean_pmd_entry(void *pmd)
 /*
  * Convert calls to our calling convention.
  */
+<<<<<<< HEAD
 #define __local_flush_tlb_range(vma,start,end)	__cpu_flush_user_tlb_range(start,end,vma)
 #define __local_flush_tlb_kernel_range(s,e)	__cpu_flush_kern_tlb_range(s,e)
 
@@ -511,12 +527,17 @@ static inline void clean_pmd_entry(void *pmd)
 #define MAX_TLB_RANGE	(1024UL << PAGE_SHIFT)
 
 
+=======
+#define local_flush_tlb_range(vma,start,end)	__cpu_flush_user_tlb_range(start,end,vma)
+#define local_flush_tlb_kernel_range(s,e)	__cpu_flush_kern_tlb_range(s,e)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #ifndef CONFIG_SMP
 #define flush_tlb_all		local_flush_tlb_all
 #define flush_tlb_mm		local_flush_tlb_mm
 #define flush_tlb_page		local_flush_tlb_page
 #define flush_tlb_kernel_page	local_flush_tlb_kernel_page
+<<<<<<< HEAD
 
 static inline void local_flush_tlb_range(struct vm_area_struct *vma,
 				   unsigned long start, unsigned long end)
@@ -535,6 +556,8 @@ static inline void local_flush_tlb_kernel_range(unsigned long start, unsigned lo
 		flush_tlb_all();
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define flush_tlb_range		local_flush_tlb_range
 #define flush_tlb_kernel_range	local_flush_tlb_kernel_range
 #define flush_bp_all		local_flush_bp_all
@@ -543,6 +566,7 @@ extern void flush_tlb_all(void);
 extern void flush_tlb_mm(struct mm_struct *mm);
 extern void flush_tlb_page(struct vm_area_struct *vma, unsigned long uaddr);
 extern void flush_tlb_kernel_page(unsigned long kaddr);
+<<<<<<< HEAD
 
 static inline void local_flush_tlb_range(struct vm_area_struct *vma,
 				   unsigned long start, unsigned long end)
@@ -561,6 +585,8 @@ static inline void local_flush_tlb_kernel_range(unsigned long start, unsigned lo
 		flush_tlb_all();
 }
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 extern void flush_tlb_range(struct vm_area_struct *vma, unsigned long start, unsigned long end);
 extern void flush_tlb_kernel_range(unsigned long start, unsigned long end);
 extern void flush_bp_all(void);
@@ -582,6 +608,11 @@ static inline void update_mmu_cache(struct vm_area_struct *vma,
 }
 #endif
 
+<<<<<<< HEAD
+=======
+#define update_mmu_cache_pmd(vma, address, pmd) do { } while (0)
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif
 
 #endif /* CONFIG_MMU */

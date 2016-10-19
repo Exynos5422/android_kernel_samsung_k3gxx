@@ -3919,6 +3919,10 @@ static void b43legacy_remove(struct ssb_device *dev)
 	 * as the ieee80211 unreg will destroy the workqueue. */
 	cancel_work_sync(&wldev->restart_work);
 	cancel_work_sync(&wl->firmware_load);
+<<<<<<< HEAD
+=======
+	complete(&wldev->fw_load_complete);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	B43legacy_WARN_ON(!wl);
 	if (!wldev->fw.ucode)

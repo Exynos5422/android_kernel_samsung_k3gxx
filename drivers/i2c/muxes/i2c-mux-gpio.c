@@ -31,15 +31,24 @@ static void i2c_mux_gpio_set(const struct gpiomux *mux, unsigned val)
 	int i;
 
 	for (i = 0; i < mux->data.n_gpios; i++)
+<<<<<<< HEAD
 		gpio_set_value(mux->gpio_base + mux->data.gpios[i],
 			       val & (1 << i));
+=======
+		gpio_set_value_cansleep(mux->gpio_base + mux->data.gpios[i],
+					val & (1 << i));
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static int i2c_mux_gpio_select(struct i2c_adapter *adap, void *data, u32 chan)
 {
 	struct gpiomux *mux = data;
 
+<<<<<<< HEAD
 	i2c_mux_gpio_set(mux, mux->data.values[chan]);
+=======
+	i2c_mux_gpio_set(mux, chan);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return 0;
 }
@@ -223,7 +232,11 @@ static int i2c_mux_gpio_probe(struct platform_device *pdev)
 		unsigned int class = mux->data.classes ? mux->data.classes[i] : 0;
 
 		mux->adap[i] = i2c_add_mux_adapter(parent, &pdev->dev, mux, nr,
+<<<<<<< HEAD
 						   i, class,
+=======
+						   mux->data.values[i], class,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 						   i2c_mux_gpio_select, deselect);
 		if (!mux->adap[i]) {
 			ret = -ENODEV;

@@ -490,6 +490,10 @@ static int ip6_frag_reasm(struct frag_queue *fq, struct sk_buff *prev,
 	ipv6_hdr(head)->payload_len = htons(payload_len);
 	ipv6_change_dsfield(ipv6_hdr(head), 0xff, ecn);
 	IP6CB(head)->nhoff = nhoff;
+<<<<<<< HEAD
+=======
+	IP6CB(head)->flags |= IP6SKB_FRAGMENTED;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	/* Yes, and fold redundant checksum back. 8) */
 	if (head->ip_summed == CHECKSUM_COMPLETE)
@@ -524,6 +528,12 @@ static int ipv6_frag_rcv(struct sk_buff *skb)
 	struct net *net = dev_net(skb_dst(skb)->dev);
 	int evicted;
 
+<<<<<<< HEAD
+=======
+	if (IP6CB(skb)->flags & IP6SKB_FRAGMENTED)
+		goto fail_hdr;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	IP6_INC_STATS_BH(net, ip6_dst_idev(skb_dst(skb)), IPSTATS_MIB_REASMREQDS);
 
 	/* Jumbo payload inhibits frag. header */
@@ -544,6 +554,10 @@ static int ipv6_frag_rcv(struct sk_buff *skb)
 				 ip6_dst_idev(skb_dst(skb)), IPSTATS_MIB_REASMOKS);
 
 		IP6CB(skb)->nhoff = (u8 *)fhdr - skb_network_header(skb);
+<<<<<<< HEAD
+=======
+		IP6CB(skb)->flags |= IP6SKB_FRAGMENTED;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		return 1;
 	}
 

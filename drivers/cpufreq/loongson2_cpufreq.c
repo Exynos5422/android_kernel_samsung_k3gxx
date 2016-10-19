@@ -72,7 +72,11 @@ static int loongson2_cpufreq_target(struct cpufreq_policy *policy,
 
 	freq =
 	    ((cpu_clock_freq / 1000) *
+<<<<<<< HEAD
 	     loongson2_clockmod_table[newstate].index) / 8;
+=======
+	     loongson2_clockmod_table[newstate].driver_data) / 8;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (freq < policy->min || freq > policy->max)
 		return -EINVAL;
 
@@ -158,7 +162,10 @@ static struct freq_attr *loongson2_table_attr[] = {
 };
 
 static struct cpufreq_driver loongson2_cpufreq_driver = {
+<<<<<<< HEAD
 	.owner = THIS_MODULE,
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	.name = "loongson2",
 	.init = loongson2_cpufreq_cpu_init,
 	.verify = loongson2_cpufreq_verify,

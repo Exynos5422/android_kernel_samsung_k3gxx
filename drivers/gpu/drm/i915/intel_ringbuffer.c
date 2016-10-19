@@ -907,6 +907,21 @@ void intel_ring_setup_status_page(struct intel_ring_buffer *ring)
 
 	I915_WRITE(mmio, (u32)ring->status_page.gfx_addr);
 	POSTING_READ(mmio);
+<<<<<<< HEAD
+=======
+
+	/* Flush the TLB for this page */
+	if (INTEL_INFO(dev)->gen >= 6) {
+		u32 reg = RING_INSTPM(ring->mmio_base);
+		I915_WRITE(reg,
+			   _MASKED_BIT_ENABLE(INSTPM_TLB_INVALIDATE |
+					      INSTPM_SYNC_FLUSH));
+		if (wait_for((I915_READ(reg) & INSTPM_SYNC_FLUSH) == 0,
+			     1000))
+			DRM_ERROR("%s: wait for SyncFlush to complete for TLB invalidation timed out\n",
+				  ring->name);
+	}
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 static int
@@ -1447,8 +1462,13 @@ intel_ring_alloc_seqno(struct intel_ring_buffer *ring)
 	return i915_gem_get_seqno(ring->dev, &ring->outstanding_lazy_request);
 }
 
+<<<<<<< HEAD
 static int __intel_ring_begin(struct intel_ring_buffer *ring,
 			      int bytes)
+=======
+static int __intel_ring_prepare(struct intel_ring_buffer *ring,
+				int bytes)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	int ret;
 
@@ -1464,7 +1484,10 @@ static int __intel_ring_begin(struct intel_ring_buffer *ring,
 			return ret;
 	}
 
+<<<<<<< HEAD
 	ring->space -= bytes;
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return 0;
 }
 
@@ -1479,12 +1502,24 @@ int intel_ring_begin(struct intel_ring_buffer *ring,
 	if (ret)
 		return ret;
 
+<<<<<<< HEAD
+=======
+	ret = __intel_ring_prepare(ring, num_dwords * sizeof(uint32_t));
+	if (ret)
+		return ret;
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	/* Preallocate the olr before touching the ring */
 	ret = intel_ring_alloc_seqno(ring);
 	if (ret)
 		return ret;
 
+<<<<<<< HEAD
 	return __intel_ring_begin(ring, num_dwords * sizeof(uint32_t));
+=======
+	ring->space -= num_dwords * sizeof(uint32_t);
+	return 0;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 }
 
 void intel_ring_init_seqno(struct intel_ring_buffer *ring, u32 seqno)

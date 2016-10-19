@@ -475,6 +475,10 @@ static void sync_cmos_clock(struct work_struct *work)
 	 * called as close as possible to 500 ms before the new second starts.
 	 * This code is run on a timer.  If the clock is set, that timer
 	 * may not expire at the correct time.  Thus, we adjust...
+<<<<<<< HEAD
+=======
+	 * We want the clock to be within a couple of ticks from the target.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	 */
 	if (!ntp_synced()) {
 		/*
@@ -485,7 +489,11 @@ static void sync_cmos_clock(struct work_struct *work)
 	}
 
 	getnstimeofday(&now);
+<<<<<<< HEAD
 	if (abs(now.tv_nsec - (NSEC_PER_SEC / 2)) <= tick_nsec / 2) {
+=======
+	if (abs(now.tv_nsec - (NSEC_PER_SEC / 2)) <= tick_nsec * 5) {
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		struct timespec adjust = now;
 
 		fail = -ENODEV;
@@ -516,13 +524,21 @@ static void sync_cmos_clock(struct work_struct *work)
 	schedule_delayed_work(&sync_cmos_work, timespec_to_jiffies(&next));
 }
 
+<<<<<<< HEAD
 static void notify_cmos_timer(void)
+=======
+void ntp_notify_cmos_timer(void)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	schedule_delayed_work(&sync_cmos_work, 0);
 }
 
 #else
+<<<<<<< HEAD
 static inline void notify_cmos_timer(void) { }
+=======
+void ntp_notify_cmos_timer(void) { }
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif
 
 
@@ -687,8 +703,11 @@ int __do_adjtimex(struct timex *txc, struct timespec *ts, s32 *time_tai)
 	if (!(time_status & STA_NANO))
 		txc->time.tv_usec /= NSEC_PER_USEC;
 
+<<<<<<< HEAD
 	notify_cmos_timer();
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return result;
 }
 

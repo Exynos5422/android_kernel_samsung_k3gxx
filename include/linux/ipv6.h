@@ -41,6 +41,10 @@ struct ipv6_devconf {
 	__s32		accept_source_route;
 #ifdef CONFIG_IPV6_OPTIMISTIC_DAD
 	__s32		optimistic_dad;
+<<<<<<< HEAD
+=======
+	__s32		use_optimistic;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #endif
 #ifdef CONFIG_IPV6_MROUTE
 	__s32		mc_forwarding;
@@ -49,6 +53,12 @@ struct ipv6_devconf {
 	__s32		accept_dad;
 	__s32		force_tllao;
 	__s32           ndisc_notify;
+<<<<<<< HEAD
+=======
+	__s32		accept_ra_prefix_route;
+	__s32		accept_ra_mtu;
+	__s32		use_oif_addrs_only;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	void		*sysctl;
 };
 
@@ -102,6 +112,10 @@ struct inet6_skb_parm {
 #define IP6SKB_FORWARDED	2
 #define IP6SKB_REROUTED		4
 #define IP6SKB_ROUTERALERT	8
+<<<<<<< HEAD
+=======
+#define IP6SKB_FRAGMENTED      16
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };
 
 #define IP6CB(skb)	((struct inet6_skb_parm*)((skb)->cb))
@@ -217,7 +231,11 @@ struct ipv6_pinfo {
 	struct ipv6_ac_socklist	*ipv6_ac_list;
 	struct ipv6_fl_socklist __rcu *ipv6_fl_list;
 
+<<<<<<< HEAD
 	struct ipv6_txoptions	*opt;
+=======
+	struct ipv6_txoptions __rcu	*opt;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct sk_buff		*pktoptions;
 	struct sk_buff		*rxpmtu;
 	struct {

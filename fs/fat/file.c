@@ -451,10 +451,13 @@ EXPORT_SYMBOL_GPL(fat_setattr);
 const struct inode_operations fat_file_inode_operations = {
 	.setattr	= fat_setattr,
 	.getattr	= fat_getattr,
+<<<<<<< HEAD
 #ifdef CONFIG_FAT_VIRTUAL_XATTR
 	.setxattr	= fat_setxattr,
 	.getxattr	= fat_getxattr,
 	.listxattr	= fat_listxattr,
 	.removexattr	= fat_removexattr,
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 };

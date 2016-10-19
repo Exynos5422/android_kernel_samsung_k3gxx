@@ -26,6 +26,7 @@ extern struct cputopo_arm cpu_topology[NR_CPUS];
 void init_cpu_topology(void);
 void store_cpu_topology(unsigned int cpuid);
 const struct cpumask *cpu_coregroup_mask(int cpu);
+<<<<<<< HEAD
 int cluster_to_logical_mask(unsigned int socket_id, cpumask_t *cluster_mask);
 
 #ifdef CONFIG_DISABLE_CPU_SCHED_DOMAIN_BALANCE
@@ -58,13 +59,18 @@ int cluster_to_logical_mask(unsigned int socket_id, cpumask_t *cluster_mask);
 }
 #endif
 #endif /* CONFIG_DISABLE_CPU_SCHED_DOMAIN_BALANCE */
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #else
 
 static inline void init_cpu_topology(void) { }
 static inline void store_cpu_topology(unsigned int cpuid) { }
+<<<<<<< HEAD
 static inline int cluster_to_logical_mask(unsigned int socket_id,
 	cpumask_t *cluster_mask) { return -EINVAL; }
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 #endif
 

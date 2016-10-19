@@ -50,9 +50,13 @@ static int davinci_verify_speed(struct cpufreq_policy *policy)
 	if (policy->cpu)
 		return -EINVAL;
 
+<<<<<<< HEAD
 	cpufreq_verify_within_limits(policy, policy->cpuinfo.min_freq,
 				     policy->cpuinfo.max_freq);
 
+=======
+	cpufreq_verify_within_cpu_limits(policy);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	policy->min = clk_round_rate(armclk, policy->min * 1000) / 1000;
 	policy->max = clk_round_rate(armclk, policy->max * 1000) / 1000;
 	cpufreq_verify_within_limits(policy, policy->cpuinfo.min_freq,
@@ -68,16 +72,23 @@ static unsigned int davinci_getspeed(unsigned int cpu)
 	return clk_get_rate(cpufreq.armclk) / 1000;
 }
 
+<<<<<<< HEAD
 static int davinci_target(struct cpufreq_policy *policy,
 				unsigned int target_freq, unsigned int relation)
 {
 	int ret = 0;
 	unsigned int idx;
+=======
+static int davinci_target(struct cpufreq_policy *policy, unsigned int idx)
+{
+	int ret = 0;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct cpufreq_freqs freqs;
 	struct davinci_cpufreq_config *pdata = cpufreq.dev->platform_data;
 	struct clk *armclk = cpufreq.armclk;
 
 	freqs.old = davinci_getspeed(0);
+<<<<<<< HEAD
 	freqs.new = clk_round_rate(armclk, target_freq * 1000) / 1000;
 
 	if (freqs.old == freqs.new)
@@ -90,6 +101,12 @@ static int davinci_target(struct cpufreq_policy *policy,
 	if (ret)
 		return -EINVAL;
 
+=======
+	freqs.new = pdata->freq_table[idx].frequency;
+
+	dev_dbg(cpufreq.dev, "transition: %u --> %u\n", freqs.old, freqs.new);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	cpufreq_notify_transition(policy, &freqs, CPUFREQ_PRECHANGE);
 
 	/* if moving to higher frequency, up the voltage beforehand */
@@ -170,7 +187,11 @@ static struct freq_attr *davinci_cpufreq_attr[] = {
 static struct cpufreq_driver davinci_driver = {
 	.flags		= CPUFREQ_STICKY,
 	.verify		= davinci_verify_speed,
+<<<<<<< HEAD
 	.target		= davinci_target,
+=======
+	.target_index	= davinci_target,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	.get		= davinci_getspeed,
 	.init		= davinci_cpu_init,
 	.exit		= davinci_cpu_exit,

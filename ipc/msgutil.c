@@ -41,6 +41,7 @@ struct msg_msgseg {
 	/* the next part of the message follows immediately */
 };
 
+<<<<<<< HEAD
 #define DATALEN_MSG	(int)(PAGE_SIZE-sizeof(struct msg_msg))
 #define DATALEN_SEG	(int)(PAGE_SIZE-sizeof(struct msg_msgseg))
 
@@ -50,6 +51,17 @@ static struct msg_msg *alloc_msg(int len)
 	struct msg_msg *msg;
 	struct msg_msgseg **pseg;
 	int alen;
+=======
+#define DATALEN_MSG	((size_t)PAGE_SIZE-sizeof(struct msg_msg))
+#define DATALEN_SEG	((size_t)PAGE_SIZE-sizeof(struct msg_msgseg))
+
+
+static struct msg_msg *alloc_msg(size_t len)
+{
+	struct msg_msg *msg;
+	struct msg_msgseg **pseg;
+	size_t alen;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	alen = min(len, DATALEN_MSG);
 	msg = kmalloc(sizeof(*msg) + alen, GFP_KERNEL);
@@ -80,12 +92,20 @@ out_err:
 	return NULL;
 }
 
+<<<<<<< HEAD
 struct msg_msg *load_msg(const void __user *src, int len)
+=======
+struct msg_msg *load_msg(const void __user *src, size_t len)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 {
 	struct msg_msg *msg;
 	struct msg_msgseg *seg;
 	int err = -EFAULT;
+<<<<<<< HEAD
 	int alen;
+=======
+	size_t alen;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	msg = alloc_msg(len);
 	if (msg == NULL)
@@ -117,8 +137,13 @@ out_err:
 struct msg_msg *copy_msg(struct msg_msg *src, struct msg_msg *dst)
 {
 	struct msg_msgseg *dst_pseg, *src_pseg;
+<<<<<<< HEAD
 	int len = src->m_ts;
 	int alen;
+=======
+	size_t len = src->m_ts;
+	size_t alen;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	BUG_ON(dst == NULL);
 	if (src->m_ts > dst->m_ts)
@@ -147,9 +172,15 @@ struct msg_msg *copy_msg(struct msg_msg *src, struct msg_msg *dst)
 	return ERR_PTR(-ENOSYS);
 }
 #endif
+<<<<<<< HEAD
 int store_msg(void __user *dest, struct msg_msg *msg, int len)
 {
 	int alen;
+=======
+int store_msg(void __user *dest, struct msg_msg *msg, size_t len)
+{
+	size_t alen;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct msg_msgseg *seg;
 
 	alen = min(len, DATALEN_MSG);

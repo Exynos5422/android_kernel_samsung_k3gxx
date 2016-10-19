@@ -776,7 +776,11 @@ static int sh_vou_try_fmt_vid_out(struct file *file, void *priv,
 	v4l_bound_align_image(&pix->width, 0, VOU_MAX_IMAGE_WIDTH, 1,
 			      &pix->height, 0, VOU_MAX_IMAGE_HEIGHT, 1, 0);
 
+<<<<<<< HEAD
 	for (i = 0; ARRAY_SIZE(vou_fmt); i++)
+=======
+	for (i = 0; i < ARRAY_SIZE(vou_fmt); i++)
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		if (vou_fmt[i].pfmt == pix->pixelformat)
 			return 0;
 

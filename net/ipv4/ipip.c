@@ -149,13 +149,21 @@ static int ipip_err(struct sk_buff *skb, u32 info)
 
 	if (type == ICMP_DEST_UNREACH && code == ICMP_FRAG_NEEDED) {
 		ipv4_update_pmtu(skb, dev_net(skb->dev), info,
+<<<<<<< HEAD
 				 t->dev->ifindex, 0, IPPROTO_IPIP, 0);
+=======
+				 t->parms.link, 0, IPPROTO_IPIP, 0);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 		err = 0;
 		goto out;
 	}
 
 	if (type == ICMP_REDIRECT) {
+<<<<<<< HEAD
 		ipv4_redirect(skb, dev_net(skb->dev), t->dev->ifindex, 0,
+=======
+		ipv4_redirect(skb, dev_net(skb->dev), t->parms.link, 0,
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 			      IPPROTO_IPIP, 0);
 		err = 0;
 		goto out;
@@ -195,7 +203,11 @@ static int ipip_rcv(struct sk_buff *skb)
 	if (tunnel) {
 		if (!xfrm4_policy_check(NULL, XFRM_POLICY_IN, skb))
 			goto drop;
+<<<<<<< HEAD
 		return ip_tunnel_rcv(tunnel, skb, &tpi, log_ecn_error);
+=======
+		return ip_tunnel_rcv(tunnel, skb, &tpi, 0, log_ecn_error);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	}
 
 	return -1;
@@ -483,4 +495,8 @@ static void __exit ipip_fini(void)
 module_init(ipip_init);
 module_exit(ipip_fini);
 MODULE_LICENSE("GPL");
+<<<<<<< HEAD
+=======
+MODULE_ALIAS_RTNL_LINK("ipip");
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 MODULE_ALIAS_NETDEV("tunl0");

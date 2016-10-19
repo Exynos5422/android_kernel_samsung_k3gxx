@@ -48,6 +48,7 @@ Example:
 		clocks = <&clock 285>;
 		clock-names = "usbhost";
 	};
+<<<<<<< HEAD
 
 DWC3
 Required properties:
@@ -82,3 +83,5 @@ Example:
 			usb-phy = <&usb2_phy &usb3_phy>;
 		};
 	};
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

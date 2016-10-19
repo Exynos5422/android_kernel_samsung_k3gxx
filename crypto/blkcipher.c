@@ -105,11 +105,14 @@ int blkcipher_walk_done(struct blkcipher_desc *desc,
 {
 	unsigned int nbytes = 0;
 
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_FIPS
 	if (unlikely(in_fips_err())) 
 		return (-EACCES);
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (likely(err >= 0)) {
 		unsigned int n = walk->nbytes - err;
 
@@ -327,11 +330,14 @@ EXPORT_SYMBOL_GPL(blkcipher_walk_phys);
 static int blkcipher_walk_first(struct blkcipher_desc *desc,
 				struct blkcipher_walk *walk)
 {
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_FIPS
 	if (unlikely(in_fips_err())) 
 		return (-EACCES);
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	if (WARN_ON_ONCE(in_irq()))
 		return -EDEADLK;
 
@@ -435,10 +441,13 @@ static int async_encrypt(struct ablkcipher_request *req)
 		.flags = req->base.flags,
 	};
 
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_FIPS
 	if (unlikely(in_fips_err())) 
 		return (-EACCES);
 #endif
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 	return alg->encrypt(&desc, req->dst, req->src, req->nbytes);
 }
@@ -453,11 +462,14 @@ static int async_decrypt(struct ablkcipher_request *req)
 		.flags = req->base.flags,
 	};
 
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_FIPS
 	if (unlikely(in_fips_err())) 
 		return (-EACCES);
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	return alg->decrypt(&desc, req->dst, req->src, req->nbytes);
 }
 
@@ -619,11 +631,14 @@ struct crypto_instance *skcipher_geniv_alloc(struct crypto_template *tmpl,
 	struct crypto_alg *alg;
 	int err;
 
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_FIPS
 	if (unlikely(in_fips_err())) 
 		return ERR_PTR(-EACCES);
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	algt = crypto_get_attr_type(tb);
 	if (IS_ERR(algt))
 		return ERR_CAST(algt);
@@ -746,11 +761,14 @@ int skcipher_geniv_init(struct crypto_tfm *tfm)
 	struct crypto_instance *inst = (void *)tfm->__crt_alg;
 	struct crypto_ablkcipher *cipher;
 
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_FIPS
 	if (unlikely(in_fips_err())) 
 		return (-EACCES);
 #endif
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	cipher = crypto_spawn_skcipher(crypto_instance_ctx(inst));
 	if (IS_ERR(cipher))
 		return PTR_ERR(cipher);

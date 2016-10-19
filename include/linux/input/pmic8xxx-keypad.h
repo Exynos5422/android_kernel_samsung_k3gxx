@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 /* Copyright (c) 2011, Code Aurora Forum. All rights reserved.
+=======
+/* Copyright (c) 2011, The Linux Foundation. All rights reserved.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and

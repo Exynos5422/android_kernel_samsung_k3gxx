@@ -21,6 +21,7 @@ Required Properties:
 
   - gpio-controller: identifies the node as a gpio controller and pin bank.
   - #gpio-cells: number of cells in GPIO specifier. Since the generic GPIO
+<<<<<<< HEAD
     binding is used, the amount of cells must be specified as 2. See the below
     mentioned gpio binding representation for description of particular cells.
 
@@ -33,15 +34,23 @@ Required Properties:
 	- Pin number: is a value between 0 to 7.
 	- Flags: 0 - Active High
 		 1 - Active Low
+=======
+    binding is used, the amount of cells must be specified as 2. See generic
+    GPIO binding documentation for description of particular cells.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 - Pin mux/config groups as child nodes: The pin mux (selecting pin function
   mode) and pin config (pull up/down, driver strength) settings are represented
   as child nodes of the pin-controller node. There should be atleast one
+<<<<<<< HEAD
   child node and there is no limit on the count of these child nodes. It is
   also possible for a child node to consist of several further child nodes
   to allow grouping multiple pinctrl groups into one. The format of second
   level child nodes is exactly the same as for first level ones and is
   described below.
+=======
+  child node and there is no limit on the count of these child nodes.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
   The child node should contain a list of pin(s) on which a particular pin
   function selection or pin configuration (or both) have to applied. This
@@ -242,6 +251,7 @@ Example 1: A pin-controller node with pin groups.
 			samsung,pin-pud = <3>;
 			samsung,pin-drv = <0>;
 		};
+<<<<<<< HEAD
 
 		sd4_bus8: sd4-bus-width8 {
 			part-1 {
@@ -259,6 +269,8 @@ Example 1: A pin-controller node with pin groups.
 				samsung,pin-drv = <3>;
 			};
 		};
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	};
 
 Example 2: A pin-controller node with external wakeup interrupt controller node.
@@ -297,6 +309,7 @@ Example 4: Set up the default pin state for uart controller.
 
 		pinctrl = devm_pinctrl_get_select_default(&pdev->dev);
 	}
+<<<<<<< HEAD
 
 Example 5: A display port client node that supports 'default' pinctrl state
 	   and gpio binding.
@@ -327,3 +340,5 @@ Example 6: Request the gpio for display port controller
 					    "hpd_gpio");
 		/* ... */
 	}
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83

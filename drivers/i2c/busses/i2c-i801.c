@@ -58,6 +58,12 @@
   Wellsburg (PCH) MS    0x8d7d     32     hard     yes     yes     yes
   Wellsburg (PCH) MS    0x8d7e     32     hard     yes     yes     yes
   Wellsburg (PCH) MS    0x8d7f     32     hard     yes     yes     yes
+<<<<<<< HEAD
+=======
+  Coleto Creek (PCH)    0x23b0     32     hard     yes     yes     yes
+  Wildcat Point-LP (PCH)   0x9ca2     32     hard     yes     yes     yes
+  BayTrail (SOC)        0x0f12     32     hard     yes     yes     yes
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
   Features supported by this driver:
   Software PEC                     no
@@ -160,6 +166,10 @@
 				 STATUS_ERROR_FLAGS)
 
 /* Older devices have their ID defined in <linux/pci_ids.h> */
+<<<<<<< HEAD
+=======
+#define PCI_DEVICE_ID_INTEL_BAYTRAIL_SMBUS	0x0f12
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define PCI_DEVICE_ID_INTEL_COUGARPOINT_SMBUS	0x1c22
 #define PCI_DEVICE_ID_INTEL_PATSBURG_SMBUS	0x1d22
 /* Patsburg also has three 'Integrated Device Function' SMBus controllers */
@@ -169,6 +179,10 @@
 #define PCI_DEVICE_ID_INTEL_PANTHERPOINT_SMBUS	0x1e22
 #define PCI_DEVICE_ID_INTEL_AVOTON_SMBUS	0x1f3c
 #define PCI_DEVICE_ID_INTEL_DH89XXCC_SMBUS	0x2330
+<<<<<<< HEAD
+=======
+#define PCI_DEVICE_ID_INTEL_COLETOCREEK_SMBUS	0x23b0
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #define PCI_DEVICE_ID_INTEL_5_3400_SERIES_SMBUS	0x3b30
 #define PCI_DEVICE_ID_INTEL_LYNXPOINT_SMBUS	0x8c22
 #define PCI_DEVICE_ID_INTEL_WELLSBURG_SMBUS	0x8d22
@@ -176,6 +190,10 @@
 #define PCI_DEVICE_ID_INTEL_WELLSBURG_SMBUS_MS1	0x8d7e
 #define PCI_DEVICE_ID_INTEL_WELLSBURG_SMBUS_MS2	0x8d7f
 #define PCI_DEVICE_ID_INTEL_LYNXPOINT_LP_SMBUS	0x9c22
+<<<<<<< HEAD
+=======
+#define PCI_DEVICE_ID_INTEL_WILDCATPOINT_LP_SMBUS	0x9ca2
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 struct i801_mux_config {
 	char *gpio_chip;
@@ -817,6 +835,12 @@ static DEFINE_PCI_DEVICE_TABLE(i801_ids) = {
 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_WELLSBURG_SMBUS_MS0) },
 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_WELLSBURG_SMBUS_MS1) },
 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_WELLSBURG_SMBUS_MS2) },
+<<<<<<< HEAD
+=======
+	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_COLETOCREEK_SMBUS) },
+	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_WILDCATPOINT_LP_SMBUS) },
+	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_BAYTRAIL_SMBUS) },
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	{ 0, }
 };
 

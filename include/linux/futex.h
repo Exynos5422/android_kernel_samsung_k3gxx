@@ -55,7 +55,15 @@ union futex_key {
 #ifdef CONFIG_FUTEX
 extern void exit_robust_list(struct task_struct *curr);
 extern void exit_pi_state_list(struct task_struct *curr);
+<<<<<<< HEAD
 extern int futex_cmpxchg_enabled;
+=======
+#ifdef CONFIG_HAVE_FUTEX_CMPXCHG
+#define futex_cmpxchg_enabled 1
+#else
+extern int futex_cmpxchg_enabled;
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #else
 static inline void exit_robust_list(struct task_struct *curr)
 {

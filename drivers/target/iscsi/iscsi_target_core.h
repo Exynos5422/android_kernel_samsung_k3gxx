@@ -760,6 +760,10 @@ struct iscsi_np {
 	int			np_ip_proto;
 	int			np_sock_type;
 	enum np_thread_state_table np_thread_state;
+<<<<<<< HEAD
+=======
+	bool                    enabled;
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	enum iscsi_timer_flags_table np_login_timer_flags;
 	u32			np_exports;
 	enum np_flags_table	np_flags;

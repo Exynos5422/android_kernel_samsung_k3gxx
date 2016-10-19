@@ -10,6 +10,14 @@
 #include <linux/rwsem.h>
 #include <linux/memcontrol.h>
 
+<<<<<<< HEAD
+=======
+extern int isolate_lru_page(struct page *page);
+extern void putback_lru_page(struct page *page);
+extern unsigned long reclaim_pages_from_list(struct list_head *page_list,
+					     struct vm_area_struct *vma);
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 /*
  * The anon_vma heads a list of private "related" vmas, to scan if
  * an anonymous page pointing to this anon_vma needs to be unmapped:
@@ -188,7 +196,12 @@ int page_referenced_one(struct page *, struct vm_area_struct *,
 
 #define TTU_ACTION(x) ((x) & TTU_ACTION_MASK)
 
+<<<<<<< HEAD
 int try_to_unmap(struct page *, enum ttu_flags flags);
+=======
+int try_to_unmap(struct page *, enum ttu_flags flags,
+			struct vm_area_struct *vma);
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 int try_to_unmap_one(struct page *, struct vm_area_struct *,
 			unsigned long address, enum ttu_flags flags);
 
@@ -255,7 +268,11 @@ static inline int page_referenced(struct page *page, int is_locked,
 	return 0;
 }
 
+<<<<<<< HEAD
 #define try_to_unmap(page, refs) SWAP_FAIL
+=======
+#define try_to_unmap(page, refs, vma) SWAP_FAIL
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 static inline int page_mkclean(struct page *page)
 {

@@ -20,8 +20,11 @@ source "drivers/block/Kconfig"
 
 source "drivers/misc/Kconfig"
 
+<<<<<<< HEAD
 source "drivers/muic/Kconfig"
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 source "drivers/ide/Kconfig"
 
 source "drivers/scsi/Kconfig"
@@ -52,8 +55,17 @@ source "drivers/char/Kconfig"
 
 source "drivers/i2c/Kconfig"
 
+<<<<<<< HEAD
 source "drivers/spi/Kconfig"
 
+=======
+source "drivers/slimbus/Kconfig"
+
+source "drivers/spi/Kconfig"
+
+source "drivers/spmi/Kconfig"
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 source "drivers/ssbi/Kconfig"
 
 source "drivers/hsi/Kconfig"
@@ -154,8 +166,11 @@ source "drivers/rpmsg/Kconfig"
 
 source "drivers/devfreq/Kconfig"
 
+<<<<<<< HEAD
 source "drivers/motor/Kconfig"
 
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 source "drivers/extcon/Kconfig"
 
 source "drivers/memory/Kconfig"
@@ -172,6 +187,7 @@ source "drivers/irqchip/Kconfig"
 
 source "drivers/ipack/Kconfig"
 
+<<<<<<< HEAD
 source "drivers/battery/Kconfig"
 
 source "drivers/reset/Kconfig"
@@ -195,5 +211,22 @@ source "drivers/gud/Kconfig"
 source "drivers/irled/Kconfig"
 
 source "drivers/ice40lm/Kconfig"
+=======
+source "drivers/gud/Kconfig"
+
+source "drivers/reset/Kconfig"
+
+source "drivers/coresight/Kconfig"
+
+source "drivers/bif/Kconfig"
+
+source "drivers/sensors/Kconfig"
+
+source "drivers/phy/Kconfig"
+
+source "drivers/soc/Kconfig"
+
+source "drivers/firmware/Kconfig"
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 
 endmenu

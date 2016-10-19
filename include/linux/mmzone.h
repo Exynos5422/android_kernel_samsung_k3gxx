@@ -63,9 +63,25 @@ enum {
 	MIGRATE_TYPES
 };
 
+<<<<<<< HEAD
 #ifdef CONFIG_CMA
 #  define is_migrate_cma(migratetype) unlikely((migratetype) == MIGRATE_CMA)
 #else
+=======
+/*
+ * Returns a list which contains the migrate types on to which
+ * an allocation falls back when the free list for the migrate
+ * type mtype is depleted.
+ * The end of the list is delimited by the type MIGRATE_RESERVE.
+ */
+extern int *get_migratetype_fallbacks(int mtype);
+
+#ifdef CONFIG_CMA
+bool is_cma_pageblock(struct page *page);
+#  define is_migrate_cma(migratetype) unlikely((migratetype) == MIGRATE_CMA)
+#else
+#  define is_cma_pageblock(page) false
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #  define is_migrate_cma(migratetype) false
 #endif
 
@@ -352,7 +368,10 @@ struct zone {
 	 * free areas of different sizes
 	 */
 	spinlock_t		lock;
+<<<<<<< HEAD
 	int                     all_unreclaimable; /* All pages pinned */
+=======
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #if defined CONFIG_COMPACTION || defined CONFIG_CMA
 	/* Set to true when the PG_migrate_skip bits should be cleared */
 	bool			compact_blockskip_flush;
@@ -361,10 +380,29 @@ struct zone {
 	unsigned long		compact_cached_free_pfn;
 	unsigned long		compact_cached_migrate_pfn;
 #endif
+<<<<<<< HEAD
+=======
+
+#ifdef CONFIG_MEMORY_ISOLATION
+	/*
+	 * Number of isolated pageblock. It is used to solve incorrect
+	 * freepage counting problem due to racy retrieving migratetype
+	 * of pageblock. Protected by zone->lock.
+	 */
+	unsigned long           nr_isolate_pageblock;
+#endif
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 #ifdef CONFIG_MEMORY_HOTPLUG
 	/* see spanned/present_pages for more description */
 	seqlock_t		span_seqlock;
 #endif
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_CMA
+	bool			cma_alloc;
+#endif
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	struct free_area	free_area[MAX_ORDER];
 
 #ifndef CONFIG_SPARSEMEM
@@ -474,10 +512,23 @@ struct zone {
 	 * frequently read in proximity to zone->lock.  It's good to
 	 * give them a chance of being in the same cacheline.
 	 *
+<<<<<<< HEAD
 	 * Write access to present_pages and managed_pages at runtime should
 	 * be protected by lock_memory_hotplug()/unlock_memory_hotplug().
 	 * Any reader who can't tolerant drift of present_pages and
 	 * managed_pages should hold memory hotplug lock to get a stable value.
+=======
+	 * Write access to present_pages at runtime should be protected by
+	 * lock_memory_hotplug()/unlock_memory_hotplug().  Any reader who can't
+	 * tolerant drift of present_pages should hold memory hotplug lock to
+	 * get a stable value.
+	 *
+	 * Read access to managed_pages should be safe because it's unsigned
+	 * long. Write access to zone->managed_pages and totalram_pages are
+	 * protected by managed_page_count_lock at runtime. Idealy only
+	 * adjust_managed_page_count() should be used instead of directly
+	 * touching zone->managed_pages and totalram_pages.
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 	 */
 	unsigned long		spanned_pages;
 	unsigned long		present_pages;
@@ -495,6 +546,16 @@ typedef enum {
 	ZONE_CONGESTED,			/* zone has many dirty pages backed by
 					 * a congested BDI
 					 */
+<<<<<<< HEAD
+=======
+	ZONE_TAIL_LRU_DIRTY,		/* reclaim scanning has recently found
+					 * many dirty file pages at the tail
+					 * of the LRU.
+					 */
+	ZONE_WRITEBACK,			/* reclaim scanning has recently found
+					 * many pages under writeback
+					 */
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 } zone_flags_t;
 
 static inline void zone_set_flag(struct zone *zone, zone_flags_t flag)
@@ -517,6 +578,19 @@ static inline int zone_is_reclaim_congested(const struct zone *zone)
 	return test_bit(ZONE_CONGESTED, &zone->flags);
 }
 
+<<<<<<< HEAD
+=======
+static inline int zone_is_reclaim_dirty(const struct zone *zone)
+{
+	return test_bit(ZONE_TAIL_LRU_DIRTY, &zone->flags);
+}
+
+static inline int zone_is_reclaim_writeback(const struct zone *zone)
+{
+	return test_bit(ZONE_WRITEBACK, &zone->flags);
+}
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 static inline int zone_is_reclaim_locked(const struct zone *zone)
 {
 	return test_bit(ZONE_RECLAIM_LOCKED, &zone->flags);
@@ -1212,7 +1286,14 @@ static inline int pfn_present(unsigned long pfn)
 #define pfn_to_nid(pfn)		(0)
 #endif
 
+<<<<<<< HEAD
 #define early_pfn_valid(pfn)	pfn_valid(pfn)
+=======
+#ifndef early_pfn_valid
+#define early_pfn_valid(pfn)	pfn_valid(pfn)
+#endif
+
+>>>>>>> 6d6f1883acbba69770ae242bdf44b3dbabed7e83
 void sparse_init(void);
 #else
 #define sparse_init()	do {} while (0)
